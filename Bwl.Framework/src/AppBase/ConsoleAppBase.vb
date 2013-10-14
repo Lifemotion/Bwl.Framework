@@ -1,8 +1,8 @@
 ﻿
-Public Class ConsoleSupport
+Public Class ConsoleAppBase
     Private Shared _storage As SettingsStorage
     Private Shared _logs As Logger
-    Private Shared _logsWriter As FileLogWriter
+    Private Shared _logsWriter As SimpleFileLogWriter
     Private Shared _consoleWriter As ConsoleLogWriter
     Private Shared _consoleSettings As SettingsStorage
     Private Shared _consoleTitle As StringSetting
@@ -30,7 +30,7 @@ Public Class ConsoleSupport
                 _consoleColor = New VariantSetting(_consoleSettings, "Font Color", "gray,white,black,green,red,blue", "gray")
                 _consoleBack = New VariantSetting(_consoleSettings, "Background Color", "grey,white,black", "black")
                 _logs = New Logger()
-                _logsWriter = New FileLogWriter(baseDir + "\..\logs\")
+                _logsWriter = New SimpleFileLogWriter(baseDir + "\..\logs\")
                 _consoleWriter = New ConsoleLogWriter
                 _logs.ConnectWriter(_logsWriter)
                 _logs.ConnectWriter(_consoleWriter)
@@ -72,8 +72,8 @@ Public Class ConsoleSupport
         For Each arg In System.Environment.GetCommandLineArgs
             If arg.ToLower = "showsetup" Then ShowSettings()
         Next
-        _logs.Add(LogMessageType.message, "Запуск приложения")
-        _logs.Add(LogMessageType.information, "Дата изменения файла: " + IO.File.GetLastWriteTime(Application.ExecutablePath).ToString)
+        _logs.Add(LogEventType.message, "Запуск приложения")
+        _logs.Add(LogEventType.information, "Дата изменения файла: " + IO.File.GetLastWriteTime(Application.ExecutablePath).ToString)
         If My.Computer.Keyboard.ShiftKeyDown And My.Computer.Keyboard.CtrlKeyDown Then ShowSettings()
     End Sub
     Public Sub Wait()

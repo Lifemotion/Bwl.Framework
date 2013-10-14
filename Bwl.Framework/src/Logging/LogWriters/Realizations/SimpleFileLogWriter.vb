@@ -1,4 +1,4 @@
-﻿Public Class FileLogWriter
+﻿Public Class SimpleFileLogWriter
     Implements ILogWriter
     Private folder As String
     Private filename As String
@@ -6,13 +6,13 @@
     Private modeType As TypeLoggingMode
     Private wordFilter As String
     Private placeFilter As String
-    Private typeFilter As LogMessageType
+    Private typeFilter As LogEventType
     Private working As Boolean = True
     Private Class ListItem
         Public message As String
         Public additional As String
         Public dateTime As DateTime
-        Public type As LogMessageType
+        Public type As LogEventType
         Public path As String()
     End Class
     Private newMessages As New List(Of ListItem)
@@ -28,16 +28,15 @@
         allInOneFile
         eachTypeInSelfFile
     End Enum
-    Private Function GetCategoryName(ByVal category As LogMessageType) As String
-        If category = LogMessageType.information Then Return "Информ."
-        If category = LogMessageType.errors Then Return "Ошибка!"
-        If category = LogMessageType.message Then Return "Сообщ."
-        If category = LogMessageType.warning Then Return "Предупр."
-        If category = LogMessageType.debug Then Return "Отладка"
-        If category = LogMessageType.deepDebug Then Return "Глуб. отладка"
-        Return "      "
+    Private Function GetCategoryName(ByVal category As LogEventType) As String
+        If category = LogEventType.information Then Return "Inf"
+        If category = LogEventType.errors Then Return "Err"
+        If category = LogEventType.message Then Return "Msg"
+        If category = LogEventType.warning Then Return "Wrn"
+        If category = LogEventType.debug Then Return "Dbg"
+        Return "   "
     End Function
-    Sub New(ByVal logFolder As String, Optional ByVal placeMode As PlaceLoggingMode = PlaceLoggingMode.allInOneFile, Optional ByVal typeMode As TypeLoggingMode = TypeLoggingMode.allInOneFile, Optional ByVal logFilename As String = "log.txt", Optional ByVal newTypeFilter As LogMessageType = -128, Optional ByVal newPlaceFilter As String = "", Optional ByVal newWordFilter As String = "")
+    Sub New(ByVal logFolder As String, Optional ByVal placeMode As PlaceLoggingMode = PlaceLoggingMode.allInOneFile, Optional ByVal typeMode As TypeLoggingMode = TypeLoggingMode.allInOneFile, Optional ByVal logFilename As String = "log.txt", Optional ByVal newTypeFilter As LogEventType = -128, Optional ByVal newPlaceFilter As String = "", Optional ByVal newWordFilter As String = "")
         filename = logFilename
         folder = logFolder
         modePlace = placeMode
@@ -65,18 +64,14 @@
         End Set
     End Property
 
-    Public Sub WriteHeader(ByVal datetime As Date, ByRef path() As String, ByRef header As String) Implements ILogWriter.WriteHeader
-
-    End Sub
-
-    Public Sub WriteMessage(ByVal datetime As Date, ByRef path() As String, ByVal messageType As LogMessageType, ByRef messageText As String, ByRef optionalText As String) Implements ILogWriter.WriteMessage
+    Public Sub WriteEvent(datetime As DateTime, path() As String, type As LogEventType, text As String, ParamArray params() As Object) Implements ILogWriter.WriteEvent
         If working Then
             Dim item As New ListItem
             item.dateTime = datetime
             item.path = path
-            item.message = messageText
-            item.additional = optionalText
-            item.type = messageType
+            item.message = text
+            item.additional = ""
+            item.type = type
             newMessages.Add(item)
         End If
     End Sub
@@ -114,12 +109,11 @@
         If modeType = TypeLoggingMode.allInOneFile Then result = ""
         If modeType = TypeLoggingMode.eachTypeInSelfFile Then
             Select Case message.type
-                Case LogMessageType.debug : result += "debug."
-                Case LogMessageType.deepDebug : result += "deepDebug."
-                Case LogMessageType.errors : result += "errors."
-                Case LogMessageType.information : result += "information."
-                Case LogMessageType.message : result += "message."
-                Case LogMessageType.warning : result += "warning."
+                Case LogEventType.debug : result += "debug."
+                Case LogEventType.errors : result += "errors."
+                Case LogEventType.information : result += "information."
+                Case LogEventType.message : result += "message."
+                Case LogEventType.warning : result += "warning."
                 Case Else : result += "other."
             End Select
         End If

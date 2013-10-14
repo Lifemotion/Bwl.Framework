@@ -4,35 +4,35 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E18C7249-22C8-4147-91EF-8A2721F0F026}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Bwl.Framework</RootNamespace>
-    <AssemblyName>Bwl.Framework</AssemblyName>
+    <ProjectGuid>{67E94558-938E-4DDE-93F4-E5ABEECE626F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Bwl.Framework.TestApp.My.MyApplication</StartupObject>
+    <RootNamespace>Bwl.Framework.TestApp</RootNamespace>
+    <AssemblyName>Bwl.Framework.TestApp</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Windows</MyType>
+    <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>dllOut\</OutputPath>
-    <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>Bwl.Framework.TestApp.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <PlatformTarget>x86</PlatformTarget>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>dllOut\</OutputPath>
-    <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>Bwl.Framework.TestApp.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -48,36 +48,36 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
-    <Import Include="System.Linq" />
     <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\AppBase\AppBase.vb" />
-    <Compile Include="src\Logging\LogWriters\Realizations\ConsoleLogWriter.vb" />
-    <Compile Include="src\AppBase\ConsoleAppBase.vb" />
-    <Compile Include="src\Identity\IDescription.vb" />
-    <Compile Include="src\Identity\IIdentity.vb" />
-    <Compile Include="src\Identity\ListWithIdentity.vb" />
-    <Compile Include="src\Logging\LogWriters\Interface\LogEventType.vb" />
-    <Compile Include="src\Logging\LogWriters\Realizations\SimpleFileLogWriter.vb" />
-    <Compile Include="src\Logging\Logger.vb" />
-    <Compile Include="src\Logging\LogWriters\Realizations\DatagridLogWriter.Designer.vb">
-      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
+    <Compile Include="TestApp.vb">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Logging\LogWriters\Realizations\DatagridLogWriter.vb">
-      <SubType>UserControl</SubType>
+    <Compile Include="TestApp.Designer.vb">
+      <DependentUpon>TestApp.vb</DependentUpon>
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Logging\LogWriters\Interface\ILogWriter.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -93,45 +93,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="src\Settings\Gui\SettingField.Designer.vb">
-      <DependentUpon>SettingField.vb</DependentUpon>
-    </Compile>
-    <Compile Include="src\Settings\Gui\SettingField.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="src\Settings\Gui\SettingsDialog.Designer.vb">
-      <DependentUpon>SettingsDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="src\Settings\Gui\SettingsDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\Settings\SettingsStorage.vb" />
-    <Compile Include="src\Settings\SettingTypes\BooleanSetting.vb" />
-    <Compile Include="src\Settings\SettingTypes\IntegerSetting.vb" />
-    <Compile Include="src\Settings\SettingTypes\Common\ObjectSetting.vb" />
-    <Compile Include="src\Settings\SettingTypes\SingleSetting.vb" />
-    <Compile Include="src\Settings\SettingTypes\StringSetting.vb" />
-    <Compile Include="src\Settings\SettingTypes\VariantSetting.vb" />
-    <Compile Include="src\Tools\IniFile.vb" />
-    <Compile Include="src\Settings\Writers\Interface\ISettingsWriter.vb" />
-    <Compile Include="src\Settings\Writers\Realizations\IniFileSettingsWriter.vb" />
-    <Compile Include="src\Settings\Writers\Realizations\NullSettingsWriter.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="src\Logging\LogWriters\Realizations\DatagridLogWriter.resx">
-      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\Settings\Gui\SettingField.resx">
-      <DependentUpon>SettingField.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\Settings\Gui\SettingsDialog.resx">
-      <DependentUpon>SettingsDialog.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +112,13 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bwl.Framework\Bwl.Framework.vbproj">
+      <Project>{e18c7249-22c8-4147-91ef-8a2721f0f026}</Project>
+      <Name>Bwl.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

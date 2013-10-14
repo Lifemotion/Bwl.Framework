@@ -45,7 +45,7 @@ Public Class SettingsStorage
     ''' </summary>
     ''' <remarks></remarks>
     Sub New()
-        _defaultWriter = New SettingsWriterNull
+        _defaultWriter = New NullSettingsWriter
         _category = "Root"
         ReDim _storagePath(0)
         _storagePath(0) = _category
@@ -57,7 +57,7 @@ Public Class SettingsStorage
     ''' <param name="rootCategoryName">Имя корневой категории настроек.</param>
     ''' <remarks></remarks>
     Sub New(ByVal iniFileName As String, ByVal rootCategoryName As String)
-        Dim writer As New SettingsWriterINI(iniFileName)
+        Dim writer As New IniFileSettingsWriter(iniFileName)
         If rootCategoryName = "" Then Throw New Exception("Имя корневой категории настроек не может быть пустым.")
         _defaultWriter = writer
         _category = rootCategoryName

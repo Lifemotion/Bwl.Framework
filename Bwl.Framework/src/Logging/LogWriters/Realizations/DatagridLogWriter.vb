@@ -1,12 +1,12 @@
 ﻿
-Public Class LogWriterList
+Public Class DatagridLogWriter
     Implements ILogWriter
     Const messagesLimit As Integer = 1024
     Private Class ListItem
         Public message As String
         Public additional As String
         Public dateTime As DateTime
-        Public type As LogMessageType
+        Public type As LogEventType
         Public path As String()
     End Class
     Private newMessages As New List(Of ListItem)
@@ -16,13 +16,12 @@ Public Class LogWriterList
     Sub New()
         InitializeComponent()
     End Sub
-    Private Function GetTypeName(ByVal type As LogMessageType) As String
-        If type = LogMessageType.information Then Return "ИНФ"
-        If type = LogMessageType.errors Then Return "ОШБ"
-        If type = LogMessageType.message Then Return "СБЩ"
-        If type = LogMessageType.warning Then Return "ПРД"
-        If type = LogMessageType.debug Then Return "ОТЛ"
-        If type = LogMessageType.deepDebug Then Return "ОТЛ"
+    Private Function GetTypeName(ByVal type As LogEventType) As String
+        If type = LogEventType.information Then Return "ИНФ"
+        If type = LogEventType.errors Then Return "ОШБ"
+        If type = LogEventType.message Then Return "СБЩ"
+        If type = LogEventType.warning Then Return "ПРД"
+        If type = LogEventType.debug Then Return "ОТЛ"
         Return ""
     End Function
 
@@ -72,31 +71,28 @@ Public Class LogWriterList
             working = value
         End Set
     End Property
-    Public Sub WriteHeader(ByVal datetime As Date, ByRef path() As String, ByRef header As String) Implements ILogWriter.WriteHeader
 
-    End Sub
     Private _newMessagesListLock As New Object
-    Public Sub WriteMessage(ByVal datetime As Date, ByRef path() As String, ByVal messageType As LogMessageType, ByRef messageText As String, ByRef optionalText As String) Implements ILogWriter.WriteMessage
+    Public Sub WriteEvent(datetime As DateTime, path() As String, type As LogEventType, text As String, ParamArray params() As Object) Implements ILogWriter.WriteEvent
         SyncLock _newMessagesListLock
             If working Then
                 Dim item As New ListItem
                 item.dateTime = datetime
                 item.path = path
-                item.message = messageText
-                item.additional = optionalText
-                item.type = messageType
+                item.message = text
+                item.additional = ""
+                item.type = type
                 newMessages.Add(item)
             End If
         End SyncLock
     End Sub
-    Private Function GetRowColor(ByVal type As LogMessageType) As System.Drawing.Color
+    Private Function GetRowColor(ByVal type As LogEventType) As System.Drawing.Color
         Dim newColor As System.Drawing.Color = Drawing.Color.White
         Static lastColor As System.Drawing.Color
-        If type = LogMessageType.debug Then newColor = Drawing.Color.FromArgb(200, 200, 200)
-        If type = LogMessageType.deepDebug Then newColor = Drawing.Color.FromArgb(150, 150, 150)
-        If type = LogMessageType.errors Then newColor = Drawing.Color.FromArgb(255, 180, 180)
-        If type = LogMessageType.message Then newColor = Drawing.Color.FromArgb(240, 240, 255)
-        If type = LogMessageType.warning Then newColor = Drawing.Color.FromArgb(255, 255, 220)
+        If type = LogEventType.debug Then newColor = Drawing.Color.FromArgb(200, 200, 200)
+        If type = LogEventType.errors Then newColor = Drawing.Color.FromArgb(255, 180, 180)
+        If type = LogEventType.message Then newColor = Drawing.Color.FromArgb(240, 240, 255)
+        If type = LogEventType.warning Then newColor = Drawing.Color.FromArgb(255, 255, 220)
         If lastColor = newColor Then
             lastColor = Drawing.Color.Black
             newColor = Drawing.Color.FromArgb(newColor.R * 0.9, newColor.G * 0.9, newColor.B * 0.9)
@@ -106,13 +102,11 @@ Public Class LogWriterList
     End Function
     Private Function Filter(ByVal message As ListItem)
         With message
-            If Not cbDebug.Checked And .type = LogMessageType.debug Then Return False
-            If Not cbDebug.Checked And .type = LogMessageType.deepDebug Then Return False
-            If Not cbInformation.Checked And .type = LogMessageType.information Then Return False
-            If Not cbErrors.Checked And .type = LogMessageType.errors Then Return False
-            If Not cbWarnings.Checked And .type = LogMessageType.warning Then Return False
-            If Not cbMessages.Checked And .type = LogMessageType.message Then Return False
-
+            If Not cbDebug.Checked And .type = LogEventType.debug Then Return False
+            If Not cbInformation.Checked And .type = LogEventType.information Then Return False
+            If Not cbErrors.Checked And .type = LogEventType.errors Then Return False
+            If Not cbWarnings.Checked And .type = LogEventType.warning Then Return False
+            If Not cbMessages.Checked And .type = LogEventType.message Then Return False
 
             Dim textFilter As Boolean
 

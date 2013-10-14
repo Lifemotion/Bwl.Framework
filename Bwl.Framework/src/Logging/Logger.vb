@@ -17,7 +17,7 @@ Public Class Logger
         ReDim _path(-1)
     End Sub
 
-    Friend Sub New(ByVal newParentLogger As Logger, ByVal categoryName As String)
+    Friend Sub New(newParentLogger As Logger, categoryName As String)
         If categoryName = "" Then Throw New Exception("Имя категории не указано!")
         If newParentLogger Is Nothing Then Throw New Exception("Родительский логгер не создан!")
         _parentLogger = newParentLogger
@@ -38,11 +38,11 @@ Public Class Logger
         End If
     End Sub
 
-    Public Function CreateChildLogger(ByVal categoryName As String) As Logger
+    Public Function CreateChildLogger(categoryName As String) As Logger
         Return New Logger(Me, categoryName)
     End Function
 
-    Public Function DeleteChildLogger(ByVal categoryName As String) As Logger
+    Public Function DeleteChildLogger(categoryName As String) As Logger
         Dim forDelete As Logger = Nothing
         For Each logger In _childLoggers
             If logger.CategoryName = categoryName Then
@@ -56,63 +56,47 @@ Public Class Logger
         Return forDelete
     End Function
 
-    Public Sub ConnectWriter(ByVal writer As ILogWriter)
+    Public Sub ConnectWriter(writer As ILogWriter)
         _writers.Add(writer)
         writer.ConnectedToLogger(Me)
     End Sub
 
-    Public Sub Add(ByVal type As LogMessageType, ByRef messageText As String, Optional ByVal additionalText As String = "")
+    Public Sub Add(type As LogEventType, text As String, ParamArray additional() As Object)
+
         For Each writer In _writers
-            writer.WriteMessage(DateTime.Now, _path, type, messageText, additionalText)
+            writer.WriteEvent(DateTime.Now, _path, type, text, additional)
         Next
         If _parentLogger IsNot Nothing Then
-            _parentLogger.AddFromChild(_path, type, messageText, additionalText)
+            _parentLogger.AddFromChild(_path, type, text, additional)
         End If
     End Sub
 
-    Public Sub AddInformation(ByRef messageText As String, Optional ByVal additionalText As String = "")
-        Add(LogMessageType.information, messageText)
+    Public Sub AddInformation(messageText As String, ParamArray additional() As Object)
+        Add(LogEventType.information, messageText)
     End Sub
 
-    Public Sub AddError(ByRef messageText As String, Optional ByVal additionalText As String = "")
-        Add(LogMessageType.errors, messageText)
+    Public Sub AddError(messageText As String, ParamArray additional() As Object)
+        Add(LogEventType.errors, messageText)
     End Sub
 
-    Public Sub AddWarning(ByRef messageText As String, Optional ByVal additionalText As String = "")
-        Add(LogMessageType.warning, messageText)
+    Public Sub AddWarning(messageText As String, ParamArray additional() As Object)
+        Add(LogEventType.warning, messageText)
     End Sub
 
-    Public Sub AddDebug(ByRef messageText As String, Optional ByVal additionalText As String = "")
-        Add(LogMessageType.debug, messageText)
+    Public Sub AddDebug(messageText As String, ParamArray additional() As Object)
+        Add(LogEventType.debug, messageText)
     End Sub
 
-    Public Sub AddMessage(ByRef messageText As String, Optional ByVal additionalText As String = "")
-        Add(LogMessageType.message, messageText)
+    Public Sub AddMessage(messageText As String, ParamArray additional() As Object)
+        Add(LogEventType.message, messageText)
     End Sub
 
-    Public Sub AddDeepDebug(ByRef messageText As String, Optional ByVal additionalText As String = "")
-        Add(LogMessageType.deepDebug, messageText)
-    End Sub
-
-    Public Sub Add(ByRef messageText As String, Optional ByVal additionalText As String = "")
-        Add(LogMessageType.information, messageText, additionalText)
-    End Sub
-
-    Private Sub AddFromChild(ByVal path1 As String(), ByVal type As LogMessageType, ByRef messageText As String, Optional ByVal additionalText As String = "")
+    Private Sub AddFromChild(path1 As String(), type As LogEventType, messageText As String, ParamArray additional() As Object)
         For Each writer In _writers
-            writer.WriteMessage(DateTime.Now, path1, type, messageText, additionalText)
+            writer.WriteEvent(DateTime.Now, path1, type, messageText, additional)
         Next
         If _parentLogger IsNot Nothing Then
-            _parentLogger.AddFromChild(path1, type, messageText, additionalText)
-        End If
-    End Sub
-
-    Public Sub AddHeader(ByRef headerText As String)
-        For Each writer In _writers
-            writer.WriteHeader(DateTime.Now, _path, headerText)
-        Next
-        If _parentLogger IsNot Nothing Then
-            _parentLogger.AddHeader(headerText)
+            _parentLogger.AddFromChild(path1, type, messageText, additional)
         End If
     End Sub
 
@@ -130,13 +114,11 @@ Public Class Logger
 
     Public ReadOnly Property ChildLoggers() As List(Of Logger)
         Get
-            Dim newChildLoggersList As New List(Of Logger)
-            For Each child In _childLoggers
-                newChildLoggersList.Add(child)
-            Next
+            Dim newChildLoggersList As New List(Of Logger)(_childLoggers)
             Return newChildLoggersList
         End Get
     End Property
+
     Public ReadOnly Property CategoriesList(Optional ByVal onlyLeaves As Boolean = False) As List(Of String())
         Get
             Dim list As New List(Of String())

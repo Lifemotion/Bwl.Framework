@@ -2,17 +2,17 @@
 ''' Класс, представляющий ini-файл. Выполняет чтение и запись параметров.
 ''' </summary>
 ''' <remarks></remarks>
-Public Class INIreader
+Public Class IniFile
     Private _iniFile As String
     ''' <summary>
     ''' Создает iniReader, настроенный на работу с заданным файлом.
     ''' </summary>
-    ''' <param name="INIfile">
+    ''' <param name="filename">
     ''' Имя файла с расширением и путем.
     ''' </param>
     ''' <remarks></remarks>
-    Sub New(ByVal INIfile As String)
-        _iniFile = INIfile
+    Sub New(ByVal filename As String)
+        _iniFile = filename
     End Sub
     ''' <summary>
     ''' Читает значение параметра. Если параметр не найден, возвращает заданную строку.

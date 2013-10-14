@@ -17,8 +17,8 @@
         TryCreateFolder(_dataFolder)
         TryCreateFolder(_logsFolder)
         _logger = New Logger
-        _logger.ConnectWriter(New FileLogWriter(_logsFolder, , FileLogWriter.TypeLoggingMode.allInOneFile))
-        _logger.ConnectWriter(New FileLogWriter(_logsFolder, , FileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogMessageType.errors))
+        _logger.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile))
+        _logger.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors))
         _storage = New SettingsStorage(_settingsFolder + "settings.ini", "Application")
     End Sub
     Public Sub TryCreateFolder(path As String)
