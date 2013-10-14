@@ -19,7 +19,7 @@
         _logger = New Logger
         _logger.ConnectWriter(New FileLogWriter(_logsFolder, , FileLogWriter.TypeLoggingMode.allInOneFile))
         _logger.ConnectWriter(New FileLogWriter(_logsFolder, , FileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogMessageType.errors))
-        _storage = New SettingsStorage(_settingsFolder + "settings.ini", "AppBaseSettings")
+        _storage = New SettingsStorage(_settingsFolder + "settings.ini", "Application")
     End Sub
     Public Sub TryCreateFolder(path As String)
         Try

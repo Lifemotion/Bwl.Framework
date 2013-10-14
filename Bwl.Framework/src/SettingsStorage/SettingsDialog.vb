@@ -22,6 +22,9 @@ Public Class SettingsDialog
         For Each childStorage As SettingsStorage In storage.ChildStorages
             Dim newNode As New TreeNode
             newNode.Text = childStorage.CategoryName
+            If childStorage.FriendlyCategoryName.Length > 0 Then
+                newNode.Text = childStorage.FriendlyCategoryName
+            End If
             newNode.ToolTipText = ""
             newNode.ImageIndex = 0
             newNode.SelectedImageIndex = 0

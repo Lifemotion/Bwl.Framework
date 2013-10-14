@@ -24,7 +24,7 @@ Public Class ConsoleSupport
                     MkDir(baseDir + "\..\data\")
                 Catch ex As Exception
                 End Try
-                _storage = New SettingsStorage(baseDir + "\..\conf\settings.ini", "ConsoleProgram")
+                _storage = New SettingsStorage(baseDir + "\..\conf\settings.ini", "Application")
                 _consoleSettings = _storage.CreateChildStorage("Console")
                 _consoleTitle = _consoleSettings.CreateStringSetting("Window Title", "Консольное приложение")
                 _consoleColor = New VariantSetting(_consoleSettings, "Font Color", "gray,white,black,green,red,blue", "gray")
