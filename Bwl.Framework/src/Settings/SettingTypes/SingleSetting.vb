@@ -1,67 +1,24 @@
-﻿Public Class SingleSetting
-    Inherits ObjectSeting
-    Private _value As Single
-    Private _defaultValue As Single
-    Public Sub New(ByVal storage As SettingsStorage, ByVal name As String, ByVal defaultValue As Single)
-        _value = defaultValue
-        _defaultValue = defaultValue
-        _storage = storage
-        _name = name
-        storage.InsertSetting(Me, name, ToString)
+﻿Public Class DoubleSetting
+    Inherits SettingBase
+
+    Public Sub New(ByVal storage As SettingsStorage, ByVal name As String, ByVal defaultValue As Double)
+        Me.New(storage, name, defaultValue, "", "")
     End Sub
-    Public Sub New(ByVal storage As SettingsStorage, ByVal name As String, ByVal defaultValue As Single, ByVal friendlyName As String, ByVal description As String)
-        _value = defaultValue
-        _defaultValue = defaultValue
-        _storage = storage
-        _name = name
-        MyBase.FriendlyName = friendlyName
-        MyBase.Description = description
-        storage.InsertSetting(Me, name, ToString)
+
+    Public Sub New(ByVal storage As SettingsStorage, ByVal name As String, ByVal defaultValue As Double, ByVal friendlyName As String, ByVal description As String)
+        MyBase.New(storage, name, defaultValue.ToString, friendlyName, description)
     End Sub
-    Public Overrides Property ValueObject() As Object
-        Get
-            Return Value
-        End Get
-        Set(ByVal value1 As Object)
-            Value = CSng(value1)
-        End Set
-    End Property
-    Friend Overrides Sub FromString(ByVal source As String)
-        _isLoaded = True
-        If IsNumeric(source.Replace(".", ",")) Then
-            _value = Val(source)
-        Else
-            _value = _defaultValue
-            _storage.SettingChanged(Me)
-        End If
-    End Sub
-    Public Overrides Function ToString() As String
-        Return Str(_value)
-    End Function
-    Shared Narrowing Operator CType(ByVal value As SingleSetting) As Single
-        If Not value._isLoaded Then
-            value._storage.LoadSetting(value)
-            value._isLoaded = True
-        End If
-        Return value._value
+
+    Shared Narrowing Operator CType(ByVal value As DoubleSetting) As Double
+        Return value.Value
     End Operator
-    Public Property Value() As Single
+
+    Public Property Value() As Double
         Get
-            If Not _isLoaded Then _storage.LoadSetting(Me)
-            _isLoaded = True
-            Return _value
+            Return CInt(MyBase.ValueAsString)
         End Get
-        Set(ByVal value As Single)
-            Dim lastValue As String = _value
-            _value = value
-            _isLoaded = True
-            ValueChangedCall(lastValue, _value)
-            _storage.SettingChanged(Me)
+        Set(ByVal value As Double)
+            MyBase.ValueAsString = value.ToString
         End Set
-    End Property
-    Public Overrides ReadOnly Property DefaultObject() As Object
-        Get
-            Return _defaultValue
-        End Get
     End Property
 End Class

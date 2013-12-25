@@ -1,5 +1,5 @@
 ﻿
-Public MustInherit Class ObjectSeting
+Public MustInherit Class ObjectSetting
     Private _description As String = ""
     Private _friendlyName As String = ""
     Protected _name As String = ""
@@ -9,8 +9,9 @@ Public MustInherit Class ObjectSeting
     Public Event ValueChanged()
     Friend MustOverride Sub FromString(ByVal source As String)
     Public MustOverride Overrides Function ToString() As String
-    Public MustOverride Property ValueObject() As Object
-    Public MustOverride ReadOnly Property DefaultObject() As Object
+    Public MustOverride Property ValueString() As Object
+    Public MustOverride ReadOnly Property DefaultString() As Object
+    Public Property Changed As Boolean
 
     Public Property Description() As String
         Get
@@ -47,4 +48,5 @@ Public MustInherit Class ObjectSeting
     Protected Sub ValueChangedCall(ByRef oldValue As Object, ByRef newValue As Object)
         If oldValue <> newValue Then RaiseEvent ValueChanged()
     End Sub
+
 End Class

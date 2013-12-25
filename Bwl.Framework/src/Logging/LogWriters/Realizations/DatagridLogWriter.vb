@@ -95,12 +95,12 @@ Public Class DatagridLogWriter
         If type = LogEventType.warning Then newColor = Drawing.Color.FromArgb(255, 255, 220)
         If lastColor = newColor Then
             lastColor = Drawing.Color.Black
-            newColor = Drawing.Color.FromArgb(newColor.R * 0.9, newColor.G * 0.9, newColor.B * 0.9)
+            newColor = Drawing.Color.FromArgb(CInt(newColor.R * 0.9), CInt(newColor.G * 0.9), CInt(newColor.B * 0.9))
         End If
         lastColor = newColor
         Return newColor
     End Function
-    Private Function Filter(ByVal message As ListItem)
+    Private Function Filter(ByVal message As ListItem) As Boolean
         With message
             If Not cbDebug.Checked And .type = LogEventType.debug Then Return False
             If Not cbInformation.Checked And .type = LogEventType.information Then Return False

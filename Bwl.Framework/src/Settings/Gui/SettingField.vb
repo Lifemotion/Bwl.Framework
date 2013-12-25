@@ -1,15 +1,15 @@
 ﻿Public Class SettingField
-    Private WithEvents setting As ObjectSeting
+    Private WithEvents setting As SettingBase
     Private settingReady As Boolean
     Private _designText As String
     Sub New()
         InitializeComponent()
     End Sub
-    Public Property AssignedSetting() As ObjectSeting
+    Public Property AssignedSetting() As SettingBase
         Get
             Return setting
         End Get
-        Set(ByVal value As ObjectSeting)
+        Set(ByVal value As SettingBase)
             setting = value
             ShowFields()
         End Set
@@ -35,20 +35,20 @@
             tbValue.Hide()
             tbValue.Enabled = True
             If TypeOf setting Is BooleanSetting Then
-                Dim tmp As BooleanSetting = setting
+                Dim tmp = DirectCast(setting, BooleanSetting)
                 cValue.Checked = tmp.Value
                 cValue.Text = setting.Name
                 cValue.Show()
             ElseIf TypeOf setting Is VariantSetting Then
-                Dim tmp As VariantSetting = setting
+                Dim tmp = DirectCast(setting, VariantSetting)
                 cbValue.Items.Clear()
-                For Each item In tmp.GetVariants
+                For Each item In tmp.Variants
                     cbValue.Items.Add(item)
                 Next
                 cbValue.Text = tmp.Value
                 cbValue.Show()
             Else
-                tbValue.Text = CStr(setting.ValueObject)
+                tbValue.Text = CStr(setting.ValueAsString)
                 tbValue.Show()
             End If
 
@@ -90,7 +90,7 @@
             settingReady = False
             Try
                 If tbValue.Text <> setting.ToString Then
-                    setting.ValueObject = tbValue.Text
+                    setting.ValueAsString = tbValue.Text
                     RaiseEvent SettingValueChanged()
                 End If
             Catch ex As Exception
@@ -113,7 +113,8 @@
     Private Sub cbValue_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbValue.TextChanged
         If settingReady Then
             If TypeOf setting Is VariantSetting Then
-                Dim tmp As VariantSetting = setting
+                Dim tmp As VariantSetting = DirectCast(setting, VariantSetting)
+
                 If cbValue.Text <> tmp.Value Then
                     Try
                         DirectCast(setting, VariantSetting).Value = cbValue.Text
@@ -132,14 +133,14 @@
     Private Sub menuDefault_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         If settingReady Then
             settingReady = False
-            setting.ValueObject = setting.DefaultObject
+            setting.ValueAsString = setting.DefaultValueAsString
             ShowFields()
             settingReady = True
         End If
     End Sub
 
     Private Sub bMenu_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles bMenu.LinkClicked
-        Dim text As String = setting.DefaultObject.ToString
+        Dim text As String = setting.DefaultValueAsString.ToString
         menuDefault.Text = "По умолчанию (" + text + ")"
         menu.Show(MousePosition.X, MousePosition.Y)
     End Sub

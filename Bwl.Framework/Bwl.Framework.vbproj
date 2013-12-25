@@ -20,7 +20,8 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>dllOut\</OutputPath>
     <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>
+    </NoWarn>
     <PlatformTarget>x86</PlatformTarget>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
@@ -31,7 +32,8 @@
     <Optimize>true</Optimize>
     <OutputPath>dllOut\</OutputPath>
     <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>
+    </NoWarn>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
@@ -93,6 +95,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="src\Settings\ExistingSettingsStorage.vb" />
     <Compile Include="src\Settings\Gui\SettingField.Designer.vb">
       <DependentUpon>SettingField.vb</DependentUpon>
     </Compile>
@@ -105,10 +108,13 @@
     <Compile Include="src\Settings\Gui\SettingsDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="src\Settings\ISettingsStorage.vb" />
+    <Compile Include="src\Settings\RootSettingsStorage.vb" />
     <Compile Include="src\Settings\SettingsStorage.vb" />
+    <Compile Include="src\Settings\SettingsStorageBase.vb" />
     <Compile Include="src\Settings\SettingTypes\BooleanSetting.vb" />
     <Compile Include="src\Settings\SettingTypes\IntegerSetting.vb" />
-    <Compile Include="src\Settings\SettingTypes\Common\ObjectSetting.vb" />
+    <Compile Include="src\Settings\SettingTypes\Common\SettingBase.vb" />
     <Compile Include="src\Settings\SettingTypes\SingleSetting.vb" />
     <Compile Include="src\Settings\SettingTypes\StringSetting.vb" />
     <Compile Include="src\Settings\SettingTypes\VariantSetting.vb" />

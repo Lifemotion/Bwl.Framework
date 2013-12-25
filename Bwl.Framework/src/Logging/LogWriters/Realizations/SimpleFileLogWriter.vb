@@ -36,7 +36,7 @@
         If category = LogEventType.debug Then Return "Dbg"
         Return "   "
     End Function
-    Sub New(ByVal logFolder As String, Optional ByVal placeMode As PlaceLoggingMode = PlaceLoggingMode.allInOneFile, Optional ByVal typeMode As TypeLoggingMode = TypeLoggingMode.allInOneFile, Optional ByVal logFilename As String = "log.txt", Optional ByVal newTypeFilter As LogEventType = -128, Optional ByVal newPlaceFilter As String = "", Optional ByVal newWordFilter As String = "")
+    Sub New(ByVal logFolder As String, Optional ByVal placeMode As PlaceLoggingMode = PlaceLoggingMode.allInOneFile, Optional ByVal typeMode As TypeLoggingMode = TypeLoggingMode.allInOneFile, Optional ByVal logFilename As String = "log.txt", Optional ByVal newTypeFilter As LogEventType = LogEventType.all, Optional ByVal newPlaceFilter As String = "", Optional ByVal newWordFilter As String = "")
         filename = logFilename
         folder = logFolder
         modePlace = placeMode

@@ -24,7 +24,7 @@ Public Class ConsoleAppBase
                     MkDir(baseDir + "\..\data\")
                 Catch ex As Exception
                 End Try
-                _storage = New SettingsStorage(baseDir + "\..\conf\settings.ini", "Application")
+                _storage = New RootSettingsStorage(baseDir + "\..\conf\settings.ini", "Application")
                 _consoleSettings = _storage.CreateChildStorage("Console")
                 _consoleTitle = _consoleSettings.CreateStringSetting("Window Title", "Консольное приложение")
                 _consoleColor = New VariantSetting(_consoleSettings, "Font Color", "gray,white,black,green,red,blue", "gray")
@@ -34,7 +34,7 @@ Public Class ConsoleAppBase
                 _consoleWriter = New ConsoleLogWriter
                 _logs.ConnectWriter(_logsWriter)
                 _logs.ConnectWriter(_consoleWriter)
-                System.Console.Title = _consoleTitle
+                System.Console.Title = _consoleTitle.Value
                 Select Case _consoleColor.Value
                     Case "white" : System.Console.ForegroundColor = ConsoleColor.White
                     Case "black" : System.Console.ForegroundColor = ConsoleColor.Black

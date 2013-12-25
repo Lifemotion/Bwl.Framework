@@ -1,25 +1,25 @@
 ﻿Imports System.Windows.Forms
 
 Public Class SettingsDialog
-    Private storage As SettingsStorage
+    Private storage As ISettingsStorage
     Private Sub frmSettingsTest_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
     End Sub
-    Public Sub ShowSettings(ByVal newStorage As SettingsStorage)
+    Public Sub ShowSettings(ByVal newStorage As ISettingsStorage)
         storage = newStorage
         FillTree(storage)
         Me.Text = "Настройки " + storage.CategoryName
     End Sub
-    Private Sub FillTree(ByVal storage As SettingsStorage)
+    Private Sub FillTree(ByVal storage As ISettingsStorage)
         list.Nodes.Clear()
         Dim nodeList As New TreeNode
         FillTreeRecursive(nodeList, storage)
-        For Each node In nodeList.Nodes
+        For Each node As TreeNode In nodeList.Nodes
             list.Nodes.Add(node)
         Next
     End Sub
-    Private Sub FillTreeRecursive(ByVal node As TreeNode, ByVal storage As SettingsStorage)
-        For Each childStorage As SettingsStorage In storage.ChildStorages
+    Private Sub FillTreeRecursive(ByVal node As TreeNode, ByVal storage As ISettingsStorage)
+        For Each childStorage As ISettingsStorage In storage.ChildStorages
             Dim newNode As New TreeNode
             newNode.Text = childStorage.CategoryName
             If childStorage.FriendlyCategoryName.Length > 0 Then
@@ -32,7 +32,7 @@ Public Class SettingsDialog
             node.Nodes.Add(newNode)
         Next
 
-        For Each childSetting As ObjectSeting In storage.Settings
+        For Each childSetting As SettingBase In storage.Settings
             Dim newNode As New TreeNode
             newNode.ImageIndex = 1
             newNode.SelectedImageIndex = 1
@@ -40,7 +40,7 @@ Public Class SettingsDialog
             If childSetting.FriendlyName.Length > 0 Then
                 nameText = childSetting.FriendlyName
             End If
-            newNode.Text = nameText + ": " + CStr(childSetting.ValueObject)
+            newNode.Text = nameText + ": " + CStr(childSetting.ValueAsString)
 
             newNode.ToolTipText = childSetting.Description
             newNode.Tag = childSetting
@@ -50,7 +50,7 @@ Public Class SettingsDialog
 
     Private Sub list_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles list.AfterSelect
         If list.SelectedNode.Tag IsNot Nothing Then
-            settingView.AssignedSetting = list.SelectedNode.Tag
+            settingView.AssignedSetting = DirectCast(list.SelectedNode.Tag, SettingBase)
         End If
     End Sub
 
@@ -64,12 +64,12 @@ Public Class SettingsDialog
 
     Private Sub settingView_SettingValueChanged() Handles settingView.SettingValueChanged
         If list.SelectedNode.Tag IsNot Nothing Then
-            Dim setting As ObjectSeting = list.SelectedNode.Tag
+            Dim setting As SettingBase = DirectCast(list.SelectedNode.Tag, SettingBase)
             Dim nameText As String = setting.Name
             If setting.FriendlyName.Length > 0 Then
                 nameText = setting.FriendlyName
             End If
-            list.SelectedNode.Text = nameText + ": " + CStr(setting.ValueObject) + " [*]"
+            list.SelectedNode.Text = nameText + ": " + CStr(setting.ValueAsString) + " [*]"
         End If
     End Sub
 End Class
