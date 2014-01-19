@@ -1,14 +1,21 @@
-﻿Public Class RootSettingsStorage
+﻿Imports System.Timers
+
+Public Class RootSettingsStorage
     Inherits SettingsStorage
+    Protected _autoSave As Boolean
+    Protected _autoSaveInterval As Single = 2
+
+    Protected WithEvents _autoSaveTimer As New Timer
+
     ''' <summary>
     ''' Создать новое хранилище настроек, являющееся корневым.
     ''' </summary>
-    ''' <param name="newDefaultWriter">Интерфейс сохранения\загрузки настроек по умолчанию.</param>
+    ''' <param name="defaultWriter">Интерфейс сохранения\загрузки настроек по умолчанию.</param>
     ''' <param name="rootCategoryName">Имя корневой категории настроек.</param>
     ''' <remarks></remarks>
-    Sub New(ByRef newDefaultWriter As ISettingsReaderWriter, ByVal rootCategoryName As String)
+    Sub New(defaultWriter As ISettingsReaderWriter, rootCategoryName As String)
         If rootCategoryName = "" Then Throw New Exception("Имя корневой категории настроек не может быть пустым.")
-        _defaultWriter = newDefaultWriter
+        _defaultWriter = defaultWriter
         _category = rootCategoryName
         ReDim _storagePath(0)
         _storagePath(0) = _category
@@ -29,12 +36,12 @@
     ''' <param name="iniFileName">Имя ini-файла с настройками.</param>
     ''' <param name="rootCategoryName">Имя корневой категории настроек.</param>
     ''' <remarks></remarks>
-    Sub New(ByVal iniFileName As String, ByVal rootCategoryName As String)
+    Sub New(iniFileName As String, rootCategoryName As String)
         Me.New(New IniFileSettingsWriter(iniFileName), rootCategoryName)
     End Sub
 
     Public Property AutoSave As Boolean
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             _autoSave = value
             ConfigureAutosaveTimer()
         End Set
@@ -44,7 +51,7 @@
     End Property
 
     Public Property AutoSaveInterval As Single
-        Set(ByVal value As Single)
+        Set(value As Single)
             _autoSaveInterval = value
             ConfigureAutosaveTimer()
         End Set
@@ -53,7 +60,7 @@
         End Get
     End Property
 
-    Private Sub _autoSaveTimer_Elapsed(ByVal sender As Object, ByVal e As System.Timers.ElapsedEventArgs) Handles _autoSaveTimer.Elapsed
+    Private Sub _autoSaveTimer_Elapsed(sender As Object, e As System.Timers.ElapsedEventArgs) Handles _autoSaveTimer.Elapsed
         SyncLock _autoSaveTimer
             If _autoSaveNeeded Then
                 _autoSaveNeeded = False

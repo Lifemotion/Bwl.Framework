@@ -1,15 +1,19 @@
 ﻿Public Class StringSetting
-    Inherits SettingBase
+    Inherits SettingOnStorage
 
-    Public Sub New(ByVal storage As SettingsStorage, ByVal name As String, ByVal defaultValue As String)
+    Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As String)
         Me.New(storage, name, defaultValue, "", "")
     End Sub
-
-    Public Sub New(ByVal storage As SettingsStorage, ByVal name As String, ByVal defaultValue As String, ByVal friendlyName As String, ByVal description As String)
+    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, friendlyName As String, description As String, value As String)
+        MyBase.New(storage, name, defaultValue, friendlyName, description, value)
+        _isValueCorrectFunction = AddressOf CheckValueIsCorrect
+    End Sub
+    Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, friendlyName As String, description As String)
         MyBase.New(storage, name, defaultValue, friendlyName, description)
+        _isValueCorrectFunction = AddressOf CheckValueIsCorrect
     End Sub
 
-    Shared Narrowing Operator CType(ByVal value As StringSetting) As String
+    Shared Narrowing Operator CType(value As StringSetting) As String
         Return value.Value
     End Operator
 
@@ -17,9 +21,13 @@
         Get
             Return MyBase.ValueAsString
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             MyBase.ValueAsString = value
         End Set
     End Property
 
+    Private Function CheckValueIsCorrect(str As String) As Boolean
+        If str Is Nothing Then Return False
+        Return True
+    End Function
 End Class

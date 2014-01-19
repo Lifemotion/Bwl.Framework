@@ -11,7 +11,7 @@ Public Class IniFile
     ''' Имя файла с расширением и путем.
     ''' </param>
     ''' <remarks></remarks>
-    Sub New(ByVal filename As String)
+    Sub New(filename As String)
         _iniFile = filename
     End Sub
     ''' <summary>
@@ -22,7 +22,7 @@ Public Class IniFile
     ''' <param name="returnIsNotExist">Что возвращает, если параметр не найден.</param>
     ''' <returns>Значение параметра.</returns>
     ''' <remarks></remarks>
-    Function GetSetting(ByVal groupName As String, ByVal paramName As String, Optional ByRef defaultValue As String = Nothing, Optional ByVal returnIsNotExist As String = "") As String
+    Function GetSetting(groupName As String, paramName As String, Optional defaultValue As String = Nothing, Optional returnIsNotExist As String = "") As String
         Dim fileID As Integer = FreeFile()
         Try
             FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
@@ -72,7 +72,7 @@ Public Class IniFile
     ''' <param name="paramName">Имя параметра.</param>
     ''' <param name="value">Значение параметра.</param>
     ''' <remarks></remarks>
-    Sub SetSetting(ByVal groupName As String, ByVal paramName As String, ByVal value As String)
+    Sub SetSetting(groupName As String, paramName As String, value As String)
         Dim fileID As Integer = FreeFile()
         Dim fileBuff() As String
         Dim flagGroup, flagParam As Boolean
@@ -169,7 +169,7 @@ Public Class IniFile
     ''' <param name="groupName">Имя группы. Если не указано, возвращает список всех параметров.</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Function GetParamList(ByVal groupName As String) As String()
+    Function GetParamList(groupName As String) As String()
         Dim params() As String
         ReDim params(0)
         Dim fileID As Integer = FreeFile()

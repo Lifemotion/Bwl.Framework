@@ -1,15 +1,19 @@
 ﻿Public Class DoubleSetting
-    Inherits SettingBase
+    Inherits SettingOnStorage
 
-    Public Sub New(ByVal storage As SettingsStorage, ByVal name As String, ByVal defaultValue As Double)
+    Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As Double)
         Me.New(storage, name, defaultValue, "", "")
     End Sub
-
-    Public Sub New(ByVal storage As SettingsStorage, ByVal name As String, ByVal defaultValue As Double, ByVal friendlyName As String, ByVal description As String)
+    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, friendlyName As String, description As String, value As String)
+        MyBase.New(storage, name, defaultValue, friendlyName, description, value)
+        _isValueCorrectFunction = AddressOf CheckValueIsCorrect
+    End Sub
+    Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As Double, friendlyName As String, description As String)
         MyBase.New(storage, name, defaultValue.ToString, friendlyName, description)
+        _isValueCorrectFunction = AddressOf CheckValueIsCorrect
     End Sub
 
-    Shared Narrowing Operator CType(ByVal value As DoubleSetting) As Double
+    Shared Narrowing Operator CType(value As DoubleSetting) As Double
         Return value.Value
     End Operator
 
@@ -17,8 +21,15 @@
         Get
             Return CInt(MyBase.ValueAsString)
         End Get
-        Set(ByVal value As Double)
+        Set(value As Double)
             MyBase.ValueAsString = value.ToString
         End Set
     End Property
+
+    Private Function CheckValueIsCorrect(str As String) As Boolean
+        If str Is Nothing Then Return False
+        If IsNumeric(str) = False Then Return False
+        If CDbl(str).ToString <> str Then Return False
+        Return True
+    End Function
 End Class

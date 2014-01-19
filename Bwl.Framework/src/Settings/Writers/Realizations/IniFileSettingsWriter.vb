@@ -3,7 +3,7 @@
 
     Private iniFile As IniFile
     Private lock As New Object
-    Sub New(ByRef filename As String)
+    Sub New(filename As String)
         iniFile = New IniFile(filename)
     End Sub
     Public Function IsSettingExist(path() As String, name As String) As Boolean Implements ISettingsReaderWriter.IsSettingExist
@@ -27,13 +27,17 @@
         Return result
     End Function
 
-    Public Sub WriteSetting(storagePath() As String, setting As SettingBase) Implements ISettingsReaderWriter.WriteSetting
+    Public Sub WriteSetting(storagePath() As String, setting As Setting) Implements ISettingsReaderWriter.WriteSetting
         SyncLock lock
-            iniFile.SetSetting(PathToString(storagePath), setting.Name, setting.ToString)
+            iniFile.SetSetting(PathToString(storagePath), setting.Name, setting.ValueAsString)
         End SyncLock
     End Sub
 
     Public Sub WriteCategory(storagePath() As String, Name As String, FriendlyName As String) Implements ISettingsReaderWriter.WriteCategory
+
+    End Sub
+
+    Public Sub WriteRoot(Name As String, FriendlyName As String) Implements ISettingsReaderWriter.WriteRoot
 
     End Sub
 End Class

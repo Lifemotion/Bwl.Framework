@@ -16,7 +16,7 @@ Public Class DatagridLogWriter
     Sub New()
         InitializeComponent()
     End Sub
-    Private Function GetTypeName(ByVal type As LogEventType) As String
+    Private Function GetTypeName(type As LogEventType) As String
         If type = LogEventType.information Then Return "ИНФ"
         If type = LogEventType.errors Then Return "ОШБ"
         If type = LogEventType.message Then Return "СБЩ"
@@ -25,7 +25,7 @@ Public Class DatagridLogWriter
         Return ""
     End Function
 
-    Private Sub tWrite_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tWrite.Tick
+    Private Sub tWrite_Tick(sender As System.Object, e As System.EventArgs) Handles tWrite.Tick
         tWrite.Stop()
         SyncLock _newMessagesListLock
             If newMessages.Count > 0 Then
@@ -60,14 +60,14 @@ Public Class DatagridLogWriter
     Public Sub CategoryListChanged() Implements ILogWriter.CategoryListChanged
 
     End Sub
-    Public Sub ConnectedToLogger(ByVal logger As Logger) Implements ILogWriter.ConnectedToLogger
+    Public Sub ConnectedToLogger(logger As Logger) Implements ILogWriter.ConnectedToLogger
 
     End Sub
     Public Property LogEnabled() As Boolean Implements ILogWriter.LogEnabled
         Get
             Return working
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             working = value
         End Set
     End Property
@@ -86,7 +86,7 @@ Public Class DatagridLogWriter
             End If
         End SyncLock
     End Sub
-    Private Function GetRowColor(ByVal type As LogEventType) As System.Drawing.Color
+    Private Function GetRowColor(type As LogEventType) As System.Drawing.Color
         Dim newColor As System.Drawing.Color = Drawing.Color.White
         Static lastColor As System.Drawing.Color
         If type = LogEventType.debug Then newColor = Drawing.Color.FromArgb(200, 200, 200)
@@ -100,7 +100,7 @@ Public Class DatagridLogWriter
         lastColor = newColor
         Return newColor
     End Function
-    Private Function Filter(ByVal message As ListItem) As Boolean
+    Private Function Filter(message As ListItem) As Boolean
         With message
             If Not cbDebug.Checked And .type = LogEventType.debug Then Return False
             If Not cbInformation.Checked And .type = LogEventType.information Then Return False
@@ -133,7 +133,7 @@ Public Class DatagridLogWriter
             Return textFilter
         End With
     End Function
-    Private Sub ShowMessage(ByVal message As ListItem)
+    Private Sub ShowMessage(message As ListItem)
         With message
             Dim pathString As String
             Dim dateString As String = .dateTime.ToShortDateString
@@ -160,7 +160,7 @@ Public Class DatagridLogWriter
         End SyncLock
     End Sub
 
-    Private Sub bClear_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles bClear.LinkClicked
+    Private Sub bClear_LinkClicked(sender As System.Object, e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles bClear.LinkClicked
         Clear()
     End Sub
 
@@ -181,7 +181,7 @@ Public Class DatagridLogWriter
         End SyncLock
     End Sub
 
-    Private Sub ViewSettingsChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDebug.CheckedChanged, cbErrors.CheckedChanged, cbInformation.CheckedChanged, cbMessages.CheckedChanged, cbWarnings.CheckedChanged, cbFilter.CheckedChanged
+    Private Sub ViewSettingsChanged(sender As System.Object, e As System.EventArgs) Handles cbDebug.CheckedChanged, cbErrors.CheckedChanged, cbInformation.CheckedChanged, cbMessages.CheckedChanged, cbWarnings.CheckedChanged, cbFilter.CheckedChanged
         RedrawItems()
     End Sub
 
@@ -189,7 +189,7 @@ Public Class DatagridLogWriter
         Get
             Return cbDebug.Checked
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             cbDebug.Checked = value
         End Set
     End Property
@@ -197,7 +197,7 @@ Public Class DatagridLogWriter
         Get
             Return cbInformation.Checked()
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             cbInformation.Checked = value
         End Set
     End Property
@@ -205,7 +205,7 @@ Public Class DatagridLogWriter
         Get
             Return cbMessages.Checked()
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             cbMessages.Checked = value
         End Set
     End Property
@@ -213,7 +213,7 @@ Public Class DatagridLogWriter
         Get
             Return cbErrors.Checked()
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             cbErrors.Checked = value
         End Set
     End Property
@@ -221,7 +221,7 @@ Public Class DatagridLogWriter
         Get
             Return cbWarnings.Checked()
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             cbWarnings.Checked = value
         End Set
     End Property
@@ -229,7 +229,7 @@ Public Class DatagridLogWriter
         Get
             Return tbFilter.Text
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             tbFilter.Text = value
             If tbFilter.Text = "" Then
                 tbFilter.Visible = False

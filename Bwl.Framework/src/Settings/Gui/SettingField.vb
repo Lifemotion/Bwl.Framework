@@ -1,19 +1,21 @@
 ﻿Public Class SettingField
-    Private WithEvents setting As SettingBase
+    Private WithEvents setting As SettingOnStorage
     Private settingReady As Boolean
     Private _designText As String
     Sub New()
         InitializeComponent()
     End Sub
-    Public Property AssignedSetting() As SettingBase
+    Public Property AssignedSetting() As SettingOnStorage
         Get
             Return setting
         End Get
-        Set(ByVal value As SettingBase)
+        Set(value As SettingOnStorage)
             setting = value
             ShowFields()
         End Set
     End Property
+
+
     Private Sub ShowFields()
         settingReady = False
         If setting Is Nothing Then
@@ -67,17 +69,17 @@
             MyBase.Refresh()
         End If
     End Sub
-    Private Sub SettingField_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Private Sub SettingField_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
 
     End Sub
-    Private Sub cbValue_SelectionChangeCommitted(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbValue.SelectionChangeCommitted
+    Private Sub cbValue_SelectionChangeCommitted(sender As System.Object, e As System.EventArgs) Handles cbValue.SelectionChangeCommitted
 
     End Sub
     Public Property DesignText() As String
         Get
             Return _designText
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             _designText = value
             If setting Is Nothing Then
                 lCaption.Text = _designText
@@ -85,11 +87,11 @@
         End Set
     End Property
     Public Event SettingValueChanged()
-    Private Sub tbValue_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbValue.TextChanged
-        If settingReady Then
+    Private Sub tbValue_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbValue.TextChanged
+        If settingReady And (Not Me.IsDisposed) Then
             settingReady = False
             Try
-                If tbValue.Text <> setting.ToString Then
+                If tbValue.Text <> setting.ValueAsString Then
                     setting.ValueAsString = tbValue.Text
                     RaiseEvent SettingValueChanged()
                 End If
@@ -100,8 +102,8 @@
         End If
     End Sub
 
-    Private Sub cValue_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles cValue.Click
-        If settingReady Then
+    Private Sub cValue_Click(sender As Object, e As System.EventArgs) Handles cValue.Click
+        If settingReady And (Not Me.IsDisposed) Then
             If TypeOf setting Is BooleanSetting Then
                 DirectCast(setting, BooleanSetting).Value = cValue.Checked
                 RaiseEvent SettingValueChanged()
@@ -110,8 +112,8 @@
         ShowFields()
     End Sub
 
-    Private Sub cbValue_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbValue.TextChanged
-        If settingReady Then
+    Private Sub cbValue_TextChanged(sender As Object, e As System.EventArgs) Handles cbValue.TextChanged
+        If settingReady And (Not Me.IsDisposed) Then
             If TypeOf setting Is VariantSetting Then
                 Dim tmp As VariantSetting = DirectCast(setting, VariantSetting)
 
@@ -127,11 +129,8 @@
         End If
     End Sub
 
-
-
-
-    Private Sub menuDefault_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        If settingReady Then
+    Private Sub menuDefault_Click(sender As System.Object, e As System.EventArgs)
+        If settingReady And (Not Me.IsDisposed) Then
             settingReady = False
             setting.ValueAsString = setting.DefaultValueAsString
             ShowFields()
@@ -139,14 +138,14 @@
         End If
     End Sub
 
-    Private Sub bMenu_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles bMenu.LinkClicked
+    Private Sub bMenu_LinkClicked(sender As System.Object, e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles bMenu.LinkClicked
         Dim text As String = setting.DefaultValueAsString.ToString
         menuDefault.Text = "По умолчанию (" + text + ")"
         menu.Show(MousePosition.X, MousePosition.Y)
     End Sub
 
-   
-    Private Sub menuFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuFile.Click
+
+    Private Sub menuFile_Click(sender As System.Object, e As System.EventArgs) Handles menuFile.Click
         If selectFile.ShowDialog = Windows.Forms.DialogResult.OK Then
             tbValue.Text = selectFile.FileName
         End If

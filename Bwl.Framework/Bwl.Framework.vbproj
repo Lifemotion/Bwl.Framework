@@ -95,7 +95,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="src\Settings\ExistingSettingsStorage.vb" />
+    <Compile Include="src\Settings\Storages\ExistingSettingsStorage.vb" />
     <Compile Include="src\Settings\Gui\SettingField.Designer.vb">
       <DependentUpon>SettingField.vb</DependentUpon>
     </Compile>
@@ -108,16 +108,18 @@
     <Compile Include="src\Settings\Gui\SettingsDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Settings\ISettingsStorage.vb" />
-    <Compile Include="src\Settings\RootSettingsStorage.vb" />
-    <Compile Include="src\Settings\SettingsStorage.vb" />
-    <Compile Include="src\Settings\SettingsStorageBase.vb" />
+    <Compile Include="src\Settings\Storages\Common\ISettingsStorage.vb" />
+    <Compile Include="src\Settings\Storages\RootSettingsStorage.vb" />
+    <Compile Include="src\Settings\Storages\SettingsStorage.vb" />
+    <Compile Include="src\Settings\Storages\Common\SettingsStorageBase.vb" />
     <Compile Include="src\Settings\SettingTypes\BooleanSetting.vb" />
+    <Compile Include="src\Settings\SettingTypes\Common\Setting.vb" />
     <Compile Include="src\Settings\SettingTypes\IntegerSetting.vb" />
-    <Compile Include="src\Settings\SettingTypes\Common\SettingBase.vb" />
+    <Compile Include="src\Settings\SettingTypes\Common\SettingOnStorage.vb" />
     <Compile Include="src\Settings\SettingTypes\SingleSetting.vb" />
     <Compile Include="src\Settings\SettingTypes\StringSetting.vb" />
     <Compile Include="src\Settings\SettingTypes\VariantSetting.vb" />
+    <Compile Include="src\Settings\Writers\Realizations\MemoryReaderWriter.vb" />
     <Compile Include="src\Tools\IniFile.vb" />
     <Compile Include="src\Settings\Writers\Interface\ISettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\IniFileSettingsWriter.vb" />

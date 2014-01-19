@@ -28,7 +28,7 @@
         allInOneFile
         eachTypeInSelfFile
     End Enum
-    Private Function GetCategoryName(ByVal category As LogEventType) As String
+    Private Function GetCategoryName(category As LogEventType) As String
         If category = LogEventType.information Then Return "Inf"
         If category = LogEventType.errors Then Return "Err"
         If category = LogEventType.message Then Return "Msg"
@@ -36,7 +36,7 @@
         If category = LogEventType.debug Then Return "Dbg"
         Return "   "
     End Function
-    Sub New(ByVal logFolder As String, Optional ByVal placeMode As PlaceLoggingMode = PlaceLoggingMode.allInOneFile, Optional ByVal typeMode As TypeLoggingMode = TypeLoggingMode.allInOneFile, Optional ByVal logFilename As String = "log.txt", Optional ByVal newTypeFilter As LogEventType = LogEventType.all, Optional ByVal newPlaceFilter As String = "", Optional ByVal newWordFilter As String = "")
+    Sub New(logFolder As String, Optional placeMode As PlaceLoggingMode = PlaceLoggingMode.allInOneFile, Optional typeMode As TypeLoggingMode = TypeLoggingMode.allInOneFile, Optional logFilename As String = "log.txt", Optional newTypeFilter As LogEventType = LogEventType.all, Optional newPlaceFilter As String = "", Optional newWordFilter As String = "")
         filename = logFilename
         folder = logFolder
         modePlace = placeMode
@@ -51,7 +51,7 @@
     Public Sub CategoryListChanged() Implements ILogWriter.CategoryListChanged
 
     End Sub
-    Public Sub ConnectedToLogger(ByVal logger As Logger) Implements ILogWriter.ConnectedToLogger
+    Public Sub ConnectedToLogger(logger As Logger) Implements ILogWriter.ConnectedToLogger
 
     End Sub
 
@@ -59,7 +59,7 @@
         Get
             Return working
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             working = value
         End Set
     End Property
@@ -86,7 +86,7 @@
             timerWorking = False
         End If
     End Sub
-    Private Function PathToString(ByVal path() As String) As String
+    Private Function PathToString(path() As String) As String
         Dim pathString As String
         If path.GetUpperBound(0) >= 0 Then
             pathString = path(0)
@@ -98,13 +98,13 @@
         End If
         Return pathString
     End Function
-    Private Function Filter(ByVal message As ListItem) As Boolean
+    Private Function Filter(message As ListItem) As Boolean
         If typeFilter <> -128 Then
             If message.type <> typeFilter Then Return False
         End If
         Return True
     End Function
-    Private Function GetFileName(ByVal message As ListItem) As String
+    Private Function GetFileName(message As ListItem) As String
         Dim result As String = ""
         If modeType = TypeLoggingMode.allInOneFile Then result = ""
         If modeType = TypeLoggingMode.eachTypeInSelfFile Then
@@ -124,7 +124,7 @@
         If modePlace = PlaceLoggingMode.eachPlaceInSelfFileAndHigher Then result += PathToString(message.path) + ".txt"
         Return folder + "\" + result
     End Function
-    Private Sub WriteLine(ByVal message As ListItem)
+    Private Sub WriteLine(message As ListItem)
         Dim msg As String = ""
         With message
             msg += .dateTime.ToShortDateString + " "

@@ -3,6 +3,7 @@
 
 
 
+
     Public Function IsSettingExist(path() As String, name As String) As Boolean Implements ISettingsReaderWriter.IsSettingExist
         Return False
     End Function
@@ -11,11 +12,15 @@
         Return ""
     End Function
 
-    Public Sub WriteSetting(storagePath() As String, setting As SettingBase) Implements ISettingsReaderWriter.WriteSetting
+    Public Sub WriteSetting(storagePath() As String, setting As Setting) Implements ISettingsReaderWriter.WriteSetting
 
     End Sub
 
     Public Sub WriteCategory(storagePath() As String, Name As String, FriendlyName As String) Implements ISettingsReaderWriter.WriteCategory
+
+    End Sub
+
+    Public Sub WriteRoot(Name As String, FriendlyName As String) Implements ISettingsReaderWriter.WriteRoot
 
     End Sub
 End Class

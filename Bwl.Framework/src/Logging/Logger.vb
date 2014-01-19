@@ -119,7 +119,7 @@ Public Class Logger
         End Get
     End Property
 
-    Public ReadOnly Property CategoriesList(Optional ByVal onlyLeaves As Boolean = False) As List(Of String())
+    Public ReadOnly Property CategoriesList(Optional onlyLeaves As Boolean = False) As List(Of String())
         Get
             Dim list As New List(Of String())
             If Not onlyLeaves Then list.Add(_path)
