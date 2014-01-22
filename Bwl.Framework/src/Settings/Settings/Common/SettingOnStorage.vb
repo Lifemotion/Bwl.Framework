@@ -4,11 +4,8 @@ Public MustInherit Class SettingOnStorage
 
     Protected _isLoaded As Boolean
     Protected _storage As SettingsStorageBase
-
     Protected _isValueCorrectFunction As IsValueCorrectDelegate
-
     Protected Delegate Function IsValueCorrectDelegate(value As String) As Boolean
-
     Public Property Changed As Boolean
 
     Public Overrides Function ToString() As String
@@ -34,18 +31,9 @@ Public MustInherit Class SettingOnStorage
         Return _isValueCorrectFunction(value)
     End Function
 
-    Private Function PathToString(path() As String) As String
-        Dim result As String = ""
-        For i = path.GetUpperBound(0) To 1 Step -1
-            result += path(i) + "."
-        Next
-        result += path(0)
-        Return result
-    End Function
-
     Public ReadOnly Property FullName As String
         Get
-            Dim result = PathToString(_storage.StoragePath) + "." + Name
+            Dim result = _storage.GetStoragePathAsString + "." + Name
             Return result
         End Get
     End Property
@@ -61,9 +49,7 @@ Public MustInherit Class SettingOnStorage
         End Set
 
         Get
-            If Not _isLoaded Then
-                _storage.LoadSetting(Me)
-            End If
+            If Not _isLoaded Then _storage.LoadSetting(Me)
             Return _value
         End Get
     End Property
@@ -84,6 +70,4 @@ Public MustInherit Class SettingOnStorage
             Changed = False
         End If
     End Sub
-
-
 End Class

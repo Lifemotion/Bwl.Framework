@@ -95,7 +95,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="src\Settings\Storages\ExistingSettingsStorage.vb" />
+    <Compile Include="src\Settings\Storages\ClonedSettingsStorage.vb" />
     <Compile Include="src\Settings\Gui\SettingField.Designer.vb">
       <DependentUpon>SettingField.vb</DependentUpon>
     </Compile>
@@ -109,21 +109,22 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Settings\Storages\Common\ISettingsStorage.vb" />
-    <Compile Include="src\Settings\Storages\RootSettingsStorage.vb" />
+    <Compile Include="src\Settings\Storages\SettingsStorageRoot.vb" />
     <Compile Include="src\Settings\Storages\SettingsStorage.vb" />
     <Compile Include="src\Settings\Storages\Common\SettingsStorageBase.vb" />
-    <Compile Include="src\Settings\SettingTypes\BooleanSetting.vb" />
-    <Compile Include="src\Settings\SettingTypes\Common\Setting.vb" />
-    <Compile Include="src\Settings\SettingTypes\IntegerSetting.vb" />
-    <Compile Include="src\Settings\SettingTypes\Common\SettingOnStorage.vb" />
-    <Compile Include="src\Settings\SettingTypes\SingleSetting.vb" />
-    <Compile Include="src\Settings\SettingTypes\StringSetting.vb" />
-    <Compile Include="src\Settings\SettingTypes\VariantSetting.vb" />
+    <Compile Include="src\Settings\Settings\BooleanSetting.vb" />
+    <Compile Include="src\Settings\Settings\Common\Setting.vb" />
+    <Compile Include="src\Settings\Settings\IntegerSetting.vb" />
+    <Compile Include="src\Settings\Settings\Common\SettingOnStorage.vb" />
+    <Compile Include="src\Settings\Settings\DoubleSetting.vb" />
+    <Compile Include="src\Settings\Settings\StringSetting.vb" />
+    <Compile Include="src\Settings\Settings\VariantSetting.vb" />
     <Compile Include="src\Settings\Writers\Realizations\MemoryReaderWriter.vb" />
     <Compile Include="src\Tools\IniFile.vb" />
     <Compile Include="src\Settings\Writers\Interface\ISettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\IniFileSettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\NullSettingsWriter.vb" />
+    <Compile Include="src\Tools\Tools.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="src\Logging\LogWriters\Realizations\DatagridLogWriter.resx">
@@ -153,6 +154,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

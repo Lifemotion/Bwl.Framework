@@ -1,20 +1,21 @@
-﻿Public Class ExistingSettingsStorage
+﻿Public Class ClonedSettingsStorage
     Inherits SettingsStorageBase
 
     Public Sub New(mrw As MemoryReaderWriter)
-        Me.New(mrw, {}, mrw.ReadRootStorageNames(0), Nothing)
+
+        Me.New(mrw, {}, mrw.ReadRootStorageNames(0), "", Nothing)
     End Sub
 
-    Protected Sub New(mrw As MemoryReaderWriter, parentStoragePath As String(), name As String, parent As ExistingSettingsStorage)
-        Dim path = New List(Of String)(parentStoragePath)
-        path.Insert(0, name)
-        _category = name
-        _storagePath = path.ToArray
-        _parentStorage = parent
+    Protected Sub New(mrw As MemoryReaderWriter, parentStoragePath As String(), name As String, friendlyname As String, parent As ClonedSettingsStorage)
 
-        Dim settingsNames = mrw.ReadSettingsNames(_storagePath)
+        _name = name
+        _friendlyName = friendlyname
+        _parentStorage = parent
+        Dim path = GetStoragePath()
+
+        Dim settingsNames = mrw.ReadSettingsNames(path)
         For Each settingName In settingsNames
-            Dim setting = mrw.ReadSetting(_storagePath, settingName)
+            Dim setting = mrw.ReadSetting(path, settingName)
             If setting.Type = GetType(IntegerSetting).ToString Then
                 Dim child = New IntegerSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
             End If
@@ -28,14 +29,15 @@
                 Dim child = New DoubleSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
             End If
             If setting.Type = GetType(VariantSetting).ToString Then
-                Dim child = New VariantSetting(Me, setting.Name, setting.DefaultValueAsString, setting.Restrictions, setting.FriendlyName, setting.Description, setting.ValueAsString)
+                Dim child = New VariantSetting(Me, setting.Name, setting.DefaultValueAsString, setting.Restrictions.Split(","c), setting.FriendlyName, setting.Description, setting.ValueAsString)
             End If
         Next
 
-        Dim childNames = mrw.ReadChildStorageNames(_storagePath)
+        Dim childNames = mrw.ReadChildStorageNames(path)
         For Each childName In childNames
-            Dim child = New ExistingSettingsStorage(mrw, _storagePath, childName, Me)
-            _childStorageList.Add(child)
+            Dim childFrindly = mrw.ReadCategoryFriendlyName(path, childName)
+            Dim child = New ClonedSettingsStorage(mrw, path, childName, childFrindly, Me)
+            _childStorages.Add(child)
         Next
 
     End Sub

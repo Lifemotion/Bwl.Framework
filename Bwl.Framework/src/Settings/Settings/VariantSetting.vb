@@ -2,43 +2,30 @@
     Inherits SettingOnStorage
     Private _variants() As String
 
-    Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, variants As String)
-        Me.New(storage, name, defaultValue, variants, "", "")
-    End Sub
-
     Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, variants() As String)
         Me.New(storage, name, defaultValue, variants, "", "")
     End Sub
 
-    Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, variants As String, friendlyName As String, description As String)
-        Me.New(storage, name, defaultValue, variants.Split(","c), friendlyName, description)
-    End Sub
-
-    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, variants As String, friendlyName As String, description As String, value As String)
+    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, variants() As String, friendlyName As String, description As String, value As String)
         MyBase.New(storage, name, defaultValue, friendlyName, description, value)
         _isValueCorrectFunction = AddressOf CheckValueIsCorrect
-        _variants = variants.Split(","c)
-
-        For Each tmp In variants
-            If tmp = "" Then Throw New Exception("Один из вариантов равен пустой строке!")
-        Next
-        If defaultValue = "" Then defaultValue = variants(0)
-        If IsIn(_variants, defaultValue) = "" Then Throw New Exception("Вариант по-умолчанию отстутсвует в списке вариантов.")
-
-        _isValueCorrectFunction = AddressOf CheckValueIsCorrect
+        SetVariants(variants, defaultValue)
     End Sub
 
     Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, variants() As String, friendlyName As String, description As String)
         MyBase.New(storage, name, defaultValue, friendlyName, description)
-        _variants = variants
+        _isValueCorrectFunction = AddressOf CheckValueIsCorrect
+        SetVariants(variants, defaultValue)
+    End Sub
 
+    Private Sub SetVariants(variants As String(), defaultValue As String)
         For Each tmp In variants
             If tmp = "" Then Throw New Exception("Один из вариантов равен пустой строке!")
         Next
         If defaultValue = "" Then defaultValue = variants(0)
-        If IsIn(variants, defaultValue) = "" Then Throw New Exception("Вариант по-умолчанию отстутсвует в списке вариантов.")
-
-        _isValueCorrectFunction = AddressOf CheckValueIsCorrect
+        If FindElement(variants, defaultValue) = "" Then Throw New Exception("Вариант по-умолчанию отстутсвует в списке вариантов.")
+        _defaultValue = defaultValue
+        _variants = variants
     End Sub
 
     Private Function CheckValueIsCorrect(str As String) As Boolean
@@ -53,10 +40,9 @@
     Public Property Value() As String
         Get
             Dim val = MyBase.ValueAsString.Split({";"c})(0)
-            Dim foundVariant = IsIn(_variants, val)
+            Dim foundVariant = FindElement(_variants, val)
             If foundVariant = "" Then
                 ValueAsString = DefaultValueAsString
-                _storage.SetSettingChanged(Me)
                 Return ValueAsString
             Else
                 Return foundVariant
@@ -64,32 +50,15 @@
         End Get
 
         Set(value As String)
-            Dim found As String = IsIn(_variants, value)
+            Dim found As String = FindElement(_variants, value)
             If found = "" Then Throw New Exception("Присвоенного значения нет в списке вариантов!")
             MyBase.ValueAsString = found
         End Set
     End Property
 
-    Public Sub ReplaceVariants(variantsString As String, defaultValue As String)
-        ReplaceVariants(Split(variantsString, ","), defaultValue)
-    End Sub
-
     Public Sub ReplaceVariants(variants() As String, defaultValue As String)
-        For Each tmp In variants
-            If tmp = "" Then Throw New Exception("Один из вариантов равен пустой строке!")
-        Next
-        If defaultValue = "" Then defaultValue = variants(0)
-        If IsIn(variants, defaultValue) = "" Then Throw New Exception("Вариант по-умолчанию отстутсвует в списке вариантов.")
-
-        _defaultValue = defaultValue
-
-        If IsIn(variants, Value) = "" Then
-            Value = defaultValue
-        End If
-        _variants = variants
-
-        '!!!
-        MyBase.Description = MyBase.Description + ""
+        If FindElement(variants, Value) = "" Then Value = defaultValue
+        SetVariants(variants, defaultValue)
     End Sub
 
     Public Overrides Property Restrictions As String
@@ -101,7 +70,7 @@
             Return variants
         End Get
         Set(value As String)
-            ReplaceVariants(value, _defaultValue)
+            ReplaceVariants(value.Split(","c), _defaultValue)
         End Set
     End Property
 
@@ -111,7 +80,7 @@
         End Get
     End Property
 
-    Private Function IsIn(array() As String, value As String) As String
+    Private Function FindElement(array() As String, value As String) As String
         For Each element In array
             If element.ToUpper = value.ToUpper Then Return element
         Next

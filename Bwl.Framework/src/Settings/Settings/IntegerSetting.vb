@@ -15,7 +15,7 @@
         _isValueCorrectFunction = AddressOf CheckValueIsCorrect
     End Sub
 
-    Shared Narrowing Operator CType(value As IntegerSetting) As Single
+    Shared Narrowing Operator CType(value As IntegerSetting) As Integer
         Return value.Value
     End Operator
 

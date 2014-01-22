@@ -4,10 +4,12 @@
     Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As Double)
         Me.New(storage, name, defaultValue, "", "")
     End Sub
+
     Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, friendlyName As String, description As String, value As String)
         MyBase.New(storage, name, defaultValue, friendlyName, description, value)
         _isValueCorrectFunction = AddressOf CheckValueIsCorrect
     End Sub
+
     Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As Double, friendlyName As String, description As String)
         MyBase.New(storage, name, defaultValue.ToString, friendlyName, description)
         _isValueCorrectFunction = AddressOf CheckValueIsCorrect

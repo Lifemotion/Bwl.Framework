@@ -5,9 +5,17 @@
     Protected _description As String = ""
     Protected _friendlyName As String = ""
     Protected _restrictions As String = ""
+    Protected _type As String = ""
+
     Public Event ParametersChanged(setting As Setting)
     Public Event ValueChanged(setting As Setting)
-    Public Property Type As String = ""
+
+    Public ReadOnly Property Type As String
+        Get
+            Return _type
+        End Get
+    End Property
+
 
     Public Overridable Property Restrictions As String
         Get
@@ -83,7 +91,9 @@
     Protected Sub RaiseValueChanged()
         RaiseEvent ValueChanged(Me)
     End Sub
+
     Protected Sub RaiseParametersChanged()
         RaiseEvent ParametersChanged(Me)
     End Sub
+
 End Class

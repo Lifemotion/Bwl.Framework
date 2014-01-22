@@ -87,16 +87,11 @@
         End If
     End Sub
     Private Function PathToString(path() As String) As String
-        Dim pathString As String
         If path.GetUpperBound(0) >= 0 Then
-            pathString = path(0)
-            For i As Integer = 1 To path.Length - 1
-                pathString = path(i) + "." + pathString
-            Next
+            Return Tools.CombineStrings(path, False, ".")
         Else
-            pathString = "root"
+            Return "root"
         End If
-        Return pathString
     End Function
     Private Function Filter(message As ListItem) As Boolean
         If typeFilter <> -128 Then

@@ -6,8 +6,6 @@
 ''' <remarks></remarks>
 Public Class SettingsStorage
     Inherits SettingsStorageBase
-    Implements IDisposable
-    Protected _autoSaveNeeded As Boolean = False
 
     Protected Sub New()
 
@@ -17,23 +15,20 @@ Public Class SettingsStorage
     ''' Создать хранилище-подкатегорию. 
     ''' </summary>
     ''' <param name="parentStorage">Родительское хранилище.</param>
-    ''' <param name="categoryName">Имя подкатегории настроек.</param>
+    ''' <param name="name">Имя подкатегории настроек.</param>
     ''' <remarks></remarks>
-    Friend Sub New(parentStorage As SettingsStorage, categoryName As String)
-        If categoryName = "" Then Throw New Exception("Имя категории настроек не может быть пустым.")
-        If parentStorage Is Nothing Then Throw New Exception("Указанное родительское хранилище отсутсвует или не создано!")
+    Protected Sub New(parentStorage As SettingsStorage, name As String, friendlyName As String)
+        If name = "" Then Throw New ArgumentException("Name can't be empty")
+        If parentStorage Is Nothing Then Throw New ArgumentException("Parent storage is nothing")
+
         _parentStorage = parentStorage
-        _category = categoryName
+        _name = name
+        _friendlyName = friendlyName
         _defaultWriter = _parentStorage.DefaultWriter
 
         For Each child In _parentStorage.ChildStorages
-            If child.CategoryName.ToUpper = categoryName.ToUpper Then Throw New Exception("Такая подкатегория уже была определена ранее!")
+            If child.CategoryName.ToLower = name.ToLower Then Throw New Exception("Category already exists")
         Next
-
-        ReDim _storagePath(_parentStorage.StoragePath.GetUpperBound(0) + 1)
-        _storagePath(0) = CategoryName
-        Array.ConstrainedCopy(_parentStorage.StoragePath, 0, _storagePath, 1, _parentStorage.StoragePath.GetUpperBound(0) + 1)
-        _parentStorage.AddStorageToList(Me)
     End Sub
 
     Public Function CreateIntegerSetting(name As String, defaultValue As Integer, Optional friendlyName As String = "", Optional description As String = "") As IntegerSetting
@@ -48,7 +43,7 @@ Public Class SettingsStorage
     Public Function CreateBooleanSetting(name As String, defaultValue As Boolean, Optional friendlyName As String = "", Optional description As String = "") As BooleanSetting
         Return New BooleanSetting(Me, name, defaultValue, friendlyName, description)
     End Function
-    Public Function CreateVariantSetting(name As String, defaultValue As String, variants As String, Optional friendlyName As String = "", Optional description As String = "") As VariantSetting
+    Public Function CreateVariantSetting(name As String, defaultValue As String, variants As String(), Optional friendlyName As String = "", Optional description As String = "") As VariantSetting
         Return New VariantSetting(Me, name, defaultValue, variants, friendlyName, description)
     End Function
 
@@ -65,128 +60,90 @@ Public Class SettingsStorage
     ''' <summary>
     ''' Создать и возвратить хранилище-подкатегорию текущего хранилища.
     ''' </summary>
-    ''' <param name="categoryName">Имя подкатегории.</param>
-    ''' <param name="friendlyCategoryName">Имя подкатегории в дочступном для человека виде.</param>
+    ''' <param name="name">Имя подкатегории.</param>
+    ''' <param name="friendlyName">Имя подкатегории в дочступном для человека виде.</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function CreateChildStorage(categoryName As String, friendlyCategoryName As String) As SettingsStorage
-        If categoryName = "" Then Throw New Exception("Имя категории настроек не может быть пустым.")
-        Dim newChildStorage As New SettingsStorage(Me, categoryName)
-        newChildStorage.FriendlyCategoryName = friendlyCategoryName
-        Return newChildStorage
+    Public Function CreateChildStorage(name As String, friendlyName As String) As SettingsStorage
+        If name = "" Then Throw New Exception("Имя категории настроек не может быть пустым.")
+        If friendlyName Is Nothing Then friendlyName = ""
+
+        Dim childStorage As New SettingsStorage(Me, name, friendlyName)
+        _childStorages.Add(childStorage)
+        Return childStorage
     End Function
 
-    Public Function DeleteChildStorage(categoryName As String) As SettingsStorage
+    ''' <summary>
+    ''' Удалить указанную подкатегорию.
+    ''' </summary>
+    ''' <param name="name"></param>
+    ''' <remarks></remarks>
+    Public Sub DeleteChildStorage(name As String)
         Dim forDelete As SettingsStorage = Nothing
-        For Each storage In _childStorageList
-            If storage.CategoryName = categoryName Then
+        For Each storage In _childStorages
+            If storage.Name = name Then
                 forDelete = DirectCast(storage, SettingsStorage)
             End If
         Next
         If forDelete IsNot Nothing Then
             forDelete._parentStorage = Nothing
-            _childStorageList.Remove(forDelete)
+            _childStorages.Remove(forDelete)
+        Else
+            Throw New Exception("Child storage not found: " + name)
         End If
-        Return forDelete
-    End Function
+    End Sub
 
     Friend Overrides Sub LoadSetting(setting As SettingOnStorage)
-        For Each settingInStorage In _settingsList
-            If ReferenceEquals(settingInStorage, setting) Then
-                setting.LoadSettingFromStorage(_defaultWriter, _storagePath)
-                Return
+        Dim path = GetStoragePath
+        setting.LoadSettingFromStorage(_defaultWriter, path)
+    End Sub
+
+    Public Sub ReloadSettings()
+        ReloadSettings(_defaultWriter)
+    End Sub
+
+    Public Sub ReloadSettings(writer As ISettingsReaderWriter)
+        Dim path = GetStoragePath
+
+        For Each setting In _settings
+            setting.LoadSettingFromStorage(writer, path)
+        Next
+
+        For Each child As SettingsStorage In _childStorages
+            child.ReloadSettings(writer)
+        Next
+    End Sub
+
+    Public Sub SaveSettings(writer As ISettingsReaderWriter, changedOnly As Boolean)
+        Dim path = GetStoragePath
+
+        If _parentStorage Is Nothing Then writer.WriteRoot(_name, _friendlyName)
+        For Each setting In _settings
+            If setting.Changed Or Not changedOnly Then
+                writer.WriteSetting(path, setting)
+                setting.Changed = False
             End If
         Next
-        Throw New Exception("Объект настройки не принадлежит этому хранилищу!")
-    End Sub
-
-    Public Sub ReloadSettings(Optional newWriter As ISettingsReaderWriter = Nothing)
-        Dim writer As ISettingsReaderWriter
-        If newWriter Is Nothing Then writer = _defaultWriter Else writer = newWriter
-        For Each setting In _settingsList
-            setting.LoadSettingFromStorage(_defaultWriter, _storagePath)
-        Next
-        For Each child As SettingsStorage In _childStorageList
-            child.ReloadSettings()
-        Next
-    End Sub
-
-    Public Sub SaveSettings(Optional newWriter As ISettingsReaderWriter = Nothing, Optional changedOnly As Boolean = True)
-        Dim writer As ISettingsReaderWriter
-        If newWriter Is Nothing Then writer = _defaultWriter Else writer = newWriter
-
-        If _parentStorage Is Nothing Then writer.WriteRoot(_category, _friendlyCategory)
-        For Each settingInStorage In _settingsList
-            If settingInStorage.Changed Or Not changedOnly Then SaveSettingInternal(writer, settingInStorage)
-        Next
-        For Each child As SettingsStorage In _childStorageList
-            writer.WriteCategory(_storagePath, child.CategoryName, child.FriendlyCategoryName)
+        For Each child As SettingsStorage In _childStorages
+            writer.WriteCategory(path, child.Name, child.FriendlyName)
             child.SaveSettings(writer, changedOnly)
-
         Next
+    End Sub
+
+    Public Sub SaveSettings()
+        SaveSettings(_defaultWriter, True)
     End Sub
 
     Public Sub SaveSettings(changedOnly As Boolean)
-        SaveSettings(Nothing, changedOnly)
+        SaveSettings(_defaultWriter, changedOnly)
     End Sub
 
     Friend Overrides Sub SetSettingChanged(setting As SettingOnStorage)
         MyBase.SetSettingChanged(setting)
-        For Each settingInStorage In _settingsList
-            If settingInStorage Is setting Then
-                settingInStorage.Changed = True
-                MarkAutoSaveNeeded()
-                Return
-            End If
-        Next
-        Throw New Exception("Объект настройки не принадлежит этому хранилищу!")
-    End Sub
-
-    Private Sub MarkAutoSaveNeeded()
-        If _parentStorage Is Nothing Then
-            _autoSaveNeeded = True
-        Else
-            DirectCast(_parentStorage, SettingsStorage).MarkAutoSaveNeeded()
+        setting.Changed = True
+        If _parentStorage IsNot Nothing Then
+            _parentStorage.SetSettingChanged(setting)
         End If
     End Sub
-
-
-
-    Private Sub SaveSettingInternal(writer As ISettingsReaderWriter, setting As SettingOnStorage)
-        writer.WriteSetting(_storagePath, setting)
-        setting.Changed = False
-    End Sub
-
-
-#Region "IDisposable Support"
-    Private disposedValue As Boolean ' Чтобы обнаружить избыточные вызовы
-
-    ' IDisposable
-    Protected Overridable Sub Dispose(disposing As Boolean)
-        If Not Me.disposedValue Then
-            If disposing Then
-                ' TODO: освободить управляемое состояние (управляемые объекты).
-            End If
-
-            ' TODO: освободить неуправляемые ресурсы (неуправляемые объекты) и переопределить ниже Finalize().
-            ' TODO: задать большие поля как null.
-        End If
-        Me.disposedValue = True
-    End Sub
-
-    ' TODO: переопределить Finalize(), только если Dispose( disposing As Boolean) выше имеет код для освобождения неуправляемых ресурсов.
-    'Protected Overrides Sub Finalize()
-    '    ' Не изменяйте этот код.  Поместите код очистки в расположенную выше команду Удалить( удаление как булево).
-    '    Dispose(False)
-    '    MyBase.Finalize()
-    'End Sub
-
-    ' Этот код добавлен редактором Visual Basic для правильной реализации шаблона высвобождаемого класса.
-    Public Sub Dispose() Implements IDisposable.Dispose
-        ' Не изменяйте этот код. Разместите код очистки выше в методе Dispose(disposing As Boolean).
-        Dispose(True)
-        GC.SuppressFinalize(Me)
-    End Sub
-#End Region
 
 End Class

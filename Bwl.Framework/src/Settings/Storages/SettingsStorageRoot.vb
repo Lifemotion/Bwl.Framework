@@ -1,24 +1,22 @@
 ﻿Imports System.Timers
 
-Public Class RootSettingsStorage
+Public Class SettingsStorageRoot
     Inherits SettingsStorage
     Protected _autoSave As Boolean
     Protected _autoSaveInterval As Single = 2
-
+    Protected _autoSaveNeeded As Boolean = False
     Protected WithEvents _autoSaveTimer As New Timer
 
     ''' <summary>
     ''' Создать новое хранилище настроек, являющееся корневым.
     ''' </summary>
     ''' <param name="defaultWriter">Интерфейс сохранения\загрузки настроек по умолчанию.</param>
-    ''' <param name="rootCategoryName">Имя корневой категории настроек.</param>
+    ''' <param name="rootName">Имя корневой категории настроек.</param>
     ''' <remarks></remarks>
-    Sub New(defaultWriter As ISettingsReaderWriter, rootCategoryName As String)
-        If rootCategoryName = "" Then Throw New Exception("Имя корневой категории настроек не может быть пустым.")
+    Sub New(defaultWriter As ISettingsReaderWriter, rootName As String)
+        If rootName Is Nothing OrElse rootName = "" Then Throw New Exception("RootName can't be empty")
         _defaultWriter = defaultWriter
-        _category = rootCategoryName
-        ReDim _storagePath(0)
-        _storagePath(0) = _category
+        _name = rootName
         AutoSave = True
     End Sub
 
@@ -40,6 +38,12 @@ Public Class RootSettingsStorage
         Me.New(New IniFileSettingsWriter(iniFileName), rootCategoryName)
     End Sub
 
+    ''' <summary>
+    ''' Включить автосохранение. По-умолчанию включено.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property AutoSave As Boolean
         Set(value As Boolean)
             _autoSave = value
@@ -50,6 +54,12 @@ Public Class RootSettingsStorage
         End Get
     End Property
 
+    ''' <summary>
+    ''' Интервал автосохранения в секундах.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property AutoSaveInterval As Single
         Set(value As Single)
             _autoSaveInterval = value
@@ -75,5 +85,9 @@ Public Class RootSettingsStorage
             _autoSaveTimer.Interval = (_autoSaveInterval * 1000)
             _autoSaveTimer.Start()
         End SyncLock
+    End Sub
+
+    Private Sub RootSettingsStorage_SettingChanged(storage As SettingsStorageBase, setting As Setting) Handles Me.SettingChanged
+        _autoSaveNeeded = True
     End Sub
 End Class

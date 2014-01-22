@@ -38,7 +38,7 @@
             For i = _list.Count - 1 To 0 Step -1
                 Dim parts = _list(i)
                 If parts(0) = "Setting" And parts.Length >= 3 Then
-                    If parts(1) = PathToString(storagePath) And parts(2) = name Then
+                    If parts(1) = Tools.PathToString(storagePath) And parts(2) = name Then
                         Return True
                     End If
                 End If
@@ -52,7 +52,7 @@
             For i = _list.Count - 1 To 0 Step -1
                 Dim parts = _list(i)
                 If parts(0) = "Setting" And parts.Length >= 3 Then
-                    If parts(1) = PathToString(storagePath) And parts(2) = name Then
+                    If parts(1) = Tools.PathToString(storagePath) And parts(2) = name Then
                         Return parts(3)
                     End If
                 End If
@@ -63,14 +63,14 @@
 
     Public Sub WriteCategory(storagePath() As String, Name As String, FriendlyName As String) Implements ISettingsReaderWriter.WriteCategory
         SyncLock _list
-            _list.Add({"Category", PathToString(storagePath), Name, FriendlyName})
+            _list.Add({"Category", Tools.PathToString(storagePath), Name, FriendlyName})
         End SyncLock
     End Sub
 
     Public Sub WriteSetting(storagePath As String(), setting As Setting) Implements ISettingsReaderWriter.WriteSetting
         SyncLock _list
             '      If setting.GetType.ToString = "Bwl.Framework.VariantSetting" Then Stop
-            _list.Add({"Setting", PathToString(storagePath), setting.Name, setting.ValueAsString, setting.GetType.ToString, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.Restrictions})
+            _list.Add({"Setting", Tools.PathToString(storagePath), setting.Name, setting.ValueAsString, setting.GetType.ToString, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.Restrictions})
         End SyncLock
     End Sub
 
@@ -79,7 +79,7 @@
             For i = _list.Count - 1 To 0 Step -1
                 Dim parts = _list(i)
                 If parts(0) = "Category" And parts.Length >= 3 Then
-                    If parts(1) = PathToString(storagePath) And parts(2) = name Then
+                    If parts(1) = Tools.PathToString(storagePath) And parts(2) = name Then
                         Return parts(3)
                     End If
                 End If
@@ -88,19 +88,10 @@
         End SyncLock
     End Function
 
-    Private Function PathToString(path() As String) As String
-        Dim result As String = ""
-        For i = path.GetUpperBound(0) To 1 Step -1
-            result += path(i) + "."
-        Next
-        result += path(0)
-        Return result
-    End Function
-
     Public Function ReadSettingsNames(storagePath() As String) As String() Implements ISettingsStructureReader.ReadSettingsNames
         Dim result As New List(Of String)
         SyncLock _list
-            Dim path = PathToString(storagePath)
+            Dim path = Tools.PathToString(storagePath)
             For i = 0 To List.Count - 1
                 Dim parts = _list(i)
                 If parts(0) = "Setting" And parts.Length >= 3 Then
@@ -119,7 +110,7 @@
             For i = 0 To List.Count - 1
                 Dim parts = _list(i)
                 If parts(0) = "Category" And parts.Length >= 3 Then
-                    If parts(1) = PathToString(storagePath) Then
+                    If parts(1) = Tools.PathToString(storagePath) Then
                         result.Add(parts(2))
                     End If
                 End If
@@ -152,7 +143,7 @@
             For i = _list.Count - 1 To 0 Step -1
                 Dim parts = _list(i)
                 If parts(0) = "Setting" And parts.Length >= 3 Then
-                    If parts(1) = PathToString(storagePath) And parts(2) = name Then
+                    If parts(1) = Tools.PathToString(storagePath) And parts(2) = name Then
                         Dim setting = New Setting(parts(2), parts(5), parts(6), parts(7), parts(3), parts(4), parts(8))
                         Return setting
                     End If

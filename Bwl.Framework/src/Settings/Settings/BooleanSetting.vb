@@ -1,16 +1,20 @@
 ﻿Public Class BooleanSetting
     Inherits SettingOnStorage
+
     Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As Boolean)
         Me.New(storage, name, defaultValue, "", "")
     End Sub
+
     Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As Boolean, friendlyName As String, description As String)
         MyBase.New(storage, name, defaultValue.ToString, friendlyName, description)
         _isValueCorrectFunction = AddressOf CheckValueIsCorrect
     End Sub
+
     Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, friendlyName As String, description As String, value As String)
         MyBase.New(storage, name, defaultValue, friendlyName, description, value)
         _isValueCorrectFunction = AddressOf CheckValueIsCorrect
     End Sub
+
     Shared Narrowing Operator CType(value As BooleanSetting) As Boolean
         Return value.Value
     End Operator
