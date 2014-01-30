@@ -94,9 +94,9 @@
         End If
     End Function
     Private Function Filter(message As ListItem) As Boolean
-        If typeFilter <> -128 Then
-            If message.type <> typeFilter Then Return False
-        End If
+		If typeFilter <> LogEventType.all Then
+			If message.type <> typeFilter Then Return False
+		End If
         Return True
     End Function
     Private Function GetFileName(message As ListItem) As String
