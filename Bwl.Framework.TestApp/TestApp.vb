@@ -1,27 +1,47 @@
-﻿Public Class TestApp
-    Private _storage As New SettingsStorageRoot("testapp.ini", "TestApp")
-    Private _child_1 As SettingsStorage = _storage.CreateChildStorage("Child-1", "Ребенок 1")
-    Private _child_2 As SettingsStorage = _storage.CreateChildStorage("Child-2", "Child 2")
-    Private _child_1_1 As SettingsStorage = _child_1.CreateChildStorage("Child-1-1", "Child 1-1")
-    Private intSetting As IntegerSetting = _storage.CreateIntegerSetting("Integer", 1, "Целое", "Описание целого")
-    Private boolSetting As BooleanSetting = _storage.CreateBooleanSetting("Boolean", True, "Булево", "Описание булевого")
-    Private strSetting As StringSetting = _child_1.CreateStringSetting("String", "Cat", "Строка", "Описание строки")
-    Private dblSetting As DoubleSetting = _child_2.CreateDoubleSetting("Double", 1.6, "Двойное", "Описание двойного")
-    Private varSetting As VariantSetting = _child_1_1.CreateVariantSetting("Variant", "Cat", {"Cat", "Dog"}, "Описание варианта")
-    Private Sub TestApp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        _storage.ShowSettingsForm()
+﻿Imports System.IO
 
-        Dim b = varSetting.FullName
-        Dim f = _storage.FindSetting(b)
-    End Sub
+Public Class TestApp
+	Private _storage As New SettingsStorageRoot("testapp.ini", "TestApp")
+	Private _child_1 As SettingsStorage = _storage.CreateChildStorage("Child-1", "Ребенок 1")
+	Private _child_2 As SettingsStorage = _storage.CreateChildStorage("Child-2", "Child 2")
+	Private _child_1_1 As SettingsStorage = _child_1.CreateChildStorage("Child-1-1", "Child 1-1")
+	Private intSetting As IntegerSetting = _storage.CreateIntegerSetting("Integer", 1, "Целое", "Описание целого")
+	Private boolSetting As BooleanSetting = _storage.CreateBooleanSetting("Boolean", True, "Булево", "Описание булевого")
+	Private strSetting As StringSetting = _child_1.CreateStringSetting("String", "Cat", "Строка", "Описание строки")
+	Private dblSetting As DoubleSetting = _child_2.CreateDoubleSetting("Double", 1.6, "Двойное", "Описание двойного")
+	Private varSetting As VariantSetting = _child_1_1.CreateVariantSetting("Variant", "Cat", {"Cat", "Dog"}, "Описание варианта")
+	Private _logger = New Logger()
+	Private Sub TestApp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+		Dim LogDir = Application.StartupPath
+		Try
+			If Not Directory.Exists(LogDir) Then
+				Directory.CreateDirectory(LogDir)
+			End If
+		Catch exc As Exception
+		End Try
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim mrw As New MemoryReaderWriter
-        _storage.SaveSettings(mrw, False)
-        Dim b = mrw.MakeString
+		Dim logWriter1 = New SimpleFileLogWriter(LogDir, SimpleFileLogWriter.PlaceLoggingMode.allInOneFile, SimpleFileLogWriter.TypeLoggingMode.allInOneFile)
+		_logger.ConnectWriter(logWriter1)
+		_logger.AddMessage("Programm Start")
 
-        Dim storage2 = New ClonedSettingsStorage(New MemoryReaderWriter(b))
-        storage2.ShowSettingsForm()
 
-    End Sub
+		_storage.ShowSettingsForm()
+
+		Dim b = varSetting.FullName
+		Dim f = _storage.FindSetting(b)
+	End Sub
+
+	Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+		Dim mrw As New MemoryReaderWriter
+		_storage.SaveSettings(mrw, False)
+		Dim b = mrw.MakeString
+
+		Dim storage2 = New ClonedSettingsStorage(New MemoryReaderWriter(b))
+		storage2.ShowSettingsForm()
+
+	End Sub
+
+	Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+		_logger.AddMessage("Some text")
+	End Sub
 End Class
