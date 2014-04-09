@@ -40,7 +40,11 @@ Public Class SettingsDialog
             If childSetting.FriendlyName.Length > 0 Then
                 nameText = childSetting.FriendlyName
             End If
-            newNode.Text = nameText + ": " + CStr(childSetting.ValueAsString)
+			Dim val = childSetting.ValueAsString
+			If (val.Length > 30) Then
+				val = val.Substring(0, 30)
+			End If
+			newNode.Text = nameText + ": " + val
 
             newNode.ToolTipText = childSetting.Description
             newNode.Tag = childSetting
@@ -70,7 +74,11 @@ Public Class SettingsDialog
 				If setting.FriendlyName.Length > 0 Then
 					nameText = setting.FriendlyName
 				End If
-				list.SelectedNode.Text = nameText + ": " + CStr(setting.ValueAsString) + " [*]"
+				Dim val = setting.ValueAsString
+				If (val.Length > 30) Then
+					val = val.Substring(0, 30)
+				End If
+				list.SelectedNode.Text = nameText + ": " + val + " [*]"
 			End If
 		End If
 	End Sub

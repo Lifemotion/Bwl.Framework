@@ -23,7 +23,7 @@
     End Sub
     Public Sub TryCreateFolder(path As String)
         Try
-            MkDir(path)
+			MkDir(path)
         Catch ex As Exception
 
         End Try

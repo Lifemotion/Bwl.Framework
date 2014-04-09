@@ -62,12 +62,14 @@ Public Class PasswordSetting
 
 	Private Sub SetValue()
 		If (_key IsNot Nothing AndAlso _key.Length = 16) Then
-			Dim keyEnc = CryptoTools.Des3Encode(Encoding.Default.GetString(_key), KeyForKey)
-			Dim passEnc = String.Empty
+			Dim bytes = New List(Of Byte)
+			Dim keyEncB = CryptoTools.Des3EncodeB(Encoding.Default.GetString(_key), KeyForKey)
+			bytes.Add(Convert.ToByte(keyEncB.Length))
+			bytes.AddRange(keyEncB)
 			If (Not String.IsNullOrWhiteSpace(_pass)) Then
-				passEnc = CryptoTools.Des3Encode(_pass, _key)
+				bytes.AddRange(CryptoTools.Des3EncodeB(_pass, _key))
 			End If
-			Dim res = Encoding.Default.GetString({Convert.ToByte(keyEnc.Length)}) + keyEnc + passEnc
+			Dim res = Convert.ToBase64String(bytes.ToArray)
 			MyBase.ValueAsString = res
 		End If
 	End Sub
@@ -75,11 +77,23 @@ Public Class PasswordSetting
 	Private Sub GetValue()
 		If (Not _loaded) Then
 			If (MyBase.ValueAsString.Length > 0) Then
-				Dim keyEncLength = Convert.ToByte(MyBase.ValueAsString.First)
-				Dim keyEnc = MyBase.ValueAsString.Substring(1, keyEncLength)
-				Dim passEnc = MyBase.ValueAsString.Substring(1 + keyEncLength)
-				_key = Encoding.Default.GetBytes(CryptoTools.Des3Decode(keyEnc, KeyForKey))
-				_pass = CryptoTools.Des3Decode(passEnc, _key)
+				Dim bytes = Convert.FromBase64String(MyBase.ValueAsString)
+				Dim keyLen = bytes.First
+
+
+				Dim keyEnc(keyLen - 1) As Byte
+				Array.ConstrainedCopy(bytes, 1, keyEnc, 0, keyLen)
+				_key = Encoding.Default.GetBytes(CryptoTools.Des3DecodeB(keyEnc, KeyForKey))
+
+				Dim passLen = bytes.Length - 1 - keyLen
+
+				If (passLen > 0) Then
+					Dim passEnc(passLen - 1) As Byte
+					Array.ConstrainedCopy(bytes, 1 + keyLen, passEnc, 0, passLen)
+					_pass = CryptoTools.Des3DecodeB(passEnc, _key)
+				Else
+					_pass = String.Empty
+				End If
 			End If
 			_loaded = True
 		End If
