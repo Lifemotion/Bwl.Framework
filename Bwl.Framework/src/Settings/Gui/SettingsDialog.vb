@@ -58,20 +58,20 @@ Public Class SettingsDialog
 
     End Sub
 
-    Private Sub settingView_Load(sender As System.Object, e As System.EventArgs) Handles settingView.Load
+	Private Sub settingView_Load(sender As System.Object, e As System.EventArgs) Handles settingView.Load
 
-    End Sub
+	End Sub
 
-    Private Sub settingView_SettingValueChanged() Handles settingView.SettingValueChanged
-        If Not Me.IsDisposed Then
-            If list.SelectedNode.Tag IsNot Nothing Then
-                Dim setting As SettingOnStorage = DirectCast(list.SelectedNode.Tag, SettingOnStorage)
-                Dim nameText As String = setting.Name
-                If setting.FriendlyName.Length > 0 Then
-                    nameText = setting.FriendlyName
-                End If
-                list.SelectedNode.Text = nameText + ": " + CStr(setting.ValueAsString) + " [*]"
-            End If
-        End If
-    End Sub
+	Private Sub settingView_SettingValueChanged() Handles settingView.SettingValueChanged
+		If Not Me.IsDisposed Then
+			If list.SelectedNode.Tag IsNot Nothing Then
+				Dim setting As SettingOnStorage = DirectCast(list.SelectedNode.Tag, SettingOnStorage)
+				Dim nameText As String = setting.Name
+				If setting.FriendlyName.Length > 0 Then
+					nameText = setting.FriendlyName
+				End If
+				list.SelectedNode.Text = nameText + ": " + CStr(setting.ValueAsString) + " [*]"
+			End If
+		End If
+	End Sub
 End Class

@@ -42,7 +42,10 @@ Public Class SettingsStorage
     End Function
     Public Function CreateBooleanSetting(name As String, defaultValue As Boolean, Optional friendlyName As String = "", Optional description As String = "") As BooleanSetting
         Return New BooleanSetting(Me, name, defaultValue, friendlyName, description)
-    End Function
+	End Function
+	Public Function CreatePasswordSetting(name As String, defaultValue As String, Optional friendlyName As String = "", Optional description As String = "") As PasswordSetting
+		Return New PasswordSetting(Me, name, defaultValue, friendlyName, description)
+	End Function
     Public Function CreateVariantSetting(name As String, defaultValue As String, variants As String(), Optional friendlyName As String = "", Optional description As String = "") As VariantSetting
         Return New VariantSetting(Me, name, defaultValue, variants, friendlyName, description)
     End Function
