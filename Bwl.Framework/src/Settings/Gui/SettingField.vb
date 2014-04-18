@@ -17,7 +17,8 @@
 
 
     Private Sub ShowFields()
-        settingReady = False
+		settingReady = False
+		tbValue.PasswordChar = Nothing
         If setting Is Nothing Then
             Me.lCaption.Text = "Нет связанной настройки!"
             Me.lDesc.Text = "Нет связанной настройки!"
