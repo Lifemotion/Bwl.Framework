@@ -10,15 +10,11 @@ Public Class PasswordSetting
 	Dim _pass As String
 	Dim _loaded As Boolean = False
 
-	Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As String)
-		Me.New(storage, name, defaultValue, "", "")
+	Public Sub New(storage As SettingsStorageBase, name As String)
+		Me.New(storage, name, "", "")
 	End Sub
-	Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, friendlyName As String, description As String, value As String)
-		MyBase.New(storage, name, defaultValue, friendlyName, description, value)
-		_isValueCorrectFunction = AddressOf CheckValueIsCorrect
-	End Sub
-	Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, friendlyName As String, description As String)
-		MyBase.New(storage, name, defaultValue, friendlyName, description)
+	Friend Sub New(storage As SettingsStorageBase, name As String, friendlyName As String, description As String)
+		MyBase.New(storage, name, "", friendlyName, description)
 		_isValueCorrectFunction = AddressOf CheckValueIsCorrect
 	End Sub
 
@@ -26,6 +22,9 @@ Public Class PasswordSetting
 		Return value.Value
 	End Operator
 
+	''' <summary>
+	''' Не является парллем, используйте поле Pass.
+	''' </summary>
 	Public Property Value() As String
 		Get
 			GetValue()
