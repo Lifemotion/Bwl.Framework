@@ -12,6 +12,7 @@ Public Class TestApp
 	Private strSetting As StringSetting = _child_1.CreateStringSetting("String", "Cat", "Строка", "Описание строки")
 	Private dblSetting As DoubleSetting = _child_2.CreateDoubleSetting("Double", 1.6, "Двойное", "Описание двойного")
 	Private varSetting As VariantSetting = _child_1_1.CreateVariantSetting("Variant", "Cat", {"Cat", "Dog"}, "Описание варианта")
+	Private passSetting As PasswordSetting = _child_1_1.CreatePasswordSetting("Pass", "")
 	Private _logger = New Logger()
     Private Sub TestApp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Form1.Show()
