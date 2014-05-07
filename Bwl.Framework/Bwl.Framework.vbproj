@@ -65,6 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\AppBase\AppBase.vb" />
+    <Compile Include="src\AppBase\FormAppBase.Designer.vb">
+      <DependentUpon>FormAppBase.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AppBase\FormAppBase.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="src\Logging\LogWriters\Realizations\ConsoleLogWriter.vb" />
     <Compile Include="src\AppBase\ConsoleAppBase.vb" />
     <Compile Include="src\Identity\IDescription.vb" />
@@ -129,6 +135,9 @@
     <Compile Include="src\Tools\Tools.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="src\AppBase\FormAppBase.resx">
+      <DependentUpon>FormAppBase.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\Logging\LogWriters\Realizations\DatagridLogWriter.resx">
       <DependentUpon>DatagridLogWriter.vb</DependentUpon>
     </EmbeddedResource>

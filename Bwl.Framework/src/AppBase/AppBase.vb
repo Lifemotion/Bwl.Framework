@@ -1,13 +1,16 @@
 ﻿Public Class AppBase
-    Private _logsFolder As String
-    Private _settingsFolder As String
-    Private _dataFolder As String
-    Private _baseFolder As String
-    Private _logger As Logger
-    Private _storage As SettingsStorage
-    Sub New(doinit As Boolean)
+
+    Protected _logsFolder As String
+    Protected _settingsFolder As String
+    Protected _dataFolder As String
+    Protected _baseFolder As String
+    Protected _logs As Logger
+    Protected _storage As SettingsStorage
+
+    Public Sub New(doinit As Boolean)
         If doinit Then Init()
     End Sub
+
     Public Sub Init()
         _baseFolder = AppDomain.CurrentDomain.BaseDirectory + "\..\"
         _logsFolder = _baseFolder + "logs\"
@@ -16,14 +19,14 @@
         TryCreateFolder(_settingsFolder)
         TryCreateFolder(_dataFolder)
         TryCreateFolder(_logsFolder)
-        _logger = New Logger
-        _logger.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile))
-        _logger.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors))
+        _logs = New Logger
+        _logs.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile))
+        _logs.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors))
         _storage = New SettingsStorageRoot(_settingsFolder + "settings.ini", "Application")
     End Sub
     Public Sub TryCreateFolder(path As String)
         Try
-			MkDir(path)
+            MkDir(path)
         Catch ex As Exception
 
         End Try
@@ -50,7 +53,7 @@
     End Property
     Public ReadOnly Property RootLogger As Logger
         Get
-            Return _logger
+            Return _logs
         End Get
     End Property
     Public ReadOnly Property RootStorage As SettingsStorage
