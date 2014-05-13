@@ -71,6 +71,9 @@
     <Compile Include="src\AppBase\FormAppBase.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="src\Attributes\DisplayAttribute.vb" />
+    <Compile Include="src\Attributes\ParameterAttribute.vb" />
+    <Compile Include="src\Attributes\StateAttribute.vb" />
     <Compile Include="src\Logging\LogWriters\Realizations\ConsoleLogWriter.vb" />
     <Compile Include="src\AppBase\ConsoleAppBase.vb" />
     <Compile Include="src\Identity\IDescription.vb" />
