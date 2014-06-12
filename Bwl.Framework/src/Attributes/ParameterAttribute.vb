@@ -5,11 +5,32 @@
 Public Class ParameterAttribute
 	Inherits DisplayAttribute
 
-	Public Sub New(displayName As String, Optional btn As Boolean = False, Optional pass As Boolean = False)
+	Private _btn As Boolean
+	Private _pass As Boolean
+	Private _acceptMsg As String
+
+	Public Sub New(displayName As String, Optional btn As Boolean = False, Optional pass As Boolean = False, Optional acceptMsg As String = Nothing)
 		MyBase.New(displayName)
+		_btn = btn
+		_pass = pass
+		_acceptMsg = acceptMsg
 	End Sub
 
-	Public Property Btn As Boolean
+	Public ReadOnly Property Btn As Boolean
+		Get
+			Return _btn
+		End Get
+	End Property
 
-	Public Property Pass As Boolean
+	Public ReadOnly Property Pass As Boolean
+		Get
+			Return _pass
+		End Get
+	End Property
+
+	Public ReadOnly Property AcceptMsg As String
+		Get
+			Return _acceptMsg
+		End Get
+	End Property
 End Class
