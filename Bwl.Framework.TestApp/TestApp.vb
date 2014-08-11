@@ -60,4 +60,9 @@ Public Class TestApp
 	Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
 		_logger.AddMessage("Some text")
 	End Sub
+
+	Private Sub _btnSholLogForm_Click(sender As Object, e As EventArgs) Handles _btnShowLogForm.Click
+		Dim form = New LoggerForm(_logger)
+		form.Show()
+	End Sub
 End Class

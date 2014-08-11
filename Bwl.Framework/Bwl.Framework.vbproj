@@ -71,6 +71,7 @@
     <Compile Include="src\AppBase\FormAppBase.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="src\AppBase\ServiceLocator.vb" />
     <Compile Include="src\Attributes\DisplayAttribute.vb" />
     <Compile Include="src\Attributes\ParameterAttribute.vb" />
     <Compile Include="src\Attributes\StateAttribute.vb" />
@@ -103,6 +104,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="src\Logging\UI\LoggerForm.designer.vb">
+      <DependentUpon>LoggerForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\Logging\UI\LoggerForm.vb">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Settings\Settings\PasswordSetting.vb" />
     <Compile Include="src\Settings\Storages\ClonedSettingsStorage.vb" />
@@ -149,6 +156,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Logging\UI\LoggerForm.resx">
+      <DependentUpon>LoggerForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Settings\Gui\SettingField.resx">
       <DependentUpon>SettingField.vb</DependentUpon>
