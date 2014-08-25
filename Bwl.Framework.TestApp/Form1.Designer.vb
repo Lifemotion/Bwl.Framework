@@ -22,22 +22,22 @@ Partial Class Form1
     'Не изменяйте ее в редакторе исходного кода.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.SuspendLayout()
-        '
-        'logWriter
-        '
-        Me.logWriter.Location = New System.Drawing.Point(0, 280)
-        Me.logWriter.Size = New System.Drawing.Size(764, 266)
-        '
-        'Form1
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(772, 542)
-        Me.Name = "Form1"
-        Me.Text = "Form1"
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+		Me.SuspendLayout()
+		'
+		'logWriter
+		'
+		Me.logWriter.Location = New System.Drawing.Point(0, 280)
+		Me.logWriter.Size = New System.Drawing.Size(764, 266)
+		'
+		'Form1
+		'
+		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+		Me.ClientSize = New System.Drawing.Size(772, 542)
+		Me.Name = "Form1"
+		Me.Text = "Form1"
+		Me.ResumeLayout(False)
+		Me.PerformLayout()
 
-    End Sub
+	End Sub
 End Class

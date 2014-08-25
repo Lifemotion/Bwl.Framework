@@ -264,4 +264,18 @@ Public Class DatagridLogWriter
         tFilterApply.Stop()
         RedrawItems()
     End Sub
+
+	Private Sub grid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles grid.CellDoubleClick
+		'вызов окна
+		If (e.RowIndex >= 0 AndAlso e.RowIndex <= grid.RowCount) Then
+			Dim LogInfo = New FormLogInfo()
+			Dim infoList As New List(Of String)()
+			For i = 0 To grid.ColumnCount - 1
+				infoList.Add(grid.Item(i, e.RowIndex).Value.ToString())
+			Next
+			LogInfo.LogInfoText = infoList
+			LogInfo.Show()
+			'LogInfo.Dispose()
+		End If
+	End Sub
 End Class
