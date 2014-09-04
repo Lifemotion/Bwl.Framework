@@ -12,7 +12,7 @@ Public Class AppBase
 	Protected _services As ServiceLocator
 
 	Public Sub New(doinit As Boolean)
-		_baseFolder = AppDomain.CurrentDomain.BaseDirectory + "\..\"
+		_baseFolder = AppDomain.CurrentDomain.BaseDirectory + "..\"
 		_logsFolder = _baseFolder + "logs\"
 		_settingsFolder = _baseFolder + "conf\"
 		_dataFolder = _baseFolder + "data\"
