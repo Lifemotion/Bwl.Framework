@@ -72,6 +72,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\AppBase\ServiceLocator.vb" />
+    <Compile Include="src\Attributes\ImageAttr.vb" />
     <Compile Include="src\Attributes\DisplayAttribute.vb" />
     <Compile Include="src\Attributes\ParameterAttribute.vb" />
     <Compile Include="src\Attributes\StateAttribute.vb" />
