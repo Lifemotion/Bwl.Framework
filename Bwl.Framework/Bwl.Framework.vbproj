@@ -71,13 +71,15 @@
     <Compile Include="src\AppBase\FormAppBase.vb">
       <SubType>Form</SubType>
     </Compile>
-	<Compile Include="src\AppBase\ServiceLocator.vb" />
-    <Compile Include="src\Attributes\ImageAttr.vb" />	<Compile Include="src\Logging\LogWriters\Realizations\FormLogInfo.Designer.vb">
+    <Compile Include="src\AppBase\ServiceLocator.vb" />
+    <Compile Include="src\Attributes\ImageAttr.vb" />
+    <Compile Include="src\Logging\LogWriters\Realizations\FormLogInfo.Designer.vb">
       <DependentUpon>FormLogInfo.vb</DependentUpon>
     </Compile>
     <Compile Include="src\Logging\LogWriters\Realizations\FormLogInfo.vb">
       <SubType>Form</SubType>
-    </Compile>    <Compile Include="src\Attributes\DisplayAttribute.vb" />
+    </Compile>
+    <Compile Include="src\Attributes\DisplayAttribute.vb" />
     <Compile Include="src\Attributes\ParameterAttribute.vb" />
     <Compile Include="src\Attributes\StateAttribute.vb" />
     <Compile Include="src\Logging\LogWriters\Realizations\ConsoleLogWriter.vb" />
@@ -143,6 +145,7 @@
     <Compile Include="src\Settings\Settings\VariantSetting.vb" />
     <Compile Include="src\Settings\Writers\Realizations\MemoryReaderWriter.vb" />
     <Compile Include="src\Tools\CryptoTools.vb" />
+    <Compile Include="src\Tools\Image.vb" />
     <Compile Include="src\Tools\IniFile.vb" />
     <Compile Include="src\Settings\Writers\Interface\ISettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\IniFileSettingsWriter.vb" />

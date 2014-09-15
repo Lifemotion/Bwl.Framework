@@ -13,8 +13,8 @@ Public Class ImageAttr
 		End Get
 	End Property
 
-	Public Sub New(displayName As String, showIfNothing As Boolean, Optional visibleForAdminOnly As Boolean = False)
-		MyBase.New(displayName, visibleForAdminOnly)
+	Public Sub New(displayName As String, showIfNothing As Boolean, Optional visibleForUsers As String() = Nothing)
+		MyBase.New(displayName, visibleForUsers)
 		_showIfNothing = showIfNothing
 	End Sub
 End Class
