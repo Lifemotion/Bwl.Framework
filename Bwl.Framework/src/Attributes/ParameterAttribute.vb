@@ -9,8 +9,8 @@ Public Class ParameterAttribute
 	Private _pass As Boolean
 	Private _acceptMsg As String
 
-	Public Sub New(displayName As String, Optional btn As Boolean = False, Optional pass As Boolean = False, Optional acceptMsg As String = Nothing)
-		MyBase.New(displayName)
+	Public Sub New(displayName As String, Optional btn As Boolean = False, Optional pass As Boolean = False, Optional acceptMsg As String = Nothing, Optional visibleForAdminOnly As Boolean = False)
+		MyBase.New(displayName, visibleForAdminOnly)
 		_btn = btn
 		_pass = pass
 		_acceptMsg = acceptMsg

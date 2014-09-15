@@ -2,3 +2,5 @@
 bin
 obj
 dllOut
+*Release
+*Debug

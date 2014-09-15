@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\dllOut\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
@@ -30,7 +30,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>..\dllOut\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
@@ -71,13 +71,13 @@
     <Compile Include="src\AppBase\FormAppBase.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Logging\LogWriters\Realizations\FormLogInfo.Designer.vb">
+	<Compile Include="src\AppBase\ServiceLocator.vb" />
+    <Compile Include="src\Attributes\ImageAttr.vb" />	<Compile Include="src\Logging\LogWriters\Realizations\FormLogInfo.Designer.vb">
       <DependentUpon>FormLogInfo.vb</DependentUpon>
     </Compile>
     <Compile Include="src\Logging\LogWriters\Realizations\FormLogInfo.vb">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\Attributes\DisplayAttribute.vb" />
+    </Compile>    <Compile Include="src\Attributes\DisplayAttribute.vb" />
     <Compile Include="src\Attributes\ParameterAttribute.vb" />
     <Compile Include="src\Attributes\StateAttribute.vb" />
     <Compile Include="src\Logging\LogWriters\Realizations\ConsoleLogWriter.vb" />
@@ -109,6 +109,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="src\Logging\UI\LoggerForm.designer.vb">
+      <DependentUpon>LoggerForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\Logging\UI\LoggerForm.vb">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Settings\Settings\PasswordSetting.vb" />
     <Compile Include="src\Settings\Storages\ClonedSettingsStorage.vb" />
@@ -159,6 +165,9 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="src\Logging\UI\LoggerForm.resx">
+      <DependentUpon>LoggerForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\Settings\Gui\SettingField.resx">
       <DependentUpon>SettingField.vb</DependentUpon>
     </EmbeddedResource>
@@ -179,6 +188,11 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+		call ..\..\output_dll.cmd  ..\..\..\$(ProjectName)-$(ConfigurationName)
+	</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -24,6 +24,7 @@ Partial Class TestApp
     Private Sub InitializeComponent()
 		Me.Button1 = New System.Windows.Forms.Button()
 		Me.Button2 = New System.Windows.Forms.Button()
+		Me._btnShowLogForm = New System.Windows.Forms.Button()
 		Me.SuspendLayout()
 		'
 		'Button1
@@ -44,11 +45,21 @@ Partial Class TestApp
 		Me.Button2.Text = "Add log msg"
 		Me.Button2.UseVisualStyleBackColor = True
 		'
+		'_btnShowLogForm
+		'
+		Me._btnShowLogForm.Location = New System.Drawing.Point(12, 101)
+		Me._btnShowLogForm.Name = "_btnShowLogForm"
+		Me._btnShowLogForm.Size = New System.Drawing.Size(75, 23)
+		Me._btnShowLogForm.TabIndex = 2
+		Me._btnShowLogForm.Text = "ShowLogFom"
+		Me._btnShowLogForm.UseVisualStyleBackColor = True
+		'
 		'TestApp
 		'
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
 		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
 		Me.ClientSize = New System.Drawing.Size(453, 306)
+		Me.Controls.Add(Me._btnShowLogForm)
 		Me.Controls.Add(Me.Button2)
 		Me.Controls.Add(Me.Button1)
 		Me.Name = "TestApp"
@@ -58,5 +69,6 @@ Partial Class TestApp
 	End Sub
 	Friend WithEvents Button1 As System.Windows.Forms.Button
 	Friend WithEvents Button2 As System.Windows.Forms.Button
+	Friend WithEvents _btnShowLogForm As System.Windows.Forms.Button
 
 End Class
