@@ -150,6 +150,7 @@
     <Compile Include="src\Settings\Writers\Interface\ISettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\IniFileSettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\NullSettingsWriter.vb" />
+    <Compile Include="src\Tools\MailSender.vb" />
     <Compile Include="src\Tools\RunMonitorHelper.vb" />
     <Compile Include="src\Tools\Tools.vb" />
   </ItemGroup>
