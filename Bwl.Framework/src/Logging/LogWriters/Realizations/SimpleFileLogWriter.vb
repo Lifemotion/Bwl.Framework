@@ -123,7 +123,7 @@ Public Class SimpleFileLogWriter
 		If modePlace = PlaceLoggingMode.onePlaceInOneFile Then result += filename
 		If modePlace = PlaceLoggingMode.eachPlaceInSelfFile Then result += PathToString(message.path) + ".txt"
 		If modePlace = PlaceLoggingMode.eachPlaceInSelfFileAndHigher Then result += PathToString(message.path) + ".txt"
-		Return folder + "\" + result
+        Return folder + IO.Path.PathSeparator + result
 	End Function
 	Private Sub RenameBigFile(fName As String)
 		Try
@@ -134,7 +134,7 @@ Public Class SimpleFileLogWriter
 					Dim name = IO.Path.GetFileNameWithoutExtension(fName)
 					Dim ext = IO.Path.GetExtension(fName)
 					Dim dtNow = DateTime.Now
-					Dim newName = path + "\\" + name + dtNow.ToString(" HH-mm_dd.MM.yyyy") + ext
+                    Dim newName = path + IO.Path.PathSeparator + name + dtNow.ToString(" HH-mm_dd.MM.yyyy") + ext
 					Rename(fName, newName)
 				End If
 			End If

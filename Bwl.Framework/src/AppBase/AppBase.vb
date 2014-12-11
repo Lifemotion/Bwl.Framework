@@ -11,11 +11,17 @@ Public Class AppBase
 	Protected _storage As SettingsStorage
 	Protected _services As ServiceLocator
 
+    Public ReadOnly Property PathSeparator As String
+        Get
+            Return IO.Path.PathSeparator
+        End Get
+    End Property
+
 	Public Sub New(doinit As Boolean)
-		_baseFolder = AppDomain.CurrentDomain.BaseDirectory + "..\"
-		_logsFolder = _baseFolder + "logs\"
-		_settingsFolder = _baseFolder + "conf\"
-		_dataFolder = _baseFolder + "data\"
+        _baseFolder = AppDomain.CurrentDomain.BaseDirectory + ".." + PathSeparator
+        _logsFolder = _baseFolder + "logs" + PathSeparator
+        _settingsFolder = _baseFolder + "conf" + PathSeparator
+        _dataFolder = _baseFolder + "data" + PathSeparator
 
 		If doinit Then Init()
 	End Sub
