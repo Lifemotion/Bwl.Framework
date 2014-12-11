@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\debug\dll\</OutputPath>
     <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
@@ -30,7 +30,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\release\bin\</OutputPath>
     <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
@@ -195,8 +195,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-		call ..\..\output_dll.cmd  ..\..\..\$(ProjectName)-$(ConfigurationName)
-	</PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
