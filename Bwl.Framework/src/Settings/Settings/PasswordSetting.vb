@@ -79,7 +79,6 @@ Public Class PasswordSetting
 				Dim bytes = Convert.FromBase64String(MyBase.ValueAsString)
 				Dim keyLen = bytes.First
 
-
 				Dim keyEnc(keyLen - 1) As Byte
 				Array.ConstrainedCopy(bytes, 1, keyEnc, 0, keyLen)
 				_key = Encoding.Default.GetBytes(CryptoTools.Des3DecodeB(keyEnc, KeyForKey))

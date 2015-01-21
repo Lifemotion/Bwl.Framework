@@ -21,7 +21,7 @@
 
     Public Property Value() As Double
         Get
-            Return CInt(MyBase.ValueAsString)
+			Return CDbl(MyBase.ValueAsString)
         End Get
         Set(value As Double)
             MyBase.ValueAsString = value.ToString

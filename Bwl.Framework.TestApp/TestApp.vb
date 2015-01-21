@@ -7,12 +7,12 @@ Public Class TestApp
 	Private _child_1 As SettingsStorage = _storage.CreateChildStorage("Child-1", "Ребенок 1")
 	Private _child_2 As SettingsStorage = _storage.CreateChildStorage("Child-2", "Child 2")
 	Private _child_1_1 As SettingsStorage = _child_1.CreateChildStorage("Child-1-1", "Child 1-1")
-	Private intSetting As IntegerSetting = _storage.CreateIntegerSetting("Integer", 1, "Целое", "Описание целого")
-	Private boolSetting As BooleanSetting = _storage.CreateBooleanSetting("Boolean", True, "Булево", "Описание булевого")
-	Private strSetting As StringSetting = _child_1.CreateStringSetting("String", "Cat", "Строка", "Описание строки")
-	Private dblSetting As DoubleSetting = _child_2.CreateDoubleSetting("Double", 1.6, "Двойное", "Описание двойного")
-	Private varSetting As VariantSetting = _child_1_1.CreateVariantSetting("Variant", "Cat", {"Cat", "Dog"}, "Описание варианта")
-	Private passSetting As PasswordSetting = _child_1_1.CreatePasswordSetting("Pass", "")
+	Private _intSetting As IntegerSetting = _storage.CreateIntegerSetting("Integer", 1, "Целое", "Описание целого")
+	Private _boolSetting As BooleanSetting = _storage.CreateBooleanSetting("Boolean", True, "Булево", "Описание булевого")
+	Private _strSetting As StringSetting = _child_1.CreateStringSetting("String", "Cat", "Строка", "Описание строки")
+	Private _dblSetting As DoubleSetting = _child_2.CreateDoubleSetting("Double", 1.6, "Двойное", "Описание двойного")
+	Private _varSetting As VariantSetting = _child_1_1.CreateVariantSetting("Variant", "Cat", {"Cat", "Dog"}, "Описание варианта")
+	Private _passSetting As PasswordSetting = _child_1_1.CreatePasswordSetting("Pass", "")
 	Private _logger = New Logger()
     Private Sub TestApp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Form1.Show()
@@ -40,10 +40,11 @@ Public Class TestApp
         _logger.ConnectWriter(logWriter1)
         _logger.AddMessage("Programm Start")
 
+		Dim d = _dblSetting.Value
 
         _storage.ShowSettingsForm()
 
-        Dim b = varSetting.FullName
+		Dim b = _varSetting.FullName
         Dim f = _storage.FindSetting(b)
     End Sub
 

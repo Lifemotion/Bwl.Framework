@@ -127,7 +127,7 @@ Partial Class DatagridLogWriter
 		Me.cbAutoScroll.AutoSize = True
 		Me.cbAutoScroll.Checked = True
 		Me.cbAutoScroll.CheckState = System.Windows.Forms.CheckState.Checked
-		Me.cbAutoScroll.Location = New System.Drawing.Point(527, 401)
+		Me.cbAutoScroll.Location = New System.Drawing.Point(528, 401)
 		Me.cbAutoScroll.Name = "cbAutoScroll"
 		Me.cbAutoScroll.Size = New System.Drawing.Size(86, 23)
 		Me.cbAutoScroll.TabIndex = 7
@@ -190,7 +190,7 @@ Partial Class DatagridLogWriter
 		Me.cbWarnings.Appearance = System.Windows.Forms.Appearance.Button
 		Me.cbWarnings.Checked = True
 		Me.cbWarnings.CheckState = System.Windows.Forms.CheckState.Checked
-		Me.cbWarnings.Location = New System.Drawing.Point(0, 426)
+		Me.cbWarnings.Location = New System.Drawing.Point(0, 427)
 		Me.cbWarnings.Name = "cbWarnings"
 		Me.cbWarnings.Size = New System.Drawing.Size(104, 23)
 		Me.cbWarnings.TabIndex = 12
