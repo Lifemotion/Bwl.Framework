@@ -15,6 +15,9 @@ Public Class TestApp
 	Private _passSetting As PasswordSetting = _child_1_1.CreatePasswordSetting("Pass", "")
 	Private _logger = New Logger()
     Private Sub TestApp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        _varSetting.ReplaceVariants({"ccc"}, "ccc")
+
         Form1.Show()
         Dim key() As Byte = {
             1, 33, 52, 34, 78, 64, 90, 120, 180, 0,
@@ -40,11 +43,11 @@ Public Class TestApp
         _logger.ConnectWriter(logWriter1)
         _logger.AddMessage("Programm Start")
 
-		Dim d = _dblSetting.Value
+        Dim d = _dblSetting.Value
 
         _storage.ShowSettingsForm()
 
-		Dim b = _varSetting.FullName
+        Dim b = _varSetting.FullName
         Dim f = _storage.FindSetting(b)
     End Sub
 

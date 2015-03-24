@@ -57,8 +57,9 @@
     End Property
 
     Public Sub ReplaceVariants(variants() As String, defaultValue As String)
-        If FindElement(variants, Value) = "" Then Value = defaultValue
         SetVariants(variants, defaultValue)
+
+        If FindElement(variants, Value) = "" Then Value = defaultValue
     End Sub
 
     Public Overrides Property Restrictions As String
