@@ -68,10 +68,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\AppBase\AppBase.vb" />
-    <Compile Include="src\AppBase\FormAppBase.Designer.vb">
-      <DependentUpon>FormAppBase.vb</DependentUpon>
-    </Compile>
     <Compile Include="src\AppBase\FormAppBase.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\AppBase\FormBase.Designer.vb">
+      <DependentUpon>FormBase.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AppBase\FormBase.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\AppBase\ServiceLocator.vb" />
@@ -158,8 +161,8 @@
     <Compile Include="src\Tools\Tools.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="src\AppBase\FormAppBase.resx">
-      <DependentUpon>FormAppBase.vb</DependentUpon>
+    <EmbeddedResource Include="src\AppBase\FormBase.resx">
+      <DependentUpon>FormBase.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Logging\LogWriters\Realizations\FormLogInfo.resx">
       <DependentUpon>FormLogInfo.vb</DependentUpon>

@@ -18,7 +18,7 @@ Public Class TestApp
 
         _varSetting.ReplaceVariants({"ccc"}, "ccc")
 
-        Form1.Show()
+        FormFromAppBase.Show()
         Dim key() As Byte = {
             1, 33, 52, 34, 78, 64, 90, 120, 180, 0,
             200, 27, 198, 154, 12, 236}

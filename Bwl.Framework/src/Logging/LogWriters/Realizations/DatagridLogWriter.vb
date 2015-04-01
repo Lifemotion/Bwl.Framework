@@ -12,7 +12,7 @@ Public Class DatagridLogWriter
     Private newMessages As New List(Of ListItem)
     Private oldMessages As New List(Of ListItem)
     Private working As Boolean = True
-    Public rootName As String = "Корень"
+    Public rootName As String = "Root"
     Sub New()
         InitializeComponent()
     End Sub
@@ -160,7 +160,7 @@ Public Class DatagridLogWriter
         End SyncLock
     End Sub
 
-    Private Sub bClear_LinkClicked(sender As System.Object, e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles bClear.LinkClicked
+    Private Sub bClear_LinkClicked(sender As System.Object, e As System.Windows.Forms.LinkLabelLinkClickedEventArgs)
         Clear()
     End Sub
 
@@ -247,14 +247,6 @@ Public Class DatagridLogWriter
         '    End If
     End Sub
 
-    Private Sub cbMessages_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMessages.CheckedChanged
-
-    End Sub
-
-    Private Sub LogWriterList_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
-
-    End Sub
-
     Private Sub tbFilter_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbFilter.TextChanged
         tFilterApply.Stop()
         tFilterApply.Start()
@@ -278,4 +270,8 @@ Public Class DatagridLogWriter
 			'LogInfo.Dispose()
 		End If
 	End Sub
+
+    Private Sub bClear_Click(sender As Object, e As EventArgs) Handles bClear.Click
+        Clear()
+    End Sub
 End Class
