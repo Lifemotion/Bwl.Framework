@@ -3,7 +3,7 @@
 Public Class TestApp
 	Private _storage As New SettingsStorageRoot("testapp.ini", "TestApp")
 
-	Private _ps = _storage.CreatePasswordSetting("n", "")
+    Private _ps = _storage.CreatePasswordSetting("n", "")
 	Private _child_1 As SettingsStorage = _storage.CreateChildStorage("Child-1", "Ребенок 1")
 	Private _child_2 As SettingsStorage = _storage.CreateChildStorage("Child-2", "Child 2")
 	Private _child_1_1 As SettingsStorage = _child_1.CreateChildStorage("Child-1-1", "Child 1-1")
@@ -49,6 +49,8 @@ Public Class TestApp
 
         Dim b = _varSetting.FullName
         Dim f = _storage.FindSetting(b)
+
+        _logger.AddInformation(Nothing)
     End Sub
 
 	Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

@@ -77,19 +77,25 @@ Public Class SimpleFileLogWriter
 			item.path = path
 			item.message = text
 			item.additional = ""
-			item.type = type
-			newMessages.Add(item)
+            item.type = type
+            SyncLock newMessages
+                newMessages.Add(item)
+            End SyncLock
 		End If
 	End Sub
 	Private Sub WriteToFile() Handles writeTimer.Elapsed
 		Static timerWorking As Boolean
 		If Not timerWorking Then
-			timerWorking = True
-			Do While newMessages.Count > 0
-				If Filter(newMessages(0)) Then WriteLine(newMessages(0))
-				newMessages.RemoveAt(0)
-			Loop
-			timerWorking = False
+            timerWorking = True
+            SyncLock newMessages
+                Do While newMessages.Count > 0
+                    If Filter(newMessages(0)) Then
+                        WriteLine(newMessages(0))
+                    End If
+                    newMessages.RemoveAt(0)
+                Loop
+            End SyncLock
+            timerWorking = False
 		End If
 	End Sub
 	Private Function PathToString(path() As String) As String
@@ -100,10 +106,17 @@ Public Class SimpleFileLogWriter
 		End If
 	End Function
 	Private Function Filter(message As ListItem) As Boolean
-		If typeFilter <> LogEventType.all Then
-			If message.type <> typeFilter Then Return False
-		End If
-		Return True
+        Dim res = True
+        If message IsNot Nothing Then
+            If typeFilter <> LogEventType.all Then
+                If message.type <> typeFilter Then
+                    res = False
+                End If
+            End If
+        Else
+            res = False
+        End If
+        Return res
 	End Function
 	Private Function GetFileName(message As ListItem) As String
 		Dim result As String = ""
