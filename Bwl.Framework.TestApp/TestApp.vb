@@ -14,24 +14,29 @@ Public Class TestApp
 	Private _varSetting As VariantSetting = _child_1_1.CreateVariantSetting("Variant", "Cat", {"Cat", "Dog"}, "Описание варианта")
 	Private _passSetting As PasswordSetting = _child_1_1.CreatePasswordSetting("Pass", "")
 	Private _logger = New Logger()
+
+    Dim _mailSender As MailSender
+
     Private Sub TestApp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+
         _varSetting.ReplaceVariants({"ccc"}, "ccc")
+        _mailSender = New MailSender(_logger, _storage.CreateChildStorage("MailSender"))
 
         FormFromAppBase.Show()
-        Dim key() As Byte = {
-            1, 33, 52, 34, 78, 64, 90, 120, 180, 0,
-            200, 27, 198, 154, 12, 236}
-        Dim data = "qwery123"
-        Dim res = CryptoTools.Des3Encode(data, key)
-        Dim res2 = CryptoTools.Des3Decode(res, key)
+    Dim key() As Byte = {
+        1, 33, 52, 34, 78, 64, 90, 120, 180, 0,
+        200, 27, 198, 154, 12, 236}
+    Dim data = "qwery123"
+    Dim res = CryptoTools.Des3Encode(Data, key)
+    Dim res2 = CryptoTools.Des3Decode(res, key)
 
 
-        'ps.Pass = "234"
-        'ps.Key = {1, 2, 3, 4, 5, 200, 100, 0, 2, 6, 4, 8, 5, 6, 7, 3}
-        Dim vvv = _ps.Value
+    'ps.Pass = "234"
+    'ps.Key = {1, 2, 3, 4, 5, 200, 100, 0, 2, 6, 4, 8, 5, 6, 7, 3}
+    Dim vvv = _ps.Value
 
-        Dim LogDir = Application.StartupPath
+    Dim LogDir = Application.StartupPath
         Try
             If Not Directory.Exists(LogDir) Then
                 Directory.CreateDirectory(LogDir)
@@ -39,36 +44,36 @@ Public Class TestApp
         Catch exc As Exception
         End Try
 
-        Dim logWriter1 = New SimpleFileLogWriter(LogDir, SimpleFileLogWriter.PlaceLoggingMode.allInOneFile, SimpleFileLogWriter.TypeLoggingMode.allInOneFile)
+    Dim logWriter1 = New SimpleFileLogWriter(LogDir, SimpleFileLogWriter.PlaceLoggingMode.allInOneFile, SimpleFileLogWriter.TypeLoggingMode.allInOneFile)
         _logger.ConnectWriter(logWriter1)
         _logger.AddMessage("Programm Start")
 
-        Dim d = _dblSetting.Value
+    Dim d = _dblSetting.Value
 
         _storage.ShowSettingsForm()
 
-        Dim b = _varSetting.FullName
-        Dim f = _storage.FindSetting(b)
+    Dim b = _varSetting.FullName
+    Dim f = _storage.FindSetting(b)
 
         _logger.AddInformation(Nothing)
     End Sub
 
-	Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-		Dim mrw As New MemoryReaderWriter
-		_storage.SaveSettings(mrw, False)
-		Dim b = mrw.MakeString
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim mrw As New MemoryReaderWriter
+        _storage.SaveSettings(mrw, False)
+        Dim b = mrw.MakeString
 
-		Dim storage2 = New ClonedSettingsStorage(New MemoryReaderWriter(b))
-		storage2.ShowSettingsForm()
+        Dim storage2 = New ClonedSettingsStorage(New MemoryReaderWriter(b))
+        storage2.ShowSettingsForm()
 
-	End Sub
+    End Sub
 
-	Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-		_logger.AddMessage("Some text")
-	End Sub
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        _logger.AddMessage("Some text")
+    End Sub
 
-	Private Sub _btnSholLogForm_Click(sender As Object, e As EventArgs) Handles _btnShowLogForm.Click
-		Dim form = New LoggerForm(_logger)
-		form.Show()
-	End Sub
+    Private Sub _btnSholLogForm_Click(sender As Object, e As EventArgs) Handles _btnShowLogForm.Click
+        Dim form = New LoggerForm(_logger)
+        form.Show()
+    End Sub
 End Class
