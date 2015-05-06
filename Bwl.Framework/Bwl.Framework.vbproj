@@ -139,6 +139,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Settings\Storages\Common\ISettingsStorage.vb" />
+    <Compile Include="src\Settings\Storages\SettingsStorageRootWithBackup.vb" />
     <Compile Include="src\Settings\Storages\SettingsStorageRoot.vb" />
     <Compile Include="src\Settings\Storages\SettingsStorage.vb" />
     <Compile Include="src\Settings\Storages\Common\SettingsStorageBase.vb" />

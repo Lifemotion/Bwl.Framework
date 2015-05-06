@@ -32,7 +32,8 @@ Public Class AppBase
 		_logs = New Logger
 		_logs.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile))
 		_logs.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors))
-        _storage = New SettingsStorageRoot(New IniFileSettingsWriter(_settingsFolder + "settings.ini"), _appName, IsSettingReadonly)
+        '_storage = New SettingsStorageRootWithBackup(_settingsFolder, New IniFileSettingsWriter(_settingsFolder + "settings.ini"), _appName, IsSettingReadonly) 'TODO
+        _storage = New SettingsStorageRoot(New IniFileSettingsWriter(_settingsFolder + "settings.ini"), _appName, IsSettingReadonly) 'TODO
 		_services = New ServiceLocator(_logs)
 		_services.AddService(_storage)
         _services.AddService(Me)

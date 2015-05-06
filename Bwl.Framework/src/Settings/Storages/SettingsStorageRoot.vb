@@ -5,8 +5,7 @@ Public Class SettingsStorageRoot
     Protected _autoSave As Boolean
     Protected _autoSaveInterval As Single = 2
     Protected _autoSaveNeeded As Boolean = False
-	Protected WithEvents _autoSaveTimer As New Timer
-
+    Protected WithEvents _autoSaveTimer As New Timer
 
 	''' <summary>
 	''' Создать новое хранилище настроек, являющееся корневым.
@@ -20,7 +19,7 @@ Public Class SettingsStorageRoot
 		_defaultWriter = defaultWriter
 		_readOnly = isReadOnly
 		_name = rootName
-		AutoSave = True
+        AutoSave = True
 	End Sub
 
 	''' <summary>
