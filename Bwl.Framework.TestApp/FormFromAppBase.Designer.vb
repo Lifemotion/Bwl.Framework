@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class FormFromAppBase
+Partial Class FormFromAppBase1111
     Inherits Bwl.Framework.FormAppBase
 
     'Форма переопределяет dispose для очистки списка компонентов.

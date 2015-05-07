@@ -23,7 +23,6 @@ Public Class AppBase
         _settingsFolder = IO.Path.Combine(_baseFolder, "conf")
         _dataFolder = IO.Path.Combine(_baseFolder, "data")
         If initFolders Then Init()
-
     End Sub
 
     Public Sub Init()

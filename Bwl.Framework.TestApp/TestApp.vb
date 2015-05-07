@@ -77,4 +77,12 @@ Public Class TestApp
         Dim form = New LoggerForm(_logger)
         form.Show()
     End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs)
+        Text = _dblSetting.Value.ToString
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        _appBase.RootStorage.ShowSettingsForm()
+    End Sub
 End Class

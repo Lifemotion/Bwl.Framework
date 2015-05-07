@@ -1,4 +1,4 @@
-﻿Public Class FormFromAppBase
+﻿Public Class FormFromAppBase1111
     Inherits FormAppBase
 
     Dim _mailSender As MailSender

@@ -40,7 +40,7 @@ Public Class SettingsStorageRootWithBackup
         _backupName = Path.GetFileName(Path.GetDirectoryName(_rootPath))
         _backupFolderName = Path.GetFileName(settingsFolder) + "-backup"
         _settingsBackupPath = Path.Combine(_rootPath, _backupFolderName)
-        _backupStorage = CreateChildStorage("Backup")
+        _backupStorage = CreateChildStorage("BackupSettings", "Резервное копирование настроек")
         _backupDaysDepth = New IntegerSetting(_backupStorage, "BackupDaysDepth", 45)
         _backupAtStart = New BooleanSetting(_backupStorage, "BackupAtStart", False)
         _autoBackup = New BooleanSetting(_backupStorage, "AutoBackup", False)
