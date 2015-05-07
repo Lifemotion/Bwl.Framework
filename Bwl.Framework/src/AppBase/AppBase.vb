@@ -25,17 +25,18 @@ Public Class AppBase
         If initFolders Then Init()
 
     End Sub
-	Public Sub Init()
-		TryCreateFolder(_settingsFolder)
-		TryCreateFolder(_dataFolder)
-		TryCreateFolder(_logsFolder)
-		_logs = New Logger
-		_logs.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile))
-		_logs.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors))
-        '_storage = New SettingsStorageRootWithBackup(_settingsFolder, New IniFileSettingsWriter(_settingsFolder + "settings.ini"), _appName, IsSettingReadonly) 'TODO
-        _storage = New SettingsStorageRoot(New IniFileSettingsWriter(_settingsFolder + "settings.ini"), _appName, IsSettingReadonly) 'TODO
-		_services = New ServiceLocator(_logs)
-		_services.AddService(_storage)
+
+    Public Sub Init()
+        TryCreateFolder(_settingsFolder)
+        TryCreateFolder(_dataFolder)
+        TryCreateFolder(_logsFolder)
+        _logs = New Logger
+        _logs.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile))
+        _logs.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors))
+        _storage = New SettingsStorageRootWithBackup(_settingsFolder, New IniFileSettingsWriter(Path.Combine(_settingsFolder, "settings.ini")), _appName, IsSettingReadonly) 'TODO
+        '_storage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_settingsFolder, "settings.ini")), _appName, IsSettingReadonly) 'TODO
+        _services = New ServiceLocator(_logs)
+        _services.AddService(_storage)
         _services.AddService(Me)
         _logs.Add(LogEventType.message, "Application startup")
         _logs.Add(LogEventType.information, "Application executable path: " + Application.ExecutablePath)
