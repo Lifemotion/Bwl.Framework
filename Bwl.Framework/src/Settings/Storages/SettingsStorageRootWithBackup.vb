@@ -6,45 +6,49 @@ Imports System.Text.RegularExpressions
 Public Class SettingsStorageRootWithBackup
     Inherits SettingsStorageRoot
 
+    Private _logger As Logger
+
     Private Const _backUpRegex = "^\w*\([0-9]{2}\.[0-9]{2}\.[0-9]{4}\)\([0-9]{2}-[0-9]{2}-[0-9]{2}\)$"
-    Private Const _backUpMask = "*(??.??.??)(??-??-??)"
+    Private Const _backUpMask = "*(??.??.????)(??-??-??)"
     Private Const _minTimerIntervalInMinutes = 0.1
 
-    Protected ReadOnly _settingsPath As String
-    Protected ReadOnly _rootPath As String
-    Protected ReadOnly _backupName As String
-    Protected ReadOnly _backupFolderName As String
-    Protected ReadOnly _settingsBackupPath As String
-    Protected ReadOnly _backupSync As New Object
+    Private ReadOnly _settingsPath As String
+    Private ReadOnly _rootPath As String
+    Private ReadOnly _backupName As String
+    Private ReadOnly _backupFolderName As String
+    Private ReadOnly _settingsBackupPath As String
+    Private ReadOnly _backupSync As New Object
 
-    Protected _backupStorage As SettingsStorage
-    Protected _backupDaysDepth As IntegerSetting
+    Private _backupStorage As SettingsStorage
+    Private _backupDepthInDays As DoubleSetting
 
-    Protected _backupAtStart As BooleanSetting
-    Protected _autoBackup As BooleanSetting
-    Protected _autoBackupIntervalInMinutes As DoubleSetting
-    Protected WithEvents _autoBackupTimer As New Timer With {.Enabled = False}
+    Private _backupAtStart As BooleanSetting
+    Private _autoBackup As BooleanSetting
+    Private _autoBackupIntervalInMinutes As DoubleSetting
+    Private WithEvents _autoBackupTimer As New Timer With {.Enabled = False}
 
     ''' <summary>
     ''' Создать новое хранилище настроек, являющееся корневым.
-    ''' </summary>
-    ''' <param name="settingsFolder">Путь к настройкам.</param>
+    ''' </summary>    
     ''' <param name="defaultWriter">Интерфейс сохранения\загрузки настроек по умолчанию.</param>
     ''' <param name="rootName">Имя корневой категории настроек.</param>
     ''' <param name="isReadOnly">Данные в хранилище только для чтения.</param>
+    ''' <param name="settingsFolder">Путь к настройкам.</param>
+    ''' <param name="logger">Логгер.</param>
     ''' <remarks></remarks>
-    Sub New(settingsFolder As String, defaultWriter As ISettingsReaderWriter, rootName As String, isReadOnly As Boolean)
+    Sub New(defaultWriter As ISettingsReaderWriter, rootName As String, isReadOnly As Boolean, settingsFolder As String, logger As Logger)
         MyBase.New(defaultWriter, rootName, isReadOnly)
+        _logger = logger
         _settingsPath = settingsFolder
         _rootPath = Path.GetDirectoryName(settingsFolder)
         _backupName = Path.GetFileName(Path.GetDirectoryName(_rootPath))
         _backupFolderName = Path.GetFileName(settingsFolder) + "-backup"
         _settingsBackupPath = Path.Combine(_rootPath, _backupFolderName)
         _backupStorage = CreateChildStorage("BackupSettings", "Резервное копирование настроек")
-        _backupDaysDepth = New IntegerSetting(_backupStorage, "BackupDaysDepth", 45)
-        _backupAtStart = New BooleanSetting(_backupStorage, "BackupAtStart", False)
+        _backupDepthInDays = New DoubleSetting(_backupStorage, "BackupDepthInDays", 30)
+        _backupAtStart = New BooleanSetting(_backupStorage, "BackupAtStart", True)
         _autoBackup = New BooleanSetting(_backupStorage, "AutoBackup", False)
-        _autoBackupIntervalInMinutes = New DoubleSetting(_backupStorage, "AutoBackupIntervalInMinutes", 1) '1
+        _autoBackupIntervalInMinutes = New DoubleSetting(_backupStorage, "AutoBackupIntervalInMinutes", (24 * 60))
         AutoBackup = _autoBackup.Value 'это присваивание требуется для автоустановки BackupAtStart при истинном значении AutoBackup        
         AddHandler _autoBackup.ValueChanged, AddressOf ConfigureAutoBackupTimerWithSetting
         AddHandler _autoBackupIntervalInMinutes.ValueChanged, AddressOf ConfigureAutoBackupTimerWithSetting
@@ -56,18 +60,19 @@ Public Class SettingsStorageRootWithBackup
     ''' </summary>
     ''' <remarks></remarks>
     Sub New()
-        Me.New(String.Empty, New NullSettingsWriter, "Root", False)
+        Me.New(New NullSettingsWriter, "Root", False, String.Empty, Nothing)
     End Sub
 
     ''' <summary>
     ''' Создать новое хранилище настроек, являющееся корневым.
-    ''' </summary>
-    ''' <param name="settingsFolder">Путь к настройкам.</param>
+    ''' </summary>    
     ''' <param name="iniFileName">Имя ini-файла с настройками.</param>
     ''' <param name="rootCategoryName">Имя корневой категории настроек.</param>
+    ''' <param name="settingsFolder">Путь к настройкам.</param>
+    ''' <param name="logger">Логгер.</param>
     ''' <remarks></remarks>
-    Sub New(settingsFolder As String, iniFileName As String, rootCategoryName As String)
-        Me.New(settingsFolder, New IniFileSettingsWriter(iniFileName), rootCategoryName, False)
+    Sub New(iniFileName As String, rootCategoryName As String, settingsFolder As String, logger As Logger)
+        Me.New(New IniFileSettingsWriter(iniFileName), rootCategoryName, False, settingsFolder, logger)
     End Sub
 
     ''' <summary>
@@ -158,9 +163,11 @@ Public Class SettingsStorageRootWithBackup
             Dim currentBackupFolderName = String.Format("{0}({1})({2})", _backupName, .ToString("dd.MM.yyyy", CultureInfo.InvariantCulture), .ToString("HH-mm-ss", CultureInfo.InvariantCulture))
             Dim dateTimeNowFromFolderName = GetDateTimeFromFolderName(currentBackupFolderName)
             If dateTimeNowFromFolderName Is Nothing Then
+                If _logger IsNot Nothing Then _logger.AddError("dateTimeNowFromFolderName Is Nothing")
                 Throw New Exception("dateTimeNowFromFolderName Is Nothing")
             Else
                 If dateTimeNowFromFolderName <> CutDateTimeToSeconds(dateTimeNow) Then
+                    If _logger IsNot Nothing Then _logger.AddError("dateTimeNowFromFolderName <> dateTimeNow")
                     Throw New Exception("dateTimeNowFromFolderName <> dateTimeNow")
                 Else
                     Return currentBackupFolderName
@@ -170,17 +177,30 @@ Public Class SettingsStorageRootWithBackup
     End Function
 
     Private Function GetDateTimeFromFolderName(folderName As String) As DateTime?
+        Dim dateTimeStartPosition As Integer = 0
         If Not FolderNameIsCorrect(folderName) Then
             Return Nothing
         Else
             Try
-                Dim dateTimeStartPosition = folderName.IndexOf("(")
+                dateTimeStartPosition = folderName.IndexOf("(")
                 Return DateTime.ParseExact(folderName.Substring(dateTimeStartPosition), "(dd.MM.yyyy)(HH-mm-ss)", CultureInfo.InvariantCulture)
             Catch ex As Exception
+                If _logger IsNot Nothing Then _logger.AddError(String.Format("DateTime.ParseExact({0})", folderName.Substring(dateTimeStartPosition)))
                 Return Nothing
             End Try
         End If
     End Function
+
+    Private Sub BackupProcessing()
+        Try
+            SyncLock _backupSync
+                BackupSettings()
+                DeleteOldFolders()
+            End SyncLock
+        Catch ex As Exception
+            _logger.AddError(String.Format("BackupProcessing exception: {0}", ex.ToString()))
+        End Try        
+    End Sub
 
     Private Sub DeleteFileSafely(fileName As String)
         If File.Exists(fileName) Then
@@ -194,13 +214,7 @@ Public Class SettingsStorageRootWithBackup
         For Each fileName In folderFiles
             DeleteFileSafely(fileName)
         Next
-    End Sub
-
-    Private Sub BackupProcessing()
-        SyncLock _backupSync
-            BackupSettings()
-            DeleteOldFolders()
-        End SyncLock
+        Directory.Delete(path)
     End Sub
 
     Private Sub BackupSettings()
@@ -217,16 +231,14 @@ Public Class SettingsStorageRootWithBackup
 
     Private Sub DeleteOldFolders()
         Dim currentDateTime = CutDateTimeToSeconds(DateTime.Now)
-        Dim backupPathSet = Directory.GetDirectories(_rootPath, _backUpMask, SearchOption.TopDirectoryOnly)
-        For Each folder In backupPathSet
-            Dim folderDateTime = GetDateTimeFromFolderName(folder)
+        Dim backupPathSet = Directory.GetDirectories(Path.Combine(_rootPath, _backupFolderName), _backUpMask, SearchOption.TopDirectoryOnly)
+        For Each backupPath In backupPathSet
+            Dim backupFolder = Path.GetFileName(backupPath)
+            Dim folderDateTime = GetDateTimeFromFolderName(backupFolder)
             If folderDateTime IsNot Nothing Then
                 Dim folderAgeInDays = (currentDateTime - folderDateTime).Value.TotalDays
-                If folderAgeInDays > _backupDaysDepth.Value Then
-                    Try
-                        DeleteFolderWithFiles(folder)
-                    Catch ex As Exception
-                    End Try
+                If folderAgeInDays > _backupDepthInDays.Value Then
+                    DeleteFolderWithFiles(backupPath)
                 End If
             End If
         Next
