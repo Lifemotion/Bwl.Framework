@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\output\Bwl.Framework\debug\dll\</OutputPath>
+    <OutputPath>..\output\Bwl.Framework\debug\</OutputPath>
     <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
@@ -32,7 +32,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>..\output\Bwl.Framework\release\dll\</OutputPath>
+    <OutputPath>..\output\Bwl.Framework\release\</OutputPath>
     <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
