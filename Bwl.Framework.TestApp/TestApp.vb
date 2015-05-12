@@ -21,6 +21,8 @@ Public Class TestApp
     Dim _mailSender As MailSender
 
     Private Sub TestApp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Dim backUper = New SettingsStorageBackup(_appBase.SettingsFolder, _logger, _appBase.RootStorage.CreateChildStorage("BackupSettings", "Резервное копирование настроек"))
+
         _varSetting.ReplaceVariants({"ccc"}, "ccc")
         _mailSender = New MailSender(_logger, _appBase.RootStorage.CreateChildStorage("MailSender"))
 

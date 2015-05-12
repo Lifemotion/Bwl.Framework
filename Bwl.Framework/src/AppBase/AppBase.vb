@@ -12,11 +12,12 @@ Public Class AppBase
 	Protected _services As ServiceLocator
     Protected _appName As String
 
-    Public Sub New()
-        Me.New(True, "Application")
-    End Sub
+    '<Obsolete("")>
+    'Public Sub New()
+    '    Me.New(True, "Application")
+    'End Sub
 
-    Public Sub New(initFolders As Boolean, appName As String)
+    Public Sub New(Optional initFolders As Boolean = True, Optional appName As String = "Application")
         _appName = appName
         _baseFolder = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..")
         _logsFolder = IO.Path.Combine(_baseFolder, "logs")
@@ -32,15 +33,13 @@ Public Class AppBase
         _logs = New Logger
         _logs.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile))
         _logs.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors))
-        _storage = New SettingsStorageRootWithBackup(New IniFileSettingsWriter(Path.Combine(_settingsFolder, "settings.ini")), _appName, IsSettingReadonly, _settingsFolder, _logs) 'TODO
-        '_storage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_settingsFolder, "settings.ini")), _appName, IsSettingReadonly) 'TODO
+        _storage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_settingsFolder, "settings.ini")), _appName, IsSettingReadonly)
         _services = New ServiceLocator(_logs)
         _services.AddService(_storage)
         _services.AddService(Me)
         _logs.Add(LogEventType.message, "Application startup")
         _logs.Add(LogEventType.information, "Application executable path: " + Application.ExecutablePath)
         _logs.Add(LogEventType.information, "Application executable date: " + IO.File.GetLastWriteTime(Application.ExecutablePath).ToString)
-
     End Sub
 
 	Public Sub TryCreateFolder(path As String)
