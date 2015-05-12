@@ -6,9 +6,10 @@ Imports System.Text.RegularExpressions
 Public Class SettingsStorageBackup
     Private ReadOnly _logger As Logger
 
-    Private Const _backUpRegex = "^\w*\([0-9]{2}\.[0-9]{2}\.[0-9]{4}\)\([0-9]{2}-[0-9]{2}-[0-9]{2}\)$"
-    Private Const _backUpMask = "*(??.??.????)(??-??-??)"
-    Private Const _minTimerIntervalInMinutes = 0.1
+    Private Const _backUpRegex As String = "\([0-9]{2}\.[0-9]{2}\.[0-9]{4}\)\([0-9]{2}-[0-9]{2}-[0-9]{2}\)$"
+    Private Const _backUpMask As String = "*(??.??.????)(??-??-??)"
+    Private Const _minTimerIntervalInMinutes As Double = 0.1
+    Private Const _dateTimeFormat As String = "(dd.MM.yyyy)(HH-mm-ss)"
 
     Private ReadOnly _settingsPath As String
     Private ReadOnly _rootPath As String
@@ -117,7 +118,7 @@ Public Class SettingsStorageBackup
     Private Function GetBackupFolderName() As String
         Dim dateTimeNow = DateTime.Now
         With dateTimeNow
-            Dim currentBackupFolderName = String.Format("{0}({1})({2})", _backupName, .ToString("dd.MM.yyyy", CultureInfo.InvariantCulture), .ToString("HH-mm-ss", CultureInfo.InvariantCulture))
+            Dim currentBackupFolderName = String.Format("{0}{1}", _backupName, .ToString(_dateTimeFormat, CultureInfo.InvariantCulture))
             Dim dateTimeNowFromFolderName = GetDateTimeFromFolderName(currentBackupFolderName)
             If dateTimeNowFromFolderName Is Nothing Then
                 If _logger IsNot Nothing Then _logger.AddError("dateTimeNowFromFolderName Is Nothing")
@@ -140,7 +141,7 @@ Public Class SettingsStorageBackup
         Else
             Try
                 dateTimeStartPosition = folderName.IndexOf("(")
-                Return DateTime.ParseExact(folderName.Substring(dateTimeStartPosition), "(dd.MM.yyyy)(HH-mm-ss)", CultureInfo.InvariantCulture)
+                Return DateTime.ParseExact(folderName.Substring(dateTimeStartPosition), _dateTimeFormat, CultureInfo.InvariantCulture)
             Catch ex As Exception
                 If _logger IsNot Nothing Then _logger.AddError(String.Format("DateTime.ParseExact({0})", folderName.Substring(dateTimeStartPosition)))
                 Return Nothing
