@@ -3,7 +3,9 @@
     Protected _logger As Logger
 
     Private Sub FormAppBase_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        _logger.ConnectWriter(logWriter)
+        If Not DesignMode Then
+            _logger.ConnectWriter(logWriter)
+        End If
     End Sub
 
     Private Sub exitMenuItem_Click(sender As Object, e As EventArgs) Handles exitMenuItem.Click
