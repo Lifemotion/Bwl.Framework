@@ -2,7 +2,6 @@
     Inherits SettingsStorageBase
 
     Public Sub New(mrw As MemoryReaderWriter)
-
         Me.New(mrw, {}, mrw.ReadRootStorageNames(0), "", Nothing)
     End Sub
 
@@ -31,6 +30,9 @@
             If setting.Type = GetType(VariantSetting).ToString Then
                 Dim child = New VariantSetting(Me, setting.Name, setting.DefaultValueAsString, setting.Restrictions.Split(","c), setting.FriendlyName, setting.Description, setting.ValueAsString)
             End If
+            If setting.Type = GetType(PasswordSetting).ToString Then
+                Dim child = New PasswordSetting(Me, setting.Name, setting.FriendlyName, setting.Description)
+            End If
         Next
 
         Dim childNames = mrw.ReadChildStorageNames(path)
@@ -39,7 +41,6 @@
             Dim child = New ClonedSettingsStorage(mrw, path, childName, childFrindly, Me)
             _childStorages.Add(child)
         Next
-
     End Sub
 
     Friend Overrides Sub SetSettingChanged(setting As SettingOnStorage)

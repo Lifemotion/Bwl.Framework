@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("bwl.Framework")> 
+<Assembly: AssemblyTitle("Bwl.Framework.UnitTest")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("bwl.Framework")> 
-<Assembly: AssemblyCopyright("Copyright ©  2012")> 
+<Assembly: AssemblyProduct("Bwl.Framework.UnitTest")> 
+<Assembly: AssemblyCopyright("Copyright ©  2015")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("7350d541-523b-43eb-86d6-0eafc9c0a00e")> 
+<Assembly: Guid("5372f948-8406-4f30-9456-7017e394852a")> 
 
 ' Version information for an assembly consists of the following four values:
 '
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.15139.98")> 
-<Assembly: AssemblyFileVersion("1.0.15139.98")> 
+<Assembly: AssemblyVersion("1.0.15139.102")> 
+<Assembly: AssemblyFileVersion("1.0.15139.102")> 

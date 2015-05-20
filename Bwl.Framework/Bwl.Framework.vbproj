@@ -151,7 +151,7 @@
     <Compile Include="src\Settings\Settings\StringSetting.vb" />
     <Compile Include="src\Settings\Settings\VariantSetting.vb" />
     <Compile Include="src\Settings\Writers\Realizations\MemoryReaderWriter.vb" />
-    <Compile Include="src\Tools\CryptoTools.vb" />
+    <Compile Include="src\Crypto\CryptoTools.vb" />
     <Compile Include="src\Tools\Image.vb" />
     <Compile Include="src\Tools\IniFile.vb" />
     <Compile Include="src\Settings\Writers\Interface\ISettingsWriter.vb" />
@@ -159,6 +159,7 @@
     <Compile Include="src\Settings\Writers\Realizations\NullSettingsWriter.vb" />
     <Compile Include="src\Tools\MailSender.vb" />
     <Compile Include="src\Tools\RunMonitorHelper.vb" />
+    <Compile Include="src\Crypto\StreamCryptoWrapper.vb" />
     <Compile Include="src\Tools\Tools.vb" />
   </ItemGroup>
   <ItemGroup>

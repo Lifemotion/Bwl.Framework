@@ -179,4 +179,43 @@ Public MustInherit Class SettingsStorageBase
         End If
     End Function
 
+    Public Sub ReloadSettings()
+        ReloadSettings(_defaultWriter)
+    End Sub
+
+    Public Sub ReloadSettings(writer As ISettingsReaderWriter)
+        Dim path = GetStoragePath
+
+        For Each setting In _settings
+            setting.LoadSettingFromStorage(writer, path)
+        Next
+
+        For Each child As SettingsStorageBase In _childStorages
+            child.ReloadSettings(writer)
+        Next
+    End Sub
+
+    Public Sub SaveSettings(writer As ISettingsReaderWriter, changedOnly As Boolean)
+        Dim path = GetStoragePath
+
+        If _parentStorage Is Nothing Then writer.WriteRoot(_name, _friendlyName)
+        For Each setting In _settings
+            If setting.Changed Or Not changedOnly Then
+                writer.WriteSetting(path, setting)
+                setting.Changed = False
+            End If
+        Next
+        For Each child As SettingsStorageBase In _childStorages
+            writer.WriteCategory(path, child.Name, child.FriendlyName)
+            child.SaveSettings(writer, changedOnly)
+        Next
+    End Sub
+
+    Public Sub SaveSettings()
+        SaveSettings(_defaultWriter, True)
+    End Sub
+
+    Public Sub SaveSettings(changedOnly As Boolean)
+        SaveSettings(_defaultWriter, changedOnly)
+    End Sub
 End Class
