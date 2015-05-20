@@ -8,7 +8,7 @@ Public Class SettingsStorageBackup
 
     Private Const _backUpRegex As String = "\([0-9]{2}\.[0-9]{2}\.[0-9]{4}\)\([0-9]{2}-[0-9]{2}-[0-9]{2}\)$"
     Private Const _backUpMask As String = "*(??.??.????)(??-??-??)"
-    Private Const _minTimerIntervalInMinutes As Double = 0.1
+    Private Const _minTimerIntervalInMinutes As Double = 0.01
     Private Const _dateTimeFormat As String = "(dd.MM.yyyy)(HH-mm-ss)"
 
     Private ReadOnly _settingsPath As String
@@ -69,7 +69,7 @@ Public Class SettingsStorageBackup
         End Get
     End Property
 
-    ''' <summary>Интервал автоархивации в секундах.</summary>
+    ''' <summary>Интервал автоархивации в минутах.</summary>
     Public Property AutoBackupInterval As Single
         Set(value As Single)
             _autoBackupIntervalInMinutes.Value = CDbl(value)
@@ -77,6 +77,13 @@ Public Class SettingsStorageBackup
         End Set
         Get
             Return CSng(_autoBackupIntervalInMinutes.Value)
+        End Get
+    End Property
+
+    ''' <summary>Имя директории бакапа.</summary>
+    Public ReadOnly Property Folder As String
+        Get
+            Return Path.Combine(_rootPath, _backupFolderName)
         End Get
     End Property
 
