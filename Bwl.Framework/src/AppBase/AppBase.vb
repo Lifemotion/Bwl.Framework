@@ -1,7 +1,9 @@
 ﻿Imports System.IO
 
 Public Class AppBase
-	Implements IDisposable
+    Implements IDisposable
+
+    Public ReadOnly SettingsFilename As String = "settings.ini"
 
 	Protected ReadOnly _logsFolder As String
 	Protected ReadOnly _settingsFolder As String
@@ -33,7 +35,7 @@ Public Class AppBase
         _logs = New Logger
         _logs.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile))
         _logs.ConnectWriter(New SimpleFileLogWriter(_logsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors))
-        _storage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_settingsFolder, "settings.ini")), _appName, IsSettingReadonly)
+        _storage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_settingsFolder, SettingsFilename)), _appName, IsSettingReadonly)
         _services = New ServiceLocator(_logs)
         _services.AddService(_storage)
         _services.AddService(Me)

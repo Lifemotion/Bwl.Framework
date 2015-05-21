@@ -104,24 +104,23 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     'Тестируется архивация настроек (в том числе - автоматическая)
-    <TestMethod()> Public Sub BackupProcessingTest()
+    <TestMethod()> Public Sub BackupProcessingTest()        
         Dim runSleepTime = 2000
         Dim autoBackupSleepTime = 2000
         CreateChildStorageTree(_storage, _childStorageTreeWidth, 0, _childStorageTreeDepth)
         Dim backUper = New SettingsStorageBackup(_appBase.SettingsFolder, _logger, _appBase.RootStorage.CreateChildStorage("BackupSettings", "Резервное копирование настроек"))
 
         File.WriteAllText("backUperBackupFolderName.txt", String.Format("backUperBackupFolderName: {0}", backUper.Folder))
-        Dim dirList1 = Directory.GetFiles(backUper.Folder, "*.*", SearchOption.AllDirectories) : Thread.Sleep(runSleepTime)
+        Dim dirList1 = Directory.GetFiles(backUper.Folder, _appBase.SettingsFilename, SearchOption.AllDirectories) : Thread.Sleep(runSleepTime)
         backUper.AutoBackupInterval = 0.01 : backUper.AutoBackup = True
         Dim autoBackupFoldersTarget = CInt(Math.Floor(((autoBackupSleepTime / 1000.0) / 60) / backUper.AutoBackupInterval))
         Thread.Sleep(autoBackupSleepTime)
 
-        Dim dirList2 = Directory.GetFiles(backUper.Folder, "*.*", SearchOption.AllDirectories)
+        Dim dirList2 = Directory.GetFiles(backUper.Folder, _appBase.SettingsFilename, SearchOption.AllDirectories)
         Dim newDirCount = dirList2.Length - dirList1.Length
 
         If newDirCount < autoBackupFoldersTarget Then
             Assert.Fail()
         End If
     End Sub
-
 End Class
