@@ -7,6 +7,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 <TestClass()> Public Class SettingsStorageUnitTest
     Private Const _childStorageTreeDepth = 2
     Private Const _childStorageTreeWidth = 3
+    Private Const _data = "The quick brown fox jumps over the lazy dog"
 
     Private _appBase As New AppBase(True, "Test")
     Private Shadows _logger As Logger = _appBase.RootLogger
@@ -66,20 +67,18 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
     'Тестируется шифрование 3DES
     <TestMethod()> Public Sub Des3Test()
-        Dim key() As Byte = {1, 33, 52, 34, 78, 64, 90, 120, 180, 0, 200, 27, 198, 154, 12, 236}
-        Dim data = "The quick brown fox jumps over the lazy dog"
-        Dim enc = CryptoTools.Des3Encode(data, key)
+        Dim key() As Byte = {1, 33, 52, 34, 78, 64, 90, 120, 180, 0, 200, 27, 198, 154, 12, 236}        
+        Dim enc = CryptoTools.Des3Encode(_data, key)
         Dim dec = CryptoTools.Des3Decode(enc, key)
-        Assert.AreEqual(data, dec)
+        Assert.AreEqual(_data, dec)
     End Sub
 
     'Тестируется шифрование Rijndael-256
     <TestMethod()> Public Sub Rijndael256Test()
-        Dim key() As Byte = {1, 33, 52, 34, 78, 64, 90, 120, 180, 0, 200, 27, 198, 154, 12, 236}
-        Dim data = "The quick brown fox jumps over the lazy dog"
-        Dim enc = CryptoTools.Rijndael256Encode(data, key)
+        Dim key() As Byte = {1, 33, 52, 34, 78, 64, 90, 120, 180, 0, 200, 27, 198, 154, 12, 236}        
+        Dim enc = CryptoTools.Rijndael256Encode(_data, key)
         Dim dec = CryptoTools.Rijndael256Decode(enc, key)
-        Assert.AreEqual(data, dec)
+        Assert.AreEqual(_data, dec)
     End Sub
 
     'Тестируется враппер потоков (шифрование Rijndael-256)
@@ -89,8 +88,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim outputStream As New MemoryStream()
         Dim outputCryptoStream = scw.WrapStream(outputStream, True)
 
-        Dim data = "The quick brown fox jumps over the lazy dog"
-        Dim dataBytes1 = Text.Encoding.Default.GetBytes(data)
+        Dim dataBytes1 = Text.Encoding.Default.GetBytes(_data)
         outputCryptoStream.Write(dataBytes1, 0, dataBytes1.Length) : CType(outputCryptoStream, CryptoStream).FlushFinalBlock()
         outputCryptoStream.Flush() : outputStream.Flush() : outputStream.Seek(0, SeekOrigin.Begin)
 
@@ -104,13 +102,11 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     'Тестируется архивация настроек (в том числе - автоматическая)
-    <TestMethod()> Public Sub BackupProcessingTest()        
+    <TestMethod()> Public Sub BackupProcessingTest()
         Dim runSleepTime = 2000
         Dim autoBackupSleepTime = 2000
         CreateChildStorageTree(_storage, _childStorageTreeWidth, 0, _childStorageTreeDepth)
         Dim backUper = New SettingsStorageBackup(_appBase.SettingsFolder, _logger, _appBase.RootStorage.CreateChildStorage("BackupSettings", "Резервное копирование настроек"))
-
-        File.WriteAllText("backUperBackupFolderName.txt", String.Format("backUperBackupFolderName: {0}", backUper.Folder))
         Dim dirList1 = Directory.GetFiles(backUper.Folder, _appBase.SettingsFilename, SearchOption.AllDirectories) : Thread.Sleep(runSleepTime)
         backUper.AutoBackupInterval = 0.01 : backUper.AutoBackup = True
         Dim autoBackupFoldersTarget = CInt(Math.Floor(((autoBackupSleepTime / 1000.0) / 60) / backUper.AutoBackupInterval))
@@ -122,5 +118,59 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         If newDirCount < autoBackupFoldersTarget Then
             Assert.Fail()
         End If
+    End Sub
+
+    'Тестируется работа лога
+    <TestMethod()> Public Sub LoggingTest()        
+        Dim sleepRadiusInS = 5 : Dim sleepTime = 2000
+        Dim logWriter = New SimpleFileLogWriter(_appBase.LogsFolder, SimpleFileLogWriter.PlaceLoggingMode.allInOneFile, SimpleFileLogWriter.TypeLoggingMode.allInOneFile)
+        _logger.ConnectWriter(logWriter)
+
+        With _logger
+            .AddDebug(_data)
+            .AddError(_data)
+            .AddInformation(_data)
+            .AddMessage(_data)
+            .AddWarning(_data)
+        End With        
+        Thread.Sleep(sleepTime)
+
+        Dim dateTimeNow_ = DateTime.Now
+        Dim logData = File.ReadAllLines(Path.Combine(_appBase.LogsFolder, "Log.txt"))
+
+        For i = -sleepRadiusInS To sleepRadiusInS            
+            Dim dateTimeNow = dateTimeNow_.AddSeconds(i)
+            Dim dateTimeNowStr = dateTimeNow.ToString("dd.MM.yyyy HH:mm:ss")
+            Dim dateTimeNowPrefix = dateTimeNowStr + " ROOT "
+
+            Dim dateTimeNowDebugStr = dateTimeNowPrefix + "[Dbg]" + " " + _data
+            Dim dateTimeNowErrorStr = dateTimeNowPrefix + "[Err]" + " " + _data
+            Dim dateTimeNowInformationStr = dateTimeNowPrefix + "[Inf]" + " " + _data
+            Dim dateTimeNowMessageStr = dateTimeNowPrefix + "[Msg]" + " " + _data
+            Dim dateTimeNowWarningStr = dateTimeNowPrefix + "[Wrn]" + " " + _data
+
+            Dim debugDataOk = logData.Any(Function(s As String)
+                                              Return s.Contains(dateTimeNowDebugStr)
+                                          End Function)
+
+            Dim errorDataOk = logData.Any(Function(s As String)
+                                              Return s.Contains(dateTimeNowErrorStr)
+                                          End Function)
+
+            Dim informationDataOk = logData.Any(Function(s As String)
+                                                    Return s.Contains(dateTimeNowInformationStr)
+                                                End Function)
+
+            Dim messageDataOk = logData.Any(Function(s As String)
+                                                Return s.Contains(dateTimeNowMessageStr)
+                                            End Function)
+
+            Dim warningDataOk = logData.Any(Function(s As String)
+                                                Return s.Contains(dateTimeNowWarningStr)
+                                            End Function)
+
+            If debugDataOk AndAlso errorDataOk AndAlso informationDataOk AndAlso messageDataOk AndAlso warningDataOk Then Return
+        Next
+        Assert.Fail()
     End Sub
 End Class
