@@ -1,4 +1,5 @@
-﻿''' <summary>
+﻿Imports System.Reflection
+''' <summary>
 ''' Класс, представляющий средство для иерархичного ведения журнала событий в программе.
 ''' </summary>
 ''' <remarks></remarks>
@@ -62,7 +63,7 @@ Public Class Logger
     End Sub
 
     Public Sub Add(type As LogEventType, text As String, ParamArray additional() As Object)
-
+        text = text + " (" + ExtractCallingMethodInfo() + ")"
         For Each writer In _writers
             writer.WriteEvent(DateTime.Now, _path, type, text, additional)
         Next
@@ -70,6 +71,34 @@ Public Class Logger
             _parentLogger.AddFromChild(_path, type, text, additional)
         End If
     End Sub
+
+    Private Function ExtractCallingMethod() As MethodBase
+        Dim stack = New StackTrace()
+
+        For i = 0 To stack.FrameCount - 1
+            Dim frame1 = stack.GetFrame(i)
+            Dim mtd1 = frame1.GetMethod
+            Dim correct = True
+            If mtd1.IsHideBySig Then correct = False
+            If mtd1.Module.Name.ToLower = "mscorlib.dll" Then correct = False
+            If mtd1.Module.Name.ToLower = "microsoft.visualbasic.dll" Then correct = False
+            If mtd1.Module.Name.ToLower = "bwl.framework.dll" Then correct = False
+            If correct Then
+                Return mtd1
+            End If
+        Next
+        Return Nothing
+    End Function
+
+    Private Function ExtractCallingMethodInfo() As String
+        Dim method = ExtractCallingMethod()
+        If method Is Nothing Then
+            Return ""
+        Else
+            Return method.DeclaringType.ToString + ". " + method.Name
+        End If
+    End Function
+
 
     Public Sub AddInformation(messageText As String, ParamArray additional() As Object)
         Add(LogEventType.information, messageText)
