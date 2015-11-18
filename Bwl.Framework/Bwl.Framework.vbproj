@@ -54,8 +54,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -139,6 +141,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Settings\Storages\Common\ISettingsStorage.vb" />
+    <Compile Include="src\Tools\GlobalStates.vb" />
+    <Compile Include="src\Tools\RegistrySettings.vb" />
+    <Compile Include="src\Tools\Serializer.vb" />
     <Compile Include="src\Tools\SettingsStorageBackup.vb" />
     <Compile Include="src\Settings\Storages\SettingsStorageRoot.vb" />
     <Compile Include="src\Settings\Storages\SettingsStorage.vb" />
@@ -159,6 +164,7 @@
     <Compile Include="src\Settings\Writers\Realizations\NullSettingsWriter.vb" />
     <Compile Include="src\Tools\MailSender.vb" />
     <Compile Include="src\Tools\RunMonitorHelper.vb" />
+    <Compile Include="src\Tools\Stopwatch.vb" />
     <Compile Include="src\Tools\Tools.vb" />
   </ItemGroup>
   <ItemGroup>
