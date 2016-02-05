@@ -8,8 +8,8 @@ Public Class AppBase
 	Protected ReadOnly _dataFolder As String
 	Protected ReadOnly _baseFolder As String
 	Protected _logs As Logger
-	Protected _storage As SettingsStorage
-	Protected _services As ServiceLocator
+    Protected _storage As SettingsStorageRoot
+    Protected _services As ServiceLocator
     Protected _appName As String
 
     '<Obsolete("")>
@@ -92,11 +92,11 @@ Public Class AppBase
 		End Get
     End Property
 
-	Public ReadOnly Property RootStorage As SettingsStorage
-		Get
-			Return _storage
-		End Get
+    Public ReadOnly Property RootStorage As SettingsStorageRoot
+        Get
+            Return _storage
+        End Get
     End Property
 
-	Public Property IsSettingReadonly As Boolean
+    Public Property IsSettingReadonly As Boolean
 End Class

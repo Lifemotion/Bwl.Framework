@@ -74,21 +74,24 @@ Public Class SettingsStorageRoot
 
 	Private Sub _autoSaveTimer_Elapsed(sender As Object, e As System.Timers.ElapsedEventArgs) Handles _autoSaveTimer.Elapsed
 		SyncLock _autoSaveTimer
-			If Not _readOnly Then
-				If _autoSaveNeeded Then
-					_autoSaveNeeded = False
-					SaveSettings(True)
-				End If
-			End If
-		End SyncLock
+            If Not _readOnly And _autoSave Then
+                If _autoSaveNeeded Then
+                    _autoSaveNeeded = False
+                    SaveSettings(True)
+                End If
+            End If
+        End SyncLock
 	End Sub
 
 	Private Sub ConfigureAutosaveTimer()
 		SyncLock _autoSaveTimer
-			_autoSaveTimer.Stop()
-			_autoSaveTimer.Interval = (_autoSaveInterval * 1000)
-			_autoSaveTimer.Start()
-		End SyncLock
+            _autoSaveTimer.Stop()
+            If _autoSave Then
+                If _autoSaveInterval < 1 Then _autoSaveInterval = 1
+                _autoSaveTimer.Interval = (_autoSaveInterval * 1000)
+                _autoSaveTimer.Start()
+            End If
+        End SyncLock
 	End Sub
 
 	Private Sub RootSettingsStorage_SettingChanged(storage As SettingsStorageBase, setting As Setting) Handles Me.SettingChanged

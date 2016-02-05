@@ -24,6 +24,7 @@ Public Class TestApp
         Dim backUper = New SettingsStorageBackup(_appBase.SettingsFolder, _logger, _appBase.RootStorage.CreateChildStorage("BackupSettings", "Резервное копирование настроек"))
 
         _varSetting.ReplaceVariants({"ccc"}, "ccc")
+        _appBase.RootStorage.AutoSave = False
         _mailSender = New MailSender(_logger, _appBase.RootStorage.CreateChildStorage("MailSender"))
 
         ' FormFromAppBase.Show()
