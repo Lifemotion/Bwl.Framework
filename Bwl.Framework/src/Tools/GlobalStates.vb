@@ -80,7 +80,7 @@ Public Class GlobalStates
 
     Public Shared Shadows Function ToString() As String
         Dim sb As New StringBuilder
-        For Each item In _list
+        For Each item In _list.ToArray()
             Dim source = "()"
             If item.Source IsNot Nothing Then source = item.Source.GetType.ToString
             sb.AppendLine(source + " " + item.ID + " - " + item.Value + " " + item.ValueType + " " + item.Time.ToLongTimeString)
