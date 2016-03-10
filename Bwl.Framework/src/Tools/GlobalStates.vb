@@ -9,7 +9,6 @@ Public Class StateItem
     Public Property ValidUntil As DateTime = Now.AddSeconds(30)
 End Class
 
-
 'TODO: перенести во фреймворк
 Public Class GlobalStates
     Private Shared _list As New LinkedList(Of StateItem)
@@ -53,38 +52,43 @@ Public Class GlobalStates
         Dim found As StateItem = Nothing
         SyncLock _list
             For Each item In _list
-                If item.ID.ToLower = id.ToLower Then found = item
+                If item.ID.ToLower() = id.ToLower() Then found = item
             Next
             If found Is Nothing Then
-                found = New StateItem
+                found = New StateItem()
                 _list.AddLast(found)
             End If
+            With found
+                .Source = source
+                .ID = id
+                .Value = value
+                .ValueType = valueType
+                .ValidUntil = Now.AddSeconds(validTimeSeconds)
+                .Time = Now
+            End With
         End SyncLock
-
-        found.Source = source
-        found.ID = id
-        found.Value = value
-        found.ValueType = valueType
-        found.ValidUntil = Now.AddSeconds(validTimeSeconds)
-        found.Time = Now
     End Sub
 
     Public Shared Function GetStates() As StateItem()
         DeleteOldStates()
 
         SyncLock _list
-            Dim result = _list.ToArray
+            Dim result = _list.ToArray()
             Return result
         End SyncLock
     End Function
 
     Public Shared Shadows Function ToString() As String
         Dim sb As New StringBuilder
-        For Each item In _list.ToArray()
-            Dim source = "()"
-            If item.Source IsNot Nothing Then source = item.Source.GetType.ToString
-            sb.AppendLine(source + " " + item.ID + " - " + item.Value + " " + item.ValueType + " " + item.Time.ToLongTimeString)
-        Next
+
+        SyncLock _list
+            For Each item In _list
+                Dim source = "()"
+                If item.Source IsNot Nothing Then source = item.Source.GetType().ToString()
+                sb.AppendLine(source + " " + item.ID + " - " + item.Value + " " + item.ValueType + " " + item.Time.ToLongTimeString())
+            Next
+        End SyncLock
+
         Return sb.ToString
     End Function
 End Class
