@@ -47,9 +47,9 @@
 				Try
 					CType(s, IDisposable).Dispose()
 				Catch ex As Exception
-					_logger.AddError("KerberKernel.Dispose " + ex.ToString)
-				End Try
-			End If
+                    _logger.AddError("Dispose " + ex.ToString)
+                End Try
+            End If
 		Next
 	End Sub
 End Class

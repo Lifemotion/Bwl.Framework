@@ -81,30 +81,36 @@
     </Compile>
     <Compile Include="src\AppBase\ServiceLocator.vb" />
     <Compile Include="src\Attributes\ImageAttr.vb" />
-    <Compile Include="src\Logging\LogWriters\Realizations\FormLogInfo.Designer.vb">
+    <Compile Include="src\AutoInterface\AutoForm.Designer.vb">
+      <DependentUpon>AutoForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoInterface\AutoForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Logger\LogWriters\Realizations\FormLogInfo.Designer.vb">
       <DependentUpon>FormLogInfo.vb</DependentUpon>
     </Compile>
-    <Compile Include="src\Logging\LogWriters\Realizations\FormLogInfo.vb">
+    <Compile Include="src\Logger\LogWriters\Realizations\FormLogInfo.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Attributes\DisplayAttribute.vb" />
     <Compile Include="src\Attributes\ParameterAttribute.vb" />
     <Compile Include="src\Attributes\StateAttribute.vb" />
-    <Compile Include="src\Logging\LogWriters\Realizations\ConsoleLogWriter.vb" />
+    <Compile Include="src\Logger\LogWriters\Realizations\ConsoleLogWriter.vb" />
     <Compile Include="src\AppBase\ConsoleAppBase.vb" />
     <Compile Include="src\Identity\IDescription.vb" />
     <Compile Include="src\Identity\IIdentity.vb" />
     <Compile Include="src\Identity\ListWithIdentity.vb" />
-    <Compile Include="src\Logging\LogWriters\Interface\LogEventType.vb" />
-    <Compile Include="src\Logging\LogWriters\Realizations\SimpleFileLogWriter.vb" />
-    <Compile Include="src\Logging\Logger.vb" />
-    <Compile Include="src\Logging\LogWriters\Realizations\DatagridLogWriter.Designer.vb">
+    <Compile Include="src\Logger\LogWriters\Interface\LogEventType.vb" />
+    <Compile Include="src\Logger\LogWriters\Realizations\SimpleFileLogWriter.vb" />
+    <Compile Include="src\Logger\Logger.vb" />
+    <Compile Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.Designer.vb">
       <DependentUpon>DatagridLogWriter.vb</DependentUpon>
     </Compile>
-    <Compile Include="src\Logging\LogWriters\Realizations\DatagridLogWriter.vb">
+    <Compile Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="src\Logging\LogWriters\Interface\ILogWriter.vb" />
+    <Compile Include="src\Logger\LogWriters\Interface\ILogWriter.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -120,10 +126,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="src\Logging\UI\LoggerForm.designer.vb">
+    <Compile Include="src\Logger\UI\LoggerForm.designer.vb">
       <DependentUpon>LoggerForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="src\Logging\UI\LoggerForm.vb">
+    <Compile Include="src\Logger\UI\LoggerForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Settings\Settings\PasswordSetting.vb" />
@@ -141,10 +147,10 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Settings\Storages\Common\ISettingsStorage.vb" />
-    <Compile Include="src\Tools\GlobalStates.vb" />
-    <Compile Include="src\Tools\RegistrySettings.vb" />
-    <Compile Include="src\Tools\Serializer.vb" />
-    <Compile Include="src\Tools\SettingsStorageBackup.vb" />
+    <Compile Include="src\GlobalStates\GlobalStates.vb" />
+    <Compile Include="src\ToolsPortable\RegistrySettings.vb" />
+    <Compile Include="src\ToolsPortable\Serializer.vb" />
+    <Compile Include="src\Settings\Backup\SettingsStorageBackup.vb" />
     <Compile Include="src\Settings\Storages\SettingsStorageRoot.vb" />
     <Compile Include="src\Settings\Storages\SettingsStorage.vb" />
     <Compile Include="src\Settings\Storages\Common\SettingsStorageBase.vb" />
@@ -156,25 +162,28 @@
     <Compile Include="src\Settings\Settings\StringSetting.vb" />
     <Compile Include="src\Settings\Settings\VariantSetting.vb" />
     <Compile Include="src\Settings\Writers\Realizations\MemoryReaderWriter.vb" />
-    <Compile Include="src\Tools\CryptoTools.vb" />
-    <Compile Include="src\Tools\Image.vb" />
-    <Compile Include="src\Tools\IniFile.vb" />
+    <Compile Include="src\ToolsPortable\CryptoTools.vb" />
+    <Compile Include="src\ToolsPortable\Image.vb" />
+    <Compile Include="src\ToolsPortable\IniFile.vb" />
     <Compile Include="src\Settings\Writers\Interface\ISettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\IniFileSettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\NullSettingsWriter.vb" />
-    <Compile Include="src\Tools\MailSender.vb" />
+    <Compile Include="src\MailSender\MailSender.vb" />
     <Compile Include="src\Tools\RunMonitorHelper.vb" />
-    <Compile Include="src\Tools\Stopwatch.vb" />
-    <Compile Include="src\Tools\Tools.vb" />
+    <Compile Include="src\ToolsPortable\Stopwatch.vb" />
+    <Compile Include="src\ToolsPortable\Tools.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="src\AppBase\FormBase.resx">
       <DependentUpon>FormBase.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\Logging\LogWriters\Realizations\FormLogInfo.resx">
+    <EmbeddedResource Include="src\AutoInterface\AutoForm.resx">
+      <DependentUpon>AutoForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Logger\LogWriters\Realizations\FormLogInfo.resx">
       <DependentUpon>FormLogInfo.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\Logging\LogWriters\Realizations\DatagridLogWriter.resx">
+    <EmbeddedResource Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.resx">
       <DependentUpon>DatagridLogWriter.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -183,7 +192,7 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\Logging\UI\LoggerForm.resx">
+    <EmbeddedResource Include="src\Logger\UI\LoggerForm.resx">
       <DependentUpon>LoggerForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Settings\Gui\SettingField.resx">

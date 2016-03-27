@@ -74,15 +74,11 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormFromAppBase.Designer.vb">
-      <DependentUpon>FormFromAppBase.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FormFromAppBase.vb" />
-    <Compile Include="TestApp.vb">
+    <Compile Include="TestFormAppBase.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TestApp.Designer.vb">
-      <DependentUpon>TestApp.vb</DependentUpon>
+    <Compile Include="TestFormAppBase.Designer.vb">
+      <DependentUpon>TestFormAppBase.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -102,17 +98,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FormFromAppBase.resx">
-      <DependentUpon>FormFromAppBase.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TestApp.resx">
-      <DependentUpon>TestApp.vb</DependentUpon>
+    <EmbeddedResource Include="TestFormAppBase.resx">
+      <DependentUpon>TestFormAppBase.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
