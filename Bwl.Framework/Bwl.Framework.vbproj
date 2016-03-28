@@ -69,6 +69,18 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\refs-src\CryptoTools.vb">
+      <Link>refs\CryptoTools.vb</Link>
+    </Compile>
+    <Compile Include="..\refs-src\IniFile.vb">
+      <Link>refs\IniFile.vb</Link>
+    </Compile>
+    <Compile Include="..\refs-src\JpegSaver.vb">
+      <Link>refs\JpegSaver.vb</Link>
+    </Compile>
+    <Compile Include="..\refs-src\StringTools.vb">
+      <Link>refs\StringTools.vb</Link>
+    </Compile>
     <Compile Include="src\AppBase\AppBase.vb" />
     <Compile Include="src\AppBase\FormAppBase.vb">
       <SubType>Form</SubType>
@@ -182,9 +194,6 @@
     </Compile>
     <Compile Include="src\Settings\Storages\Common\ISettingsStorage.vb" />
     <Compile Include="src\GlobalStates\GlobalStates.vb" />
-    <Compile Include="src\ToolsPortable\JpegSaver.vb" />
-    <Compile Include="src\ToolsPortable\RegistrySettings.vb" />
-    <Compile Include="src\ToolsPortable\Serializer.vb" />
     <Compile Include="src\Settings\Backup\SettingsStorageBackup.vb" />
     <Compile Include="src\Settings\Storages\SettingsStorageRoot.vb" />
     <Compile Include="src\Settings\Storages\SettingsStorage.vb" />
@@ -197,16 +206,11 @@
     <Compile Include="src\Settings\Settings\StringSetting.vb" />
     <Compile Include="src\Settings\Settings\VariantSetting.vb" />
     <Compile Include="src\Settings\Writers\Realizations\MemoryReaderWriter.vb" />
-    <Compile Include="src\ToolsPortable\CryptoTools.vb" />
-    <Compile Include="src\ToolsPortable\Image.vb" />
-    <Compile Include="src\ToolsPortable\IniFile.vb" />
     <Compile Include="src\Settings\Writers\Interface\ISettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\IniFileSettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\NullSettingsWriter.vb" />
     <Compile Include="src\MailSender\MailSender.vb" />
     <Compile Include="src\Tools\RunMonitorHelper.vb" />
-    <Compile Include="src\ToolsPortable\Stopwatch.vb" />
-    <Compile Include="src\ToolsPortable\Tools.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="src\AppBase\FormBase.resx">
