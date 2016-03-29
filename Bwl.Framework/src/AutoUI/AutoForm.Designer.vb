@@ -21,13 +21,33 @@ Partial Class AutoForm
     'Не изменяйте ее в редакторе исходного кода.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.AutoUIDisplay1 = New Bwl.Framework.AutoUIDisplay()
         Me.SuspendLayout()
+        '
+        'logWriter
+        '
+        Me.logWriter.Location = New System.Drawing.Point(2, 425)
+        '
+        'AutoUIDisplay1
+        '
+        Me.AutoUIDisplay1.Location = New System.Drawing.Point(4, 27)
+        Me.AutoUIDisplay1.Name = "AutoUIDisplay1"
+        Me.AutoUIDisplay1.Size = New System.Drawing.Size(776, 395)
+        Me.AutoUIDisplay1.TabIndex = 2
         '
         'AutoForm
         '
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.ClientSize = New System.Drawing.Size(784, 748)
+        Me.Controls.Add(Me.AutoUIDisplay1)
         Me.Name = "AutoForm"
         Me.Text = "AutoForm"
+        Me.Controls.SetChildIndex(Me.AutoUIDisplay1, 0)
+        Me.Controls.SetChildIndex(Me.logWriter, 0)
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
+
+    Friend WithEvents AutoUIDisplay1 As AutoUIDisplay
 End Class

@@ -21,7 +21,7 @@ Public Class AutoImage
         MyBase.New(iface, id)
     End Sub
 
-    Public Overrides Sub ReceiveInfo(dataname As String, data() As Byte)
+    Public Overrides Sub ProcessData(dataname As String, data() As Byte)
         Dim parts = GetParts(data)
         If parts(0) = "click" Then RaiseEvent Click(Me)
     End Sub

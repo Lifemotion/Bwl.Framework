@@ -9,7 +9,7 @@ Public Class AutoButton
         MyBase.New(iface, id)
     End Sub
 
-    Public Overrides Sub ReceiveInfo(dataname As String, data() As Byte)
+    Public Overrides Sub ProcessData(dataname As String, data() As Byte)
         If dataname = "click" Then RaiseEvent Click(Me)
     End Sub
 

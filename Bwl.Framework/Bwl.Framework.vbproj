@@ -99,13 +99,14 @@
     <Compile Include="src\AutoUI\AutoForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\AutoUI\AutoUI.vb" />
-    <Compile Include="src\AutoUI\AutoUIDisplay.Designer.vb">
+    <Compile Include="src\AutoUI\AutoUI\AutoUI.vb" />
+    <Compile Include="src\AutoUI\AutoUI\AutoUIDisplay.Designer.vb">
       <DependentUpon>AutoUIDisplay.vb</DependentUpon>
     </Compile>
-    <Compile Include="src\AutoUI\AutoUIDisplay.vb">
+    <Compile Include="src\AutoUI\AutoUI\AutoUIDisplay.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="src\AutoUI\AutoUI\IAutoUI.vb" />
     <Compile Include="src\AutoUI\LocalElements\AutoButton.vb" />
     <Compile Include="src\AutoUI\LocalElements\AutoImage.vb" />
     <Compile Include="src\AutoUI\LocalElements\BaseLocalElement.vb" />
@@ -219,7 +220,7 @@
     <EmbeddedResource Include="src\AutoUI\AutoForm.resx">
       <DependentUpon>AutoForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\AutoUI\AutoUIDisplay.resx">
+    <EmbeddedResource Include="src\AutoUI\AutoUI\AutoUIDisplay.resx">
       <DependentUpon>AutoUIDisplay.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoBitmap.resx">

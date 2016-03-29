@@ -57,7 +57,7 @@ Public MustInherit Class BaseLocalElement
     End Sub
 
     Public MustOverride Sub SendExtendedState() Implements IUIElementLocal.SendExtendedState
-    Public MustOverride Sub ReceiveInfo(dataname As String, data() As Byte) Implements IUIElementLocal.ReceiveInfo
+    Public MustOverride Sub ProcessData(dataname As String, data() As Byte) Implements IUIElementLocal.ProcessData
 
     Public ReadOnly Property ID As String Implements IUIElementLocal.ID
         Get

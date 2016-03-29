@@ -5,7 +5,7 @@
         InitializeComponent()
     End Sub
 
-    Public Overrides Sub ReceiveInfo(dataname As String, data() As Byte)
+    Public Overrides Sub ProcessData(dataname As String, data() As Byte)
 
     End Sub
 

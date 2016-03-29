@@ -47,7 +47,7 @@ Public Class BaseRemoteElement
         _id = id
     End Sub
 
-    Public Overridable Sub ReceiveInfo(dataname As String, data() As Byte) Implements IUIElementRemote.ReceiveInfo
+    Public Overridable Sub ProcessData(dataname As String, data() As Byte) Implements IUIElementRemote.ProcessData
 
     End Sub
 
