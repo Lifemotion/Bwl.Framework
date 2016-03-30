@@ -3,10 +3,10 @@ Imports Bwl.Framework
 
 Public Class BaseRemoteElement
     Implements IUIElementRemote
-    Private _id As String
-    Public Property Caption As String Implements IUIElementRemote.Caption
-    Public Property Category As String Implements IUIElementRemote.Category
-    Private Event RequestToSend(source As IUIElement, dataname As String, data() As Byte) Implements IUIElementRemote.RequestToSend
+
+    Public ReadOnly Property Info As UIElementInfo Implements IUIElement.Info
+
+    Public Event RequestToSend(source As IUIElement, dataname As String, data() As Byte) Implements IUIElementRemote.RequestToSend
 
     Protected Sub Send(dataname As String, parts As Object())
         Dim sb As New StringBuilder
@@ -39,22 +39,17 @@ Public Class BaseRemoteElement
         Return parts
     End Function
 
-    Public Sub New()
-        _id = ""
+    Public Sub New(info As UIElementInfo)
+        _Info = info
+        InitializeComponent()
     End Sub
 
-    Protected Sub SetID(id As String)
-        _id = id
+    Public Sub New()
+        _Info = New UIElementInfo("", "")
     End Sub
 
     Public Overridable Sub ProcessData(dataname As String, data() As Byte) Implements IUIElementRemote.ProcessData
 
     End Sub
-
-    Public ReadOnly Property ID As String Implements IUIElementRemote.ID
-        Get
-            Return _id
-        End Get
-    End Property
 
 End Class

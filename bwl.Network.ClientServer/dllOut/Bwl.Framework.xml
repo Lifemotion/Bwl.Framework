@@ -1,0 +1,203 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Bwl.Framework
+</name>
+</assembly>
+<members>
+<member name="M:Bwl.Framework.IniFile.#ctor(System.String)">
+	<summary>
+ Создает iniReader, настроенный на работу с заданным файлом.
+ </summary>
+	<param name="filename">
+ Имя файла с расширением и путем.
+ </param>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.IniFile.GetSetting(System.String,System.String,System.String,System.String)">
+	<summary>
+ Читает значение параметра. Если параметр не найден, возвращает заданную строку.
+ </summary>
+	<param name="groupName">Имя группы параметров в ini-файле.</param>
+	<param name="paramName">Имя параметра.</param>
+	<param name="returnIsNotExist">Что возвращает, если параметр не найден.</param>
+	<returns>Значение параметра.</returns>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.IniFile.SetSetting(System.String,System.String,System.String)">
+	<summary>
+ Записывает значение параметра. Создает файл, группу, параметр, если они не найдены.
+ </summary>
+	<param name="groupName">Имя группы параметров в ini-файле.</param>
+	<param name="paramName">Имя параметра.</param>
+	<param name="value">Значение параметра.</param>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.IniFile.IsFileExist">
+	<summary>
+ Проверяет, присутсвует ли указанный файл.
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.IniFile.GetGroupList">
+	<summary>
+ Возвращает список групп из файла.
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.IniFile.GetParamList(System.String)">
+	<summary>
+ Возвращает список параметров в указанной группе из файла.
+ </summary>
+	<param name="groupName">Имя группы. Если не указано, возвращает список всех параметров.</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Bwl.Framework.IniFile">
+	<summary>
+ Класс, представляющий ini-файл. Выполняет чтение и запись параметров.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.Image.SaveImage(System.String)">
+	<summary>Сохранить кадр по указанному пути.</summary>
+</member><member name="M:Bwl.Framework.Image.GetBitmap">
+	<summary>
+ Скопировать изображение
+ </summary>
+</member><member name="P:Bwl.Framework.Image.RowDataBytes">
+	<summary>Сырые данные изобаржения</summary>
+</member><member name="T:Bwl.Framework.Image">
+	<summary>Изображение</summary>
+</member><member name="M:Bwl.Framework.CryptoTools.Des3Encode(System.String,System.Byte[])">
+	<summary>
+	</summary>
+	<param name="data"></param>
+	<param name="key"></param>
+	<returns></returns>
+	<remarks>Вначале добавляется 16 байт IV</remarks>
+</member><member name="P:Bwl.Framework.SettingsStorageBase.IsReadOnly">
+	<summary>
+ Можно ли изменять данные в хранилище.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Bwl.Framework.SettingsStorageBase">
+	<summary>
+ Базовый класс хранилища настроек.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.SettingsStorage.#ctor(Bwl.Framework.SettingsStorage,System.String,System.String,System.Boolean)">
+	<summary>
+ Создать хранилище-подкатегорию. 
+ </summary>
+	<param name="parentStorage">Родительское хранилище.</param>
+	<param name="name">Имя подкатегории настроек.</param>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.SettingsStorage.CreateChildStorage(System.String)">
+	<summary>
+ Создать и возвратить хранилище-подкатегорию текущего хранилища.
+ </summary>
+	<param name="categoryName">Имя подкатегории.</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.SettingsStorage.CreateChildStorage(System.String,System.String)">
+	<summary>
+ Создать и возвратить хранилище-подкатегорию текущего хранилища.
+ </summary>
+	<param name="name">Имя подкатегории.</param>
+	<param name="friendlyName">Имя подкатегории в дочступном для человека виде.</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.SettingsStorage.DeleteChildStorage(System.String)">
+	<summary>
+ Удалить указанную подкатегорию.
+ </summary>
+	<param name="name"></param>
+	<remarks></remarks>
+</member><member name="T:Bwl.Framework.SettingsStorage">
+	<summary>
+ Хранилище настроек.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.SettingsStorageRoot.#ctor(Bwl.Framework.ISettingsReaderWriter,System.String,System.Boolean)">
+	<summary>
+ Создать новое хранилище настроек, являющееся корневым.
+ </summary>
+	<param name="defaultWriter">Интерфейс сохранения\загрузки настроек по умолчанию.</param>
+	<param name="rootName">Имя корневой категории настроек.</param>
+	<param name="isReadOnly">Данные в хранилище только для чтения.</param>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.SettingsStorageRoot.#ctor">
+	<summary>
+ Создать хранилище настроек с виртуальным интерфейсом загрузки\сохранения и корневой категорией Root.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Bwl.Framework.SettingsStorageRoot.#ctor(System.String,System.String)">
+	<summary>
+ Создать новое хранилище настроек, являющееся корневым.
+ </summary>
+	<param name="iniFileName">Имя ini-файла с настройками.</param>
+	<param name="rootCategoryName">Имя корневой категории настроек.</param>
+	<remarks></remarks>
+</member><member name="P:Bwl.Framework.SettingsStorageRoot.AutoSave">
+	<summary>
+ Включить автосохранение. По-умолчанию включено.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Bwl.Framework.SettingsStorageRoot.AutoSaveInterval">
+	<summary>
+ Интервал автосохранения в секундах.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Bwl.Framework.PasswordSetting.Value">
+	<summary>
+ Не является парллем, используйте поле Pass.
+ </summary>
+</member><member name="P:Bwl.Framework.My.Resources.Resources.ResourceManager">
+	<summary>
+  Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
+</summary>
+</member><member name="P:Bwl.Framework.My.Resources.Resources.Culture">
+	<summary>
+  Перезаписывает свойство CurrentUICulture текущего потока для всех
+  обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
+</summary>
+</member><member name="T:Bwl.Framework.My.Resources.Resources">
+	<summary>
+  Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
+</summary>
+</member><member name="M:Bwl.Framework.Logger.#ctor">
+	<summary>
+ Новый корневой журнал.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Bwl.Framework.Logger">
+	<summary>
+ Класс, представляющий средство для иерархичного ведения журнала событий в программе.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Bwl.Framework.StateAttribute">
+	<summary>
+ Поле с состоянием объекта
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Bwl.Framework.ParameterAttribute">
+	<summary>
+ Поле с настройкой объекта
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Bwl.Framework.DisplayAttribute">
+	<summary>
+ Отображаемое поле или свойтсво объекта
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Bwl.Framework.ImageAttr">
+	<summary>
+ Отображаемое поле или свойтсво объекта
+ </summary>
+	<remarks></remarks>
+</member>
+</members>
+</doc>

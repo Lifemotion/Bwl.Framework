@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework", "Bwl.Framework\Bwl.Framework.vbproj", "{E18C7249-22C8-4147-91EF-8A2721F0F026}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework.TestApp", "Bwl.Framework.TestApp\Bwl.Framework.TestApp.vbproj", "{67E94558-938E-4DDE-93F4-E5ABEECE626F}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework.Test", "Bwl.Framework.Test\Bwl.Framework.Test.vbproj", "{67E94558-938E-4DDE-93F4-E5ABEECE626F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,7 @@
 *.suo
+.vs
 bin
 obj
-dllOut
-*Release
-*Debug
+debug
+release
 output

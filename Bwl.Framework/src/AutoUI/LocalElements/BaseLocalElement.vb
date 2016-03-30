@@ -4,24 +4,18 @@ Imports Bwl.Framework
 Public MustInherit Class BaseLocalElement
     Implements IUIElementLocal
 
-    Private _id As String
-    Public Property Caption As String Implements IUIElementLocal.Caption
-    Public Property Category As String Implements IUIElementLocal.Category
+    Public ReadOnly Property Info As UIElementInfo Implements IUIElement.Info
+
     Private Event RequestToSend(source As IUIElement, dataname As String, data() As Byte) Implements IUIElementLocal.RequestToSend
+    Public MustOverride Sub SendUpdate() Implements IUIElementLocal.SendUpdate
+    Public MustOverride Sub ProcessData(dataname As String, data() As Byte) Implements IUIElementLocal.ProcessData
 
     Protected Sub Send(dataname As String, parts As Object())
-        Dim sb As New StringBuilder
-        For Each part In parts
-            If part Is Nothing Then part = ""
-            sb.Append(part.ToString)
-            sb.Append(":::")
-        Next
-        Dim result = sb.ToString
-        Send(dataname, result)
+        Send(dataname, AutoUIByteCoding.GetString(parts))
     End Sub
 
     Protected Sub Send(dataname As String, data As String)
-        Dim bytes = Encoding.UTF8.GetBytes(data)
+        Dim bytes = AutoUIByteCoding.GetBytes(data)
         Send(dataname, bytes)
     End Sub
 
@@ -29,40 +23,10 @@ Public MustInherit Class BaseLocalElement
         RaiseEvent RequestToSend(Me, dataname, bytes)
     End Sub
 
-    Protected Function GetString(bytes As Byte()) As String
-        Dim str = Encoding.UTF8.GetString(bytes)
-        Return str
-    End Function
-
-    Protected Function GetParts(bytes As Byte()) As String()
-        Dim str = GetString(bytes)
-        Dim parts = str.Split({":::"}, StringSplitOptions.None)
-        Return parts
-    End Function
-
-    Public Sub New(iface As AutoUI, id As String)
+    Public Sub New(iface As AutoUI, id As String, type As Type)
         If id Is Nothing OrElse id.Length = 0 Then Throw New ArgumentException()
-        _id = id
-        Caption = id
-        Category = ""
+        Info = New UIElementInfo(id, type.Name)
         iface.RegisterElement(Me)
     End Sub
-
-    Public Sub SendBaseState() Implements IUIElementLocal.SendBaseState
-        Dim list As New List(Of String)
-        list.Add(ID)
-        list.Add(Caption)
-        list.Add(Category)
-        Send("basestate", list.ToArray)
-    End Sub
-
-    Public MustOverride Sub SendExtendedState() Implements IUIElementLocal.SendExtendedState
-    Public MustOverride Sub ProcessData(dataname As String, data() As Byte) Implements IUIElementLocal.ProcessData
-
-    Public ReadOnly Property ID As String Implements IUIElementLocal.ID
-        Get
-            Return _id
-        End Get
-    End Property
 
 End Class

@@ -1,5 +1,4 @@
 ﻿Public Interface IUIElementLocal
     Inherits IUIElement
-    Sub SendBaseState()
-    Sub SendExtendedState()
+    Sub SendUpdate()
 End Interface
