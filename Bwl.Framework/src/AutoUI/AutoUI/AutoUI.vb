@@ -5,6 +5,7 @@ Public Class AutoUI
 
     Public ReadOnly Property Elements As New List(Of IUIElementLocal)
     Public Event RequestToSend(id As String, dataname As String, data As Byte()) Implements IAutoUI.RequestToSend
+    Public Event BaseInfosReady(infos As Byte()()) Implements IAutoUI.BaseInfosReady
 
     Friend Sub RegisterElement(element As IUIElementLocal)
         For Each elem In Elements
@@ -22,11 +23,11 @@ Public Class AutoUI
         Next
     End Sub
 
-    Public Function GetBaseInfos() As Byte()() Implements IAutoUI.GetBaseInfos
+    Private Sub GetBaseInfos() Implements IAutoUI.GetBaseInfos
         Dim datas As New List(Of Byte())
         For Each elem In Elements
             datas.Add(AutoUIByteCoding.CodeBaseInfo(elem.Info))
         Next
-        Return datas.ToArray
-    End Function
+        RaiseEvent BaseInfosReady(datas.ToArray)
+    End Sub
 End Class

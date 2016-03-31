@@ -1,24 +1,13 @@
 ﻿Public Class SettingsClient
-
-    Private _prefix As String
-    Private _client As NetClient
-    Private _existingSettingsStorage As ClonedSettingsStorage
-
-    Public Sub New(netClient As NetClient, prefix As String)
-        AddHandler netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
-        _prefix = prefix
-        _client = netClient
-    End Sub
-
-    Public ReadOnly Property RemoteStorage As ClonedSettingsStorage
-        Get
-            Return _existingSettingsStorage
-        End Get
-    End Property
-
-
+    Inherits BaseClient
     Public Event SettingsReceived(settingsClient As SettingsClient)
     Public Event SettingChangeError(settingName As String, errorName As String)
+    Public ReadOnly Property RemoteStorage As ClonedSettingsStorage
+
+    Public Sub New(netClient As IMessageClient, prefix As String)
+        MyBase.New(netClient, prefix)
+        AddHandler netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
+    End Sub
 
     Private Sub _client_ReceivedMessage(message As NetMessage)
         If message.Part(0) = "SettingsRemoting" And message.Part(1) = _prefix Then
@@ -27,11 +16,11 @@
                     Dim settingsString = message.Part(3)
                     Dim mrw = New MemoryReaderWriter(settingsString)
                     Dim exSS = New ClonedSettingsStorage(mrw)
-                    If _existingSettingsStorage IsNot Nothing Then
-                        RemoveHandler _existingSettingsStorage.SettingChanged, AddressOf SettingChangedHandler
+                    If RemoteStorage IsNot Nothing Then
+                        RemoveHandler RemoteStorage.SettingChanged, AddressOf SettingChangedHandler
                     End If
-                    _existingSettingsStorage = exSS
-                    AddHandler _existingSettingsStorage.SettingChanged, AddressOf SettingChangedHandler
+                    _RemoteStorage = exSS
+                    AddHandler RemoteStorage.SettingChanged, AddressOf SettingChangedHandler
                     RaiseEvent SettingsReceived(Me)
                 Case "SetSettingValueResult"
                     Dim settingsName = message.Part(3)
@@ -62,5 +51,4 @@
             RaiseEvent SettingChangeError(name, "NotConnectedToServer")
         End If
     End Sub
-
 End Class

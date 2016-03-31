@@ -1,16 +1,15 @@
 ﻿Public Class LogsServer
-    Public Sub New(logger As Logger, netServer As NetServer, prefix As String)
+    Public Sub New(logger As Logger, netServer As IMessageServer, prefix As String)
         logger.ConnectWriter(New LogsExporter(netServer, prefix))
     End Sub
 End Class
 
 Public Class LogsExporter
+    Inherits BaseServer
     Implements ILogWriter
 
-    Private _server As NetServer
-    Private _prefix As String
-
-    Public Sub New(netServer As NetServer, prefix As String)
+    Public Sub New(netServer As IMessageServer, prefix As String)
+        MyBase.New(netServer, prefix)
         _server = netServer
         _prefix = prefix
     End Sub

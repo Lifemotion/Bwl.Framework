@@ -1,10 +1,9 @@
 ﻿Public Class SettingsServer
-    Private _server As NetServer
+    Inherits BaseServer
     Private _storage As SettingsStorage
-    Private _prefix As String
-    Public Sub New(storage As SettingsStorage, netServer As NetServer, prefix As String)
-        _server = netServer
-        _prefix = prefix
+
+    Public Sub New(storage As SettingsStorage, netServer As IMessageServer, prefix As String)
+        MyBase.New(netServer, prefix)
         _storage = storage
         AddHandler _server.ReceivedMessage, AddressOf ReceivedHandler
     End Sub
@@ -34,7 +33,4 @@
             End Select
         End If
     End Sub
-
-  
-
 End Class

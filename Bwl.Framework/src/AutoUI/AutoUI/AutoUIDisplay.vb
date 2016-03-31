@@ -10,7 +10,7 @@ Public Class AutoUIDisplay
         End Get
         Set(value As IAutoUI)
             _ui = value
-            If _loaded Then CreateControls
+            If _loaded Then _ui.GetBaseInfos()
         End Set
     End Property
 
@@ -22,9 +22,21 @@ Public Class AutoUIDisplay
         panel.Controls.Clear()
     End Sub
 
-    Private Sub CreateControls()
+    Public Sub RecreateControls()
+        _ui.GetBaseInfos()
+    End Sub
+
+    Private Sub _ui_RequestToSend(id As String, dataname As String, data() As Byte) Handles _ui.RequestToSend
+        For i = 0 To panel.Controls.Count - 1
+            Dim ctl = DirectCast(panel.Controls.Item(i), BaseRemoteElement)
+            If ctl.Info.ID.ToLower = id.ToLower Then
+                ctl.ProcessData(dataname, data)
+            End If
+        Next
+    End Sub
+
+    Private Sub _ui_BaseInfosReady(infos As Byte()()) Handles _ui.BaseInfosReady
         RemoveControls()
-        Dim infos = _ui.GetBaseInfos
         For Each infoBytes In infos
             Dim info = AutoUIByteCoding.DecodeBaseInfo(infoBytes)
             Dim ctl As BaseRemoteElement = Nothing
@@ -39,15 +51,6 @@ Public Class AutoUIDisplay
                                                   _ui.ProcessData(source.Info.ID, dataname, data)
                                               End Sub
                 panel.Controls.Add(ctl)
-            End If
-        Next
-    End Sub
-
-    Private Sub _ui_RequestToSend(id As String, dataname As String, data() As Byte) Handles _ui.RequestToSend
-        For i = 0 To panel.Controls.Count - 1
-            Dim ctl = DirectCast(panel.Controls.Item(i), BaseRemoteElement)
-            If ctl.Info.ID.ToLower = id.ToLower Then
-                ctl.ProcessData(dataname, data)
             End If
         Next
     End Sub

@@ -65,6 +65,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\BaseClient.vb" />
+    <Compile Include="Common\BaseServer.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -80,12 +82,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Remoting\LogsClient.vb" />
-    <Compile Include="Remoting\LogsServer.vb" />
-    <Compile Include="Remoting\SettingsClient.vb" />
-    <Compile Include="Remoting\SettingsLogsClient.vb" />
-    <Compile Include="Remoting\SettingsLogsServer.vb" />
-    <Compile Include="Remoting\SettingsServer.vb" />
+    <Compile Include="Logs\LogsClient.vb" />
+    <Compile Include="Logs\LogsServer.vb" />
+    <Compile Include="AutoUi\AutoUiClient.vb" />
+    <Compile Include="SettingsLogsClient.vb" />
+    <Compile Include="SettingsLogsServer.vb" />
+    <Compile Include="AutoUi\AutoUiServer.vb" />
+    <Compile Include="Settings\SettingsClient.vb" />
+    <Compile Include="Settings\SettingsServer.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -112,6 +116,9 @@
       <Project>{e8d43e81-de74-4f1c-9a3b-f3b16addfc18}</Project>
       <Name>Bwl.Network.ClientServerMessaging</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GlobalStates\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
