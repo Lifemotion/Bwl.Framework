@@ -47,9 +47,6 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bwl.Framework">
-      <HintPath>..\output\Bwl.Framework\debug\Bwl.Framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
@@ -112,9 +109,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\bwl.Framework\Bwl.Framework.vbproj">
+      <Project>{e18c7249-22c8-4147-91ef-8a2721f0f026}</Project>
+      <Name>Bwl.Framework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Bwl.Network.ClientServer\Bwl.Network.ClientServer.vbproj">
       <Project>{e8d43e81-de74-4f1c-9a3b-f3b16addfc18}</Project>
-      <Name>Bwl.Network.ClientServerMessaging</Name>
+      <Name>Bwl.Network.ClientServer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

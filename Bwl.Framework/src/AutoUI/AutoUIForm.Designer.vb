@@ -30,17 +30,21 @@ Partial Class AutoUIForm
         '
         'AutoUIDisplay1
         '
+        Me.AutoUIDisplay1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AutoUIDisplay1.ConnectedUI = Nothing
         Me.AutoUIDisplay1.Location = New System.Drawing.Point(4, 27)
         Me.AutoUIDisplay1.Name = "AutoUIDisplay1"
         Me.AutoUIDisplay1.Size = New System.Drawing.Size(776, 395)
         Me.AutoUIDisplay1.TabIndex = 2
         '
-        'AutoForm
+        'AutoUIForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.ClientSize = New System.Drawing.Size(784, 748)
         Me.Controls.Add(Me.AutoUIDisplay1)
-        Me.Name = "AutoForm"
+        Me.Name = "AutoUIForm"
         Me.Text = "AutoForm"
         Me.Controls.SetChildIndex(Me.AutoUIDisplay1, 0)
         Me.Controls.SetChildIndex(Me.logWriter, 0)

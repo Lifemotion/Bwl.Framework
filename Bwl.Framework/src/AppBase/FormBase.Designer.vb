@@ -49,21 +49,21 @@ Partial Class FormBase
         Me.УправлениеToolStripMenuItem.Size = New System.Drawing.Size(85, 20)
         Me.УправлениеToolStripMenuItem.Text = "Управление"
         '
-        'ОткрытьПапкуПрограммыToolStripMenuItem
+        'openAppDirMenuItem
         '
-        Me.openAppDirMenuItem.Name = "ОткрытьПапкуПрограммыToolStripMenuItem"
+        Me.openAppDirMenuItem.Name = "openAppDirMenuItem"
         Me.openAppDirMenuItem.Size = New System.Drawing.Size(225, 22)
         Me.openAppDirMenuItem.Text = "Открыть папку программы"
         '
-        'НастройкиToolStripMenuItem
+        'settingsMenuItem
         '
-        Me.settingsMenuItem.Name = "НастройкиToolStripMenuItem"
+        Me.settingsMenuItem.Name = "settingsMenuItem"
         Me.settingsMenuItem.Size = New System.Drawing.Size(225, 22)
         Me.settingsMenuItem.Text = "Настройки..."
         '
-        'ВыходToolStripMenuItem
+        'exitMenuItem
         '
-        Me.exitMenuItem.Name = "ВыходToolStripMenuItem"
+        Me.exitMenuItem.Name = "exitMenuItem"
         Me.exitMenuItem.Size = New System.Drawing.Size(225, 22)
         Me.exitMenuItem.Text = "Выход"
         '
@@ -84,19 +84,17 @@ Partial Class FormBase
         Me.logWriter.Size = New System.Drawing.Size(781, 322)
         Me.logWriter.TabIndex = 0
         '
-        'FormAppBase
+        'FormBase
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(784, 561)
         Me.Controls.Add(Me.logWriter)
         Me.Controls.Add(Me.MenuStrip1)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Margin = New System.Windows.Forms.Padding(2)
-        Me.MaximizeBox = False
-        Me.Name = "FormAppBase"
+        Me.Name = "FormBase"
         Me.Text = "Application"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()

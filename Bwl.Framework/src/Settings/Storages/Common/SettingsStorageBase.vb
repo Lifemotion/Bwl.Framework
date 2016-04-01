@@ -6,6 +6,7 @@
 ''' <remarks></remarks>
 Public MustInherit Class SettingsStorageBase
     Implements ISettingsStorage
+    Implements ISettingsStorageForm
 
     Protected _settings As New List(Of SettingOnStorage)
     Protected _childStorages As New List(Of SettingsStorageBase)
@@ -99,22 +100,25 @@ Public MustInherit Class SettingsStorageBase
         End Get
     End Property
 
-    Public Function ShowSettingsForm(title As String) As SettingsDialog
-        _settingsForm = New SettingsDialog
-        _settingsForm.ShowSettings(Me)
-        _settingsForm.Show()
-        If Not String.IsNullOrEmpty(title) Then _settingsForm.Text = title
-        Return _settingsForm
+    Public Function ShowSettingsForm(invokeForm As Form) As SettingsDialog Implements ISettingsStorageForm.ShowSettingsForm
+        If invokeForm IsNot Nothing AndAlso invokeForm.InvokeRequired Then
+            Return DirectCast(invokeForm.Invoke(Function() ShowSettingsForm(invokeForm)), SettingsDialog)
+        Else
+            _settingsForm = New SettingsDialog
+            _settingsForm.ShowSettings(Me)
+            _settingsForm.Show()
+            Return _settingsForm
+        End If
     End Function
 
-    Public Function ShowSettingsForm() As SettingsDialog
-        Return ShowSettingsForm("")
-    End Function
-
-    Public Function CreateSettingsForm() As SettingsDialog
-        Dim form As SettingsDialog = New SettingsDialog
-        form.ShowSettings(Me)
-        Return form
+    Public Function CreateSettingsForm(invokeForm As Form) As SettingsDialog Implements ISettingsStorageForm.CreateSettingsForm
+        If invokeForm IsNot Nothing AndAlso invokeForm.InvokeRequired Then
+            Return DirectCast(invokeForm.Invoke(Function() CreateSettingsForm(invokeForm)), SettingsDialog)
+        Else
+            Dim form As SettingsDialog = New SettingsDialog
+            form.ShowSettings(Me)
+            Return form
+        End If
     End Function
 
     Friend Sub InsertSetting(setting As SettingOnStorage)

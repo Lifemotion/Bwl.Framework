@@ -1,13 +1,13 @@
 ﻿Public Class FormBase
-    Protected _storage As SettingsStorageBase
-    Protected _loggerServer As ILoggerServer
+    Protected _loggerServer As ILoggerDispatcher
+    Protected _storageForm As ISettingsStorageForm
 
     Public Sub New()
         InitializeComponent()
     End Sub
 
-    Public Sub New(storage As SettingsStorageBase, logger As ILoggerServer)
-        _storage = storage
+    Public Sub New(storage As SettingsStorageBase, logger As ILoggerDispatcher)
+        _storageForm = storage
         _loggerServer = logger
         InitializeComponent()
     End Sub
@@ -28,7 +28,7 @@
     End Sub
 
     Private Sub settingsMenuItem_Click(sender As Object, e As EventArgs) Handles settingsMenuItem.Click
-        _storage.ShowSettingsForm()
+        _storageForm.ShowSettingsForm(Me)
     End Sub
 
     Private Sub openAppDirMenuItem_Click(sender As Object, e As EventArgs) Handles openAppDirMenuItem.Click

@@ -4,7 +4,9 @@
 ''' </summary>
 ''' <remarks></remarks>
 Public Class Logger
-    Implements ILoggerServer
+    Implements ILoggerDispatcher
+    Implements ILoggerReceiver
+    Implements ILoggerChilds
     Private _writers As New List(Of ILogWriter)
     Private _parentLogger As Logger
     Private _childLoggers As New List(Of Logger)
@@ -40,11 +42,11 @@ Public Class Logger
         End If
     End Sub
 
-    Public Function CreateChildLogger(categoryName As String) As Logger
+    Public Function CreateChildLogger(categoryName As String) As Logger Implements ILoggerChilds.CreateChildLogger
         Return New Logger(Me, categoryName)
     End Function
 
-    Public Function DeleteChildLogger(categoryName As String) As Logger
+    Public Function DeleteChildLogger(categoryName As String) As Logger Implements ILoggerChilds.DeleteChildLogger
         Dim forDelete As Logger = Nothing
         For Each logger In _childLoggers
             If logger.CategoryName = categoryName Then
@@ -58,12 +60,12 @@ Public Class Logger
         Return forDelete
     End Function
 
-    Public Sub ConnectWriter(writer As ILogWriter) Implements ILoggerServer.ConnectWriter
+    Public Sub ConnectWriter(writer As ILogWriter) Implements ILoggerDispatcher.ConnectWriter
         _writers.Add(writer)
         writer.ConnectedToLogger(Me)
     End Sub
 
-    Public Sub Add(type As LogEventType, text As String, ParamArray additional() As Object)
+    Public Sub Add(type As LogEventType, text As String, ParamArray additional() As Object) Implements ILoggerReceiver.Add
         text = text + " (" + ExtractCallingMethodInfo() + ")"
         For Each writer In _writers
             writer.WriteEvent(DateTime.Now, _path, type, text, additional)
@@ -101,23 +103,23 @@ Public Class Logger
     End Function
 
 
-    Public Sub AddInformation(messageText As String, ParamArray additional() As Object)
+    Public Sub AddInformation(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddInformation
         Add(LogEventType.information, messageText)
     End Sub
 
-    Public Sub AddError(messageText As String, ParamArray additional() As Object)
+    Public Sub AddError(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddError
         Add(LogEventType.errors, messageText)
     End Sub
 
-    Public Sub AddWarning(messageText As String, ParamArray additional() As Object)
+    Public Sub AddWarning(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddWarning
         Add(LogEventType.warning, messageText)
     End Sub
 
-    Public Sub AddDebug(messageText As String, ParamArray additional() As Object)
+    Public Sub AddDebug(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddDebug
         Add(LogEventType.debug, messageText)
     End Sub
 
-    Public Sub AddMessage(messageText As String, ParamArray additional() As Object)
+    Public Sub AddMessage(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddMessage
         Add(LogEventType.message, messageText)
     End Sub
 
@@ -142,7 +144,7 @@ Public Class Logger
         End Get
     End Property
 
-    Public ReadOnly Property ChildLoggers() As List(Of Logger)
+    Public ReadOnly Property ChildLoggers() As List(Of Logger) Implements ILoggerChilds.ChildLoggers
         Get
             Dim newChildLoggersList As New List(Of Logger)(_childLoggers)
             Return newChildLoggersList

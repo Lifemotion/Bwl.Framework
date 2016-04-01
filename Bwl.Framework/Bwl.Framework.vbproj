@@ -133,7 +133,9 @@
     <Compile Include="src\AutoUI\RemoteElements\RemoteAutoButton.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="src\Logger\ILoggerServer.vb" />
+    <Compile Include="src\Logger\Interface\ILoggerChilds.vb" />
+    <Compile Include="src\Logger\Interface\ILoggerReceiver.vb" />
+    <Compile Include="src\Logger\Interface\ILoggerDispatcher.vb" />
     <Compile Include="src\Logger\LogWriters\Realizations\FormLogInfo.Designer.vb">
       <DependentUpon>FormLogInfo.vb</DependentUpon>
     </Compile>
@@ -199,6 +201,7 @@
     <Compile Include="src\Settings\Storages\Common\ISettingsStorage.vb" />
     <Compile Include="src\GlobalStates\GlobalStates.vb" />
     <Compile Include="src\Settings\Backup\SettingsStorageBackup.vb" />
+    <Compile Include="src\Settings\Storages\Common\ISettingsStorageForm.vb" />
     <Compile Include="src\Settings\Storages\SettingsStorageRoot.vb" />
     <Compile Include="src\Settings\Storages\SettingsStorage.vb" />
     <Compile Include="src\Settings\Storages\Common\SettingsStorageBase.vb" />
@@ -217,6 +220,9 @@
     <Compile Include="src\Tools\RunMonitorHelper.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="src\AppBase\FormAppBase.resx">
+      <DependentUpon>FormAppBase.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\AppBase\FormBase.resx">
       <DependentUpon>FormBase.vb</DependentUpon>
     </EmbeddedResource>
@@ -268,6 +274,7 @@
   <ItemGroup>
     <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>
