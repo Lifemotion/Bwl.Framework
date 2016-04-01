@@ -1,5 +1,7 @@
 ﻿Public Class LogsClient
     Inherits BaseClient
+    Implements ILoggerServer
+
     Private _writers As New List(Of ILogWriter)
 
     Public Sub New(netClient As IMessageClient, prefix As String)
@@ -18,7 +20,7 @@
         End If
     End Sub
 
-    Public Sub ConnectWriter(writer As ILogWriter)
+    Private Sub ConnectWriter(writer As ILogWriter) Implements ILoggerServer.ConnectWriter
         _writers.Add(writer)
         writer.ConnectedToLogger(Nothing)
     End Sub

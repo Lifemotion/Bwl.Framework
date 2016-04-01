@@ -14,12 +14,15 @@
             Select Case message.Part(2)
                 Case "#baseinfos"
                     Dim infos As New List(Of Byte())
-
+                    For i = 3 To message.Count - 1
+                        infos.Add(message.PartBytes(i))
+                    Next
+                    RaiseEvent BaseInfosReady(infos.ToArray)
                 Case Else
-                    Dim settingsName = message.Part(3)
-                    If message.Part(4) = "Error" Then
-
-                    End If
+                    Dim id = message.Part(2)
+                    Dim dataname = message.Part(3)
+                    Dim bytes = message.PartBytes(4)
+                    RaiseEvent RequestToSend(id, dataname, bytes)
             End Select
         End If
     End Sub
@@ -32,6 +35,6 @@
 
     Private Sub GetBaseInfos() Implements IAutoUI.GetBaseInfos
         Dim msg = New NetMessage("#", "AutoUiRemoting", _prefix, "#baseinfos")
-        _client.SendMessage(New NetMessage)
+        _client.SendMessage(msg)
     End Sub
 End Class

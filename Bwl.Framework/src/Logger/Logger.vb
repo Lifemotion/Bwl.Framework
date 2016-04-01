@@ -4,6 +4,7 @@
 ''' </summary>
 ''' <remarks></remarks>
 Public Class Logger
+    Implements ILoggerServer
     Private _writers As New List(Of ILogWriter)
     Private _parentLogger As Logger
     Private _childLoggers As New List(Of Logger)
@@ -57,7 +58,7 @@ Public Class Logger
         Return forDelete
     End Function
 
-    Public Sub ConnectWriter(writer As ILogWriter)
+    Public Sub ConnectWriter(writer As ILogWriter) Implements ILoggerServer.ConnectWriter
         _writers.Add(writer)
         writer.ConnectedToLogger(Me)
     End Sub

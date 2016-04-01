@@ -93,10 +93,10 @@
     </Compile>
     <Compile Include="src\AppBase\ServiceLocator.vb" />
     <Compile Include="src\Attributes\ImageAttr.vb" />
-    <Compile Include="src\AutoUI\AutoForm.Designer.vb">
-      <DependentUpon>AutoForm.vb</DependentUpon>
+    <Compile Include="src\AutoUI\AutoUIForm.Designer.vb">
+      <DependentUpon>AutoUIForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="src\AutoUI\AutoForm.vb">
+    <Compile Include="src\AutoUI\AutoUIForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\AutoUI\AutoUI\AutoUI.vb" />
@@ -133,6 +133,7 @@
     <Compile Include="src\AutoUI\RemoteElements\RemoteAutoButton.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="src\Logger\ILoggerServer.vb" />
     <Compile Include="src\Logger\LogWriters\Realizations\FormLogInfo.Designer.vb">
       <DependentUpon>FormLogInfo.vb</DependentUpon>
     </Compile>
@@ -219,8 +220,8 @@
     <EmbeddedResource Include="src\AppBase\FormBase.resx">
       <DependentUpon>FormBase.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\AutoUI\AutoForm.resx">
-      <DependentUpon>AutoForm.vb</DependentUpon>
+    <EmbeddedResource Include="src\AutoUI\AutoUIForm.resx">
+      <DependentUpon>AutoUIForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\AutoUI\AutoUI\AutoUIDisplay.resx">
       <DependentUpon>AutoUIDisplay.vb</DependentUpon>

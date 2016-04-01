@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class AutoForm
+Partial Class AutoUIForm
 
     'Форма переопределяет dispose для очистки списка компонентов.
     <System.Diagnostics.DebuggerNonUserCode()> _

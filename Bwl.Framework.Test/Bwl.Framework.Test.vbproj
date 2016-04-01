@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{67E94558-938E-4DDE-93F4-E5ABEECE626F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>Bwl.Framework.TestApp.My.MyApplication</StartupObject>
+    <StartupObject>Sub Main</StartupObject>
     <RootNamespace>Bwl.Framework.TestApp</RootNamespace>
     <AssemblyName>Bwl.Framework.TestApp</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>WindowsForms</MyType>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -74,6 +74,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Main.vb" />
     <Compile Include="TestFormAppBase.vb">
       <SubType>Form</SubType>
     </Compile>

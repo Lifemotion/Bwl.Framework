@@ -46,6 +46,7 @@ Public Class BaseRemoteElement
 
     Public Sub New()
         _Info = New UIElementInfo("", "")
+        InitializeComponent()
     End Sub
 
     Public Overridable Sub ProcessData(dataname As String, data() As Byte) Implements IUIElementRemote.ProcessData

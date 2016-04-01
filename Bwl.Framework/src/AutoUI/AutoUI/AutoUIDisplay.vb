@@ -50,7 +50,7 @@ Public Class AutoUIDisplay
                 AddHandler ctl.RequestToSend, Sub(source As IUIElement, dataname As String, data As Byte())
                                                   _ui.ProcessData(source.Info.ID, dataname, data)
                                               End Sub
-                panel.Controls.Add(ctl)
+                Me.Invoke(Sub() panel.Controls.Add(ctl))
             End If
         Next
     End Sub

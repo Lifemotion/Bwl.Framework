@@ -85,8 +85,8 @@
     <Compile Include="Logs\LogsClient.vb" />
     <Compile Include="Logs\LogsServer.vb" />
     <Compile Include="AutoUi\AutoUiClient.vb" />
-    <Compile Include="SettingsLogsClient.vb" />
-    <Compile Include="SettingsLogsServer.vb" />
+    <Compile Include="RemoteAppClient.vb" />
+    <Compile Include="RemoteAppServer.vb" />
     <Compile Include="AutoUi\AutoUiServer.vb" />
     <Compile Include="Settings\SettingsClient.vb" />
     <Compile Include="Settings\SettingsServer.vb" />

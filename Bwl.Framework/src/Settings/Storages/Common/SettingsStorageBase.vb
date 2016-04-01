@@ -12,29 +12,29 @@ Public MustInherit Class SettingsStorageBase
 
     Protected _defaultWriter As ISettingsReaderWriter
     Protected _parentStorage As SettingsStorageBase
-	Protected _readOnly As Boolean = False
-	Protected _name As String
-	Protected _settingsForm As SettingsDialog
+    Protected _readOnly As Boolean = False
+    Protected _name As String
+    Protected _settingsForm As SettingsDialog
 
-	Protected _friendlyName As String = ""
+    Protected _friendlyName As String = ""
 
-	Public Event SettingChanged(storage As SettingsStorageBase, setting As Setting)
+    Public Event SettingChanged(storage As SettingsStorageBase, setting As Setting)
 
-	Public Sub New()
+    Public Sub New()
 
-	End Sub
+    End Sub
 
-	''' <summary>
-	''' Можно ли изменять данные в хранилище.
-	''' </summary>
-	''' <value></value>
-	''' <returns></returns>
-	''' <remarks></remarks>
-	Public ReadOnly Property IsReadOnly As Boolean
-		Get
-			Return _readOnly
-		End Get
-	End Property
+    ''' <summary>
+    ''' Можно ли изменять данные в хранилище.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public ReadOnly Property IsReadOnly As Boolean
+        Get
+            Return _readOnly
+        End Get
+    End Property
 
     Public ReadOnly Property Parent As SettingsStorageBase
         Get

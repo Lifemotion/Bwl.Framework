@@ -10,11 +10,11 @@ Public Class ConsoleAppBase
 
     Public Sub New()
         MyBase.New()
-        _consoleSettings = _storage.CreateChildStorage("Console")
+        _consoleSettings = RootStorage.CreateChildStorage("Console")
         _consoleColor = New VariantSetting(_consoleSettings, "Font Color", "gray", {"gray", "white", "black", "green", "red", "blue"})
         _consoleBack = New VariantSetting(_consoleSettings, "Background Color", "black", {"grey", "white", "black"})
         _consoleWriter = New ConsoleLogWriter
-        _logs.ConnectWriter(_consoleWriter)
+        RootLogger.ConnectWriter(_consoleWriter)
 
         Select Case _consoleColor.Value
             Case "white" : System.Console.ForegroundColor = ConsoleColor.White
@@ -33,8 +33,8 @@ Public Class ConsoleAppBase
     End Sub
 
     Public Sub ShowSettings()
-        Application.Run(_storage.ShowSettingsForm())
-        _storage.SaveSettings(False)
+        Application.Run(RootStorage.ShowSettingsForm())
+        RootStorage.SaveSettings(False)
     End Sub
 
     Public Sub Start()

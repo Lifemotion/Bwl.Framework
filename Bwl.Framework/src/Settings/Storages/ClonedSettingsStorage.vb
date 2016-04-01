@@ -1,8 +1,11 @@
 ﻿Public Class ClonedSettingsStorage
     Inherits SettingsStorageBase
 
-    Public Sub New(mrw As MemoryReaderWriter)
+    Public Sub New()
 
+    End Sub
+
+    Public Sub New(mrw As MemoryReaderWriter)
         Me.New(mrw, {}, mrw.ReadRootStorageNames(0), "", Nothing)
     End Sub
 
