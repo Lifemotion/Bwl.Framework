@@ -36,7 +36,7 @@ Public Class TestFormAppBase
         AppBase.RootStorage.SaveSettings(mrw, False)
         Dim b = mrw.MakeString
         Dim storage2 = New ClonedSettingsStorage(New MemoryReaderWriter(b))
-        storage2.ShowSettingsForm()
+        storage2.ShowSettingsForm(Me)
     End Sub
 
     Private Sub AddMessageButton_Click(sender As Object, e As EventArgs) Handles AddMessageButton.Click
@@ -49,6 +49,6 @@ Public Class TestFormAppBase
     End Sub
 
     Private Sub ShowSettingsForm_Click(sender As Object, e As EventArgs) Handles ShowSettingsFormButton.Click
-        AppBase.RootStorage.ShowSettingsForm()
+        AppBase.RootStorage.ShowSettingsForm(Me)
     End Sub
 End Class
