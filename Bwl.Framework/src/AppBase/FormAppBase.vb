@@ -7,6 +7,7 @@
     Sub New()
         MyBase.New()
         AppBase = New AppBase()
+        MyBase.Init(AppBase.RootStorage, AppBase.RootLogger)
         _storage = AppBase.RootStorage
         _logger = AppBase.RootLogger
         _loggerServer = AppBase.RootLogger

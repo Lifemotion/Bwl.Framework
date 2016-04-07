@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{67E94558-938E-4DDE-93F4-E5ABEECE626F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>Sub Main</StartupObject>
+    <StartupObject>Bwl.Framework.TestApp.TestFormAppBase</StartupObject>
     <RootNamespace>Bwl.Framework.TestApp</RootNamespace>
     <AssemblyName>Bwl.Framework.TestApp</AssemblyName>
     <FileAlignment>512</FileAlignment>

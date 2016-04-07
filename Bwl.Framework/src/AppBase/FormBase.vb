@@ -7,14 +7,18 @@
     End Sub
 
     Public Sub New(storage As SettingsStorageBase, logger As ILoggerDispatcher)
-        _storageForm = storage
-        _loggerServer = logger
+        Init(storage, logger)
         InitializeComponent()
     End Sub
 
     Public Sub New(appbase As AppBase)
         Me.New(appbase.RootStorage, appbase.RootLogger)
         InitializeComponent()
+    End Sub
+
+    Public Sub Init(storage As SettingsStorageBase, logger As ILoggerDispatcher)
+        _storageForm = storage
+        _loggerServer = logger
     End Sub
 
     Private Sub FormAppBase_Load(sender As Object, e As EventArgs) Handles MyBase.Load
