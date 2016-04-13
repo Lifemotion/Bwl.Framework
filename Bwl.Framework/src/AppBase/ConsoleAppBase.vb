@@ -33,7 +33,7 @@ Public Class ConsoleAppBase
     End Sub
 
     Public Sub ShowSettings()
-        Application.Run(RootStorage.ShowSettingsForm())
+        Application.Run(RootStorage.ShowSettingsForm(Nothing))
         RootStorage.SaveSettings(False)
     End Sub
 

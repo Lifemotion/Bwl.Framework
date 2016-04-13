@@ -23,4 +23,20 @@
         _AutoUIClient = New AutoUiClient(_NetClient, prefix)
     End Sub
 
+    Public Sub Connect(host As String, port As Integer)
+        _NetClient.Connect(host, port)
+    End Sub
+
+    Public Function CreateAutoUiForm() As AutoUIForm
+        Dim form = AutoUIForm.Create(SettingsClient, LogsClient, AutoUIClient)
+        form.Text += " RemoteApp " + NetClient.DefaultAddress + ":" + NetClient.DefaultPort.ToString
+        Return form
+    End Function
+
+    Public Sub RunRemoteApp()
+        Application.EnableVisualStyles()
+        CreateAutoUiForm.Show()
+        Application.Run()
+    End Sub
+
 End Class

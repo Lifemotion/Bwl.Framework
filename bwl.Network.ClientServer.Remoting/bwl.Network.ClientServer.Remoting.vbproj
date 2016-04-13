@@ -115,7 +115,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Bwl.Network.ClientServer\Bwl.Network.ClientServer.vbproj">
       <Project>{e8d43e81-de74-4f1c-9a3b-f3b16addfc18}</Project>
-      <Name>Bwl.Network.ClientServerMessaging</Name>
+      <Name>Bwl.Network.ClientServer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

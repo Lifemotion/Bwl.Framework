@@ -18,7 +18,7 @@ Public Class RemoteAutoBitmap
         If dataname.ToLower = "bitmap" Then
             Dim ms As New IO.MemoryStream(data)
             Dim bmp = New Bitmap(ms)
-            Me.PictureBox1.Image = bmp
+            Me.Invoke(Sub() Me.PictureBox1.Image = bmp)
         End If
     End Sub
 

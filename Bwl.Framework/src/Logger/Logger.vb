@@ -4,8 +4,10 @@
 ''' </summary>
 ''' <remarks></remarks>
 Public Class Logger
-    Implements ILoggerServer
-    Private _writers As New List(Of ILogWriter)
+    Implements ILoggerDispatcher
+    Implements ILoggerReceiver
+    Implements ILoggerChilds
+    Private ReadOnly _writers As New List(Of ILogWriter)
     Private _parentLogger As Logger
     Private _childLoggers As New List(Of Logger)
     Private _category As String = ""
@@ -32,19 +34,21 @@ Public Class Logger
     End Sub
 
     Private Sub NewChildConnected()
-        For Each writer In _writers
-            writer.CategoryListChanged()
-        Next
+        SyncLock (_writers)
+            For Each writer In _writers
+                writer.CategoryListChanged()
+            Next
+        End SyncLock
         If _parentLogger IsNot Nothing Then
             _parentLogger.NewChildConnected()
         End If
     End Sub
 
-    Public Function CreateChildLogger(categoryName As String) As Logger
+    Public Function CreateChildLogger(categoryName As String) As Logger Implements ILoggerChilds.CreateChildLogger
         Return New Logger(Me, categoryName)
     End Function
 
-    Public Function DeleteChildLogger(categoryName As String) As Logger
+    Public Function DeleteChildLogger(categoryName As String) As Logger Implements ILoggerChilds.DeleteChildLogger
         Dim forDelete As Logger = Nothing
         For Each logger In _childLoggers
             If logger.CategoryName = categoryName Then
@@ -58,16 +62,20 @@ Public Class Logger
         Return forDelete
     End Function
 
-    Public Sub ConnectWriter(writer As ILogWriter) Implements ILoggerServer.ConnectWriter
-        _writers.Add(writer)
+    Public Sub ConnectWriter(writer As ILogWriter) Implements ILoggerDispatcher.ConnectWriter
+        SyncLock (_writers)
+            _writers.Add(writer)
+        End SyncLock
         writer.ConnectedToLogger(Me)
     End Sub
 
-    Public Sub Add(type As LogEventType, text As String, ParamArray additional() As Object)
+    Public Sub Add(type As LogEventType, text As String, ParamArray additional() As Object) Implements ILoggerReceiver.Add
         text = text + " (" + ExtractCallingMethodInfo() + ")"
-        For Each writer In _writers
-            writer.WriteEvent(DateTime.Now, _path, type, text, additional)
-        Next
+        SyncLock (_writers)
+            For Each writer In _writers
+                writer.WriteEvent(DateTime.Now, _path, type, text, additional)
+            Next
+        End SyncLock
         If _parentLogger IsNot Nothing Then
             _parentLogger.AddFromChild(_path, type, text, additional)
         End If
@@ -101,30 +109,32 @@ Public Class Logger
     End Function
 
 
-    Public Sub AddInformation(messageText As String, ParamArray additional() As Object)
+    Public Sub AddInformation(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddInformation
         Add(LogEventType.information, messageText)
     End Sub
 
-    Public Sub AddError(messageText As String, ParamArray additional() As Object)
+    Public Sub AddError(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddError
         Add(LogEventType.errors, messageText)
     End Sub
 
-    Public Sub AddWarning(messageText As String, ParamArray additional() As Object)
+    Public Sub AddWarning(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddWarning
         Add(LogEventType.warning, messageText)
     End Sub
 
-    Public Sub AddDebug(messageText As String, ParamArray additional() As Object)
+    Public Sub AddDebug(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddDebug
         Add(LogEventType.debug, messageText)
     End Sub
 
-    Public Sub AddMessage(messageText As String, ParamArray additional() As Object)
+    Public Sub AddMessage(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddMessage
         Add(LogEventType.message, messageText)
     End Sub
 
     Private Sub AddFromChild(path1 As String(), type As LogEventType, messageText As String, ParamArray additional() As Object)
-        For Each writer In _writers
-            writer.WriteEvent(DateTime.Now, path1, type, messageText, additional)
-        Next
+        SyncLock (_writers)
+            For Each writer In _writers
+                writer.WriteEvent(DateTime.Now, path1, type, messageText, additional)
+            Next
+        End SyncLock
         If _parentLogger IsNot Nothing Then
             _parentLogger.AddFromChild(path1, type, messageText, additional)
         End If
@@ -142,7 +152,7 @@ Public Class Logger
         End Get
     End Property
 
-    Public ReadOnly Property ChildLoggers() As List(Of Logger)
+    Public ReadOnly Property ChildLoggers() As List(Of Logger) Implements ILoggerChilds.ChildLoggers
         Get
             Dim newChildLoggersList As New List(Of Logger)(_childLoggers)
             Return newChildLoggersList
