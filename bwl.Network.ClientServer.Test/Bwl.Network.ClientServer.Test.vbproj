@@ -8,9 +8,9 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D31646A7-2452-4F87-BBA2-AB531D6A1699}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>Bwl.Network.ClientServerMessaging.My.MyApplication</StartupObject>
-    <RootNamespace>Bwl.Network.ClientServerMessaging</RootNamespace>
-    <AssemblyName>Bwl.Network.ClientServerMessaging.Test</AssemblyName>
+    <StartupObject>Bwl.Network.ClientServer.My.MyApplication</StartupObject>
+    <RootNamespace>Bwl.Network.ClientServer</RootNamespace>
+    <AssemblyName>Bwl.Network.ClientServer.Test</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -22,8 +22,8 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\debug\test\</OutputPath>
-    <DocumentationFile>Bwl.Network.ClientServerMessaging.Test.xml</DocumentationFile>
+    <OutputPath>..\debug\testapp-nte\bin\</OutputPath>
+    <DocumentationFile>Bwl.Network.ClientServer.Test.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
@@ -33,8 +33,8 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>..\release\test\</OutputPath>
-    <DocumentationFile>Bwl.Network.ClientServerMessaging.Test.xml</DocumentationFile>
+    <OutputPath>..\release\testapp-nte\bin\</OutputPath>
+    <DocumentationFile>Bwl.Network.ClientServer.Test.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -50,10 +50,29 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>Bwl.Network.ClientServer.Test.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>Bwl.Network.ClientServer.Test.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bwl.Framework">
-      <HintPath>..\output\Bwl.Framework\debug\Bwl.Framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -124,6 +143,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\bwl.Framework\Bwl.Framework.vbproj">
+      <Project>{e18c7249-22c8-4147-91ef-8a2721f0f026}</Project>
+      <Name>Bwl.Framework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Bwl.Network.ClientServer\Bwl.Network.ClientServer.vbproj">
       <Project>{e8d43e81-de74-4f1c-9a3b-f3b16addfc18}</Project>
       <Name>Bwl.Network.ClientServer</Name>

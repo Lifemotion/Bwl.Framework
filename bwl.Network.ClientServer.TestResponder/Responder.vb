@@ -1,6 +1,4 @@
-﻿Imports bwl.Network.ClientServerMessaging
-
-Public Class Responder
+﻿Public Class Responder
     Private WithEvents server As New NetServer
 
     Private Sub Responder_Load(sender As Object, e As EventArgs) Handles MyBase.Load

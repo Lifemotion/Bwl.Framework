@@ -1,6 +1,4 @@
-﻿Imports Bwl.Network.ClientServerMessaging
-
-Public Interface IMessageServer
+﻿Public Interface IMessageServer
     ReadOnly Property Clients As List(Of ConnectedClient)
     ReadOnly Property IsWorking() As Boolean
     Event ClientConnected(client As ConnectedClient)

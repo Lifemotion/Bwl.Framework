@@ -1,6 +1,4 @@
-﻿Imports Bwl.Network.ClientServerMessaging
-
-Public Class SerialCableServer
+﻿Public Class SerialCableServer
     Implements IMessageServer
     Public Event ClientConnected(client As ConnectedClient) Implements IMessageServer.ClientConnected
     Public Event ClientDisonnected(client As ConnectedClient) Implements IMessageServer.ClientDisonnected

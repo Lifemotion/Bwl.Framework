@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7CE3CFF5-D210-4AAD-90B8-62A94ED839C8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>bwl.Network.ClientServerMessaging.TestResponder.My.MyApplication</StartupObject>
-    <RootNamespace>bwl.Network.ClientServerMessaging.TestResponder</RootNamespace>
-    <AssemblyName>bwl.Network.ClientServerMessaging.TestResponder</AssemblyName>
+    <StartupObject>bwl.Network.ClientServer.My.MyApplication</StartupObject>
+    <RootNamespace>bwl.Network.ClientServer</RootNamespace>
+    <AssemblyName>bwl.Network.ClientServer.TestResponder</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -19,8 +19,8 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\debug\test\</OutputPath>
-    <DocumentationFile>bwl.Network.ClientServerMessaging.TestResponder.xml</DocumentationFile>
+    <OutputPath>..\release\testapp-responder\bin\</OutputPath>
+    <DocumentationFile>bwl.Network.ClientServer.TestResponder.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -29,8 +29,8 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>..\release\test\</OutputPath>
-    <DocumentationFile>bwl.Network.ClientServerMessaging.TestResponder.xml</DocumentationFile>
+    <OutputPath>..\debug\testapp-responder\bin\</OutputPath>
+    <DocumentationFile>bwl.Network.ClientServer.TestResponder.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>

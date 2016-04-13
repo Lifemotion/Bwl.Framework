@@ -1,5 +1,4 @@
 ﻿Imports System.IO.Ports
-Imports Bwl.Network.ClientServerMessaging
 
 Public Class SerialCableClient
     Implements IMessageClient

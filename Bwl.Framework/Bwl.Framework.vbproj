@@ -10,7 +10,7 @@
     <AssemblyName>Bwl.Framework</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
   </PropertyGroup>
@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\output\Bwl.Framework\debug\</OutputPath>
+    <OutputPath>..\debug\dll\</OutputPath>
     <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
@@ -32,7 +32,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>..\output\Bwl.Framework\release\</OutputPath>
+    <OutputPath>..\release\dll\</OutputPath>
     <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>

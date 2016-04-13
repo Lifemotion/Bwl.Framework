@@ -1,5 +1,4 @@
 ﻿Imports bwl.Framework
-Imports bwl.Network.ClientServerMessaging
 
 Module Test
     Private _appBase As New AppBase

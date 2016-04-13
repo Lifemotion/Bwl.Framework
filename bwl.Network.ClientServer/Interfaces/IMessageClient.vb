@@ -1,6 +1,4 @@
-﻿Imports Bwl.Network.ClientServerMessaging
-
-Public Interface IMessageClient
+﻿Public Interface IMessageClient
     Property DefaultAddress As String
     Property DefaultPort As Integer
     Property IgnoreNotConnected As Boolean

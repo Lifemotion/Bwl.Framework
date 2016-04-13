@@ -1,6 +1,4 @@
-﻿Imports Bwl.Network.ClientServerMessaging
-
-Public Class SpeedForm
+﻿Public Class SpeedForm
     Inherits FormAppBase
     Dim port = 3333
     Dim address = "127.0.0.1"
