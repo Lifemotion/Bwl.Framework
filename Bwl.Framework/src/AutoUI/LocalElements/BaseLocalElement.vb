@@ -10,6 +10,7 @@ Public MustInherit Class BaseLocalElement
     Public MustOverride Sub SendUpdate() Implements IUIElementLocal.SendUpdate
     Public MustOverride Sub ProcessData(dataname As String, data() As Byte) Implements IUIElementLocal.ProcessData
 
+
     Protected Sub Send(dataname As String, parts As Object())
         Send(dataname, AutoUIByteCoding.GetString(parts))
     End Sub

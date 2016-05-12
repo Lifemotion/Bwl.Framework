@@ -111,6 +111,8 @@
     <Compile Include="src\AutoUI\Interfaces\UIElementInfo.vb" />
     <Compile Include="src\AutoUI\LocalElements\AutoButton.vb" />
     <Compile Include="src\AutoUI\LocalElements\AutoBitmap.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoListbox.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoTextbox.vb" />
     <Compile Include="src\AutoUI\LocalElements\BaseLocalElement.vb" />
     <Compile Include="src\AutoUI\Interfaces\IUIElementRemote.vb" />
     <Compile Include="src\AutoUI\Interfaces\IUIElementLocal.vb" />
@@ -119,6 +121,18 @@
       <DependentUpon>BaseRemoteElement.vb</DependentUpon>
     </Compile>
     <Compile Include="src\AutoUI\RemoteElements\BaseRemoteElement.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoListbox.Designer.vb">
+      <DependentUpon>RemoteAutoListbox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoListbox.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoTextbox.Designer.vb">
+      <DependentUpon>RemoteAutoTextbox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoTextbox.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="src\AutoUI\RemoteElements\RemoteAutoBitmap.Designer.vb">
@@ -133,6 +147,7 @@
     <Compile Include="src\AutoUI\RemoteElements\RemoteAutoButton.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="src\ListWithEvents.vb" />
     <Compile Include="src\Logger\Interface\ILoggerChilds.vb" />
     <Compile Include="src\Logger\Interface\ILoggerReceiver.vb" />
     <Compile Include="src\Logger\Interface\ILoggerDispatcher.vb" />
@@ -231,6 +246,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\AutoUI\AutoUI\AutoUIDisplay.resx">
       <DependentUpon>AutoUIDisplay.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoListbox.resx">
+      <DependentUpon>RemoteAutoListbox.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoTextbox.resx">
+      <DependentUpon>RemoteAutoTextbox.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoBitmap.resx">
       <DependentUpon>RemoteAutoBitmap.vb</DependentUpon>

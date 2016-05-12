@@ -5,7 +5,11 @@ Module Main
     Private WithEvents _button1 As New AutoButton(_appBase.AutoUI, "button1")
     Private WithEvents _button2 As New AutoButton(_appBase.AutoUI, "button2")
     Private WithEvents _button3 As New AutoButton(_appBase.AutoUI, "button3")
+    Private WithEvents _button4 As New AutoButton(_appBase.AutoUI, "button4")
     Private WithEvents _image As New AutoBitmap(_appBase.AutoUI, "image")
+    Private WithEvents _textbox1 As New AutoTextbox(_appBase.AutoUI, "textbox1")
+    Private WithEvents _textbox2 As New AutoTextbox(_appBase.AutoUI, "textbox2")
+    Private WithEvents _listbox1 As New AutoListbox(_appBase.AutoUI, "listbox1")
 
     Public Sub Main()
         Application.EnableVisualStyles()
@@ -25,5 +29,14 @@ Module Main
         Dim g = Graphics.FromImage(bitmap)
         g.Clear(Color.Blue)
         _image.Image = bitmap
+    End Sub
+
+    Private Sub _button3_Click(source As AutoButton) Handles _button3.Click
+        _listbox1.Items.Add("test")
+        _textbox1.Text += "E"
+    End Sub
+
+    Private Sub _button4_Click(source As AutoButton) Handles _button4.Click
+        _listbox1.Items.Clear()
     End Sub
 End Module

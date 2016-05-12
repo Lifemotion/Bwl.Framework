@@ -45,6 +45,10 @@ Public Class AutoUIDisplay
                     ctl = New RemoteAutoButton(info)
                 Case "AutoBitmap"
                     ctl = New RemoteAutoBitmap(info)
+                Case "AutoTextbox"
+                    ctl = New RemoteAutoTextbox(info)
+                Case "AutoListbox"
+                    ctl = New RemoteAutoListbox(info)
             End Select
             If ctl IsNot Nothing Then
                 AddHandler ctl.RequestToSend, Sub(source As IUIElement, dataname As String, data As Byte())
