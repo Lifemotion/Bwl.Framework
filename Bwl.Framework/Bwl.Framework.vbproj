@@ -111,6 +111,7 @@
     <Compile Include="src\AutoUI\Interfaces\UIElementInfo.vb" />
     <Compile Include="src\AutoUI\LocalElements\AutoButton.vb" />
     <Compile Include="src\AutoUI\LocalElements\AutoBitmap.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoFormDescriptor.vb" />
     <Compile Include="src\AutoUI\LocalElements\AutoListbox.vb" />
     <Compile Include="src\AutoUI\LocalElements\AutoTextbox.vb" />
     <Compile Include="src\AutoUI\LocalElements\BaseLocalElement.vb" />
@@ -123,6 +124,8 @@
     <Compile Include="src\AutoUI\RemoteElements\BaseRemoteElement.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\BaseRemoteClass.vb" />
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoFormDescriptor.vb" />
     <Compile Include="src\AutoUI\RemoteElements\RemoteAutoListbox.Designer.vb">
       <DependentUpon>RemoteAutoListbox.vb</DependentUpon>
     </Compile>

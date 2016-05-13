@@ -4,6 +4,12 @@ Public Class AutoUIDisplay
     Private WithEvents _ui As IAutoUI
     Private _loaded As Boolean
 
+    Public Sub New()
+        ' Этот вызов является обязательным для конструктора.
+        InitializeComponent()
+        ' Добавить код инициализации после вызова InitializeComponent().
+    End Sub
+
     Public Property ConnectedUI As IAutoUI
         Get
             Return _ui
@@ -14,12 +20,15 @@ Public Class AutoUIDisplay
         End Set
     End Property
 
+    Public Event AutoFormDescriptorUpdated(sender As AutoUIDisplay)
+    Public Property AutoFormDescriptor As RemoteAutoFormDescriptor
+
     Private Sub AutoUIDisplay_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         _loaded = True
     End Sub
 
     Private Sub RemoveControls()
-        panel.Controls.Clear()
+        Me.Invoke(Sub() panel.Controls.Clear())
     End Sub
 
     Public Sub RecreateControls()
@@ -27,6 +36,10 @@ Public Class AutoUIDisplay
     End Sub
 
     Private Sub _ui_RequestToSend(id As String, dataname As String, data() As Byte) Handles _ui.RequestToSend
+        If AutoFormDescriptor IsNot Nothing AndAlso id = AutoFormDescriptor.Info.ID Then
+            AutoFormDescriptor.ProcessData(dataname, data)
+        End If
+
         For i = 0 To panel.Controls.Count - 1
             Dim ctl = DirectCast(panel.Controls.Item(i), BaseRemoteElement)
             If ctl.Info.ID.ToLower = id.ToLower Then
@@ -34,6 +47,8 @@ Public Class AutoUIDisplay
             End If
         Next
     End Sub
+
+    Public g As Guid
 
     Private Sub _ui_BaseInfosReady(infos As Byte()()) Handles _ui.BaseInfosReady
         RemoveControls()
@@ -49,6 +64,18 @@ Public Class AutoUIDisplay
                     ctl = New RemoteAutoTextbox(info)
                 Case "AutoListbox"
                     ctl = New RemoteAutoListbox(info)
+                Case "AutoListbox"
+                    ctl = New RemoteAutoListbox(info)
+                Case "AutoFormDescriptor"
+                    _AutoFormDescriptor = New RemoteAutoFormDescriptor(info)
+                    AddHandler _AutoFormDescriptor.Updated, Sub()
+                                                                RaiseEvent AutoFormDescriptorUpdated(Me)
+                                                            End Sub
+                    AddHandler _AutoFormDescriptor.RequestToSend, Sub(source As IUIElement, dataname As String, data As Byte())
+                                                                      _ui.ProcessData(source.Info.ID, dataname, data)
+                                                                  End Sub
+                    _AutoFormDescriptor.Update()
+
             End Select
             If ctl IsNot Nothing Then
                 AddHandler ctl.RequestToSend, Sub(source As IUIElement, dataname As String, data As Byte())

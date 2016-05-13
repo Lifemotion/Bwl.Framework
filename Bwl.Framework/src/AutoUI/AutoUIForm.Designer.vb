@@ -1,8 +1,8 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class AutoUIForm
 
     'Форма переопределяет dispose для очистки списка компонентов.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -19,9 +19,11 @@ Partial Class AutoUIForm
     'Примечание: следующая процедура является обязательной для конструктора форм Windows Forms
     'Для ее изменения используйте конструктор форм Windows Form.  
     'Не изменяйте ее в редакторе исходного кода.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.AutoUIDisplay1 = New Bwl.Framework.AutoUIDisplay()
+        Me.updateTimer = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
         'logWriter
@@ -33,11 +35,17 @@ Partial Class AutoUIForm
         Me.AutoUIDisplay1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AutoUIDisplay1.AutoFormDescriptor = Nothing
         Me.AutoUIDisplay1.ConnectedUI = Nothing
         Me.AutoUIDisplay1.Location = New System.Drawing.Point(4, 27)
         Me.AutoUIDisplay1.Name = "AutoUIDisplay1"
         Me.AutoUIDisplay1.Size = New System.Drawing.Size(776, 395)
         Me.AutoUIDisplay1.TabIndex = 2
+        '
+        'updateTimer
+        '
+        Me.updateTimer.Enabled = True
+        Me.updateTimer.Interval = 500
         '
         'AutoUIForm
         '
@@ -54,4 +62,5 @@ Partial Class AutoUIForm
     End Sub
 
     Friend WithEvents AutoUIDisplay1 As AutoUIDisplay
+    Friend WithEvents updateTimer As Timer
 End Class

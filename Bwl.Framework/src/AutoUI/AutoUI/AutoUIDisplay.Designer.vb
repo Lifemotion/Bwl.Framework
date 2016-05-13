@@ -31,6 +31,7 @@ Partial Class AutoUIDisplay
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panel.AutoScroll = True
+        Me.panel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.panel.Location = New System.Drawing.Point(0, 0)
         Me.panel.Name = "panel"
         Me.panel.Size = New System.Drawing.Size(332, 428)

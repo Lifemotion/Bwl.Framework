@@ -11,6 +11,8 @@ Module Main
     Private WithEvents _textbox2 As New AutoTextbox(_appBase.AutoUI, "textbox2")
     Private WithEvents _listbox1 As New AutoListbox(_appBase.AutoUI, "listbox1")
 
+    Private WithEvents _formDesc As New AutoFormDescriptor(_appBase.AutoUI, "form") With {.FormWidth = 400, .ShowLogger = False}
+
     Public Sub Main()
         Application.EnableVisualStyles()
         AutoUIForm.Create(_appBase).Show()
