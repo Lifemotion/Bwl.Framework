@@ -28,7 +28,8 @@ Partial Class AutoUIForm
         '
         'logWriter
         '
-        Me.logWriter.Location = New System.Drawing.Point(2, 425)
+        Me.logWriter.Location = New System.Drawing.Point(2, 562)
+        Me.logWriter.Size = New System.Drawing.Size(781, 187)
         '
         'AutoUIDisplay1
         '
@@ -39,7 +40,7 @@ Partial Class AutoUIForm
         Me.AutoUIDisplay1.ConnectedUI = Nothing
         Me.AutoUIDisplay1.Location = New System.Drawing.Point(4, 27)
         Me.AutoUIDisplay1.Name = "AutoUIDisplay1"
-        Me.AutoUIDisplay1.Size = New System.Drawing.Size(776, 395)
+        Me.AutoUIDisplay1.Size = New System.Drawing.Size(776, 532)
         Me.AutoUIDisplay1.TabIndex = 2
         '
         'updateTimer

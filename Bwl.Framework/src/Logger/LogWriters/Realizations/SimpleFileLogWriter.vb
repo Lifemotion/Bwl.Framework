@@ -77,6 +77,7 @@ Public Class SimpleFileLogWriter
             item.path = path
             item.message = text
             item.additional = ""
+            If params IsNot Nothing AndAlso params.Length > 0 Then item.additional = params(0).ToString
             item.type = type
             SyncLock newMessages
                 newMessages.Add(item)

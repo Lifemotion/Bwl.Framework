@@ -25,6 +25,7 @@
                       End If
                       If desc.FormWidth > 0 Then Width = desc.FormWidth
                       If desc.FormHeight > 0 Then Height = desc.FormHeight
+                      logWriter.ExtendedView = desc.LoggerExtended
                   End Sub)
     End Sub
 

@@ -11,7 +11,7 @@ Module Main
     Private WithEvents _textbox2 As New AutoTextbox(_appBase.AutoUI, "textbox2")
     Private WithEvents _listbox1 As New AutoListbox(_appBase.AutoUI, "listbox1")
 
-    Private WithEvents _formDesc As New AutoFormDescriptor(_appBase.AutoUI, "form") With {.FormWidth = 400, .ShowLogger = False}
+    Private WithEvents _formDesc As New AutoFormDescriptor(_appBase.AutoUI, "form") With {.FormWidth = 1000, .FormHeight = 500, .LoggerExtended = False}
 
     Public Sub Main()
         Application.EnableVisualStyles()
@@ -40,5 +40,6 @@ Module Main
 
     Private Sub _button4_Click(source As AutoButton) Handles _button4.Click
         _listbox1.Items.Clear()
+        _appBase.RootLogger.AddMessage("12434")
     End Sub
 End Module

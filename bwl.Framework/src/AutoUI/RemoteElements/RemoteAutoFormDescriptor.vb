@@ -7,6 +7,9 @@
     Public ReadOnly Property ShowLogger As Boolean
     Public ReadOnly Property FormWidth As Integer
     Public ReadOnly Property FormHeight As Integer
+    Public ReadOnly Property LoggerSize As Integer
+    Public ReadOnly Property LoggerExtended As Boolean
+    Public ReadOnly Property LoggerVertical As Boolean
 
     Public Sub New(info As UIElementInfo)
         MyBase.New(info)
@@ -20,6 +23,9 @@
             _ShowLogger = (parts(2).ToLower = "true")
             _FormWidth = CInt(Val(parts(3)))
             _FormHeight = CInt(Val(parts(4)))
+            _LoggerVertical = (parts(5).ToLower = "true")
+            _LoggerExtended = (parts(6).ToLower = "true")
+            _LoggerSize = CInt(Val(parts(7)))
             RaiseEvent Updated(Me)
         End If
     End Sub

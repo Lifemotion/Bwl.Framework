@@ -5,6 +5,9 @@
     Private _showLogger As Boolean = True
     Private _formWidth As Integer
     Private _formHeight As Integer
+    Private _loggerSize As Integer
+    Private _loggerVertical As Boolean = False
+    Private _loggerExtended As Boolean = True
 
     Public Event Click(source As AutoBitmap)
 
@@ -49,6 +52,36 @@
         End Set
     End Property
 
+    Public Property LoggerSize As Integer
+        Get
+            Return _loggerSize
+        End Get
+        Set(value As Integer)
+            _loggerSize = value
+            SendUpdate()
+        End Set
+    End Property
+
+    Public Property LoggerExtended As Boolean
+        Get
+            Return _loggerExtended
+        End Get
+        Set(value As Boolean)
+            _loggerExtended = value
+            SendUpdate()
+        End Set
+    End Property
+
+    Public Property LoggerVertical As Boolean
+        Get
+            Return _loggerVertical
+        End Get
+        Set(value As Boolean)
+            _loggerVertical = value
+            SendUpdate()
+        End Set
+    End Property
+
     Public ReadOnly Property ApplicationDescription As String
         Get
             Return _appDescription
@@ -75,6 +108,7 @@
     End Sub
 
     Public Overrides Sub SendUpdate()
-        Send("form-info", {Text, ApplicationDescription, ShowLogger.ToString, FormWidth.ToString, FormHeight.ToString})
+        Send("form-info", {Text, ApplicationDescription, ShowLogger.ToString, FormWidth.ToString,
+             FormHeight.ToString, LoggerVertical.ToString, LoggerExtended.ToString, LoggerSize.ToString})
     End Sub
 End Class

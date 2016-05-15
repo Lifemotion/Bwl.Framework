@@ -81,6 +81,7 @@ Public Class DatagridLogWriter
                 item.path = path
                 item.message = text
                 item.additional = ""
+                If params IsNot Nothing AndAlso params.Length > 0 Then item.additional = params(0).ToString
                 item.type = type
                 newMessages.Add(item)
             End If
@@ -148,7 +149,7 @@ Public Class DatagridLogWriter
                 pathString = rootName
             End If
             grid.RowTemplate.DefaultCellStyle.BackColor = GetRowColor(.type)
-            grid.Rows.Add(dateString, timeString, typeString, pathString, .message)
+            grid.Rows.Add(dateString, timeString, typeString, pathString, .message,.additional)
             'grid.Rows.SharedRow (grid.Rows.Count-1).
         End With
     End Sub
@@ -257,21 +258,40 @@ Public Class DatagridLogWriter
         RedrawItems()
     End Sub
 
-	Private Sub grid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles grid.CellDoubleClick
-		'вызов окна
-		If (e.RowIndex >= 0 AndAlso e.RowIndex <= grid.RowCount) Then
-			Dim LogInfo = New FormLogInfo()
-			Dim infoList As New List(Of String)()
-			For i = 0 To grid.ColumnCount - 1
-				infoList.Add(grid.Item(i, e.RowIndex).Value.ToString())
-			Next
-			LogInfo.LogInfoText = infoList
-			LogInfo.Show()
-			'LogInfo.Dispose()
-		End If
-	End Sub
+    Private Sub grid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles grid.CellDoubleClick
+        'вызов окна
+        If (e.RowIndex >= 0 AndAlso e.RowIndex <= grid.RowCount) Then
+            Dim LogInfo = New FormLogInfo()
+            Dim infoList As New List(Of String)()
+            For i = 0 To grid.ColumnCount - 1
+                infoList.Add(grid.Item(i, e.RowIndex).Value.ToString())
+            Next
+            LogInfo.LogInfoText = infoList
+            LogInfo.Show()
+            'LogInfo.Dispose()
+        End If
+    End Sub
 
     Private Sub bClear_Click(sender As Object, e As EventArgs) Handles bClear.Click
         Clear()
     End Sub
+
+    Private Sub DatagridLogWriter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Private Sub cbExtended_CheckedChanged(sender As Object, e As EventArgs) Handles cbExtended.CheckedChanged
+        grid.Columns(2).Visible = cbExtended.Checked
+        grid.Columns(3).Visible = cbExtended.Checked
+        grid.Columns(5).Visible = cbExtended.Checked
+    End Sub
+
+    Public Property ExtendedView As Boolean
+        Get
+            Return cbExtended.Checked
+        End Get
+        Set(value As Boolean)
+            cbExtended.Checked = value
+        End Set
+    End Property
 End Class

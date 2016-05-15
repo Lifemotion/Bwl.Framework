@@ -70,14 +70,16 @@ Public Class Logger
     End Sub
 
     Public Sub Add(type As LogEventType, text As String, ParamArray additional() As Object) Implements ILoggerReceiver.Add
-        text = text + " (" + ExtractCallingMethodInfo() + ")"
+        Dim list As New List(Of Object)
+        list.Add("CallFrom: " + ExtractCallingMethodInfo())
+        list.AddRange(additional)
         SyncLock (_writers)
             For Each writer In _writers
-                writer.WriteEvent(DateTime.Now, _path, type, text, additional)
+                writer.WriteEvent(DateTime.Now, _path, type, text, list.ToArray)
             Next
         End SyncLock
         If _parentLogger IsNot Nothing Then
-            _parentLogger.AddFromChild(_path, type, text, additional)
+            _parentLogger.AddFromChild(_path, type, text, list.ToArray)
         End If
     End Sub
 
