@@ -42,12 +42,14 @@ Public Class BaseRemoteElement
     Public Sub New(info As UIElementInfo)
         _Info = info
         InitializeComponent()
+        '   AddHandler info.Changed, AddressOf BaseInfoChanged
+        '  BaseInfoChanged(info)
     End Sub
 
     Public Sub New()
-        _Info = New UIElementInfo("", "")
-        InitializeComponent()
+        Me.New(New UIElementInfo("", ""))
     End Sub
+
 
     Public Overridable Sub ProcessData(dataname As String, data() As Byte) Implements IUIElementRemote.ProcessData
 

@@ -43,7 +43,11 @@ Public Class AutoUIDisplay
         For i = 0 To panel.Controls.Count - 1
             Dim ctl = DirectCast(panel.Controls.Item(i), BaseRemoteElement)
             If ctl.Info.ID.ToLower = id.ToLower Then
-                ctl.ProcessData(dataname, data)
+                If dataname = "base-info-change" Then
+                    ctl.Info.SetFromBytes(data)
+                Else
+                    ctl.ProcessData(dataname, data)
+                End If
             End If
         Next
     End Sub
@@ -53,7 +57,7 @@ Public Class AutoUIDisplay
     Private Sub _ui_BaseInfosReady(infos As Byte()()) Handles _ui.BaseInfosReady
         RemoveControls()
         For Each infoBytes In infos
-            Dim info = AutoUIByteCoding.DecodeBaseInfo(infoBytes)
+            Dim info = UIElementInfo.CreateFromBytes(infoBytes)
             Dim ctl As BaseRemoteElement = Nothing
             Select Case info.Type
                 Case "AutoButton"

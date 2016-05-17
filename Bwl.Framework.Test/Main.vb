@@ -31,15 +31,21 @@ Module Main
         Dim g = Graphics.FromImage(bitmap)
         g.Clear(Color.Blue)
         _image.Image = bitmap
+        _listbox1.AutoHeight = True
     End Sub
 
     Private Sub _button3_Click(source As AutoButton) Handles _button3.Click
         _listbox1.Items.Add("test")
         _textbox1.Text += "E"
+
     End Sub
 
     Private Sub _button4_Click(source As AutoButton) Handles _button4.Click
         _listbox1.Items.Clear()
         _appBase.RootLogger.AddMessage("12434")
+        _listbox1.Info.BackColor = Color.Red
+        _listbox1.Info.Caption += "ff"
+
+        _listbox1.Info.Height = 100
     End Sub
 End Module

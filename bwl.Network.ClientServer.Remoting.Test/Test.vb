@@ -15,7 +15,7 @@ Module Test
 
     Private _setting1 As New StringSetting(_appBase.RootStorage, "Setting1", "cat")
 
-    Private _appBaseServer As New RemoteAppServer(3155, _appBase)
+    Private _appBaseServer As New RemoteAppServer(3155, _appBase, "TestRemApp", RemoteAppBeaconMode.broadcast)
 
     Public Sub Main()
         Dim thread1 As New Threading.Thread(Sub()

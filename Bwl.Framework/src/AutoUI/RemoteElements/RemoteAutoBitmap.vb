@@ -4,15 +4,25 @@ Public Class RemoteAutoBitmap
     Inherits BaseRemoteElement
 
     Public Sub New()
-        MyBase.New(New UIElementInfo("", ""))
-        InitializeComponent()
-
+        Me.New(New UIElementInfo("", ""))
     End Sub
 
     Public Sub New(info As UIElementInfo)
         MyBase.New(info)
         InitializeComponent()
-        ElementCaption.Text = info.Caption
+        AddHandler info.Changed, AddressOf BaseInfoChanged
+        BaseInfoChanged(info)
+    End Sub
+
+    Private Sub BaseInfoChanged(source As UIElementInfo)
+        If InvokeRequired Then
+            Me.Invoke(Sub() BaseInfoChanged(source))
+        Else
+            ElementCaption.Text = Info.Caption
+            If Info.BackColor.A = 255 Then PictureBox1.BackColor = Info.BackColor
+            If Info.Width > 0 Then Me.Width = Info.Width
+            If Info.Height > 0 Then Me.Height = Info.Height
+        End If
     End Sub
 
     Public Overrides Sub ProcessData(dataname As String, data() As Byte)

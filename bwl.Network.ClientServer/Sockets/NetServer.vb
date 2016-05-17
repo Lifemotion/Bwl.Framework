@@ -88,7 +88,15 @@ Public Class NetServer
 	Private pingFailsToDisconnect As Integer = 3
 	' Private log As LogWriter
 	Private WithEvents pingTimer As System.Timers.Timer
-	Private directOnly As Boolean
+    Private directOnly As Boolean
+
+    Public ReadOnly Property NetBeacon As NetBeacon
+
+    Public Sub StartNetBeacon(serverName As String, localhostOnly As Boolean)
+        If NetBeacon IsNot Nothing Then NetBeacon.Finish()
+        _NetBeacon = New NetBeacon(tcpPort, serverName, localhostOnly, True)
+    End Sub
+
     Public ReadOnly Property Clients() As List(Of ConnectedClient) Implements IMessageServer.Clients
         Get
             Dim list As New List(Of ConnectedClient)
@@ -103,6 +111,12 @@ Public Class NetServer
             Return list
         End Get
     End Property
+
+    Sub New(startOnPort As Integer)
+        Me.New
+        StartServer(startOnPort)
+    End Sub
+
     Sub New()
 		' log = New LogWriter(Application.StartupPath + "\tcpserv_debug.log")
 		pingTimer = New System.Timers.Timer
@@ -116,6 +130,7 @@ Public Class NetServer
     ''' <param name="incomingPort">TCP - порт, подключения к которому будут приниматься.</param>
     ''' <remarks></remarks>
     Public Sub StartServer(ByVal incomingPort As Integer) Implements IMessageServer.StartServer
+        tcpPort = incomingPort
         If working = True Then StopServer()
         Try
             Dim ipAddr As IPAddress = IPAddress.Any

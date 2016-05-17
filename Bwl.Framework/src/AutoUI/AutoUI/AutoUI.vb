@@ -15,6 +15,10 @@ Public Class AutoUI
         AddHandler element.RequestToSend, Sub(source As IUIElement, dataname As String, data As Byte())
                                               RaiseEvent RequestToSend(source.Info.ID, dataname, data)
                                           End Sub
+        AddHandler element.Info.Changed, Sub(elem As UIElementInfo)
+                                             Dim bytes = elem.ToBytes
+                                             RaiseEvent RequestToSend(elem.ID, "base-info-change", bytes)
+                                         End Sub
     End Sub
 
     Public Sub ProcessData(id As String, dataname As String, data As Byte()) Implements IAutoUI.ProcessData
@@ -26,7 +30,7 @@ Public Class AutoUI
     Private Sub GetBaseInfos() Implements IAutoUI.GetBaseInfos
         Dim datas As New List(Of Byte())
         For Each elem In Elements
-            datas.Add(AutoUIByteCoding.CodeBaseInfo(elem.Info))
+            datas.Add(elem.Info.ToBytes())
         Next
         RaiseEvent BaseInfosReady(datas.ToArray)
     End Sub

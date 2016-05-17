@@ -10,6 +10,17 @@ Public Class AutoListbox
     Public Event DoubleClick(source As AutoListbox)
     Public Event SelectedIndexChanged(source As AutoListbox)
 
+    Private _autoHeight As Boolean
+
+    Public Property AutoHeight As Boolean
+        Get
+            Return _autoHeight
+        End Get
+        Set(autoHeight As Boolean)
+            _autoHeight = autoHeight
+            SendUpdate()
+        End Set
+    End Property
     Public Sub New(iface As AutoUI, id As String)
         MyBase.New(iface, id, GetType(AutoListbox))
         AddHandler Items.CollectionChanged, AddressOf SendUpdate
@@ -24,5 +35,6 @@ Public Class AutoListbox
 
     Public Overrides Sub SendUpdate()
         Send("items", Items.ToArray)
+        Send("parameters", AutoHeight.ToString)
     End Sub
 End Class

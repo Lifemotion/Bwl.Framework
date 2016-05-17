@@ -8,6 +8,7 @@
     Private _loggerSize As Integer
     Private _loggerVertical As Boolean = False
     Private _loggerExtended As Boolean = True
+    Private _elementsLayoutVertical As Boolean = True
 
     Public Event Click(source As AutoBitmap)
 

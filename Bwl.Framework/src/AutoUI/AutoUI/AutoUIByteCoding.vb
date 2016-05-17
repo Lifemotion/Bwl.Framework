@@ -29,28 +29,5 @@ Public Class AutoUIByteCoding
         Return parts
     End Function
 
-    Public Shared Function CodeBaseInfo(info As UIElementInfo) As Byte()
-        Dim list As New List(Of String)
-        With info
-            list.Add(.ID)
-            list.Add(.Type)
-            list.Add(.Caption)
-            list.Add(.Category)
-            list.Add(.Width.ToString)
-            list.Add(.Height.ToString)
-        End With
-        Dim str = GetString(list.ToArray)
-        Dim bytes = GetBytes(str)
-        Return bytes
-    End Function
 
-    Public Shared Function DecodeBaseInfo(bytes As Byte()) As UIElementInfo
-        Dim parts = GetParts(bytes)
-        Dim info As New UIElementInfo(parts(0), parts(1))
-        info.Caption = parts(2)
-        info.Category = parts(3)
-        info.Width = CInt(parts(4))
-        info.Height = CInt(parts(5))
-        Return info
-    End Function
 End Class
