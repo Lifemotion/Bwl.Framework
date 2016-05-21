@@ -38,6 +38,14 @@ Public Class IniFile
     ''' <remarks></remarks>
     Function GetSetting(groupName As String, paramName As String, Optional defaultValue As String = Nothing, Optional returnIsNotExist As String = "") As String
         Dim fileID As Integer = FreeFile()
+
+        If Not System.IO.File.Exists(_iniFile) Then
+            Dim bakName = _iniFile + ".bak"
+            If System.IO.File.Exists(bakName) Then
+                System.IO.File.Copy(bakName, _iniFile)
+            End If
+        End If
+
         Try
             FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
         Catch ex As Exception
@@ -49,6 +57,7 @@ Public Class IniFile
                 Return returnIsNotExist
             End Try
         End Try
+
         Dim currentString As String
         Dim currentGroup As String = ""
         Do While Not EOF(fileID)
@@ -103,7 +112,14 @@ Public Class IniFile
 
         End Try
         fileID = FreeFile()
-        FileOpen(fileID, _iniFile, OpenMode.Output, OpenAccess.Write)
+
+        Dim tmpFName = _iniFile + ".tmp"
+        If System.IO.File.Exists(tmpFName) Then
+            System.IO.File.SetAttributes(tmpFName, IO.FileAttributes.Normal)
+            System.IO.File.Delete(tmpFName)
+        End If
+
+        FileOpen(fileID, tmpFName, OpenMode.Output, OpenAccess.Write)
         Dim currentGroup As String = ""
         Dim i As Integer
         For i = 0 To fileBuff.Length - 2
@@ -140,6 +156,18 @@ Public Class IniFile
             End If
         End If
         FileClose(fileID)
+
+        If System.IO.File.Exists(_iniFile) Then
+            Dim bakFName = _iniFile + ".bak"
+            If System.IO.File.Exists(bakFName) Then
+                System.IO.File.SetAttributes(bakFName, IO.FileAttributes.Normal)
+                System.IO.File.Delete(bakFName)
+            End If
+            System.IO.File.SetAttributes(_iniFile, IO.FileAttributes.Normal)
+            System.IO.File.Move(_iniFile, bakFName)
+        End If
+
+        System.IO.File.Move(tmpFName, _iniFile)
     End Sub
     ''' <summary>
     ''' Проверяет, присутсвует ли указанный файл.

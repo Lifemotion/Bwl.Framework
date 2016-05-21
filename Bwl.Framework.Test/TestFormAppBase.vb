@@ -17,10 +17,14 @@ Public Class TestFormAppBase
     Private _backUper = New SettingsStorageBackup(AppBase.SettingsFolder, _logger, AppBase.RootStorage.CreateChildStorage("BackupSettings", "Резервное копирование настроек"))
 
     Private Sub TestApp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        AppBase.RootStorage.AutoSave = False
+        'AppBase.RootStorage.AutoSave = False
+
+        Dim tmp = _intSetting.Value
 
         _varSetting.ReplaceVariants({"ccc"}, "ccc")
         _mailSender = New MailSender(_logger, AppBase.RootStorage.CreateChildStorage("MailSender"))
+
+        AppBase.RootStorage.SaveSettings(False)
 
         _logger.AddMessage("Programm Start")
 
