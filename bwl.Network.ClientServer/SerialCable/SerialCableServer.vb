@@ -6,8 +6,14 @@
     Public Event SentMessage(message As NetMessage, client As ConnectedClient) Implements IMessageServer.SentMessage
 
     Private WithEvents _serial As New IO.Ports.SerialPort
+    private _clients As New List(Of ConnectedClient)
 
-    Public ReadOnly Property Clients As New List(Of ConnectedClient) Implements IMessageServer.Clients
+    Public ReadOnly Property Clients As List(Of ConnectedClient) Implements IMessageServer.Clients
+    get
+    return _clients
+       End Get
+    End Property
+
     Public ReadOnly Property IsWorking As Boolean Implements IMessageServer.IsWorking
         Get
             Return _serial.IsOpen

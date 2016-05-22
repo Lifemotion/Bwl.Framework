@@ -89,8 +89,13 @@ Public Class NetServer
 	' Private log As LogWriter
 	Private WithEvents pingTimer As System.Timers.Timer
     Private directOnly As Boolean
+    private _netBeacon as NetBeacon
 
     Public ReadOnly Property NetBeacon As NetBeacon
+    get
+    return _netBeacon
+    end get
+    end property
 
     Public Sub StartNetBeacon(serverName As String, localhostOnly As Boolean)
         If NetBeacon IsNot Nothing Then NetBeacon.Finish()

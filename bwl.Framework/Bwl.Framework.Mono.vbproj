@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E18C7249-22C8-4147-91EF-8A2721F0F026}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Bwl.Framework</RootNamespace>
+    <AssemblyName>Bwl.Framework</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Windows</MyType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>..\debug-mono\dll\</OutputPath>
+    <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
+    <NoWarn>
+    </NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>..\debug-mono\dll\</OutputPath>
+    <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
+    <NoWarn>
+    </NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\refs-src\CryptoTools.vb">
+      <Link>refs\CryptoTools.vb</Link>
+    </Compile>
+    <Compile Include="..\refs-src\IniFile.vb">
+      <Link>refs\IniFile.vb</Link>
+    </Compile>
+    <Compile Include="..\refs-src\JpegSaver.vb">
+      <Link>refs\JpegSaver.vb</Link>
+    </Compile>
+    <Compile Include="..\refs-src\StringTools.vb">
+      <Link>refs\StringTools.vb</Link>
+    </Compile>
+    <Compile Include="src\AppBase\AppBase.vb" />
+    <Compile Include="src\AppBase\FormAppBase.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\AppBase\FormBase.Designer.vb">
+      <DependentUpon>FormBase.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AppBase\FormBase.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\AppBase\ServiceLocator.vb" />
+    <Compile Include="src\Attributes\ImageAttr.vb" />
+    <Compile Include="src\AutoUI\AutoUIForm.Designer.vb">
+      <DependentUpon>AutoUIForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\AutoUIForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\AutoUI\AutoUI.vb" />
+    <Compile Include="src\AutoUI\AutoUI\AutoUIByteCoding.vb" />
+    <Compile Include="src\AutoUI\AutoUI\AutoUIDisplay.Designer.vb">
+      <DependentUpon>AutoUIDisplay.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\AutoUI\AutoUIDisplay.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\AutoUI\IAutoUI.vb" />
+    <Compile Include="src\AutoUI\Interfaces\UIElementInfo.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoButton.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoBitmap.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoFormDescriptor.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoListbox.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoTextbox.vb" />
+    <Compile Include="src\AutoUI\LocalElements\BaseLocalElement.vb" />
+    <Compile Include="src\AutoUI\Interfaces\IUIElementRemote.vb" />
+    <Compile Include="src\AutoUI\Interfaces\IUIElementLocal.vb" />
+    <Compile Include="src\AutoUI\Interfaces\IUIElement.vb" />
+    <Compile Include="src\AutoUI\RemoteElements\BaseRemoteElement.Designer.vb">
+      <DependentUpon>BaseRemoteElement.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\BaseRemoteElement.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\BaseRemoteClass.vb" />
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoFormDescriptor.vb" />
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoListbox.Designer.vb">
+      <DependentUpon>RemoteAutoListbox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoListbox.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoTextbox.Designer.vb">
+      <DependentUpon>RemoteAutoTextbox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoTextbox.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoBitmap.Designer.vb">
+      <DependentUpon>RemoteAutoBitmap.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoBitmap.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoButton.Designer.vb">
+      <DependentUpon>RemoteAutoButton.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoButton.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\ListWithEvents.vb" />
+    <Compile Include="src\Logger\Interface\ILoggerChilds.vb" />
+    <Compile Include="src\Logger\Interface\ILoggerReceiver.vb" />
+    <Compile Include="src\Logger\Interface\ILoggerDispatcher.vb" />
+    <Compile Include="src\Logger\LogWriters\Realizations\FormLogInfo.Designer.vb">
+      <DependentUpon>FormLogInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\Logger\LogWriters\Realizations\FormLogInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Attributes\DisplayAttribute.vb" />
+    <Compile Include="src\Attributes\ParameterAttribute.vb" />
+    <Compile Include="src\Attributes\StateAttribute.vb" />
+    <Compile Include="src\Logger\LogWriters\Realizations\ConsoleLogWriter.vb" />
+    <Compile Include="src\AppBase\ConsoleAppBase.vb" />
+    <Compile Include="src\Identity\IDescription.vb" />
+    <Compile Include="src\Identity\IIdentity.vb" />
+    <Compile Include="src\Identity\ListWithIdentity.vb" />
+    <Compile Include="src\Logger\LogWriters\Interface\LogEventType.vb" />
+    <Compile Include="src\Logger\LogWriters\Realizations\SimpleFileLogWriter.vb" />
+    <Compile Include="src\Logger\Logger.vb" />
+    <Compile Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.Designer.vb">
+      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\Logger\LogWriters\Interface\ILogWriter.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="src\Logger\UI\LoggerForm.designer.vb">
+      <DependentUpon>LoggerForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\Logger\UI\LoggerForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\NetClientServerPortable\NetClientSimple.vb" />
+    <Compile Include="src\NetClientServerPortable\NetMessage.vb" />
+    <Compile Include="src\NetClientServerPortable\NetServer.vb" />
+    <Compile Include="src\Settings\Settings\PasswordSetting.vb" />
+    <Compile Include="src\Settings\Storages\ClonedSettingsStorage.vb" />
+    <Compile Include="src\Settings\Gui\SettingField.Designer.vb">
+      <DependentUpon>SettingField.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\Settings\Gui\SettingField.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\Settings\Gui\SettingsDialog.Designer.vb">
+      <DependentUpon>SettingsDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\Settings\Gui\SettingsDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Settings\Storages\Common\ISettingsStorage.vb" />
+    <Compile Include="src\GlobalStates\GlobalStates.vb" />
+    <Compile Include="src\Settings\Backup\SettingsStorageBackup.vb" />
+    <Compile Include="src\Settings\Storages\Common\ISettingsStorageForm.vb" />
+    <Compile Include="src\Settings\Storages\SettingsStorageRoot.vb" />
+    <Compile Include="src\Settings\Storages\SettingsStorage.vb" />
+    <Compile Include="src\Settings\Storages\Common\SettingsStorageBase.vb" />
+    <Compile Include="src\Settings\Settings\BooleanSetting.vb" />
+    <Compile Include="src\Settings\Settings\Common\Setting.vb" />
+    <Compile Include="src\Settings\Settings\IntegerSetting.vb" />
+    <Compile Include="src\Settings\Settings\Common\SettingOnStorage.vb" />
+    <Compile Include="src\Settings\Settings\DoubleSetting.vb" />
+    <Compile Include="src\Settings\Settings\StringSetting.vb" />
+    <Compile Include="src\Settings\Settings\VariantSetting.vb" />
+    <Compile Include="src\Settings\Writers\Realizations\MemoryReaderWriter.vb" />
+    <Compile Include="src\Settings\Writers\Interface\ISettingsWriter.vb" />
+    <Compile Include="src\Settings\Writers\Realizations\IniFileSettingsWriter.vb" />
+    <Compile Include="src\Settings\Writers\Realizations\NullSettingsWriter.vb" />
+    <Compile Include="src\MailSender\MailSender.vb" />
+    <Compile Include="src\Tools\RunMonitorHelper.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="src\AppBase\FormAppBase.resx">
+      <DependentUpon>FormAppBase.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\AppBase\FormBase.resx">
+      <DependentUpon>FormBase.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\AutoUI\AutoUIForm.resx">
+      <DependentUpon>AutoUIForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\AutoUI\AutoUI\AutoUIDisplay.resx">
+      <DependentUpon>AutoUIDisplay.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoListbox.resx">
+      <DependentUpon>RemoteAutoListbox.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoTextbox.resx">
+      <DependentUpon>RemoteAutoTextbox.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoBitmap.resx">
+      <DependentUpon>RemoteAutoBitmap.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoButton.resx">
+      <DependentUpon>RemoteAutoButton.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Logger\LogWriters\Realizations\FormLogInfo.resx">
+      <DependentUpon>FormLogInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.resx">
+      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Logger\UI\LoggerForm.resx">
+      <DependentUpon>LoggerForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Settings\Gui\SettingField.resx">
+      <DependentUpon>SettingField.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Settings\Gui\SettingsDialog.resx">
+      <DependentUpon>SettingsDialog.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
