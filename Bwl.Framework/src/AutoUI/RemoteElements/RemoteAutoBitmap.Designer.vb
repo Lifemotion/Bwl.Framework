@@ -32,10 +32,9 @@ Partial Class RemoteAutoBitmap
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PictureBox1.Location = New System.Drawing.Point(4, 28)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4)
+        Me.PictureBox1.Location = New System.Drawing.Point(3, 23)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(285, 260)
+        Me.PictureBox1.Size = New System.Drawing.Size(214, 212)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
@@ -43,22 +42,22 @@ Partial Class RemoteAutoBitmap
         'ElementCaption
         '
         Me.ElementCaption.AutoSize = True
-        Me.ElementCaption.Location = New System.Drawing.Point(3, 6)
+        Me.ElementCaption.Location = New System.Drawing.Point(2, 5)
+        Me.ElementCaption.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.ElementCaption.Name = "ElementCaption"
-        Me.ElementCaption.Size = New System.Drawing.Size(54, 16)
+        Me.ElementCaption.Size = New System.Drawing.Size(43, 13)
         Me.ElementCaption.TabIndex = 1
         Me.ElementCaption.Text = "Caption"
         '
         'RemoteAutoBitmap
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.ElementCaption)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Margin = New System.Windows.Forms.Padding(4)
-        Me.MinimumSize = New System.Drawing.Size(0, 37)
+        Me.MinimumSize = New System.Drawing.Size(0, 30)
         Me.Name = "RemoteAutoBitmap"
-        Me.Size = New System.Drawing.Size(293, 292)
+        Me.Size = New System.Drawing.Size(220, 237)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()

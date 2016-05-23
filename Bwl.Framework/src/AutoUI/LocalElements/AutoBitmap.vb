@@ -6,6 +6,7 @@ Public Class AutoBitmap
     Private _saver As New JpegSaver
 
     Public Event Click(source As AutoBitmap)
+    Public Event DoubleClick(source As AutoBitmap)
 
     Public Property Image As Bitmap
         Get
@@ -25,6 +26,7 @@ Public Class AutoBitmap
     Public Overrides Sub ProcessData(dataname As String, data() As Byte)
         Dim parts = AutoUIByteCoding.GetParts(data)
         If parts(0) = "click" Then RaiseEvent Click(Me)
+        If parts(0) = "double-click" Then RaiseEvent DoubleClick(Me)
     End Sub
 
     Public Overrides Sub SendUpdate()

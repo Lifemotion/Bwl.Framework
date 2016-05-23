@@ -24,7 +24,7 @@
     Public Overrides Sub ProcessData(dataname As String, data() As Byte)
         Dim parts = AutoUIByteCoding.GetParts(data)
         If dataname = "click" Then RaiseEvent Click(Me)
-        If dataname = "double-click" Then RaiseEvent Click(Me)
+        If dataname = "double-click" Then RaiseEvent DoubleClick(Me)
         If dataname = "text-changed" Then _text = parts(0) : RaiseEvent TextChanged(Me)
     End Sub
 

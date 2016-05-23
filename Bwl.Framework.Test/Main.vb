@@ -48,4 +48,12 @@ Module Main
 
         _listbox1.Info.Height = 100
     End Sub
+
+    Private Sub _listbox1_Click(source As Object) Handles _listbox1.Click, _textbox1.Click, _image.Click, _button1.Click
+        _appBase.RootLogger.AddMessage("Click")
+    End Sub
+
+    Private Sub _listbox1_DoubleClick(source As Object) Handles _listbox1.DoubleClick, _textbox1.DoubleClick, _image.DoubleClick
+        _appBase.RootLogger.AddMessage("DoubleClick")
+    End Sub
 End Module

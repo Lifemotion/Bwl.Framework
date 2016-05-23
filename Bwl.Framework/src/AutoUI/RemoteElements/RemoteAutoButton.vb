@@ -30,4 +30,9 @@
     Private Sub bButton_Click(sender As Object, e As EventArgs) Handles bButton.Click
         Send("click", {})
     End Sub
+
+    Private Sub bButton_DoubleClick(sender As Object, e As EventArgs) Handles bButton.DoubleClick
+        Send("double-click", {})
+
+    End Sub
 End Class

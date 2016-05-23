@@ -29,7 +29,7 @@ Public Class AutoListbox
     Public Overrides Sub ProcessData(dataname As String, data() As Byte)
         Dim parts = AutoUIByteCoding.GetParts(data)
         If dataname = "click" Then _SelectedIndex = CInt(Val(parts(0))) : RaiseEvent Click(Me)
-        If dataname = "double-click" Then _SelectedIndex = CInt(Val(parts(0))) : RaiseEvent Click(Me)
+        If dataname = "double-click" Then _SelectedIndex = CInt(Val(parts(0))) : RaiseEvent DoubleClick(Me)
         If dataname = "selected-index-changed" Then _SelectedIndex = CInt(Val(parts(0))) : RaiseEvent SelectedIndexChanged(Me)
     End Sub
 

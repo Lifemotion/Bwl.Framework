@@ -25,11 +25,10 @@ Public Class RemoteAutoTextbox
         End If
     End Sub
 
-
     Public Overrides Sub ProcessData(dataname As String, data() As Byte)
         If dataname.ToLower = "text" Then
             Dim text = AutoUIByteCoding.GetString(data)
-            Me.Invoke(Sub() Me.TextBox1.Text = text)
+            Me.Invoke(Sub() If Me.TextBox1.Text <> text Then Me.TextBox1.Text = text)
         End If
     End Sub
 
@@ -37,4 +36,21 @@ Public Class RemoteAutoTextbox
         Send("text-changed", {TextBox1.Text})
     End Sub
 
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+
+    End Sub
+
+    Private Sub TextBox1_Click(sender As Object, e As EventArgs) Handles TextBox1.Click
+        Send("click", {})
+
+    End Sub
+
+    Private Sub TextBox1_DoubleClick(sender As Object, e As EventArgs) Handles TextBox1.DoubleClick
+        Send("double-click", {})
+
+    End Sub
+
+    Private Sub RemoteAutoTextbox_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
 End Class

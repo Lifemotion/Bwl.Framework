@@ -33,4 +33,11 @@ Public Class RemoteAutoBitmap
         End If
     End Sub
 
+    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
+        Send("click", {})
+    End Sub
+
+    Private Sub PictureBox1_DoubleClick(sender As Object, e As EventArgs) Handles PictureBox1.DoubleClick, Me.DoubleClick
+        Send("double-click", {})
+    End Sub
 End Class
