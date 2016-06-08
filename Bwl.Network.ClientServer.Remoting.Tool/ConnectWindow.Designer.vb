@@ -24,34 +24,35 @@ Partial Class ConnectWindow
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConnectWindow))
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.bConnect = New System.Windows.Forms.Button()
+        Me.cbAddress = New System.Windows.Forms.ComboBox()
         Me.ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.lbBeacons = New System.Windows.Forms.ListBox()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.bFind = New System.Windows.Forms.Button()
+        Me.bSetNetwork = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
-        'Button1
+        'bConnect
         '
-        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button1.Location = New System.Drawing.Point(252, 244)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Connect"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.bConnect.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bConnect.Location = New System.Drawing.Point(219, 237)
+        Me.bConnect.Name = "bConnect"
+        Me.bConnect.Size = New System.Drawing.Size(90, 23)
+        Me.bConnect.TabIndex = 0
+        Me.bConnect.Text = "Connect"
+        Me.bConnect.UseVisualStyleBackColor = True
         '
-        'ComboBox1
+        'cbAddress
         '
-        Me.ComboBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.cbAddress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(12, 12)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(315, 21)
-        Me.ComboBox1.TabIndex = 1
-        Me.ComboBox1.Text = "localhost"
+        Me.cbAddress.FormattingEnabled = True
+        Me.cbAddress.Location = New System.Drawing.Point(12, 12)
+        Me.cbAddress.Name = "cbAddress"
+        Me.cbAddress.Size = New System.Drawing.Size(297, 21)
+        Me.cbAddress.TabIndex = 1
+        Me.cbAddress.Text = "localhost"
         '
         'ComboBox2
         '
@@ -60,7 +61,7 @@ Partial Class ConnectWindow
         Me.ComboBox2.FormattingEnabled = True
         Me.ComboBox2.Location = New System.Drawing.Point(12, 39)
         Me.ComboBox2.Name = "ComboBox2"
-        Me.ComboBox2.Size = New System.Drawing.Size(315, 21)
+        Me.ComboBox2.Size = New System.Drawing.Size(297, 21)
         Me.ComboBox2.TabIndex = 2
         '
         'lbBeacons
@@ -71,7 +72,7 @@ Partial Class ConnectWindow
         Me.lbBeacons.FormattingEnabled = True
         Me.lbBeacons.Location = New System.Drawing.Point(12, 66)
         Me.lbBeacons.Name = "lbBeacons"
-        Me.lbBeacons.Size = New System.Drawing.Size(315, 173)
+        Me.lbBeacons.Size = New System.Drawing.Size(297, 160)
         Me.lbBeacons.TabIndex = 3
         '
         'Timer1
@@ -79,26 +80,37 @@ Partial Class ConnectWindow
         Me.Timer1.Enabled = True
         Me.Timer1.Interval = 500
         '
-        'Button2
+        'bFind
         '
-        Me.Button2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button2.Location = New System.Drawing.Point(12, 246)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
-        Me.Button2.TabIndex = 4
-        Me.Button2.Text = "Find"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.bFind.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.bFind.Location = New System.Drawing.Point(12, 237)
+        Me.bFind.Name = "bFind"
+        Me.bFind.Size = New System.Drawing.Size(90, 23)
+        Me.bFind.TabIndex = 4
+        Me.bFind.Text = "Find"
+        Me.bFind.UseVisualStyleBackColor = True
+        '
+        'bSetNetwork
+        '
+        Me.bSetNetwork.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bSetNetwork.Location = New System.Drawing.Point(108, 237)
+        Me.bSetNetwork.Name = "bSetNetwork"
+        Me.bSetNetwork.Size = New System.Drawing.Size(105, 23)
+        Me.bSetNetwork.TabIndex = 5
+        Me.bSetNetwork.Text = "Set Network"
+        Me.bSetNetwork.UseVisualStyleBackColor = True
         '
         'ConnectWindow
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(339, 279)
-        Me.Controls.Add(Me.Button2)
+        Me.ClientSize = New System.Drawing.Size(321, 272)
+        Me.Controls.Add(Me.bSetNetwork)
+        Me.Controls.Add(Me.bFind)
         Me.Controls.Add(Me.lbBeacons)
         Me.Controls.Add(Me.ComboBox2)
-        Me.Controls.Add(Me.ComboBox1)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.cbAddress)
+        Me.Controls.Add(Me.bConnect)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
@@ -108,10 +120,11 @@ Partial Class ConnectWindow
 
     End Sub
 
-    Friend WithEvents Button1 As Button
-    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents bConnect As Button
+    Friend WithEvents cbAddress As ComboBox
     Friend WithEvents ComboBox2 As ComboBox
     Friend WithEvents lbBeacons As ListBox
     Friend WithEvents Timer1 As Timer
-    Friend WithEvents Button2 As Button
+    Friend WithEvents bFind As Button
+    Friend WithEvents bSetNetwork As Button
 End Class
