@@ -50,6 +50,8 @@ Public MustInherit Class SettingOnStorage
 
         Get
             If Not _isLoaded Then _storage.LoadSetting(Me)
+            If Not IsValueCorrect(_value) Then _storage.LoadSetting(Me)
+            If Not IsValueCorrect(_value) Then Throw New Exception("Can't make value correct, very strange, ask Igor")
             Return _value
         End Get
     End Property

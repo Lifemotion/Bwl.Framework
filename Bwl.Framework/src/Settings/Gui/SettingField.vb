@@ -160,16 +160,16 @@
 		End If
 	End Sub
 
-	Private Sub menuDefault_Click(sender As System.Object, e As System.EventArgs)
-		If settingReady And (Not Me.IsDisposed) Then
-			settingReady = False
-			setting.ValueAsString = setting.DefaultValueAsString
-			ShowFields()
-			settingReady = True
-		End If
-	End Sub
+    Private Sub menuDefault_Click(sender As System.Object, e As System.EventArgs) Handles menuDefault.Click
+        If settingReady And (Not Me.IsDisposed) Then
+            settingReady = False
+            setting.ValueAsString = setting.DefaultValueAsString
+            ShowFields()
+            settingReady = True
+        End If
+    End Sub
 
-	Private Sub bMenu_LinkClicked(sender As System.Object, e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles bMenu.LinkClicked
+    Private Sub bMenu_LinkClicked(sender As System.Object, e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles bMenu.LinkClicked
 		Dim text As String = setting.DefaultValueAsString.ToString
 		menuDefault.Text = "По умолчанию (" + text + ")"
 		menu.Show(MousePosition.X, MousePosition.Y)
@@ -194,4 +194,5 @@
 			End If
 		End If
 	End Sub
+
 End Class

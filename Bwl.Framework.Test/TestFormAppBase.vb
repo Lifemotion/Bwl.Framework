@@ -26,7 +26,7 @@ Public Class TestFormAppBase
 
         AppBase.RootStorage.SaveSettings(False)
 
-        _logger.AddMessage("Programm Start")
+        _logger.AddMessage("Program Start")
 
         Dim d = _dblSetting.Value
         Dim b = _varSetting.FullName

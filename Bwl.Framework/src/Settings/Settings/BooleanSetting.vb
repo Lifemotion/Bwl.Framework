@@ -37,7 +37,7 @@
     End Property
 
     Private Function CheckValueIsCorrect(str As String) As Boolean
-        Select Case ValueAsString.ToLower
+        Select Case str.ToLower
             Case "true", "1", "yes"
                 Return True
             Case "false", "0", "no"
