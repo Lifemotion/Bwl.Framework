@@ -1,17 +1,33 @@
 ﻿Imports System.Net.Sockets
 Imports System.Net
+
+''' <summary>
+''' Класс, представляющий интерфейс подключившегося клиента.
+''' </summary>
+Public Interface IConnectedClient
+    ReadOnly Property Connected As Boolean
+    ReadOnly Property ConnectionTime As Date
+    ReadOnly Property Direct As Object
+    ReadOnly Property ID As Integer
+    ReadOnly Property IPAddress As String
+    Event ReceivedMessage(message As NetMessage)
+    Sub Disconnect()
+    Sub SendMessage(message As NetMessage)
+End Interface
+
 ''' <summary>
 ''' Класс, представляющий подключившегося клиента.
 ''' </summary>
 ''' <remarks></remarks>
 Public NotInheritable Class ConnectedClient
+    Implements IConnectedClient
     Private ipAddressVal As String
     Private connectTime As Date
     Private myid As Integer
     Public tag() As Object
     Private isConnected As Boolean
     Private isDirect As Boolean
-    Public Event ReceivedMessage(ByVal message As NetMessage)
+    Public Event ReceivedMessage(ByVal message As NetMessage) Implements IConnectedClient.ReceivedMessage
     Friend parentStruct As ClientData
     Friend parentServer As NetServer
     Friend Sub New(ByVal newIpAddress As String, ByVal newId As Integer, ByVal newParentStruct As ClientData, ByVal newParent As NetServer, ByVal newDirect As Boolean)
@@ -27,35 +43,35 @@ Public NotInheritable Class ConnectedClient
     Friend Sub RaiseNewMessage(ByVal message As NetMessage)
         RaiseEvent ReceivedMessage(message)
     End Sub
-    Public ReadOnly Property IPAddress() As String
+    Public ReadOnly Property IPAddress() As String Implements IConnectedClient.IPAddress
         Get
             Return ipAddressVal
         End Get
     End Property
-    Public ReadOnly Property ConnectionTime() As Date
+    Public ReadOnly Property ConnectionTime() As Date Implements IConnectedClient.ConnectionTime
         Get
             Return connectTime
         End Get
     End Property
-    Public ReadOnly Property Connected() As Boolean
+    Public ReadOnly Property Connected() As Boolean Implements IConnectedClient.Connected
         Get
             Return isConnected
         End Get
     End Property
-    Public ReadOnly Property ID() As Integer
+    Public ReadOnly Property ID() As Integer Implements IConnectedClient.ID
         Get
             Return myid
         End Get
     End Property
-    Public ReadOnly Property Direct()
+    Public ReadOnly Property Direct() Implements IConnectedClient.Direct
         Get
             Return isDirect
         End Get
     End Property
-    Public Sub Disconnect()
+    Public Sub Disconnect() Implements IConnectedClient.Disconnect
         parentServer.SystemPerformRemove(parentStruct)
     End Sub
-    Public Sub SendMessage(ByVal message As NetMessage)
+    Public Sub SendMessage(ByVal message As NetMessage) Implements IConnectedClient.SendMessage
         parentServer.SystemSendMessage(parentStruct, message)
     End Sub
 End Class
@@ -84,27 +100,27 @@ Public Class NetServer
     Private tcpListener As TcpListener
     Private tcpPort As Integer
     Private ReadOnly connectedClients As New List(Of ClientData)
-	Private working As Boolean
-	Private pingFailsToDisconnect As Integer = 3
-	' Private log As LogWriter
-	Private WithEvents pingTimer As System.Timers.Timer
+    Private working As Boolean
+    Private pingFailsToDisconnect As Integer = 3
+    ' Private log As LogWriter
+    Private WithEvents pingTimer As System.Timers.Timer
     Private directOnly As Boolean
-    private _netBeacon as NetBeacon
+    Private _netBeacon As NetBeacon
 
     Public ReadOnly Property NetBeacon As NetBeacon
-    get
-    return _netBeacon
-    end get
-    end property
+        Get
+            Return _netBeacon
+        End Get
+    End Property
 
     Public Sub StartNetBeacon(serverName As String, localhostOnly As Boolean)
         If NetBeacon IsNot Nothing Then NetBeacon.Finish()
-        _NetBeacon = New NetBeacon(tcpPort, serverName, localhostOnly, True)
+        _netBeacon = New NetBeacon(tcpPort, serverName, localhostOnly, True)
     End Sub
 
-    Public ReadOnly Property Clients() As List(Of ConnectedClient) Implements IMessageServer.Clients
+    Public ReadOnly Property Clients() As List(Of IConnectedClient) Implements IMessageServer.Clients
         Get
-            Dim list As New List(Of ConnectedClient)
+            Dim list As New List(Of IConnectedClient)
             SyncLock connectedClients
                 Try
                     For Each client In connectedClients.ToArray
@@ -123,12 +139,12 @@ Public Class NetServer
     End Sub
 
     Sub New()
-		' log = New LogWriter(Application.StartupPath + "\tcpserv_debug.log")
-		pingTimer = New System.Timers.Timer
-		pingTimer.Interval = 1000 * pingInterval
-		pingTimer.Enabled = True
-		'  log.Enabled = True
-	End Sub
+        ' log = New LogWriter(Application.StartupPath + "\tcpserv_debug.log")
+        pingTimer = New System.Timers.Timer
+        pingTimer.Interval = 1000 * pingInterval
+        pingTimer.Enabled = True
+        '  log.Enabled = True
+    End Sub
     ''' <summary>
     ''' Запускает сервер. При успешном вызове сервер ждет подключения клиентов.
     ''' </summary>
@@ -159,11 +175,11 @@ Public Class NetServer
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function StartServerEmulationOnly() As Boolean
-		If working = True Then StopServer()
-		directOnly = True
-		working = True
-		Return True
-	End Function
+        If working = True Then StopServer()
+        directOnly = True
+        working = True
+        Return True
+    End Function
 
     ''' <summary>
     ''' Остановить сервер.
@@ -242,218 +258,218 @@ Public Class NetServer
         End Try
     End Sub
     Friend Sub DirectConnectClient(ByVal directClient As NetClient)
-		Dim newClient As New ClientData
-		newClient.userInfo = New ConnectedClient("direct", GetID, newClient, Me, True)
-		newClient.directClient = directClient
-		SyncLock (connectedClients)
-			connectedClients.Add(newClient)
-		End SyncLock
+        Dim newClient As New ClientData
+        newClient.userInfo = New ConnectedClient("direct", GetID, newClient, Me, True)
+        newClient.directClient = directClient
+        SyncLock (connectedClients)
+            connectedClients.Add(newClient)
+        End SyncLock
 
-		'вызываем событие
-		RaiseEvent ClientConnected(newClient.userInfo)
-	End Sub
-	Friend Sub DirectDisconnectClient(ByVal directClient As NetClient)
-		Dim disconnectThis As ClientData = Nothing
-		For Each connClient In connectedClients.ToArray
-			If connClient.directClient.Equals(directClient) Then disconnectThis = connClient
-		Next
-		If disconnectThis IsNot Nothing Then SystemPerformRemove(disconnectThis)
-	End Sub
-	Friend Sub DirectReceiveMessage(ByVal directClient As NetClient, ByVal message As NetMessage)
-		For Each connClient In connectedClients.ToArray
-			If connClient.directClient.Equals(directClient) Then
-				Dim pack As New MessageClientPack
-				pack.message = message.GetCopy
-				pack.client = connClient.userInfo
-				'Dim thread As New Threading.Thread(AddressOf DirectMessageReceived)
-				'thread.Start(pack)
-				DirectMessageReceived(pack)
-				Exit For
-			End If
-		Next
-	End Sub
-	Private Class MessageClientPack
-		Public message As NetMessage
-		Public client As ConnectedClient
-	End Class
-	Private Sub DirectMessageReceived(ByVal pack As MessageClientPack)
-		RaiseEvent ReceivedMessage(pack.message, pack.client)
-		pack.client.RaiseNewMessage(pack.message)
-	End Sub
+        'вызываем событие
+        RaiseEvent ClientConnected(newClient.userInfo)
+    End Sub
+    Friend Sub DirectDisconnectClient(ByVal directClient As NetClient)
+        Dim disconnectThis As ClientData = Nothing
+        For Each connClient In connectedClients.ToArray
+            If connClient.directClient.Equals(directClient) Then disconnectThis = connClient
+        Next
+        If disconnectThis IsNot Nothing Then SystemPerformRemove(disconnectThis)
+    End Sub
+    Friend Sub DirectReceiveMessage(ByVal directClient As NetClient, ByVal message As NetMessage)
+        For Each connClient In connectedClients.ToArray
+            If connClient.directClient.Equals(directClient) Then
+                Dim pack As New MessageClientPack
+                pack.message = message.GetCopy
+                pack.client = connClient.userInfo
+                'Dim thread As New Threading.Thread(AddressOf DirectMessageReceived)
+                'thread.Start(pack)
+                DirectMessageReceived(pack)
+                Exit For
+            End If
+        Next
+    End Sub
+    Private Class MessageClientPack
+        Public message As NetMessage
+        Public client As ConnectedClient
+    End Class
+    Private Sub DirectMessageReceived(ByVal pack As MessageClientPack)
+        RaiseEvent ReceivedMessage(pack.message, pack.client)
+        pack.client.RaiseNewMessage(pack.message)
+    End Sub
 
-	Private Function GetID()
-		Dim i As Integer
-		Do
-			i += 1
-			Dim notUsed As Boolean = True
-			Try
-				For Each client In connectedClients.ToArray
-					If client.userInfo.ID = i Then notUsed = False
-				Next
-			Catch ex As Exception
-			End Try
-			If notUsed Then Return i
-		Loop
-	End Function
-	Private Sub SocketReceived(ByVal data As IAsyncResult)
-		'пришел новый байт данных по TCP.IP
-		'перезапускаем прием
-		Dim receivedLen As Integer = 0
-		Dim currByte As Byte
-		Dim client As ClientData = data.AsyncState
+    Private Function GetID()
+        Dim i As Integer
+        Do
+            i += 1
+            Dim notUsed As Boolean = True
+            Try
+                For Each client In connectedClients.ToArray
+                    If client.userInfo.ID = i Then notUsed = False
+                Next
+            Catch ex As Exception
+            End Try
+            If notUsed Then Return i
+        Loop
+    End Function
+    Private Sub SocketReceived(ByVal data As IAsyncResult)
+        'пришел новый байт данных по TCP.IP
+        'перезапускаем прием
+        Dim receivedLen As Integer = 0
+        Dim currByte As Byte
+        Dim client As ClientData = data.AsyncState
 
-		Dim socket As Socket = client.tcpSocket
-		'MsgBox(socket.SendBufferSize)
-		Try
-			receivedLen = socket.EndReceive(data)
-		Catch ex As Exception
-		End Try
-		Dim i As Integer
-		For i = 0 To receivedLen - 1
-			'пришел байт
-			currByte = client.receiveBuffer(i)
-			Select Case currByte
-				Case 1
-					'1 - символ нового сообщения.
-					If client.wasPacketStart Then
-						' log.Add("Пришел символ нового сообщения, когда старое еще не кончилось.")
-					End If
-					client.wasPacketStart = True
-				Case 2
-					'2 - символ конца сообщения.
-					If Not client.wasPacketStart Then
-						'    log.Add("Пришел символ конца сообщения, когда еще не начиналось.")
-					End If
-					client.wasPacketStart = False
-					ParseBytesInMessage(client, False)
-					client.receivePosition = 0
-				Case 3
-					'3 - входящий запрос пинга.
-					Dim bytes(0) As Byte
-					bytes(0) = 4
-					Try
-						client.tcpSocket.Send(bytes, 0, 1, 0)
-					Catch ex As Exception
-					End Try
-				Case 4
-					'4 - ответ пинга.
-					client.pingsLost = 0
-				Case Else
-					If client.wasPacketStart Then
-						client.receivedData(client.receivePosition) = currByte
-						client.receivePosition += 1
-						If client.receivePosition > client.receivedData.GetUpperBound(0) Then
-							ReDim Preserve client.receivedData(client.receivedData.GetUpperBound(0) + bufferStepSize)
-						End If
-					Else
-						'     log.Add("Пришел символ вне сообщения.")
-					End If
-			End Select
-		Next
+        Dim socket As Socket = client.tcpSocket
+        'MsgBox(socket.SendBufferSize)
+        Try
+            receivedLen = socket.EndReceive(data)
+        Catch ex As Exception
+        End Try
+        Dim i As Integer
+        For i = 0 To receivedLen - 1
+            'пришел байт
+            currByte = client.receiveBuffer(i)
+            Select Case currByte
+                Case 1
+                    '1 - символ нового сообщения.
+                    If client.wasPacketStart Then
+                        ' log.Add("Пришел символ нового сообщения, когда старое еще не кончилось.")
+                    End If
+                    client.wasPacketStart = True
+                Case 2
+                    '2 - символ конца сообщения.
+                    If Not client.wasPacketStart Then
+                        '    log.Add("Пришел символ конца сообщения, когда еще не начиналось.")
+                    End If
+                    client.wasPacketStart = False
+                    ParseBytesInMessage(client, False)
+                    client.receivePosition = 0
+                Case 3
+                    '3 - входящий запрос пинга.
+                    Dim bytes(0) As Byte
+                    bytes(0) = 4
+                    Try
+                        client.tcpSocket.Send(bytes, 0, 1, 0)
+                    Catch ex As Exception
+                    End Try
+                Case 4
+                    '4 - ответ пинга.
+                    client.pingsLost = 0
+                Case Else
+                    If client.wasPacketStart Then
+                        client.receivedData(client.receivePosition) = currByte
+                        client.receivePosition += 1
+                        If client.receivePosition > client.receivedData.GetUpperBound(0) Then
+                            ReDim Preserve client.receivedData(client.receivedData.GetUpperBound(0) + bufferStepSize)
+                        End If
+                    Else
+                        '     log.Add("Пришел символ вне сообщения.")
+                    End If
+            End Select
+        Next
 
-		If receivedLen = 0 Then
-			'байта не пришло, а событие случилось
-			'значит, это было отключение ;)
-			'   log.Add("Тестовое отключение!")
-			client.userInfo.Disconnect()
-		Else
-			Try
-				socket.BeginReceive(client.receiveBuffer, 0, systemBufferSize, 0, AddressOf SocketReceived, client)
-			Catch ex As Exception
-				'      log.Add("Не удалось продолжить прием!")
-				client.userInfo.Disconnect()
-			End Try
-		End If
+        If receivedLen = 0 Then
+            'байта не пришло, а событие случилось
+            'значит, это было отключение ;)
+            '   log.Add("Тестовое отключение!")
+            client.userInfo.Disconnect()
+        Else
+            Try
+                socket.BeginReceive(client.receiveBuffer, 0, systemBufferSize, 0, AddressOf SocketReceived, client)
+            Catch ex As Exception
+                '      log.Add("Не удалось продолжить прием!")
+                client.userInfo.Disconnect()
+            End Try
+        End If
 
-	End Sub
-	''' <summary>
-	''' Обрабатывает байты в сообщении.
-	''' </summary>
-	''' <param name="client"></param>
-	''' <param name="broken"></param>
-	''' <remarks></remarks>
-	Private Sub ParseBytesInMessage(ByVal client As ClientData, ByVal broken As Boolean)
-		If client.receivePosition > 0 Then
-			Dim bytes(client.receivePosition - 1) As Byte
-			Array.Copy(client.receivedData, bytes, client.receivePosition)
-			Dim message As New NetMessage(bytes)
-			RaiseEvent ReceivedMessage(message, client.userInfo)
-			client.userInfo.RaiseNewMessage(message)
-		Else
-		End If
-	End Sub
-    Public Event ClientConnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientConnected
-    Public Event ClientDisonnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientDisonnected
-    Public Event ReceivedMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.ReceivedMessage
+    End Sub
+    ''' <summary>
+    ''' Обрабатывает байты в сообщении.
+    ''' </summary>
+    ''' <param name="client"></param>
+    ''' <param name="broken"></param>
+    ''' <remarks></remarks>
+    Private Sub ParseBytesInMessage(ByVal client As ClientData, ByVal broken As Boolean)
+        If client.receivePosition > 0 Then
+            Dim bytes(client.receivePosition - 1) As Byte
+            Array.Copy(client.receivedData, bytes, client.receivePosition)
+            Dim message As New NetMessage(bytes)
+            RaiseEvent ReceivedMessage(message, client.userInfo)
+            client.userInfo.RaiseNewMessage(message)
+        Else
+        End If
+    End Sub
+    Public Event ClientConnected(ByVal client As IConnectedClient) Implements IMessageServer.ClientConnected
+    Public Event ClientDisonnected(ByVal client As IConnectedClient) Implements IMessageServer.ClientDisonnected
+    Public Event ReceivedMessage(ByVal message As NetMessage, ByVal client As IConnectedClient) Implements IMessageServer.ReceivedMessage
     ' Public Event ReceivedHierarchicMessage(ByVal message As Hierarchic, ByVal client As ConnectedClient) 
-    Public Event SentMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.SentMessage
+    Public Event SentMessage(ByVal message As NetMessage, ByVal client As IConnectedClient) Implements IMessageServer.SentMessage
     Friend Sub SystemPerformRemove(ByVal client As ClientData)
-		If Not client.userInfo.Direct Then
-			client.tcpSocket.Close()
-		Else
-			client.directClient.DirectDisconnect()
-		End If
-		connectedClients.Remove(client)
-		RaiseEvent ClientDisonnected(client.userInfo)
-	End Sub
-	Private Sub PingClients() Handles pingTimer.Elapsed
-		Try
-			For Each client In connectedClients.ToArray
-				If Not client.userInfo.Direct Then
-					If client.pingsLost > pingFailsToDisconnect Then
-						'простите :(((
-						'придется вас отключить :(
-						client.userInfo.Disconnect()
-						Exit For
-					Else
-						Dim bytes(0) As Byte
-						bytes(0) = 3
-						Try
-							client.tcpSocket.Send(bytes)
-							client.pingsLost += 1
-						Catch ex As Exception
-							'   log.Add("Не удалось отправить пинг. " + ex.ToString)
-							client.userInfo.Disconnect()
-						End Try
-					End If
-				Else
-					If client.directClient Is Nothing OrElse client.directClient.IsConnected = False Then
-						client.userInfo.Disconnect()
-					End If
-				End If
-			Next
-		Catch ex As Exception
-		End Try
-	End Sub
-	Friend Sub SystemSendMessage(ByVal client As ClientData, ByVal message As NetMessage)
-		If Not client.userInfo.Direct Then
-			'если клиент подкелючен по сети
-			Dim bytes() As Byte = message.ToBytes(1)
-			bytes(0) = 1
-			bytes(bytes.GetUpperBound(0)) = 2
-			Try
-				client.tcpSocket.Send(bytes, SocketFlags.Partial)
-				RaiseEvent SentMessage(message, client.userInfo)
-			Catch ex As Exception
-				'  log.Add("Не удалось отправить сообщение в порт!" + ex.ToString)
-			End Try
-		Else
-			'если подключен объект клиента напрямую
-			If client.directClient IsNot Nothing Then
-				client.directClient.DirectMessageReceive(message.GetCopy)
-				RaiseEvent SentMessage(message, client.userInfo)
-			Else
-				client.userInfo.Disconnect()
-			End If
-		End If
-	End Sub
+        If Not client.userInfo.Direct Then
+            client.tcpSocket.Close()
+        Else
+            client.directClient.DirectDisconnect()
+        End If
+        connectedClients.Remove(client)
+        RaiseEvent ClientDisonnected(client.userInfo)
+    End Sub
+    Private Sub PingClients() Handles pingTimer.Elapsed
+        Try
+            For Each client In connectedClients.ToArray
+                If Not client.userInfo.Direct Then
+                    If client.pingsLost > pingFailsToDisconnect Then
+                        'простите :(((
+                        'придется вас отключить :(
+                        client.userInfo.Disconnect()
+                        Exit For
+                    Else
+                        Dim bytes(0) As Byte
+                        bytes(0) = 3
+                        Try
+                            client.tcpSocket.Send(bytes)
+                            client.pingsLost += 1
+                        Catch ex As Exception
+                            '   log.Add("Не удалось отправить пинг. " + ex.ToString)
+                            client.userInfo.Disconnect()
+                        End Try
+                    End If
+                Else
+                    If client.directClient Is Nothing OrElse client.directClient.IsConnected = False Then
+                        client.userInfo.Disconnect()
+                    End If
+                End If
+            Next
+        Catch ex As Exception
+        End Try
+    End Sub
+    Friend Sub SystemSendMessage(ByVal client As ClientData, ByVal message As NetMessage)
+        If Not client.userInfo.Direct Then
+            'если клиент подкелючен по сети
+            Dim bytes() As Byte = message.ToBytes(1)
+            bytes(0) = 1
+            bytes(bytes.GetUpperBound(0)) = 2
+            Try
+                client.tcpSocket.Send(bytes, SocketFlags.Partial)
+                RaiseEvent SentMessage(message, client.userInfo)
+            Catch ex As Exception
+                '  log.Add("Не удалось отправить сообщение в порт!" + ex.ToString)
+            End Try
+        Else
+            'если подключен объект клиента напрямую
+            If client.directClient IsNot Nothing Then
+                client.directClient.DirectMessageReceive(message.GetCopy)
+                RaiseEvent SentMessage(message, client.userInfo)
+            Else
+                client.userInfo.Disconnect()
+            End If
+        End If
+    End Sub
     ''' <summary>
     ''' Отправить сообщение клиенту, если известен объект указывающий клиента.
     ''' </summary>
     ''' <param name="client"></param>
     ''' <param name="message"></param>
     ''' <remarks></remarks>
-    Public Overloads Sub SendMessage(ByVal client As ConnectedClient, ByVal message As NetMessage) Implements IMessageServer.SendMessage
+    Public Overloads Sub SendMessage(ByVal client As IConnectedClient, ByVal message As NetMessage) Implements IMessageServer.SendMessage
         For Each connClient In connectedClients.ToArray
             If connClient.userInfo.Equals(client) Then
                 SystemSendMessage(connClient, message)
@@ -467,10 +483,10 @@ Public Class NetServer
     ''' <param name="message"></param>
     ''' <remarks></remarks>
     Public Overloads Sub SendMessage(ByVal clientID As Integer, ByVal message As NetMessage)
-		For Each connClient In connectedClients.ToArray
-			If connClient.userInfo.ID = clientID Then
-				SystemSendMessage(connClient, message)
-			End If
-		Next
-	End Sub
+        For Each connClient In connectedClients.ToArray
+            If connClient.userInfo.ID = clientID Then
+                SystemSendMessage(connClient, message)
+            End If
+        Next
+    End Sub
 End Class
