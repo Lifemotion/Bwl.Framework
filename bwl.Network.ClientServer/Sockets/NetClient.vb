@@ -123,7 +123,7 @@ Public Class NetClient
         Else
             If directServer IsNot Nothing Then directServer.DirectDisconnectClient(Me)
         End If
-        RaiseEvent Disonnected()
+        RaiseEvent Disconnected()
     End Sub
     ''' <summary>
     ''' Подключены ли мы сейчас к серверу.
@@ -231,7 +231,7 @@ Public Class NetClient
     ''' Отключились от сервера.
     ''' </summary>
     ''' <remarks></remarks>
-    Public Event Disonnected() Implements IMessageClient.Disonnected
+    Public Event Disconnected() Implements IMessageClient.Disconnected
     ''' <summary>
     ''' Серверу было отправлено сообщение.
     ''' </summary>
@@ -344,7 +344,7 @@ Public Class NetClient
     End Sub
     Friend Sub DirectDisconnect()
         working = False
-        RaiseEvent Disonnected()
+        RaiseEvent Disconnected()
     End Sub
 End Class
 

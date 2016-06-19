@@ -399,7 +399,7 @@ Public Class NetServer
         End If
     End Sub
     Public Event ClientConnected(ByVal client As IConnectedClient) Implements IMessageServer.ClientConnected
-    Public Event ClientDisonnected(ByVal client As IConnectedClient) Implements IMessageServer.ClientDisonnected
+    Public Event ClientDisconnected(ByVal client As IConnectedClient) Implements IMessageServer.ClientDisconnected
     Public Event ReceivedMessage(ByVal message As NetMessage, ByVal client As IConnectedClient) Implements IMessageServer.ReceivedMessage
     ' Public Event ReceivedHierarchicMessage(ByVal message As Hierarchic, ByVal client As ConnectedClient) 
     Public Event SentMessage(ByVal message As NetMessage, ByVal client As IConnectedClient) Implements IMessageServer.SentMessage
@@ -410,7 +410,7 @@ Public Class NetServer
             client.directClient.DirectDisconnect()
         End If
         connectedClients.Remove(client)
-        RaiseEvent ClientDisonnected(client.userInfo)
+        RaiseEvent ClientDisconnected(client.userInfo)
     End Sub
     Private Sub PingClients() Handles pingTimer.Elapsed
         Try
