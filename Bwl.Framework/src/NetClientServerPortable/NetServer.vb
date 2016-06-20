@@ -307,14 +307,14 @@ Public Class NetServerSimple
         End If
     End Sub
     Public Event ClientConnected(ByVal client As ConnectedClientSimple)
-    Public Event ClientDisonnected(ByVal client As ConnectedClientSimple)
+    Public Event ClientDisconnected(ByVal client As ConnectedClientSimple)
     Public Event ReceivedMessage(ByVal message As NetMessageSimple, ByVal client As ConnectedClientSimple)
     Public Event SentMessage(ByVal message As NetMessageSimple, ByVal client As ConnectedClientSimple)
 
     Friend Sub SystemPerformRemove(ByVal client As ClientDataSimple)
         client.tcpSocket.Close()
         connectedClients.Remove(client)
-        RaiseEvent ClientDisonnected(client.userInfo)
+        RaiseEvent ClientDisconnected(client.userInfo)
     End Sub
     Private Sub PingClients() Handles pingTimer.Elapsed
         Try

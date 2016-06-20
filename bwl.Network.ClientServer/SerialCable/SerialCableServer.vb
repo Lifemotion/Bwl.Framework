@@ -1,7 +1,7 @@
 ﻿Public Class SerialCableServer
     Implements IMessageServer
     Public Event ClientConnected(client As IConnectedClient) Implements IMessageServer.ClientConnected
-    Public Event ClientDisonnected(client As IConnectedClient) Implements IMessageServer.ClientDisonnected
+    Public Event ClientDisconnected(client As IConnectedClient) Implements IMessageServer.ClientDisconnected
     Public Event ReceivedMessage(message As NetMessage, client As IConnectedClient) Implements IMessageServer.ReceivedMessage
     Public Event SentMessage(message As NetMessage, client As IConnectedClient) Implements IMessageServer.SentMessage
 

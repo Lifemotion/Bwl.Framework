@@ -7,7 +7,7 @@ Public Class SerialCableClient
     Public Property IgnoreNotConnected As Boolean Implements IMessageClient.IgnoreNotConnected
 
     Public Event Connected() Implements IMessageClient.Connected
-    Public Event Disonnected() Implements IMessageClient.Disonnected
+    Public Event Disconnected() Implements IMessageClient.Disconnected
     Public Event ReceivedMessage(message As NetMessage) Implements IMessageClient.ReceivedMessage
     Public Event SentMessage(message As NetMessage) Implements IMessageClient.SentMessage
 
@@ -58,7 +58,7 @@ Public Class SerialCableClient
         ' pingsLost = 0
         receivePosition = 0
         _serial.Close()
-        RaiseEvent Disonnected()
+        RaiseEvent Disconnected()
     End Sub
 
     Public Sub SendMessage(ByVal message As NetMessage) Implements IMessageClient.SendMessage

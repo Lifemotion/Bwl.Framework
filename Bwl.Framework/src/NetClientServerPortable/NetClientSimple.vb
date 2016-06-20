@@ -86,7 +86,7 @@ Public Class NetClientSimple
         Catch ex As Exception
 
         End Try
-        RaiseEvent Disonnected()
+        RaiseEvent Disconnected()
     End Sub
     ''' <summary>
     ''' Подключены ли мы сейчас к серверу.
@@ -194,7 +194,7 @@ Public Class NetClientSimple
     ''' Отключились от сервера.
     ''' </summary>
     ''' <remarks></remarks>
-    Public Event Disonnected()
+    Public Event Disconnected()
     ''' <summary>
     ''' Серверу было отправлено сообщение.
     ''' </summary>

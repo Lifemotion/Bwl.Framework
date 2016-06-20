@@ -3,7 +3,7 @@
     Property DefaultPort As Integer
     Property IgnoreNotConnected As Boolean
     Event Connected()
-    Event Disonnected()
+    Event Disconnected()
     Event ReceivedMessage(message As NetMessage)
     Event SentMessage(message As NetMessage)
     Sub Connect()
