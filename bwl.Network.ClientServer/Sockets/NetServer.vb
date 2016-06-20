@@ -15,7 +15,7 @@ Public Class ConnectedClient
     Public Event ReceivedMessage(ByVal message As NetMessage)
     Friend parentStruct As ClientData
     Friend parentServer As NetServer
-    Friend Sub New(ByVal newIpAddress As String, ByVal newId As Integer, ByVal newParentStruct As ClientData, ByVal newParent As NetServer, ByVal newDirect As Boolean)
+    Public Sub New(ByVal newIpAddress As String, ByVal newId As Integer, ByVal newParentStruct As ClientData, ByVal newParent As NetServer, ByVal newDirect As Boolean)
         ipAddressVal = newIpAddress
         myid = newId
         parentStruct = newParentStruct
@@ -60,7 +60,7 @@ Public Class ConnectedClient
         parentServer.SystemSendMessage(parentStruct, message)
     End Sub
 End Class
-Friend Class ClientData
+Public Class ClientData
     Public userInfo As ConnectedClient
     Public tcpSocket As Socket
     Public receiveBuffer() As Byte
