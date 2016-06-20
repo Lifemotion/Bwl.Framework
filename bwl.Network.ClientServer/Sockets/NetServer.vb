@@ -2,32 +2,17 @@
 Imports System.Net
 
 ''' <summary>
-''' Класс, представляющий интерфейс подключившегося клиента.
-''' </summary>
-Public Interface IConnectedClient
-    ReadOnly Property Connected As Boolean
-    ReadOnly Property ConnectionTime As Date
-    ReadOnly Property Direct As Object
-    ReadOnly Property ID As Integer
-    ReadOnly Property IPAddress As String
-    Event ReceivedMessage(message As NetMessage)
-    Sub Disconnect()
-    Sub SendMessage(message As NetMessage)
-End Interface
-
-''' <summary>
 ''' Класс, представляющий подключившегося клиента.
 ''' </summary>
 ''' <remarks></remarks>
-Public NotInheritable Class ConnectedClient
-    Implements IConnectedClient
+Public Class ConnectedClient
     Private ipAddressVal As String
     Private connectTime As Date
     Private myid As Integer
     Public tag() As Object
     Private isConnected As Boolean
     Private isDirect As Boolean
-    Public Event ReceivedMessage(ByVal message As NetMessage) Implements IConnectedClient.ReceivedMessage
+    Public Event ReceivedMessage(ByVal message As NetMessage)
     Friend parentStruct As ClientData
     Friend parentServer As NetServer
     Friend Sub New(ByVal newIpAddress As String, ByVal newId As Integer, ByVal newParentStruct As ClientData, ByVal newParent As NetServer, ByVal newDirect As Boolean)
@@ -43,35 +28,35 @@ Public NotInheritable Class ConnectedClient
     Friend Sub RaiseNewMessage(ByVal message As NetMessage)
         RaiseEvent ReceivedMessage(message)
     End Sub
-    Public ReadOnly Property IPAddress() As String Implements IConnectedClient.IPAddress
+    Public ReadOnly Property IPAddress() As String
         Get
             Return ipAddressVal
         End Get
     End Property
-    Public ReadOnly Property ConnectionTime() As Date Implements IConnectedClient.ConnectionTime
+    Public ReadOnly Property ConnectionTime() As Date
         Get
             Return connectTime
         End Get
     End Property
-    Public ReadOnly Property Connected() As Boolean Implements IConnectedClient.Connected
+    Public ReadOnly Property Connected() As Boolean
         Get
             Return isConnected
         End Get
     End Property
-    Public ReadOnly Property ID() As Integer Implements IConnectedClient.ID
+    Public ReadOnly Property ID() As Integer
         Get
             Return myid
         End Get
     End Property
-    Public ReadOnly Property Direct() Implements IConnectedClient.Direct
+    Public ReadOnly Property Direct()
         Get
             Return isDirect
         End Get
     End Property
-    Public Sub Disconnect() Implements IConnectedClient.Disconnect
+    Public Sub Disconnect()
         parentServer.SystemPerformRemove(parentStruct)
     End Sub
-    Public Sub SendMessage(ByVal message As NetMessage) Implements IConnectedClient.SendMessage
+    Public Sub SendMessage(ByVal message As NetMessage)
         parentServer.SystemSendMessage(parentStruct, message)
     End Sub
 End Class
@@ -118,9 +103,9 @@ Public Class NetServer
         _netBeacon = New NetBeacon(tcpPort, serverName, localhostOnly, True)
     End Sub
 
-    Public ReadOnly Property Clients() As List(Of IConnectedClient) Implements IMessageServer.Clients
+    Public ReadOnly Property Clients() As List(Of ConnectedClient) Implements IMessageServer.Clients
         Get
-            Dim list As New List(Of IConnectedClient)
+            Dim list As New List(Of ConnectedClient)
             SyncLock connectedClients
                 Try
                     For Each client In connectedClients.ToArray
@@ -398,11 +383,11 @@ Public Class NetServer
         Else
         End If
     End Sub
-    Public Event ClientConnected(ByVal client As IConnectedClient) Implements IMessageServer.ClientConnected
-    Public Event ClientDisconnected(ByVal client As IConnectedClient) Implements IMessageServer.ClientDisconnected
-    Public Event ReceivedMessage(ByVal message As NetMessage, ByVal client As IConnectedClient) Implements IMessageServer.ReceivedMessage
+    Public Event ClientConnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientConnected
+    Public Event ClientDisconnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientDisconnected
+    Public Event ReceivedMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.ReceivedMessage
     ' Public Event ReceivedHierarchicMessage(ByVal message As Hierarchic, ByVal client As ConnectedClient) 
-    Public Event SentMessage(ByVal message As NetMessage, ByVal client As IConnectedClient) Implements IMessageServer.SentMessage
+    Public Event SentMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.SentMessage
     Friend Sub SystemPerformRemove(ByVal client As ClientData)
         If Not client.userInfo.Direct Then
             client.tcpSocket.Close()
@@ -469,7 +454,7 @@ Public Class NetServer
     ''' <param name="client"></param>
     ''' <param name="message"></param>
     ''' <remarks></remarks>
-    Public Overloads Sub SendMessage(ByVal client As IConnectedClient, ByVal message As NetMessage) Implements IMessageServer.SendMessage
+    Public Overloads Sub SendMessage(ByVal client As ConnectedClient, ByVal message As NetMessage) Implements IMessageServer.SendMessage
         For Each connClient In connectedClients.ToArray
             If connClient.userInfo.Equals(client) Then
                 SystemSendMessage(connClient, message)

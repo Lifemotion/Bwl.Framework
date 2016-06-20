@@ -1,14 +1,14 @@
 ﻿Public Class SerialCableServer
     Implements IMessageServer
-    Public Event ClientConnected(client As IConnectedClient) Implements IMessageServer.ClientConnected
-    Public Event ClientDisconnected(client As IConnectedClient) Implements IMessageServer.ClientDisconnected
-    Public Event ReceivedMessage(message As NetMessage, client As IConnectedClient) Implements IMessageServer.ReceivedMessage
-    Public Event SentMessage(message As NetMessage, client As IConnectedClient) Implements IMessageServer.SentMessage
+    Public Event ClientConnected(client As ConnectedClient) Implements IMessageServer.ClientConnected
+    Public Event ClientDisconnected(client As ConnectedClient) Implements IMessageServer.ClientDisconnected
+    Public Event ReceivedMessage(message As NetMessage, client As ConnectedClient) Implements IMessageServer.ReceivedMessage
+    Public Event SentMessage(message As NetMessage, client As ConnectedClient) Implements IMessageServer.SentMessage
 
     Private WithEvents _serial As New IO.Ports.SerialPort
-    Private _clients As New List(Of IConnectedClient)
+    Private _clients As New List(Of ConnectedClient)
 
-    Public ReadOnly Property Clients As List(Of IConnectedClient) Implements IMessageServer.Clients
+    Public ReadOnly Property Clients As List(Of ConnectedClient) Implements IMessageServer.Clients
         Get
             Return _clients
         End Get
@@ -20,7 +20,7 @@
         End Get
     End Property
 
-    Public Sub SendMessage(client As IConnectedClient, message As NetMessage) Implements IMessageServer.SendMessage
+    Public Sub SendMessage(client As ConnectedClient, message As NetMessage) Implements IMessageServer.SendMessage
         Throw New NotImplementedException()
     End Sub
 
