@@ -28,7 +28,7 @@ Public Class ConnectedClient
     Friend Sub RaiseNewMessage(ByVal message As NetMessage)
         RaiseEvent ReceivedMessage(message)
     End Sub
-    Public ReadOnly Property IPAddress() As String
+    Public Overridable ReadOnly Property IPAddress() As String
         Get
             Return ipAddressVal
         End Get
@@ -56,7 +56,7 @@ Public Class ConnectedClient
     Public Sub Disconnect()
         parentServer.SystemPerformRemove(parentStruct)
     End Sub
-    Public Sub SendMessage(ByVal message As NetMessage)
+    Public Overridable Sub SendMessage(ByVal message As NetMessage)
         parentServer.SystemSendMessage(parentStruct, message)
     End Sub
 End Class
