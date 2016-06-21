@@ -1,5 +1,6 @@
 ﻿Imports System.Net.Sockets
 Imports System.Net
+Imports bwl.Network.ClientServer
 
 ''' <summary>
 ''' Класс, представляющий подключившегося клиента.
@@ -15,6 +16,7 @@ Public Class ConnectedClient
     Public Event ReceivedMessage(ByVal message As NetMessage)
     Friend parentStruct As ClientData
     Friend parentServer As NetServer
+    Public Property RegisteredID As String = ""
     Public Sub New(ByVal newIpAddress As String, ByVal newId As Integer, ByVal newParentStruct As ClientData, ByVal newParent As NetServer, ByVal newDirect As Boolean)
         ipAddressVal = newIpAddress
         myid = newId
@@ -195,11 +197,13 @@ Public Class NetServer
     ''' </summary>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property IsWorking() As Boolean Implements IMessageServer.IsWorking
+    Public ReadOnly Property IsWorking() As Boolean Implements IMessageServer.IsWorking, IMessageTransport.IsConnected
         Get
             Return working
         End Get
     End Property
+
+    Public Property IgnoreNotConnected As Boolean Implements IMessageTransport.IgnoreNotConnected
 
     Private Sub AcceptSocket(ByVal data As IAsyncResult)
         Dim newSocket As Socket = Nothing
@@ -279,6 +283,7 @@ Public Class NetServer
     End Class
     Private Sub DirectMessageReceived(ByVal pack As MessageClientPack)
         RaiseEvent ReceivedMessage(pack.message, pack.client)
+        RaiseEvent ReceivedMessageUniversal(pack.message)
         pack.client.RaiseNewMessage(pack.message)
     End Sub
 
@@ -378,16 +383,37 @@ Public Class NetServer
             Dim bytes(client.receivePosition - 1) As Byte
             Array.Copy(client.receivedData, bytes, client.receivePosition)
             Dim message As New NetMessage(bytes)
-            RaiseEvent ReceivedMessage(message, client.userInfo)
+            If message.Part(0) = "service-register-me" Then
+                Dim id = message.Part(1)
+                Dim method = message.Part(2)
+                Dim password = message.Part(3)
+                Dim options = message.Part(4)
+                Dim allow = False
+                Dim info = ""
+                RaiseEvent RegisterClientRequest(id, method, password, options, allow, info)
+                If allow Then
+                    client.userInfo.RegisteredID = id
+                    SendMessage(New NetMessage("S", "service-register-result", "ok", info))
+                Else
+                    SendMessage(New NetMessage("S", "service-register-result", "error", info))
+                End If
+            Else
+                RaiseEvent ReceivedMessage(message, client.userInfo)
+                RaiseEvent ReceivedMessageUniversal(message)
+            End If
             client.userInfo.RaiseNewMessage(message)
         Else
         End If
     End Sub
+    Public Event RegisterClientRequest(id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String)
     Public Event ClientConnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientConnected
     Public Event ClientDisconnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientDisconnected
-    Public Event ReceivedMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.ReceivedMessage
+    Public Event ReceivedMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.SentClientMessage
     ' Public Event ReceivedHierarchicMessage(ByVal message As Hierarchic, ByVal client As ConnectedClient) 
-    Public Event SentMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.SentMessage
+    Public Event SentMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.ReceivedClientMessage
+    Public Event ReceivedMessageUniversal(message As NetMessage) Implements IMessageTransport.ReceivedMessage
+    Public Event SentMessageUniversal(message As NetMessage) Implements IMessageTransport.SentMessage
+
     Friend Sub SystemPerformRemove(ByVal client As ClientData)
         If Not client.userInfo.Direct Then
             client.tcpSocket.Close()
@@ -435,6 +461,7 @@ Public Class NetServer
             Try
                 client.tcpSocket.Send(bytes, SocketFlags.Partial)
                 RaiseEvent SentMessage(message, client.userInfo)
+                RaiseEvent ReceivedMessageUniversal(message)
             Catch ex As Exception
                 '  log.Add("Не удалось отправить сообщение в порт!" + ex.ToString)
             End Try
@@ -443,6 +470,7 @@ Public Class NetServer
             If client.directClient IsNot Nothing Then
                 client.directClient.DirectMessageReceive(message.GetCopy)
                 RaiseEvent SentMessage(message, client.userInfo)
+                RaiseEvent ReceivedMessageUniversal(message)
             Else
                 client.userInfo.Disconnect()
             End If
@@ -473,5 +501,31 @@ Public Class NetServer
                 SystemSendMessage(connClient, message)
             End If
         Next
+    End Sub
+
+    ''' <summary>
+    ''' Отправить сообщение, используя внутреннее поле ToID
+    ''' </summary>
+    ''' <param name="message"></param>
+    Public Overloads Sub SendMessage(message As NetMessage) Implements IMessageTransport.SendMessage
+        For Each connClient In connectedClients.ToArray
+            If connClient.userInfo.RegisteredID = message.ToID Or message.ToID = "" Then
+                SystemSendMessage(connClient, message)
+            End If
+        Next
+    End Sub
+
+    Public Function SendMessageWaitAnswer(message As NetMessage, answerFirstPart As String, Optional timeout As Single = 20) As NetMessage Implements IMessageTransport.SendMessageWaitAnswer
+        Throw New NotImplementedException()
+    End Function
+
+    ''' <summary>
+    ''' Для сервера это не имеет смысла.
+    ''' </summary>
+    ''' <param name="id"></param>
+    ''' <param name="password"></param>
+    ''' <param name="options"></param>
+    Public Sub RegisterMe(id As String, password As String, options As String) Implements IMessageTransport.RegisterMe
+
     End Sub
 End Class

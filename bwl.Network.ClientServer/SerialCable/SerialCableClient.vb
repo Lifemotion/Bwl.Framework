@@ -2,6 +2,7 @@
 
 Public Class SerialCableClient
     Implements IMessageClient
+
     Public Property DefaultAddress As String = "" Implements IMessageClient.DefaultAddress
     Public Property DefaultPort As Integer = 0 Implements IMessageClient.DefaultPort
     Public Property IgnoreNotConnected As Boolean Implements IMessageClient.IgnoreNotConnected
@@ -77,9 +78,11 @@ Public Class SerialCableClient
         End If
     End Sub
 
-    Public Function IsConnected() As Boolean Implements IMessageClient.IsConnected
-        Return _serial.IsOpen
-    End Function
+    Public ReadOnly Property IsConnected() As Boolean Implements IMessageClient.IsConnected
+        Get
+            Return _serial.IsOpen
+        End Get
+    End Property
 
     Private Sub _serial_DataReceived(sender As Object, e As SerialDataReceivedEventArgs) Handles _serial.DataReceived
         Try
@@ -177,4 +180,8 @@ Public Class SerialCableClient
             End Try
         End SyncLock
     End Function
+
+    Public Sub RegisterMe(id As String, password As String, options As String) Implements IMessageTransport.RegisterMe
+        Throw New NotImplementedException()
+    End Sub
 End Class

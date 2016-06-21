@@ -30,6 +30,11 @@ Partial Class TestForm
         Me.bSend = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.tbAddressFrom = New System.Windows.Forms.TextBox()
+        Me.tbAddressTo = New System.Windows.Forms.TextBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.SuspendLayout()
@@ -78,6 +83,11 @@ Partial Class TestForm
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.Label3)
+        Me.TabPage1.Controls.Add(Me.Label2)
+        Me.TabPage1.Controls.Add(Me.Label1)
+        Me.TabPage1.Controls.Add(Me.tbAddressTo)
+        Me.TabPage1.Controls.Add(Me.tbAddressFrom)
         Me.TabPage1.Controls.Add(Me.bSend)
         Me.TabPage1.Controls.Add(Me.TextBox1)
         Me.TabPage1.Controls.Add(Me.SettingField2)
@@ -117,6 +127,47 @@ Partial Class TestForm
         Me.TabPage2.Text = "NetServer"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
+        'tbAddressFrom
+        '
+        Me.tbAddressFrom.Location = New System.Drawing.Point(242, 69)
+        Me.tbAddressFrom.Name = "tbAddressFrom"
+        Me.tbAddressFrom.Size = New System.Drawing.Size(104, 20)
+        Me.tbAddressFrom.TabIndex = 7
+        '
+        'tbAddressTo
+        '
+        Me.tbAddressTo.Location = New System.Drawing.Point(352, 69)
+        Me.tbAddressTo.Name = "tbAddressTo"
+        Me.tbAddressTo.Size = New System.Drawing.Size(104, 20)
+        Me.tbAddressTo.TabIndex = 8
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(239, 7)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(50, 13)
+        Me.Label1.TabIndex = 9
+        Me.Label1.Text = "Message"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(239, 51)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(68, 13)
+        Me.Label2.TabIndex = 10
+        Me.Label2.Text = "AddressFrom"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(352, 51)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(58, 13)
+        Me.Label3.TabIndex = 11
+        Me.Label3.Text = "AddressTo"
+        '
         'TestForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -142,4 +193,9 @@ Partial Class TestForm
     Friend WithEvents bSend As System.Windows.Forms.Button
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
+    Friend WithEvents Label3 As Label
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label1 As Label
+    Friend WithEvents tbAddressTo As TextBox
+    Friend WithEvents tbAddressFrom As TextBox
 End Class

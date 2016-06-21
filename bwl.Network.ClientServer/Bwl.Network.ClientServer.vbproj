@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Interfaces\IMessageClient.vb" />
     <Compile Include="Interfaces\IMessageServer.vb" />
+    <Compile Include="Interfaces\IMessageTransport.vb" />
     <Compile Include="NetDetect\NetBeacon.vb" />
     <Compile Include="NetDetect\NetBeaconInfo.vb" />
     <Compile Include="NetDetect\NetFinder.vb" />
@@ -73,7 +74,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SerialCable\SerialCableClient.vb" />
-    <Compile Include="SerialCable\SerialCableServer.vb" />
     <Compile Include="Sockets\NetClient.vb" />
     <Compile Include="Message\NetMessage.vb" />
     <Compile Include="Sockets\NetServer.vb" />

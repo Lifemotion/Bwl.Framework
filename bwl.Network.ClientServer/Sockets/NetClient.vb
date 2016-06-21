@@ -9,6 +9,7 @@ Imports System.Net
 ''' <remarks></remarks>
 Public Class NetClient
     Implements IMessageClient
+
     Const systemBufferSize = 2560 * 1024
     Const bufferStepSize As Integer = 1024 * 640
     Const pingInterval As Integer = 10
@@ -130,9 +131,12 @@ Public Class NetClient
     ''' </summary>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Function IsConnected() As Boolean Implements IMessageClient.IsConnected
-        Return working
-    End Function
+    ReadOnly Property IsConnected() As Boolean Implements IMessageClient.IsConnected
+        Get
+            Return working
+        End Get
+    End Property
+
     Private Sub SocketReceived(ByVal data As IAsyncResult)
         'пришел новый байт данных по TCP.IP
         'перезапускаем прием
@@ -345,6 +349,12 @@ Public Class NetClient
     Friend Sub DirectDisconnect()
         working = False
         RaiseEvent Disconnected()
+    End Sub
+
+    Public Sub RegisterMe(id As String, password As String, options As String) Implements IMessageTransport.RegisterMe
+        Dim result = SendMessageWaitAnswer(New NetMessage("S", "service-register-me", id, "plain", password, options), "service-register-result")
+        If result Is Nothing Then Throw New Exception("Server not responding")
+        If result.Part(1).ToLower <> "ok" Then Throw New Exception("Server response: " + result.Part(1) + " " + result.Part(2))
     End Sub
 End Class
 
