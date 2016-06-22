@@ -9,4 +9,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-Console|AnyCPU'">
     <StartArguments>-console</StartArguments>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-Gui|AnyCPU'">
+    <StartArguments>-gui</StartArguments>
+  </PropertyGroup>
 </Project>

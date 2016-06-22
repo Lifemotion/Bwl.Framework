@@ -17,6 +17,8 @@ Public Class ConnectedClient
     Friend parentStruct As ClientData
     Friend parentServer As NetServer
     Public Property RegisteredID As String = ""
+    Public Property SentMessages As Long
+    Public Property ReceivedMessages As Long
     Public Sub New(ByVal newIpAddress As String, ByVal newId As Integer, ByVal newParentStruct As ClientData, ByVal newParent As NetServer, ByVal newDirect As Boolean)
         ipAddressVal = newIpAddress
         myid = newId
@@ -385,6 +387,7 @@ Public Class NetServer
             Dim bytes(client.receivePosition - 1) As Byte
             Array.Copy(client.receivedData, bytes, client.receivePosition)
             Dim message As New NetMessage(bytes)
+            client.userInfo.ReceivedMessages += 1
             If message.Part(0) = "service-register-me" Then
                 Dim id = message.Part(1)
                 Dim method = message.Part(2)
@@ -476,6 +479,7 @@ Public Class NetServer
                 client.userInfo.Disconnect()
             End If
         End If
+        client.userInfo.SentMessages += 1
     End Sub
     ''' <summary>
     ''' Отправить сообщение клиенту, если известен объект указывающий клиента.

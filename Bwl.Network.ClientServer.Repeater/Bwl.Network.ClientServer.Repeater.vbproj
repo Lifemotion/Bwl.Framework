@@ -48,7 +48,7 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-Console|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-Gui|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
@@ -96,6 +96,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="RepeaterInterface.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -120,6 +121,10 @@
     <ProjectReference Include="..\bwl.Framework\Bwl.Framework.vbproj">
       <Project>{e18c7249-22c8-4147-91ef-8a2721f0f026}</Project>
       <Name>Bwl.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\bwl.Network.ClientServer.Remoting\bwl.Network.ClientServer.Remoting.vbproj">
+      <Project>{f9ef5f2b-75d3-4b83-a018-8c08100fd32f}</Project>
+      <Name>bwl.Network.ClientServer.Remoting</Name>
     </ProjectReference>
     <ProjectReference Include="..\bwl.Network.ClientServer\Bwl.Network.ClientServer.vbproj">
       <Project>{e8d43e81-de74-4f1c-9a3b-f3b16addfc18}</Project>
