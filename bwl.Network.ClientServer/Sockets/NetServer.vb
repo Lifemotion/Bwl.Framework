@@ -95,6 +95,7 @@ Public Class NetServer
     Private WithEvents pingTimer As System.Timers.Timer
     Private directOnly As Boolean
     Private _netBeacon As NetBeacon
+    Public ReadOnly Property MyID As String = "" Implements IMessageServer.MyID
 
     Public ReadOnly Property NetBeacon As NetBeacon
         Get
@@ -457,8 +458,9 @@ Public Class NetServer
         End Try
     End Sub
     Friend Sub SystemSendMessage(ByVal client As ClientData, ByVal message As NetMessage)
+        If message.FromID = "" And MyID > "" Then message.FromID = MyID
         If Not client.userInfo.Direct Then
-            'если клиент подкелючен по сети
+            'если клиент подключен по сети
             Dim bytes() As Byte = message.ToBytes(1)
             bytes(0) = 1
             bytes(bytes.GetUpperBound(0)) = 2
@@ -531,6 +533,6 @@ Public Class NetServer
     ''' <param name="password"></param>
     ''' <param name="options"></param>
     Public Sub RegisterMe(id As String, password As String, options As String) Implements IMessageTransport.RegisterMe
-
+        _MyID = id
     End Sub
 End Class

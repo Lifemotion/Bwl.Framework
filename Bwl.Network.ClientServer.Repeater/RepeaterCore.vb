@@ -35,7 +35,6 @@ Public Class RepeaterCore
 
     Private Sub _netServer_ClientConnected(client As ConnectedClient) Handles _netServer.ClientConnected
         _logger.AddMessage("Connected #" + client.ID.ToString + ", " + client.IPAddress + ", " + client.ConnectionTime.ToString + "")
-
     End Sub
 
     Public ReadOnly Property NetServer As NetServer

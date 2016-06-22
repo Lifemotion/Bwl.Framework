@@ -36,6 +36,7 @@ Public Class NetClient
     Public Property DefaultAddress As String = "localhost" Implements IMessageClient.DefaultAddress
     Public Property DefaultPort As Integer = 3130 Implements IMessageClient.DefaultPort
     Public Property AutoConnect As Boolean
+    Public ReadOnly Property MyID As String = "" Implements IMessageClient.MyID
 
     Sub New()
         pingTimer = New System.Timers.Timer
@@ -83,6 +84,7 @@ Public Class NetClient
     ''' <param name="port">Порт TCP.</param>
     ''' <remarks></remarks>
     Public Sub Connect(ByVal host As String, ByVal port As Integer) Implements IMessageClient.Connect
+        _MyID = ""
         If tcpSocket.Connected Then Disconnect()
         working = False
         wasPacketStart = False
@@ -113,6 +115,7 @@ Public Class NetClient
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub Disconnect() Implements IMessageClient.Disconnect
+        _MyID = ""
         working = False
         If Not directMode Then
             Try
@@ -292,6 +295,7 @@ Public Class NetClient
             End Try
         End If
         If working Then
+            If message.FromID = "" And MyID > "" Then message.FromID = MyID
             If Not directMode Then
                 Dim bytes() As Byte = message.ToBytes(1)
                 bytes(0) = 1
@@ -355,6 +359,7 @@ Public Class NetClient
         Dim result = SendMessageWaitAnswer(New NetMessage("S", "service-register-me", id, "plain", password, options), "service-register-result")
         If result Is Nothing Then Throw New Exception("Server not responding")
         If result.Part(1).ToLower <> "ok" Then Throw New Exception("Server response: " + result.Part(1) + " " + result.Part(2))
+        _MyID = id
     End Sub
 End Class
 
