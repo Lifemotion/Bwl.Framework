@@ -125,11 +125,13 @@ Public Class NetServer
         StartServer(startOnPort)
     End Sub
 
+    Public Shared jjj As Integer
     Sub New()
         ' log = New LogWriter(Application.StartupPath + "\tcpserv_debug.log")
         pingTimer = New System.Timers.Timer
         pingTimer.Interval = 1000 * pingInterval
         pingTimer.Enabled = True
+        jjj += 1
         '  log.Enabled = True
     End Sub
     ''' <summary>
@@ -408,11 +410,10 @@ Public Class NetServer
     Public Event RegisterClientRequest(client As ConnectedClient, id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String)
     Public Event ClientConnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientConnected
     Public Event ClientDisconnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientDisconnected
-    Public Event ReceivedMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.SentClientMessage
-    ' Public Event ReceivedHierarchicMessage(ByVal message As Hierarchic, ByVal client As ConnectedClient) 
-    Public Event SentMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.ReceivedClientMessage
-    Public Event ReceivedMessageUniversal(message As NetMessage) Implements IMessageTransport.ReceivedMessage
-    Public Event SentMessageUniversal(message As NetMessage) Implements IMessageTransport.SentMessage
+    Public Event ReceivedMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.ReceivedClientMessage
+    Public Event SentMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.SentClientMessage
+    Public Event ReceivedMessageUniversal(message As NetMessage) Implements IMessageServer.ReceivedMessage
+    Public Event SentMessageUniversal(message As NetMessage) Implements IMessageServer.SentMessage
 
     Friend Sub SystemPerformRemove(ByVal client As ClientData)
         If Not client.userInfo.Direct Then
@@ -461,7 +462,7 @@ Public Class NetServer
             Try
                 client.tcpSocket.Send(bytes, SocketFlags.Partial)
                 RaiseEvent SentMessage(message, client.userInfo)
-                RaiseEvent ReceivedMessageUniversal(message)
+                RaiseEvent SentMessageUniversal(message)
             Catch ex As Exception
                 '  log.Add("Не удалось отправить сообщение в порт!" + ex.ToString)
             End Try
@@ -470,7 +471,7 @@ Public Class NetServer
             If client.directClient IsNot Nothing Then
                 client.directClient.DirectMessageReceive(message.GetCopy)
                 RaiseEvent SentMessage(message, client.userInfo)
-                RaiseEvent ReceivedMessageUniversal(message)
+                RaiseEvent SentMessageUniversal(message)
             Else
                 client.userInfo.Disconnect()
             End If

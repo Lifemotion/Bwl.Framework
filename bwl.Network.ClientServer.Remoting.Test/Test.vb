@@ -20,7 +20,7 @@ Module Test
     Public Sub Main()
         Dim thread1 As New Threading.Thread(Sub()
                                                 Do
-                                                    _appBase.RootLogger.AddMessage("logtest1")
+                                                    ' _appBase.RootLogger.AddMessage("logtest1")
                                                     Threading.Thread.Sleep(500)
                                                 Loop
                                             End Sub)

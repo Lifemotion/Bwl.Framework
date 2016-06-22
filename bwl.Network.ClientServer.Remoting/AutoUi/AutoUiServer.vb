@@ -1,4 +1,6 @@
-﻿Public Class AutoUiServer
+﻿Imports bwl.Network.ClientServer
+
+Public Class AutoUiServer
     Inherits BaseServer
     Private _ui As IAutoUI
 
