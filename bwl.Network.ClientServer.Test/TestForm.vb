@@ -23,6 +23,8 @@ Public Class TestForm
     Private Sub bSend_Click(sender As Object, e As EventArgs) Handles bSend.Click
         Dim parts = TextBox1.Text.Split(":")
         Dim message As New NetMessage("S", parts)
+        message.FromID = tbAddressFrom.Text
+        message.ToID = tbAddressTo.Text
         Try
             _client.SendMessage(message)
             _logger.AddMessage("Отправлено клиентом: " + message.ToString)
@@ -35,4 +37,12 @@ Public Class TestForm
         _logger.AddMessage("Принято клиентом: " + message.ToString)
     End Sub
 
+    Private Sub bRegister_Click(sender As Object, e As EventArgs) Handles bRegister.Click
+        Try
+            _client.RegisterMe(TextBox2.Text, "", "")
+            _logger.AddMessage("Регистрация выполнена")
+        Catch ex As Exception
+            _logger.AddWarning("Ошибка: " + ex.Message)
+        End Try
+    End Sub
 End Class

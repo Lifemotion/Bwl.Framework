@@ -5,7 +5,7 @@
     Public Sub New(ui As IAutoUI, netServer As IMessageServer, prefix As String)
         MyBase.New(netServer, prefix)
         _ui = ui
-        AddHandler _server.ReceivedMessage, AddressOf ReceivedHandler
+        AddHandler _server.ReceivedClientMessage, AddressOf ReceivedHandler
         AddHandler _ui.RequestToSend, AddressOf UiRequestToSendHandler
         AddHandler _ui.BaseInfosReady, AddressOf UiBaseInfosReadyHandler
     End Sub

@@ -5,7 +5,7 @@
     Public Sub New(storage As SettingsStorage, netServer As IMessageServer, prefix As String)
         MyBase.New(netServer, prefix)
         _storage = storage
-        AddHandler _server.ReceivedMessage, AddressOf ReceivedHandler
+        AddHandler _server.ReceivedClientMessage, AddressOf ReceivedHandler
     End Sub
 
     Private Sub ReceivedHandler(message As NetMessage, client As ConnectedClient)

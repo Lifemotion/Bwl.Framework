@@ -27,14 +27,17 @@ Partial Class TestForm
         Me.SettingField2 = New Bwl.Framework.SettingField()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.tbAddressTo = New System.Windows.Forms.TextBox()
+        Me.tbAddressFrom = New System.Windows.Forms.TextBox()
         Me.bSend = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.tbAddressFrom = New System.Windows.Forms.TextBox()
-        Me.tbAddressTo = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.bRegister = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.SuspendLayout()
@@ -83,6 +86,9 @@ Partial Class TestForm
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.bRegister)
+        Me.TabPage1.Controls.Add(Me.Label4)
+        Me.TabPage1.Controls.Add(Me.TextBox2)
         Me.TabPage1.Controls.Add(Me.Label3)
         Me.TabPage1.Controls.Add(Me.Label2)
         Me.TabPage1.Controls.Add(Me.Label1)
@@ -100,6 +106,47 @@ Partial Class TestForm
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "NetClient"
         Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(352, 51)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(29, 13)
+        Me.Label3.TabIndex = 11
+        Me.Label3.Text = "IdTo"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(239, 51)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(39, 13)
+        Me.Label2.TabIndex = 10
+        Me.Label2.Text = "IdFrom"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(239, 7)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(50, 13)
+        Me.Label1.TabIndex = 9
+        Me.Label1.Text = "Message"
+        '
+        'tbAddressTo
+        '
+        Me.tbAddressTo.Location = New System.Drawing.Point(352, 69)
+        Me.tbAddressTo.Name = "tbAddressTo"
+        Me.tbAddressTo.Size = New System.Drawing.Size(104, 20)
+        Me.tbAddressTo.TabIndex = 8
+        '
+        'tbAddressFrom
+        '
+        Me.tbAddressFrom.Location = New System.Drawing.Point(242, 69)
+        Me.tbAddressFrom.Name = "tbAddressFrom"
+        Me.tbAddressFrom.Size = New System.Drawing.Size(104, 20)
+        Me.tbAddressFrom.TabIndex = 7
         '
         'bSend
         '
@@ -127,46 +174,30 @@ Partial Class TestForm
         Me.TabPage2.Text = "NetServer"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
-        'tbAddressFrom
+        'Label4
         '
-        Me.tbAddressFrom.Location = New System.Drawing.Point(242, 69)
-        Me.tbAddressFrom.Name = "tbAddressFrom"
-        Me.tbAddressFrom.Size = New System.Drawing.Size(104, 20)
-        Me.tbAddressFrom.TabIndex = 7
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(239, 93)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(60, 13)
+        Me.Label4.TabIndex = 13
+        Me.Label4.Text = "Register ID"
         '
-        'tbAddressTo
+        'TextBox2
         '
-        Me.tbAddressTo.Location = New System.Drawing.Point(352, 69)
-        Me.tbAddressTo.Name = "tbAddressTo"
-        Me.tbAddressTo.Size = New System.Drawing.Size(104, 20)
-        Me.tbAddressTo.TabIndex = 8
+        Me.TextBox2.Location = New System.Drawing.Point(242, 111)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(104, 20)
+        Me.TextBox2.TabIndex = 12
         '
-        'Label1
+        'bRegister
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(239, 7)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(50, 13)
-        Me.Label1.TabIndex = 9
-        Me.Label1.Text = "Message"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(239, 51)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(68, 13)
-        Me.Label2.TabIndex = 10
-        Me.Label2.Text = "AddressFrom"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(352, 51)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(58, 13)
-        Me.Label3.TabIndex = 11
-        Me.Label3.Text = "AddressTo"
+        Me.bRegister.Location = New System.Drawing.Point(691, 111)
+        Me.bRegister.Name = "bRegister"
+        Me.bRegister.Size = New System.Drawing.Size(95, 23)
+        Me.bRegister.TabIndex = 14
+        Me.bRegister.Text = "Регистрация"
+        Me.bRegister.UseVisualStyleBackColor = True
         '
         'TestForm
         '
@@ -198,4 +229,7 @@ Partial Class TestForm
     Friend WithEvents Label1 As Label
     Friend WithEvents tbAddressTo As TextBox
     Friend WithEvents tbAddressFrom As TextBox
+    Friend WithEvents bRegister As Button
+    Friend WithEvents Label4 As Label
+    Friend WithEvents TextBox2 As TextBox
 End Class

@@ -1,43 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>
-    </ProductVersion>
-    <SchemaVersion>
-    </SchemaVersion>
-    <ProjectGuid>{E8D43E81-DE74-4F1C-9A3B-F3B16ADDFC18}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>bwl.Network.ClientServer</RootNamespace>
-    <AssemblyName>bwl.Network.ClientServer</AssemblyName>
+    <ProjectGuid>{5C1039A1-484A-40C3-B5BE-A868BCCC4889}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Sub Main</StartupObject>
+    <RootNamespace>Bwl.Network.ClientServer</RootNamespace>
+    <AssemblyName>Bwl.Network.ClientServer.Repeater</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Windows</MyType>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\debug-mono\dll\</OutputPath>
-    <DocumentationFile>bwl.Network.ClientServer.xml</DocumentationFile>
+    <OutputPath>..\debug\NetRepeater\bin\</OutputPath>
+    <DocumentationFile>Bwl.Network.ClientServer.Repeater.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>..\debug-mono\dll\</OutputPath>
-    <DocumentationFile>bwl.Network.ClientServer.xml</DocumentationFile>
+    <OutputPath>..\release\NetRepeater\bin\</OutputPath>
+    <DocumentationFile>Bwl.Network.ClientServer.Repeater.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
-    <RemoveIntegerChecks>true</RemoveIntegerChecks>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -51,32 +48,39 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-Console|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>..\debug\NetRepeater\bin\</OutputPath>
+    <DocumentationFile>Bwl.Network.ClientServer.Repeater.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Bwl.Framework" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
+    <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IMessageClient.vb" />
-    <Compile Include="Interfaces\IMessageServer.vb" />
-    <Compile Include="Interfaces\IMessageTransport.vb" />
-    <Compile Include="NetDetect\NetBeacon.vb" />
-    <Compile Include="NetDetect\NetBeaconInfo.vb" />
-    <Compile Include="NetDetect\NetFinder.vb" />
-    <Compile Include="NetworkAdapter\NetworkAdapter.vb" />
-    <Compile Include="NetworkAdapter\NetworkAdapters.vb" />
-    <Compile Include="NetworkAdapter\NetworkAdaptersForm.Designer.vb">
-      <DependentUpon>NetworkAdaptersForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="NetworkAdapter\NetworkAdaptersForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SerialCable\SerialCableClient.vb" />
-    <Compile Include="Sockets\NetClient.vb" />
-    <Compile Include="Message\NetMessage.vb" />
-    <Compile Include="Sockets\NetServer.vb" />
+    <Compile Include="RepeaterCore.vb" />
+    <Compile Include="App.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -100,9 +104,6 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="NetworkAdapter\NetworkAdaptersForm.resx">
-      <DependentUpon>NetworkAdaptersForm.vb</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="My Project\Application.myapp">
@@ -116,10 +117,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Windows.Forms" />
+    <ProjectReference Include="..\bwl.Framework\Bwl.Framework.vbproj">
+      <Project>{e18c7249-22c8-4147-91ef-8a2721f0f026}</Project>
+      <Name>Bwl.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\bwl.Network.ClientServer\Bwl.Network.ClientServer.vbproj">
+      <Project>{e8d43e81-de74-4f1c-9a3b-f3b16addfc18}</Project>
+      <Name>Bwl.Network.ClientServer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

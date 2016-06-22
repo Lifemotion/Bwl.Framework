@@ -390,7 +390,7 @@ Public Class NetServer
                 Dim options = message.Part(4)
                 Dim allow = False
                 Dim info = ""
-                RaiseEvent RegisterClientRequest(id, method, password, options, allow, info)
+                RaiseEvent RegisterClientRequest(client.userInfo, id, method, password, options, allow, info)
                 If allow Then
                     client.userInfo.RegisteredID = id
                     SendMessage(New NetMessage("S", "service-register-result", "ok", info))
@@ -405,7 +405,7 @@ Public Class NetServer
         Else
         End If
     End Sub
-    Public Event RegisterClientRequest(id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String)
+    Public Event RegisterClientRequest(client As ConnectedClient, id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String)
     Public Event ClientConnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientConnected
     Public Event ClientDisconnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientDisconnected
     Public Event ReceivedMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.SentClientMessage
