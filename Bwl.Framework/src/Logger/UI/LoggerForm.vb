@@ -2,12 +2,12 @@
 Imports System.Windows.Forms
 
 Public Class LoggerForm
-	Private _logger As Logger
+    Private _logger As ILoggerDispatcher
 
-	Public Sub New(logger As Logger)
-		InitializeComponent()
+    Public Sub New(logger As ILoggerDispatcher)
+        InitializeComponent()
 
-		_logger = logger
-		_logger.ConnectWriter(_datagridLogWriter1)
-	End Sub
+        _logger = logger
+        _logger.ConnectWriter(_datagridLogWriter1)
+    End Sub
 End Class

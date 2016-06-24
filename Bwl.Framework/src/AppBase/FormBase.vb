@@ -48,4 +48,9 @@
         Dim form As New AutoUIForm(storage, logger, ui)
         Return form
     End Function
+
+    Private Sub ЛогToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ЛогToolStripMenuItem.Click
+        Dim logForm = New LoggerForm(_loggerServer)
+        logForm.Show()
+    End Sub
 End Class

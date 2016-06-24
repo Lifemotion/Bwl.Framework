@@ -29,6 +29,7 @@ Partial Class FormBase
         Me.settingsMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.exitMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.logWriter = New Bwl.Framework.DatagridLogWriter()
+        Me.ЛогToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -44,7 +45,7 @@ Partial Class FormBase
         '
         'УправлениеToolStripMenuItem
         '
-        Me.УправлениеToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.openAppDirMenuItem, Me.settingsMenuItem, Me.exitMenuItem})
+        Me.УправлениеToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.openAppDirMenuItem, Me.settingsMenuItem, Me.ЛогToolStripMenuItem, Me.exitMenuItem})
         Me.УправлениеToolStripMenuItem.Name = "УправлениеToolStripMenuItem"
         Me.УправлениеToolStripMenuItem.Size = New System.Drawing.Size(85, 20)
         Me.УправлениеToolStripMenuItem.Text = "Управление"
@@ -71,6 +72,7 @@ Partial Class FormBase
         '
         Me.logWriter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.logWriter.ExtendedView = True
         Me.logWriter.FilterText = ""
         Me.logWriter.Location = New System.Drawing.Point(2, 238)
         Me.logWriter.LogEnabled = True
@@ -83,6 +85,12 @@ Partial Class FormBase
         Me.logWriter.ShowWarnings = True
         Me.logWriter.Size = New System.Drawing.Size(781, 322)
         Me.logWriter.TabIndex = 0
+        '
+        'ЛогToolStripMenuItem
+        '
+        Me.ЛогToolStripMenuItem.Name = "ЛогToolStripMenuItem"
+        Me.ЛогToolStripMenuItem.Size = New System.Drawing.Size(225, 22)
+        Me.ЛогToolStripMenuItem.Text = "Лог"
         '
         'FormBase
         '
@@ -108,4 +116,5 @@ Partial Class FormBase
     Friend WithEvents settingsMenuItem As System.Windows.Forms.ToolStripMenuItem
     Protected WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Protected WithEvents УправлениеToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ЛогToolStripMenuItem As ToolStripMenuItem
 End Class
