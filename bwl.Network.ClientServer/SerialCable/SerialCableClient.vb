@@ -3,6 +3,7 @@
 Public Class SerialCableClient
     Implements IMessageClient
 
+    Public ReadOnly Property MyID As String = "" Implements IMessageClient.MyID
     Public Property DefaultAddress As String = "" Implements IMessageClient.DefaultAddress
     Public Property DefaultPort As Integer = 0 Implements IMessageClient.DefaultPort
     Public Property IgnoreNotConnected As Boolean Implements IMessageClient.IgnoreNotConnected
