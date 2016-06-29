@@ -77,6 +77,19 @@ Public Class NetClient
     Public Sub Connect() Implements IMessageClient.Connect
         Connect(DefaultAddress, DefaultPort)
     End Sub
+
+    ''' <summary>
+    ''' Подключиться к сетевому серверу, передающему данные по протоколу BWN.
+    ''' </summary>
+    ''' <param name="address">Адрес в формате host:port</param>
+    ''' <param name="options">Не используется</param>
+    Public Sub Connect(address As String, options As String) Implements IMessageClient.Open
+        Dim parts = address.Split({":"}, StringSplitOptions.RemoveEmptyEntries)
+        If parts.Length <> 2 Then Throw New Exception("Address has wrong format! Must be hostname:port")
+        If IsNumeric(parts(1)) = False Then Throw New Exception("Address has wrong format! Must be hostname:port")
+        Connect(parts(1), CInt(Val(parts(2))))
+    End Sub
+
     ''' <summary>
     ''' Подключиться к сетевому серверу, передающему данные по протоколу BWN.
     ''' </summary>
@@ -114,7 +127,7 @@ Public Class NetClient
     ''' Отключиться от сервера.
     ''' </summary>
     ''' <remarks></remarks>
-    Public Sub Disconnect() Implements IMessageClient.Disconnect
+    Public Sub Disconnect() Implements IMessageClient.Disconnect, IMessageTransport.Close
         _MyID = ""
         working = False
         If Not directMode Then

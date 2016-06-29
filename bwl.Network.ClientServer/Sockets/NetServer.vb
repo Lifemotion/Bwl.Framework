@@ -137,6 +137,18 @@ Public Class NetServer
         jjj += 1
         '  log.Enabled = True
     End Sub
+
+    ''' <summary>
+    ''' Запускает сервер. При успешном вызове сервер ждет подключения клиентов.
+    ''' </summary>
+    ''' <param name="address">Адрес в формате host:port, значение host не используется, рекомендуется формат *:port</param>
+    ''' <param name="options">Не используется</param>
+    Public Sub StartServer(address As String, options As String) Implements IMessageTransport.Open
+        Dim parts = address.Split({":"}, StringSplitOptions.RemoveEmptyEntries)
+        If parts.Length <> 2 Then Throw New Exception("Address has wrong format! Must be hostname:port")
+        If IsNumeric(parts(1)) = False Then Throw New Exception("Address has wrong format! Must be hostname:port")
+        StartServer(CInt(Val(parts(2))))
+    End Sub
     ''' <summary>
     ''' Запускает сервер. При успешном вызове сервер ждет подключения клиентов.
     ''' </summary>
@@ -177,7 +189,7 @@ Public Class NetServer
     ''' Остановить сервер.
     ''' </summary>
     ''' <remarks></remarks>
-    Public Sub StopServer() Implements IMessageServer.StopServer
+    Public Sub StopServer() Implements IMessageServer.StopServer, IMessageTransport.Close
         working = False
         Try
             SyncLock (connectedClients)

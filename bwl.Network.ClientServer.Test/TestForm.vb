@@ -13,7 +13,7 @@ Public Class TestForm
 
     Private Sub bClientConnect_Click(sender As Object, e As EventArgs) Handles bClientConnect.Click
         Try
-            _client.Connect(_clientAddress, _clientPort)
+            _client.Connect(_clientAddress.Value, _clientPort.Value)
             _logger.AddMessage("Подключено успешно")
         Catch ex As Exception
             _logger.AddWarning("Подключено неуспешно: " + ex.Message)
