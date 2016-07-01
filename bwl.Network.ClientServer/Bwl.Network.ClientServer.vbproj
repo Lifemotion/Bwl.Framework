@@ -62,6 +62,7 @@
     <Compile Include="Interfaces\IMessageClient.vb" />
     <Compile Include="Interfaces\IMessageServer.vb" />
     <Compile Include="Interfaces\IMessageTransport.vb" />
+    <Compile Include="Interfaces\IMessageTransportFactory.vb" />
     <Compile Include="NetDetect\NetBeacon.vb" />
     <Compile Include="NetDetect\NetBeaconInfo.vb" />
     <Compile Include="NetDetect\NetFinder.vb" />
@@ -73,7 +74,17 @@
     <Compile Include="NetworkAdapter\NetworkAdaptersForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SerialCable\SerialCableClient.vb" />
+    <Compile Include="Remoting\AutoUi\AutoUiClient.vb" />
+    <Compile Include="Remoting\AutoUi\AutoUiServer.vb" />
+    <Compile Include="Remoting\Common\BaseClient.vb" />
+    <Compile Include="Remoting\Common\BaseServer.vb" />
+    <Compile Include="Remoting\Logs\LogsClient.vb" />
+    <Compile Include="Remoting\Logs\LogsServer.vb" />
+    <Compile Include="Remoting\RemoteAppClient.vb" />
+    <Compile Include="Remoting\RemoteAppServer.vb" />
+    <Compile Include="Remoting\Settings\SettingsClient.vb" />
+    <Compile Include="Remoting\Settings\SettingsServer.vb" />
+    <Compile Include="SerialCable\SerialCableTransport.vb" />
     <Compile Include="Sockets\NetClient.vb" />
     <Compile Include="Message\NetMessage.vb" />
     <Compile Include="Sockets\NetServer.vb" />
@@ -92,6 +103,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="MessageTransport.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -120,6 +132,15 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\bwl.Framework\Bwl.Framework.vbproj">
+      <Project>{e18c7249-22c8-4147-91ef-8a2721f0f026}</Project>
+      <Name>Bwl.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Remoting\GlobalStates\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

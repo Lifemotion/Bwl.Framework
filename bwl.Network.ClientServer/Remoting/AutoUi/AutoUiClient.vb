@@ -1,11 +1,13 @@
-﻿Public Class AutoUiClient
+﻿Imports bwl.Framework
+
+Public Class AutoUiClient
     Inherits BaseClient
     Implements IAutoUI
     Public Event RequestToSend As IAutoUI.RequestToSendEventHandler Implements IAutoUI.RequestToSend
     Public Event BaseInfosReady As IAutoUI.BaseInfosReadyEventHandler Implements IAutoUI.BaseInfosReady
 
-    Public Sub New(netClient As IMessageClient, prefix As String)
-        MyBase.New(netClient, prefix)
+    Public Sub New(netClient As IMessageTransport, prefix As String, target As String)
+        MyBase.New(netClient, prefix, target)
         AddHandler netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
     End Sub
 
@@ -29,12 +31,14 @@
 
     Public Sub ProcessData(id As String, dataname As String, data() As Byte) Implements IAutoUI.ProcessData
         Dim msg As New NetMessage("#", "AutoUiRemoting", _prefix, id, dataname)
+        msg.ToID = _target
         msg.PartBytes(4) = data
         _client.SendMessage(msg)
     End Sub
 
     Private Sub GetBaseInfos() Implements IAutoUI.GetBaseInfos
         Dim msg = New NetMessage("#", "AutoUiRemoting", _prefix, "#baseinfos")
+        msg.ToID = _target
         _client.SendMessage(msg)
     End Sub
 End Class

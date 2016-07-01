@@ -11,17 +11,19 @@ Module Test
     Private WithEvents _textbox2 As New AutoTextbox(_appBase.AutoUI, "textbox2")
     Private WithEvents _listbox1 As New AutoListbox(_appBase.AutoUI, "listbox1")
 
-    Private WithEvents _formDesc As New AutoFormDescriptor(_appBase.AutoUI, "form") With {.FormWidth = 400, .ShowLogger = False}
+    Private WithEvents _formDesc As New AutoFormDescriptor(_appBase.AutoUI, "form") With {.FormWidth = 850, .ShowLogger = True}
 
     Private _setting1 As New StringSetting(_appBase.RootStorage, "Setting1", "cat")
 
-    Private _appBaseServer As New RemoteAppServer(3155, _appBase, "TestRemApp", RemoteAppBeaconMode.broadcast)
+    Private _appBaseServerLocal As New RemoteAppServer(3155, _appBase, "TestRemApp", RemoteAppBeaconMode.broadcast)
+
+    Private _appBaseServerOnRepeater As New RemoteAppServer("localhost:3180", "RemoteApp1", "", _appBase)
 
     Public Sub Main()
         Dim thread1 As New Threading.Thread(Sub()
                                                 Do
-                                                    ' _appBase.RootLogger.AddMessage("logtest1")
-                                                    Threading.Thread.Sleep(500)
+                                                    _appBase.RootLogger.AddMessage("logtest1")
+                                                    Threading.Thread.Sleep(3000)
                                                 Loop
                                             End Sub)
         thread1.Start()
@@ -43,6 +45,7 @@ Module Test
 
     Private Sub _button3_Click(source As AutoButton) Handles _button3.Click
         _listbox1.Items.Add("test")
+        _listbox1.Items.Add(_setting1)
         _textbox1.Text += "E"
     End Sub
 

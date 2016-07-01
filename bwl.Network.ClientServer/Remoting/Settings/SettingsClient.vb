@@ -1,4 +1,7 @@
-﻿Public Class SettingsClient
+﻿Imports System.Windows.Forms
+Imports bwl.Framework
+
+Public Class SettingsClient
     Inherits BaseClient
     Implements ISettingsStorageForm
     Public Event SettingsReceived(settingsClient As SettingsClient)
@@ -8,8 +11,8 @@
     Private _settingsForm As SettingsDialog
     Private _invokeForm As Form
 
-    Public Sub New(netClient As IMessageClient, prefix As String)
-        MyBase.New(netClient, prefix)
+    Public Sub New(netClient As IMessageTransport, prefix As String, target As String)
+        MyBase.New(netClient, prefix, target)
         AddHandler netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
 
         AddHandler SettingsReceived, AddressOf SettingsReceivedHanlder
@@ -40,7 +43,9 @@
 
     Private Sub RequestSettings()
         If _client.IsConnected Then
-            _client.SendMessage(New NetMessage("#", "SettingsRemoting", _prefix, "SettingsRequest"))
+            Dim msg As New NetMessage("#", "SettingsRemoting", _prefix, "SettingsRequest")
+            msg.ToID = _target
+            _client.SendMessage(msg)
         End If
     End Sub
 
@@ -50,7 +55,9 @@
         If _client.IsConnected Then
             Dim value = settingonstorage.ValueAsString
             Try
-                _client.SendMessage(New NetMessage("#", "SettingsRemoting", _prefix, "SetSettingValue", name, value))
+                Dim msg As New NetMessage("#", "SettingsRemoting", _prefix, "SetSettingValue", name, value)
+                msg.ToID = _target
+                _client.SendMessage(msg)
             Catch ex As Exception
                 RaiseEvent SettingChangeError(name, "SendToServerError")
             End Try

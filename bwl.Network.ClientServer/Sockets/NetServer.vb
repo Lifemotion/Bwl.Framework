@@ -147,7 +147,7 @@ Public Class NetServer
         Dim parts = address.Split({":"}, StringSplitOptions.RemoveEmptyEntries)
         If parts.Length <> 2 Then Throw New Exception("Address has wrong format! Must be hostname:port")
         If IsNumeric(parts(1)) = False Then Throw New Exception("Address has wrong format! Must be hostname:port")
-        StartServer(CInt(Val(parts(2))))
+        StartServer(CInt(Val(parts(1))))
     End Sub
     ''' <summary>
     ''' Запускает сервер. При успешном вызове сервер ждет подключения клиентов.
@@ -408,7 +408,11 @@ Public Class NetServer
                 Dim options = message.Part(4)
                 Dim allow = False
                 Dim info = ""
-                RaiseEvent RegisterClientRequest(client.userInfo, id, method, password, options, allow, info)
+                Dim dictonary As New Dictionary(Of String, String)
+                dictonary.Add("ID", client.userInfo.ID)
+                dictonary.Add("IPAddress", client.userInfo.IPAddress)
+                dictonary.Add("RegisteredID", client.userInfo.RegisteredID)
+                RaiseEvent RegisterClientRequest(dictonary, id, method, password, options, allow, info)
                 If allow Then
                     client.userInfo.RegisteredID = id
                     SendMessage(New NetMessage("S", "service-register-result", "ok", info))
@@ -423,7 +427,8 @@ Public Class NetServer
         Else
         End If
     End Sub
-    Public Event RegisterClientRequest(client As ConnectedClient, id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String)
+
+    Public Event RegisterClientRequest(client As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageServer.RegisterClientRequest
     Public Event ClientConnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientConnected
     Public Event ClientDisconnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientDisconnected
     Public Event ReceivedMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.ReceivedClientMessage
@@ -547,4 +552,18 @@ Public Class NetServer
     Public Sub RegisterMe(id As String, password As String, options As String) Implements IMessageTransport.RegisterMe
         _MyID = id
     End Sub
+End Class
+
+Public Class NetServerFactory
+    Implements IMessageTransportFactory
+
+    Public ReadOnly Property TransportClass As Type Implements IMessageTransportFactory.TransportClass
+        Get
+            Return GetType(NetServer)
+        End Get
+    End Property
+
+    Public Function Create() As IMessageTransport Implements IMessageTransportFactory.Create
+        Return New NetServer
+    End Function
 End Class

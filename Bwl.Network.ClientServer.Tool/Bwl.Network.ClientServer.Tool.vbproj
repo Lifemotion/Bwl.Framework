@@ -1,19 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F9EF5F2B-75D3-4B83-A018-8C08100FD32F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <StartupObject>
-    </StartupObject>
-    <RootNamespace>bwl.Network.ClientServer</RootNamespace>
-    <AssemblyName>bwl.Network.ClientServer.Remoting</AssemblyName>
+    <ProjectGuid>{D8B576E1-36DD-4D28-B7AA-E7BCCA41F2C6}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Bwl.Network.ClientServer.Tool.My.MyApplication</StartupObject>
+    <RootNamespace>Bwl.Network.ClientServer.Tool</RootNamespace>
+    <AssemblyName>Bwl.Network.ClientServer.Tool</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Windows</MyType>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -21,8 +19,8 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\debug-mono\dll-remoting\</OutputPath>
-    <DocumentationFile>bwl.Network.ClientServer.Remoting.xml</DocumentationFile>
+    <OutputPath>..\debug\Bwl ClientServer Tool\</OutputPath>
+    <DocumentationFile>Bwl.Network.ClientServer.Tool.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -31,8 +29,8 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>..\debug-mono\dll-remoting\</OutputPath>
-    <DocumentationFile>bwl.Network.ClientServer.Remoting.xml</DocumentationFile>
+    <OutputPath>..\release\Bwl ClientServer Tool\</OutputPath>
+    <DocumentationFile>Bwl.Network.ClientServer.Tool.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -47,24 +45,35 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Connexion rВseau white.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Import Include="Bwl.Framework" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
-    <Import Include="System.Linq" />
     <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\BaseClient.vb" />
-    <Compile Include="Common\BaseServer.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -80,14 +89,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Logs\LogsClient.vb" />
-    <Compile Include="Logs\LogsServer.vb" />
-    <Compile Include="AutoUi\AutoUiClient.vb" />
-    <Compile Include="RemoteAppClient.vb" />
-    <Compile Include="RemoteAppServer.vb" />
-    <Compile Include="AutoUi\AutoUiServer.vb" />
-    <Compile Include="Settings\SettingsClient.vb" />
-    <Compile Include="Settings\SettingsServer.vb" />
+    <Compile Include="ToolForm.Designer.vb">
+      <DependentUpon>ToolForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ToolForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -95,6 +102,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolForm.resx">
+      <DependentUpon>ToolForm.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -109,17 +119,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\bwl.Framework\Bwl.Framework.Mono.vbproj">
+    <ProjectReference Include="..\bwl.Framework\Bwl.Framework.vbproj">
       <Project>{e18c7249-22c8-4147-91ef-8a2721f0f026}</Project>
-      <Name>Bwl.Framework.Mono</Name>
+      <Name>Bwl.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\bwl.Network.ClientServer\Bwl.Network.ClientServer.Mono.vbproj">
+    <ProjectReference Include="..\Bwl.Network.ClientServer\Bwl.Network.ClientServer.vbproj">
       <Project>{e8d43e81-de74-4f1c-9a3b-f3b16addfc18}</Project>
-      <Name>Bwl.Network.ClientServer.Mono</Name>
+      <Name>Bwl.Network.ClientServer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GlobalStates\" />
+    <Content Include="Connexion rВseau white.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

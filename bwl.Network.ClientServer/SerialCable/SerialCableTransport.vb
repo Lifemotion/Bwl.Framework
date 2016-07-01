@@ -16,6 +16,7 @@
     End Property
 
     Public Event ReceivedMessage(message As NetMessage) Implements IMessageTransport.ReceivedMessage
+    Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
     Public Event SentMessage(message As NetMessage) Implements IMessageTransport.SentMessage
 
     Public Sub Close() Implements IMessageTransport.Close
@@ -36,5 +37,19 @@
 
     Public Function SendMessageWaitAnswer(message As NetMessage, answerFirstPart As String, Optional timeout As Single = 20) As NetMessage Implements IMessageTransport.SendMessageWaitAnswer
         Throw New NotImplementedException()
+    End Function
+End Class
+
+Public Class SerialCableTransportFactory
+    Implements IMessageTransportFactory
+
+    Public ReadOnly Property TransportClass As Type Implements IMessageTransportFactory.TransportClass
+        Get
+            Return GetType(SerialCableTransport)
+        End Get
+    End Property
+
+    Public Function Create() As IMessageTransport Implements IMessageTransportFactory.Create
+        Return New SerialCableTransport
     End Function
 End Class

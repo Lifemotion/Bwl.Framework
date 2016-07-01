@@ -1,5 +1,6 @@
 ﻿Imports System.Net.Sockets
 Imports System.Net
+Imports bwl.Network.ClientServer
 
 ''' <summary>
 ''' Клиент, работающий с сервером BWN по протоколу TCP\IP.
@@ -87,7 +88,7 @@ Public Class NetClient
         Dim parts = address.Split({":"}, StringSplitOptions.RemoveEmptyEntries)
         If parts.Length <> 2 Then Throw New Exception("Address has wrong format! Must be hostname:port")
         If IsNumeric(parts(1)) = False Then Throw New Exception("Address has wrong format! Must be hostname:port")
-        Connect(parts(1), CInt(Val(parts(2))))
+        Connect(parts(0), CInt(Val(parts(1))))
     End Sub
 
     ''' <summary>
@@ -264,6 +265,7 @@ Public Class NetClient
     ''' <param name="message"></param>
     ''' <remarks></remarks>
     Public Event ReceivedMessage(ByVal message As NetMessage) Implements IMessageClient.ReceivedMessage
+    Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
     ' Public Event ReceivedHierarchicMessage(ByVal message As Hierarchic)
     Private Sub PingServer() Handles pingTimer.Elapsed
         If Not directMode Then
@@ -381,4 +383,18 @@ Public Class NoConnectException
     Sub New(ByVal exc As Exception, ByVal message As String)
         MyBase.New(message, exc)
     End Sub
+End Class
+
+Public Class NetClientFactory
+    Implements IMessageTransportFactory
+
+    Public ReadOnly Property TransportClass As Type Implements IMessageTransportFactory.TransportClass
+        Get
+            Return GetType(NetClient)
+        End Get
+    End Property
+
+    Public Function Create() As IMessageTransport Implements IMessageTransportFactory.Create
+        Return New NetClient
+    End Function
 End Class
