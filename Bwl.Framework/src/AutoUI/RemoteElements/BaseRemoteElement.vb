@@ -1,5 +1,4 @@
 ﻿Imports System.Text
-Imports Bwl.Framework
 
 Public Class BaseRemoteElement
     Implements IUIElementRemote
@@ -50,9 +49,7 @@ Public Class BaseRemoteElement
         Me.New(New UIElementInfo("", ""))
     End Sub
 
-
     Public Overridable Sub ProcessData(dataname As String, data() As Byte) Implements IUIElementRemote.ProcessData
 
     End Sub
-
 End Class

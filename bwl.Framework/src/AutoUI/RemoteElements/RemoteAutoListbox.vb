@@ -77,7 +77,7 @@ Public Class RemoteAutoListbox
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
-
+        Send("selected-index-changed", {ListBox1.SelectedIndex.ToString})
     End Sub
 
     Private Sub RemoteAutoListbox_Load(sender As Object, e As EventArgs) Handles MyBase.Load

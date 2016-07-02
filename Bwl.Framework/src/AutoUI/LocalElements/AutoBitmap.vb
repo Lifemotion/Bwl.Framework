@@ -25,8 +25,8 @@ Public Class AutoBitmap
 
     Public Overrides Sub ProcessData(dataname As String, data() As Byte)
         Dim parts = AutoUIByteCoding.GetParts(data)
-        If parts(0) = "click" Then RaiseEvent Click(Me)
-        If parts(0) = "double-click" Then RaiseEvent DoubleClick(Me)
+        If dataname = "click" Then RaiseEvent Click(Me)
+        If dataname = "double-click" Then RaiseEvent DoubleClick(Me)
     End Sub
 
     Public Overrides Sub SendUpdate()
