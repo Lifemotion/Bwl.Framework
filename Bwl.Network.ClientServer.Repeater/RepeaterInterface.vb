@@ -17,7 +17,7 @@ Public Class RepeaterInterface
         _formDescriptor = New AutoFormDescriptor(app.AutoUI, "Repeater Form") With {.FormHeight = 500, .LoggerExtended = False}
         _clientsList = New AutoListbox(app.AutoUI, "Connected Clients")
         _showDumpsButtons = New AutoButton(app.AutoUI, "Show\Hide Dumps")
-        _clientsList.Info.Width = 400
+        _clientsList.Info.Width = 500
         _logger = app.RootLogger
         _logger.AddMessage("Created autointerface")
         _stateTimer.AutoReset = True

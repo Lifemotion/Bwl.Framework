@@ -5,6 +5,7 @@
 ''' <remarks></remarks>
 Public Class Logger
     Implements ILoggerDispatcher
+
     Implements ILoggerReceiver
     Implements ILoggerChilds
     Private ReadOnly _writers As New List(Of ILogWriter)
@@ -140,6 +141,10 @@ Public Class Logger
         If _parentLogger IsNot Nothing Then
             _parentLogger.AddFromChild(path1, type, messageText, additional)
         End If
+    End Sub
+
+    Public Sub RequestLogsTransmission() Implements ILoggerDispatcher.RequestLogsTransmission
+        
     End Sub
 
     Public ReadOnly Property IsRoot() As Boolean

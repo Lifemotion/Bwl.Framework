@@ -39,7 +39,7 @@ Public Class AutoUiServer
                 Case "#baseinfos"
                     _ui.GetBaseInfos()
                 Case "#alive"
-                    Dim msg As New NetMessage("#", "AutoUiRemoting", _prefix, "#alive-ok")
+                    Dim msg As New NetMessage("S", "#alive-ok", "AutoUiRemoting", _prefix)
                     msg.ToID = _clientID
                     _server.SendMessage(msg)
                 Case Else

@@ -49,10 +49,6 @@ Public Class ToolForm
         End Try
     End Sub
 
-    Private Sub _client_RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Handles _transport.RegisterClientRequest
-        If id > "" Then allowRegister = True
-    End Sub
-
     Private Sub cbAutoConnect_CheckedChanged(sender As Object, e As EventArgs) Handles cbAutoConnect.CheckedChanged
         _transport.AutoConnect = cbAutoConnect.Checked
     End Sub
@@ -60,5 +56,9 @@ Public Class ToolForm
     Private Sub tState_Tick(sender As Object, e As EventArgs) Handles tState.Tick
         cbIsConnected.Checked = _transport.IsConnected
         cbIsConnected.Text = "IsConnected " + _transport.MyID
+    End Sub
+
+    Private Sub _transport_RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Handles _transport.RegisterClientRequest
+        If id > "" Then allowRegister = True
     End Sub
 End Class

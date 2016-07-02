@@ -16,8 +16,10 @@ Public Class AutoUIDisplay
         End Get
         Set(value As IAutoUI)
             _ui = value
-            If Me.IsDisposed Then Return
-            If _loaded Then _ui.GetBaseInfos()
+            If _ui IsNot Nothing Then
+                If Me.IsDisposed Then Return
+                If _loaded Then _ui.GetBaseInfos()
+            End If
         End Set
     End Property
 

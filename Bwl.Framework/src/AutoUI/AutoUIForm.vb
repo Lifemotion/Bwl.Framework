@@ -14,7 +14,6 @@
         _ui = ui
         InitializeComponent()
         AddHandler AutoUIDisplay1.AutoFormDescriptorUpdated, AddressOf FormDescriptorUpdated
-        AddHandler ui.UiAlive, Sub() _lastUiAlive = Now
     End Sub
 
     Private Sub FormDescriptorUpdated(sender As AutoUIDisplay)
@@ -39,6 +38,7 @@
         If Not DesignMode Then
             If _ui IsNot Nothing Then
                 AutoUIDisplay1.ConnectedUI = _ui
+                _loggerServer.RequestLogsTransmission()
             End If
         End If
     End Sub
@@ -58,7 +58,16 @@
     End Sub
 
     Private Sub updateTimer_Tick(sender As Object, e As EventArgs) Handles updateTimer.Tick
-        If (Now - _lastUiAlive).TotalSeconds > 6 Then
+
+    End Sub
+
+    Private Sub AutoUIForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        _ui = Nothing
+        AutoUIDisplay1.ConnectedUI = Nothing
+    End Sub
+
+    Private Sub checkAlive_Tick(sender As Object, e As EventArgs) Handles checkAlive.Tick
+        If _ui.CheckAlive() = False Then
             If Text.Contains(" (no connection)") = False Then
                 Text += " (no connection)"
                 For Each cnt As Control In Controls
@@ -73,5 +82,6 @@
                 Next
             End If
         End If
+        _loggerServer.RequestLogsTransmission()
     End Sub
 End Class

@@ -9,6 +9,7 @@ End Class
 Public Class LogsExporter
     Inherits BaseServer
     Implements ILogWriter
+    Private _lastSendRequest As DateTime = Now
 
     Public Sub New(netServer As IMessageTransport, prefix As String)
         MyBase.New(netServer, prefix)
@@ -23,6 +24,7 @@ Public Class LogsExporter
                 Select Case message.Part(2)
                     Case "send-request"
                         _clientID = message.FromID
+                        _lastSendRequest = Now
                 End Select
             End If
         End If
@@ -38,7 +40,7 @@ Public Class LogsExporter
     Public Sub WriteEvent(datetime As Date, path() As String, type As LogEventType, text As String, ParamArray params() As Object) Implements ILogWriter.WriteEvent
         Try
             If _server IsNot Nothing Then
-                If _clientID > "" Then
+                If _clientID > "" And (Now - _lastSendRequest).TotalSeconds < 5 Then
                     Dim msg = New NetMessage("#", "LogsRemoting", _prefix, datetime.Ticks.ToString, type.ToString, text, params.ToString)
                     msg.ToID = _clientID
                     _server.SendMessage(msg)

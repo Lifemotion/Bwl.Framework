@@ -6,25 +6,10 @@ Public Class AutoUiClient
 
     Public Event RequestToSend As IAutoUI.RequestToSendEventHandler Implements IAutoUI.RequestToSend
     Public Event BaseInfosReady As IAutoUI.BaseInfosReadyEventHandler Implements IAutoUI.BaseInfosReady
-    Public Event UiAlive As IAutoUI.UiAliveEventHandler Implements IAutoUI.UiAlive
 
     Public Sub New(netClient As IMessageTransport, prefix As String, target As String)
         MyBase.New(netClient, prefix, target)
         AddHandler netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
-
-        Dim aliveThread As New Threading.Thread(Sub()
-                                                    Do
-                                                        Try
-                                                            Dim msg = New NetMessage("#", "AutoUiRemoting", _prefix, "#alive")
-                                                            msg.ToID = _target
-                                                            _client.SendMessage(msg)
-                                                        Catch ex As Exception
-                                                        End Try
-                                                        Threading.Thread.Sleep(3000)
-                                                    Loop
-                                                End Sub)
-        aliveThread.IsBackground = True
-        aliveThread.Start()
     End Sub
 
     Private Sub _client_ReceivedMessage(message As NetMessage)
@@ -36,8 +21,6 @@ Public Class AutoUiClient
                         infos.Add(message.PartBytes(i))
                     Next
                     RaiseEvent BaseInfosReady(infos.ToArray)
-                Case "#alive-ok"
-                    RaiseEvent UiAlive()
                 Case Else
                     Dim id = message.Part(2)
                     Dim dataname = message.Part(3)
@@ -60,4 +43,12 @@ Public Class AutoUiClient
         _client.SendMessage(msg)
     End Sub
 
+    Public Function CheckAlive() As Boolean Implements IAutoUI.CheckAlive
+        Dim msg = New NetMessage("S", "AutoUiRemoting", _prefix, "#alive")
+        msg.ToID = _target
+        Dim result = _client.SendMessageWaitAnswer(msg, "#alive-ok", 5)
+        If result Is Nothing Then Return False
+        If result.Part(0).ToLower <> "#alive-ok" Then Return False
+        Return True
+    End Function
 End Class

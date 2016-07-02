@@ -2,6 +2,7 @@
 Imports bwl.Framework
 
 Public Class RemoteAppClient
+
     Public ReadOnly Property LogsClient As LogsClient
     Public ReadOnly Property SettingsClient As SettingsClient
     Public ReadOnly Property AutoUIClient As AutoUiClient
@@ -10,6 +11,7 @@ Public Class RemoteAppClient
     Private _settingsForm As SettingsDialog
     Private _invokeFrom As Form
     Private _formTitle As String
+    Private _createdForm As Form
 
     Public Sub New()
         Me.New("remote-app", "")
@@ -31,9 +33,17 @@ Public Class RemoteAppClient
     End Sub
 
     Public Function CreateAutoUiForm() As AutoUIForm
-        Dim form = AutoUIForm.Create(SettingsClient, LogsClient, AutoUIClient)
-        form.Text += " RemoteApp"
-        Return form
+        If _createdForm IsNot Nothing Then
+            Try
+                _createdForm.Close()
+                _createdForm.Dispose()
+            Catch ex As Exception
+            End Try
+            _createdForm = Nothing
+        End If
+        _createdForm = AutoUIForm.Create(SettingsClient, LogsClient, AutoUIClient)
+        _createdForm.Text += " RemoteApp"
+        Return _createdForm
     End Function
 
     Public Sub RunRemoteApp()
@@ -41,4 +51,5 @@ Public Class RemoteAppClient
         CreateAutoUiForm.Show()
         Application.Run()
     End Sub
+
 End Class

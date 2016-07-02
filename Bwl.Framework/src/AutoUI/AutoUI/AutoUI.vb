@@ -6,21 +6,6 @@ Public Class AutoUI
     Public ReadOnly Property Elements As New List(Of IUIElementLocal)
     Public Event RequestToSend(id As String, dataname As String, data As Byte()) Implements IAutoUI.RequestToSend
     Public Event BaseInfosReady(infos As Byte()()) Implements IAutoUI.BaseInfosReady
-    Public Event UiAlive() Implements IAutoUI.UiAlive
-
-    Public Sub New()
-        Dim aliveThread As New Threading.Thread(Sub()
-                                                    Do
-                                                        Try
-                                                            RaiseEvent UiAlive()
-                                                        Catch ex As Exception
-                                                        End Try
-                                                        Threading.Thread.Sleep(3000)
-                                                    Loop
-                                                End Sub)
-        aliveThread.IsBackground = True
-        aliveThread.Start()
-    End Sub
 
     Friend Sub RegisterElement(element As IUIElementLocal)
         For Each elem In Elements
@@ -50,4 +35,7 @@ Public Class AutoUI
         RaiseEvent BaseInfosReady(datas.ToArray)
     End Sub
 
+    Public Function CheckAlive() As Boolean Implements IAutoUI.CheckAlive
+        Return True
+    End Function
 End Class

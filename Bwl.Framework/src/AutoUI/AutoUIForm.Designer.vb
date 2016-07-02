@@ -24,6 +24,7 @@ Partial Class AutoUIForm
         Me.components = New System.ComponentModel.Container()
         Me.AutoUIDisplay1 = New Bwl.Framework.AutoUIDisplay()
         Me.updateTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.checkAlive = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
         'logWriter
@@ -48,6 +49,11 @@ Partial Class AutoUIForm
         Me.updateTimer.Enabled = True
         Me.updateTimer.Interval = 500
         '
+        'checkAlive
+        '
+        Me.checkAlive.Enabled = True
+        Me.checkAlive.Interval = 3000
+        '
         'AutoUIForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -64,4 +70,5 @@ Partial Class AutoUIForm
 
     Friend WithEvents AutoUIDisplay1 As AutoUIDisplay
     Friend WithEvents updateTimer As Timer
+    Friend WithEvents checkAlive As Timer
 End Class

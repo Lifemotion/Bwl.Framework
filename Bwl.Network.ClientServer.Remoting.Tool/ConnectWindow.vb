@@ -51,7 +51,7 @@ Public Class ConnectWindow
         End Try
     End Sub
 
-    Private _transport As New MessageTransport(_app.RootStorage, _app.RootLogger,,, "localhost:3180", "", "", False)
+    Private _transport As New MessageTransport(_app.RootStorage, _app.RootLogger,, "localhost:3180",, "", "", False)
 
     Private Sub ConnectWindow_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         SettingField1.AssignedSetting = _transport.ModeSetting

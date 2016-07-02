@@ -199,9 +199,6 @@
     <Compile Include="src\Logger\UI\LoggerForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\NetClientServerPortable\NetClientSimple.vb" />
-    <Compile Include="src\NetClientServerPortable\NetMessage.vb" />
-    <Compile Include="src\NetClientServerPortable\NetServer.vb" />
     <Compile Include="src\Settings\Settings\PasswordSetting.vb" />
     <Compile Include="src\Settings\Storages\ClonedSettingsStorage.vb" />
     <Compile Include="src\Settings\Gui\SettingField.Designer.vb">
