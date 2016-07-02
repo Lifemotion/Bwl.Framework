@@ -1,4 +1,6 @@
-﻿Public Class SerialCableTransport
+﻿Imports bwl.Network.ClientServer
+
+Public Class SerialCableTransport
     Implements IMessageTransport
 
     Public Property IgnoreNotConnected As Boolean Implements IMessageTransport.IgnoreNotConnected
@@ -15,8 +17,14 @@
         End Get
     End Property
 
+    Public ReadOnly Property MyServiceName As String Implements IMessageTransport.MyServiceName
+        Get
+            Throw New NotImplementedException()
+        End Get
+    End Property
+
     Public Event ReceivedMessage(message As NetMessage) Implements IMessageTransport.ReceivedMessage
-    Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
+    Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
     Public Event SentMessage(message As NetMessage) Implements IMessageTransport.SentMessage
 
     Public Sub Close() Implements IMessageTransport.Close
@@ -27,13 +35,17 @@
         Throw New NotImplementedException()
     End Sub
 
-    Public Sub RegisterMe(id As String, password As String, options As String) Implements IMessageTransport.RegisterMe
+    Public Sub RegisterMe(id As String, password As String, serviceName As String, options As String) Implements IMessageTransport.RegisterMe
         Throw New NotImplementedException()
     End Sub
 
     Public Sub SendMessage(message As NetMessage) Implements IMessageTransport.SendMessage
         Throw New NotImplementedException()
     End Sub
+
+    Public Function GetClientsList(serviceName As String) As String() Implements IMessageTransport.GetClientsList
+        Throw New NotImplementedException()
+    End Function
 
     Public Function SendMessageWaitAnswer(message As NetMessage, answerFirstPart As String, Optional timeout As Single = 20) As NetMessage Implements IMessageTransport.SendMessageWaitAnswer
         Throw New NotImplementedException()

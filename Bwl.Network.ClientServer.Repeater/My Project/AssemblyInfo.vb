@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 ' Проверьте значения атрибутов сборки
 
-<Assembly: AssemblyTitle("Bwl.Network.ExchangeServer")> 
+<Assembly: AssemblyTitle("Bwl.Network.ClientServer.Repeater")>
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("Bwl.Network.ExchangeServer")> 
+<Assembly: AssemblyCompany("")>
+<Assembly: AssemblyProduct("Bwl.Network.ClientServer.Repeater")>
 <Assembly: AssemblyCopyright("Copyright ©  2014")> 
 <Assembly: AssemblyTrademark("")> 
 

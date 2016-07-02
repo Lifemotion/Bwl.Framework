@@ -41,6 +41,8 @@ Public Class ConnectWindow
         Dim _appBaseClient As New RemoteAppClient()
         Try
             _appBaseClient.MessageTransport.Open(cbAddress.Text, Val(ComboBox2.Text))
+            _appBaseClient.MessageTransport.RegisterMe("User", "", "RemoteAppClient", "")
+
             Dim form = _appBaseClient.CreateAutoUiForm()
             form.Show()
         Catch ex As Exception
@@ -49,7 +51,7 @@ Public Class ConnectWindow
         End Try
     End Sub
 
-    Private _transport As New MessageTransport(_app.RootStorage, _app.RootLogger,,, "localhost:3180", "", False)
+    Private _transport As New MessageTransport(_app.RootStorage, _app.RootLogger,,, "localhost:3180", "", "", False)
 
     Private Sub ConnectWindow_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         SettingField1.AssignedSetting = _transport.ModeSetting
@@ -61,8 +63,11 @@ Public Class ConnectWindow
 
     Private Sub bClientConnect_Click(sender As Object, e As EventArgs) Handles bClient.Click
         Try
+            lbClients.Items.Clear()
             _transport.Close()
             _transport.OpenAndRegister()
+            Dim clients = _transport.GetClientsList("RemoteAppServer")
+            lbClients.Items.AddRange(clients)
             _logger.AddMessage("Открыто успешно")
         Catch ex As Exception
             _logger.AddWarning("Открыто неуспешно: " + ex.Message)
@@ -96,5 +101,20 @@ Public Class ConnectWindow
             Catch ex1 As Exception
             End Try
         End Try
+    End Sub
+
+    Private Sub bFindClients_Click(sender As Object, e As EventArgs) Handles bFindClients.Click
+        Try
+            lbClients.Items.Clear()
+            Dim clients = _transport.GetClientsList("RemoteAppServer")
+            lbClients.Items.AddRange(clients)
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+
+    Private Sub lbClients_DoubleClick(sender As Object, e As EventArgs) Handles lbClients.DoubleClick
+        _transport.TargetSetting.Value = lbClients.Text
+        bConnectRemoteApp_Click(Nothing, Nothing)
     End Sub
 End Class

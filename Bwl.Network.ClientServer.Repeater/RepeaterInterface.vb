@@ -29,7 +29,7 @@ Public Class RepeaterInterface
             Dim clients = _server.Clients.ToArray
             Dim items As New List(Of String)
             For Each client In clients
-                items.Add("#" + client.ID.ToString + ", [" + client.RegisteredID + "], " + client.IPAddress + ", Received\Sent: " + client.ReceivedMessages.ToString + "\" + client.SentMessages.ToString)
+                items.Add("#" + client.ID.ToString + ", [" + client.RegisteredID + " @ " + client.RegisteredServiceName + "], " + client.IPAddress + ", Received\Sent: " + client.ReceivedMessages.ToString + "\" + client.SentMessages.ToString)
             Next
             _clientsList.Items.Replace(items.ToArray)
         Catch ex As Exception

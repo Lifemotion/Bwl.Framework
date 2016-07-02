@@ -31,21 +31,21 @@ Public Class RepeaterCore
         End SyncLock
     End Sub
 
-    Private Sub _netServer_RegisterClientRequest(client As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Handles _netServer.RegisterClientRequest
-        If id > "" Then
-            allowRegister = True
-            _logger.AddMessage("Registered ID " + id)
-        Else
-            _logger.AddWarning("Trying to register with empty name ")
-        End If
-    End Sub
-
     Private Sub _netServer_ClientConnected(client As ConnectedClient) Handles _netServer.ClientConnected
         _logger.AddMessage("Connected #" + client.ID.ToString + ", " + client.IPAddress + ", " + client.ConnectionTime.ToString + "")
     End Sub
 
     Private Sub _netServer_SentMessage(message As NetMessage, client As ConnectedClient) Handles _netServer.SentMessage
         If LogMessages Then _logger.AddInformation(client.RegisteredID + "<- " + message.ToString)
+    End Sub
+
+    Private Sub _netServer_RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Handles _netServer.RegisterClientRequest
+        If id > "" Then
+            allowRegister = True
+            _logger.AddMessage("Registered ID " + id + ", ServiceName " + serviceName)
+        Else
+            _logger.AddWarning("Trying to register with empty name ")
+        End If
     End Sub
 
     Public ReadOnly Property NetServer As NetServer

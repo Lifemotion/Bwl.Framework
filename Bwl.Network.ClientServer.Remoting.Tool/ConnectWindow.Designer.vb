@@ -34,6 +34,8 @@ Partial Class ConnectWindow
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.bFindClients = New System.Windows.Forms.Button()
+        Me.lbClients = New System.Windows.Forms.ListBox()
         Me.bConnectRemoteApp = New System.Windows.Forms.Button()
         Me.cbIsConnected = New System.Windows.Forms.CheckBox()
         Me.SettingField5 = New Bwl.Framework.SettingField()
@@ -50,7 +52,7 @@ Partial Class ConnectWindow
         'bConnect
         '
         Me.bConnect.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.bConnect.Location = New System.Drawing.Point(428, 266)
+        Me.bConnect.Location = New System.Drawing.Point(428, 296)
         Me.bConnect.Name = "bConnect"
         Me.bConnect.Size = New System.Drawing.Size(90, 23)
         Me.bConnect.TabIndex = 0
@@ -86,7 +88,7 @@ Partial Class ConnectWindow
         Me.lbBeacons.FormattingEnabled = True
         Me.lbBeacons.Location = New System.Drawing.Point(6, 60)
         Me.lbBeacons.Name = "lbBeacons"
-        Me.lbBeacons.Size = New System.Drawing.Size(512, 199)
+        Me.lbBeacons.Size = New System.Drawing.Size(512, 225)
         Me.lbBeacons.TabIndex = 3
         '
         'Timer1
@@ -97,7 +99,7 @@ Partial Class ConnectWindow
         'bFind
         '
         Me.bFind.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.bFind.Location = New System.Drawing.Point(6, 266)
+        Me.bFind.Location = New System.Drawing.Point(6, 296)
         Me.bFind.Name = "bFind"
         Me.bFind.Size = New System.Drawing.Size(90, 23)
         Me.bFind.TabIndex = 4
@@ -107,7 +109,7 @@ Partial Class ConnectWindow
         'bSetNetwork
         '
         Me.bSetNetwork.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.bSetNetwork.Location = New System.Drawing.Point(317, 266)
+        Me.bSetNetwork.Location = New System.Drawing.Point(317, 296)
         Me.bSetNetwork.Name = "bSetNetwork"
         Me.bSetNetwork.Size = New System.Drawing.Size(105, 23)
         Me.bSetNetwork.TabIndex = 5
@@ -122,7 +124,7 @@ Partial Class ConnectWindow
         Me.TabControl1.Location = New System.Drawing.Point(0, 4)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(534, 322)
+        Me.TabControl1.Size = New System.Drawing.Size(534, 353)
         Me.TabControl1.TabIndex = 6
         '
         'TabPage1
@@ -136,13 +138,15 @@ Partial Class ConnectWindow
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(526, 300)
+        Me.TabPage1.Size = New System.Drawing.Size(526, 327)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Direct Connect"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
         'TabPage2
         '
+        Me.TabPage2.Controls.Add(Me.bFindClients)
+        Me.TabPage2.Controls.Add(Me.lbClients)
         Me.TabPage2.Controls.Add(Me.bConnectRemoteApp)
         Me.TabPage2.Controls.Add(Me.cbIsConnected)
         Me.TabPage2.Controls.Add(Me.SettingField5)
@@ -154,14 +158,31 @@ Partial Class ConnectWindow
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(526, 296)
+        Me.TabPage2.Size = New System.Drawing.Size(526, 327)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "MessageTransport Connect"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
+        'bFindClients
+        '
+        Me.bFindClients.Location = New System.Drawing.Point(13, 267)
+        Me.bFindClients.Name = "bFindClients"
+        Me.bFindClients.Size = New System.Drawing.Size(269, 23)
+        Me.bFindClients.TabIndex = 41
+        Me.bFindClients.Text = "Find Clients"
+        Me.bFindClients.UseVisualStyleBackColor = True
+        '
+        'lbClients
+        '
+        Me.lbClients.FormattingEnabled = True
+        Me.lbClients.Location = New System.Drawing.Point(288, 15)
+        Me.lbClients.Name = "lbClients"
+        Me.lbClients.Size = New System.Drawing.Size(232, 303)
+        Me.lbClients.TabIndex = 40
+        '
         'bConnectRemoteApp
         '
-        Me.bConnectRemoteApp.Location = New System.Drawing.Point(13, 269)
+        Me.bConnectRemoteApp.Location = New System.Drawing.Point(13, 296)
         Me.bConnectRemoteApp.Name = "bConnectRemoteApp"
         Me.bConnectRemoteApp.Size = New System.Drawing.Size(269, 23)
         Me.bConnectRemoteApp.TabIndex = 39
@@ -237,7 +258,7 @@ Partial Class ConnectWindow
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(534, 326)
+        Me.ClientSize = New System.Drawing.Size(534, 357)
         Me.Controls.Add(Me.TabControl1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -270,4 +291,6 @@ Partial Class ConnectWindow
     Friend WithEvents SettingField1 As Framework.SettingField
     Friend WithEvents cbIsConnected As CheckBox
     Friend WithEvents bConnectRemoteApp As Button
+    Friend WithEvents lbClients As ListBox
+    Friend WithEvents bFindClients As Button
 End Class

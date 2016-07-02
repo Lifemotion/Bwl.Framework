@@ -38,6 +38,7 @@ Public Class NetClient
     Public Property DefaultPort As Integer = 3130 Implements IMessageClient.DefaultPort
     Public Property AutoConnect As Boolean
     Public ReadOnly Property MyID As String = "" Implements IMessageClient.MyID
+    Public ReadOnly Property MyServiceName As String = "" Implements IMessageClient.MyServiceName
 
     Sub New()
         pingTimer = New System.Timers.Timer
@@ -265,7 +266,8 @@ Public Class NetClient
     ''' <param name="message"></param>
     ''' <remarks></remarks>
     Public Event ReceivedMessage(ByVal message As NetMessage) Implements IMessageClient.ReceivedMessage
-    Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
+    Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
+    '  Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
     ' Public Event ReceivedHierarchicMessage(ByVal message As Hierarchic)
     Private Sub PingServer() Handles pingTimer.Elapsed
         If Not directMode Then
@@ -370,12 +372,25 @@ Public Class NetClient
         RaiseEvent Disconnected()
     End Sub
 
-    Public Sub RegisterMe(id As String, password As String, options As String) Implements IMessageTransport.RegisterMe
-        Dim result = SendMessageWaitAnswer(New NetMessage("S", "service-register-me", id, "plain", password, options), "service-register-result")
+    Public Sub RegisterMe(id As String, password As String, serviceName As String, options As String) Implements IMessageTransport.RegisterMe
+        Dim result = SendMessageWaitAnswer(New NetMessage("S", "service-register-me", id, "plain", password, serviceName, options), "service-register-result")
         If result Is Nothing Then Throw New Exception("Server not responding")
         If result.Part(1).ToLower <> "ok" Then Throw New Exception("Server response: " + result.Part(1) + " " + result.Part(2))
         _MyID = id
+        _MyServiceName = serviceName
     End Sub
+
+    Public Function GetClientsList(serviceName As String) As String() Implements IMessageTransport.GetClientsList
+        Dim result = SendMessageWaitAnswer(New NetMessage("S", "service-get-clients-list", serviceName), "service-get-clients-list-result")
+        If result Is Nothing Then Throw New Exception("Server not responding")
+        Dim list As New List(Of String)
+        Dim i = 1
+        Do While (result.Part(i) > "")
+            list.Add(result.Part(i))
+            i += 1
+        Loop
+        Return list.ToArray
+    End Function
 End Class
 
 Public Class NoConnectException

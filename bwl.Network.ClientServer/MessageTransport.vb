@@ -14,10 +14,11 @@ Public Class MessageTransport
     Public Property UserSetting As StringSetting
     Public Property PasswordSetting As StringSetting
     Public Property TargetSetting As StringSetting
+    Public Property ServiceNameSetting As StringSetting
 
     Public Event ReceivedMessage(message As NetMessage) Implements IMessageTransport.ReceivedMessage
     Public Event SentMessage(message As NetMessage) Implements IMessageTransport.SentMessage
-    Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
+    Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
     Public Property AutoConnect As Boolean
 
     Public Property IgnoreNotConnected As Boolean Implements IMessageTransport.IgnoreNotConnected
@@ -45,6 +46,13 @@ Public Class MessageTransport
         End Get
     End Property
 
+    Public ReadOnly Property MyServiceName As String Implements IMessageTransport.MyServiceName
+        Get
+            If _transport Is Nothing Then Return ""
+            Return _transport.MyServiceName
+        End Get
+    End Property
+
     Public Sub SendMessage(message As NetMessage) Implements IMessageTransport.SendMessage
         If _transport Is Nothing Then Throw New Exception("Transport Not Created (Invalid Mode)")
         _transport.SendMessage(message)
@@ -55,9 +63,9 @@ Public Class MessageTransport
         Return _transport.SendMessageWaitAnswer(message, answerFirstPart, timeout)
     End Function
 
-    Public Sub RegisterMe(id As String, password As String, options As String) Implements IMessageTransport.RegisterMe
+    Public Sub RegisterMe(id As String, password As String, serviceName As String, options As String) Implements IMessageTransport.RegisterMe
         If _transport Is Nothing Then Throw New Exception("Transport Not Created (Invalid Mode)")
-        _transport.RegisterMe(id, password, options)
+        _transport.RegisterMe(id, password, serviceName, options)
     End Sub
 
     Public Sub Open(address As String, options As String) Implements IMessageTransport.Open
@@ -70,11 +78,11 @@ Public Class MessageTransport
         _transport.Close()
     End Sub
 
-    Public Sub New(storage As SettingsStorage, logger As Logger, Optional defaultMode As String = "NetClient", Optional defaultAddress As String = "localhost:3001", Optional defaultUser As String = "User1", Optional defaultTargetId As String = "User1", Optional autoConnect As Boolean = True)
-        Me.New({New NetClientFactory, New NetServerFactory}, storage, logger, defaultMode, defaultAddress, defaultUser, defaultTargetId, autoConnect)
+    Public Sub New(storage As SettingsStorage, logger As Logger, Optional defaultMode As String = "NetClient", Optional defaultAddress As String = "localhost:3001", Optional defaultUser As String = "User1", Optional defaultTargetId As String = "User1", Optional defaultServiceName As String = "Service", Optional autoConnect As Boolean = True)
+        Me.New({New NetClientFactory, New NetServerFactory}, storage, logger, defaultMode, defaultAddress, defaultUser, defaultTargetId, defaultServiceName, autoConnect)
     End Sub
 
-    Public Sub New(factories As IMessageTransportFactory(), storage As SettingsStorage, logger As Logger, Optional defaultMode As String = "NetClient", Optional defaultAddress As String = "localhost:3001", Optional defaultUser As String = "User1", Optional defaultTargetId As String = "User1", Optional autoConnect As Boolean = True)
+    Public Sub New(factories As IMessageTransportFactory(), storage As SettingsStorage, logger As Logger, Optional defaultMode As String = "NetClient", Optional defaultAddress As String = "localhost:3001", Optional defaultUser As String = "User1", Optional defaultTargetId As String = "User1", Optional defaultServiceName As String = "Service", Optional autoConnect As Boolean = True)
         _storage = storage
         _logger = logger
         _factories.AddRange(factories)
@@ -91,6 +99,7 @@ Public Class MessageTransport
         PasswordSetting = New StringSetting(_storage, "TransportPassword", "")
 
         TargetSetting = New StringSetting(_storage, "TransportTargetID", defaultTargetId)
+        ServiceNameSetting = New StringSetting(_storage, "TransportServiceName", defaultServiceName)
         Me.AutoConnect = autoConnect
         Try
             CreateTransport()
@@ -135,7 +144,7 @@ Public Class MessageTransport
 
     Public Sub OpenAndRegister()
         _transport.Open(AddressSetting.Value, "")
-        _transport.RegisterMe(UserSetting.Value, PasswordSetting.Value, "")
+        _transport.RegisterMe(UserSetting.Value, PasswordSetting.Value, "RemoteAppClient", "")
         _logger.AddMessage("Connected to server " + AddressSetting.Value + " as " + UserSetting.Value)
     End Sub
 
@@ -147,7 +156,11 @@ Public Class MessageTransport
         RaiseEvent SentMessage(message)
     End Sub
 
-    Private Sub _transport_RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Handles _transport.RegisterClientRequest
-        RaiseEvent RegisterClientRequest(clientInfo, id, method, password, options, allowRegister, infoToClient)
+    Public Function GetClientsList(serviceName As String) As String() Implements IMessageTransport.GetClientsList
+        Return _transport.GetClientsList(serviceName)
+    End Function
+
+    Private Sub _transport_RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Handles _transport.RegisterClientRequest
+        RaiseEvent RegisterClientRequest(clientInfo, id, method, password, serviceName, options, allowRegister, infoToClient)
     End Sub
 End Class

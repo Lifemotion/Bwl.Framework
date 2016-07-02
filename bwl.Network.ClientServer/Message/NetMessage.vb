@@ -3,6 +3,7 @@ Public Class NetMessage
     Public Property DataType As Char
     Public Property FromID As String = ""
     Public Property ToID As String = ""
+    Public Property ServiceName As String = ""
 
     Private parts()() As Byte
     Private partCount As Integer
@@ -101,9 +102,10 @@ Public Class NetMessage
             If lastPart.Length > 6 Then
                 If lastPart(0) = 35 And lastPart(1) = 37 And lastPart(2) = 126 Then
                     Dim txtParts = System.Text.Encoding.GetEncoding(1251).GetString(lastPart).Split({"#%~"}, StringSplitOptions.None)
-                    If txtParts.Length = 5 AndAlso txtParts(1) = "ADDRESSES" Then
+                    If txtParts.Length = 6 AndAlso txtParts(1) = "ADDRESSES" Then
                         FromID = txtParts(2)
                         ToID = txtParts(3)
+                        ServiceName = txtParts(4)
                         partCount -= 1
                     End If
                 End If
@@ -211,8 +213,8 @@ Public Class NetMessage
             Array.ConstrainedCopy(coded(i), 0, result, position, coded(i).Length)
             position += coded(i).Length + 1
         Next
-        If FromID > "" Or ToID > "" Then
-            Dim addrString = "#%~ADDRESSES#%~" + FromID + "#%~" + ToID + "#%~"
+        If FromID > "" Or ToID > "" Or ServiceName > "" Then
+            Dim addrString = "#%~ADDRESSES#%~" + FromID + "#%~" + ToID + "#%~" + ServiceName + "#%~"
             Dim addrBytes = CodeBytes(System.Text.Encoding.GetEncoding(1251).GetBytes(addrString))
             ReDim Preserve result(result.Length + addrBytes.Length)
             If position > rightLeftOffset + 1 Then result(position - 1) = 58

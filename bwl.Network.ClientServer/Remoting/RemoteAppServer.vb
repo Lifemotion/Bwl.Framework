@@ -31,7 +31,7 @@ Public Class RemoteAppServer
         _MessageTransport.Open("*:" + serverPort.ToString, "")
     End Sub
 
-    Public Sub New(remoteAddress As String, remoteUser As String, remotePassword As String, appBase As AppBase)
+    Public Sub New(remoteAddress As String, remoteUser As String, remotePassword As String,  appBase As AppBase)
         Me.New(remoteAddress, remoteUser, remotePassword, appBase.RootStorage, appBase.RootLogger, appBase.AutoUI)
     End Sub
 
@@ -56,7 +56,7 @@ Public Class RemoteAppServer
             Try
                 If _MessageTransport.IsConnected = False Then
                     _MessageTransport.Open(_remoteAddress, "")
-                    _MessageTransport.RegisterMe(_remoteUser, _remotePassword, "")
+                    _MessageTransport.RegisterMe(_remoteUser, _remotePassword, "RemoteAppServer", "")
                 End If
             Catch ex As Exception
             End Try
@@ -83,9 +83,13 @@ Public Class RemoteAppServer
         _SettingsServer = New SettingsServer(storage, transport, prefix)
         _LogsServer = New LogsServer(logger, transport, prefix)
         _UiServer = New AutoUiServer(ui, transport, prefix)
-
+        AddHandler MessageTransport.RegisterClientRequest, AddressOf RegisterClientRequest
         If beaconMode = RemoteAppBeaconMode.localhost Then _beacon = New NetBeacon(netPort, beaconName, True, True)
         If beaconMode = RemoteAppBeaconMode.broadcast Then _beacon = New NetBeacon(netPort, beaconName, False, True)
+    End Sub
+
+    Private Sub RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String)
+        allowRegister = True
     End Sub
 
     Private Shared Function GetPortFromAddress(address As String) As Integer

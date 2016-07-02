@@ -38,6 +38,10 @@ Public Class AutoUiServer
             Select Case message.Part(2)
                 Case "#baseinfos"
                     _ui.GetBaseInfos()
+                Case "#alive"
+                    Dim msg As New NetMessage("#", "AutoUiRemoting", _prefix, "#alive-ok")
+                    msg.ToID = _clientID
+                    _server.SendMessage(msg)
                 Case Else
                     Dim id = message.Part(2)
                     Dim dataname = message.Part(3)

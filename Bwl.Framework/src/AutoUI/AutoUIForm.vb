@@ -1,6 +1,7 @@
 ﻿Public Class AutoUIForm
     Inherits FormBase
     Protected _ui As IAutoUI
+    Protected _lastUiAlive As DateTime = Now
 
     Public Sub New()
         MyBase.New
@@ -13,6 +14,7 @@
         _ui = ui
         InitializeComponent()
         AddHandler AutoUIDisplay1.AutoFormDescriptorUpdated, AddressOf FormDescriptorUpdated
+        AddHandler ui.UiAlive, Sub() _lastUiAlive = Now
     End Sub
 
     Private Sub FormDescriptorUpdated(sender As AutoUIDisplay)
@@ -53,5 +55,23 @@
 
     Private Sub Button1_Click(sender As Object, e As EventArgs)
         AutoUIDisplay1.AutoFormDescriptor.Update()
+    End Sub
+
+    Private Sub updateTimer_Tick(sender As Object, e As EventArgs) Handles updateTimer.Tick
+        If (Now - _lastUiAlive).TotalSeconds > 6 Then
+            If Text.Contains(" (no connection)") = False Then
+                Text += " (no connection)"
+                For Each cnt As Control In Controls
+                    cnt.Enabled = False
+                Next
+            End If
+        Else
+            If Text.Contains(" (no connection)") = True Then
+                Text = Text.Replace(" (no connection)", "")
+                For Each cnt As Control In Controls
+                    cnt.Enabled = True
+                Next
+            End If
+        End If
     End Sub
 End Class

@@ -16,6 +16,7 @@ Public Class AutoUIDisplay
         End Get
         Set(value As IAutoUI)
             _ui = value
+            If Me.IsDisposed Then Return
             If _loaded Then _ui.GetBaseInfos()
         End Set
     End Property
@@ -24,6 +25,7 @@ Public Class AutoUIDisplay
     Public Property AutoFormDescriptor As RemoteAutoFormDescriptor
 
     Private Sub AutoUIDisplay_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Me.IsDisposed Then Return
         _loaded = True
     End Sub
 
@@ -36,6 +38,8 @@ Public Class AutoUIDisplay
     End Sub
 
     Private Sub _ui_RequestToSend(id As String, dataname As String, data() As Byte) Handles _ui.RequestToSend
+        If Me.IsDisposed Then Return
+
         If AutoFormDescriptor IsNot Nothing AndAlso id = AutoFormDescriptor.Info.ID Then
             AutoFormDescriptor.ProcessData(dataname, data)
         End If
@@ -55,6 +59,7 @@ Public Class AutoUIDisplay
     Public g As Guid
 
     Private Sub _ui_BaseInfosReady(infos As Byte()()) Handles _ui.BaseInfosReady
+        If Me.IsDisposed Then Return
         RemoveControls()
         For Each infoBytes In infos
             Dim info = UIElementInfo.CreateFromBytes(infoBytes)

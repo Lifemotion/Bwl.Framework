@@ -24,12 +24,12 @@ Public Class LogsClient
                 End If
             Catch ex As Exception
             End Try
-            Threading.Thread.Sleep(30000)
+            Threading.Thread.Sleep(3000)
         Loop
     End Sub
 
     Private Sub _client_ReceivedMessage(message As NetMessage)
-        If message.Part(0) = "LogsRemoting" And message.Part(1) = _prefix Then
+        If message.Part(0) = "LogsRemoting" And message.Part(1) = _prefix And message.FromID = _target Then
             Dim mtype As LogEventType = LogEventType.debug
             Dim mdate = New DateTime(CLng(message.Part(2)))
             [Enum].TryParse(Of LogEventType)(message.Part(3), mtype)

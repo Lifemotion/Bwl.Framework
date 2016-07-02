@@ -15,11 +15,19 @@ Module Test
 
     Private _setting1 As New StringSetting(_appBase.RootStorage, "Setting1", "cat")
 
-    Private _appBaseServerLocal As New RemoteAppServer(3155, _appBase, "TestRemApp", RemoteAppBeaconMode.broadcast)
+    Private _appBaseServerLocal As RemoteAppServer
 
-    Private _appBaseServerOnRepeater As New RemoteAppServer("localhost:3180", "RemoteApp1", "", _appBase)
+    Private _appBaseServerOnRepeater As RemoteAppServer
 
     Public Sub Main()
+
+        Try
+            _appBaseServerLocal = New RemoteAppServer(3155, _appBase, "TestRemApp", RemoteAppBeaconMode.broadcast)
+        Catch ex As Exception
+        End Try
+        Dim rnd As New Random
+        _appBaseServerOnRepeater = New RemoteAppServer("localhost:3180", "RemoteApp" + rnd.Next.ToString, "", _appBase)
+
         Dim thread1 As New Threading.Thread(Sub()
                                                 Do
                                                     _appBase.RootLogger.AddMessage("logtest1")

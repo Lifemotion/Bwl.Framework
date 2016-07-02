@@ -17,6 +17,7 @@ Public Class ConnectedClient
     Friend parentStruct As ClientData
     Friend parentServer As NetServer
     Public Property RegisteredID As String = ""
+    Public Property RegisteredServiceName As String = ""
     Public Property SentMessages As Long
     Public Property ReceivedMessages As Long
     Public Sub New(ByVal newIpAddress As String, ByVal newId As Integer, ByVal newParentStruct As ClientData, ByVal newParent As NetServer, ByVal newDirect As Boolean)
@@ -96,6 +97,7 @@ Public Class NetServer
     Private directOnly As Boolean
     Private _netBeacon As NetBeacon
     Public ReadOnly Property MyID As String = "" Implements IMessageServer.MyID
+    Public ReadOnly Property MyServiceName As String = "" Implements IMessageServer.MyServiceName
 
     Public ReadOnly Property NetBeacon As NetBeacon
         Get
@@ -405,20 +407,38 @@ Public Class NetServer
                 Dim id = message.Part(1)
                 Dim method = message.Part(2)
                 Dim password = message.Part(3)
-                Dim options = message.Part(4)
+                Dim serviceName = message.Part(4)
+                Dim options = message.Part(5)
                 Dim allow = False
                 Dim info = ""
                 Dim dictonary As New Dictionary(Of String, String)
                 dictonary.Add("ID", client.userInfo.ID)
                 dictonary.Add("IPAddress", client.userInfo.IPAddress)
                 dictonary.Add("RegisteredID", client.userInfo.RegisteredID)
-                RaiseEvent RegisterClientRequest(dictonary, id, method, password, options, allow, info)
+                dictonary.Add("RegisteredServiceName", client.userInfo.RegisteredServiceName)
+                RaiseEvent RegisterClientRequest(dictonary, id, method, password, serviceName, options, allow, info)
+                Dim msg As New NetMessage("S", "service-register-result")
+                msg.ToID = message.FromID
+                msg.FromID = MyID
+                msg.Part(2) = info
                 If allow Then
                     client.userInfo.RegisteredID = id
-                    SendMessage(New NetMessage("S", "service-register-result", "ok", info))
+                    client.userInfo.RegisteredServiceName = serviceName
+                    msg.Part(1) = "ok"
                 Else
-                    SendMessage(New NetMessage("S", "service-register-result", "error", info))
+                    msg.Part(1) = "error"
                 End If
+                SendMessage(msg)
+            ElseIf message.Part(0) = "service-get-clients-list" Then
+                Dim serviceName = message.Part(1)
+                Dim users = GetClientsList(serviceName)
+                Dim msg As New NetMessage("S", "service-get-clients-list-result")
+                For i = 0 To users.Length - 1
+                    msg.Part(1 + i) = users(i)
+                Next
+                msg.ToID = message.FromID
+                msg.FromID = MyID
+                SendMessage(msg)
             Else
                 RaiseEvent ReceivedMessage(message, client.userInfo)
                 RaiseEvent ReceivedMessageUniversal(message)
@@ -428,13 +448,13 @@ Public Class NetServer
         End If
     End Sub
 
-    Public Event RegisterClientRequest(client As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageServer.RegisterClientRequest
     Public Event ClientConnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientConnected
     Public Event ClientDisconnected(ByVal client As ConnectedClient) Implements IMessageServer.ClientDisconnected
     Public Event ReceivedMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.ReceivedClientMessage
     Public Event SentMessage(ByVal message As NetMessage, ByVal client As ConnectedClient) Implements IMessageServer.SentClientMessage
     Public Event ReceivedMessageUniversal(message As NetMessage) Implements IMessageServer.ReceivedMessage
     Public Event SentMessageUniversal(message As NetMessage) Implements IMessageServer.SentMessage
+    Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
 
     Friend Sub SystemPerformRemove(ByVal client As ClientData)
         If Not client.userInfo.Direct Then
@@ -549,9 +569,23 @@ Public Class NetServer
     ''' <param name="id"></param>
     ''' <param name="password"></param>
     ''' <param name="options"></param>
-    Public Sub RegisterMe(id As String, password As String, options As String) Implements IMessageTransport.RegisterMe
+    Public Sub RegisterMe(id As String, password As String, serviceName As String, options As String) Implements IMessageTransport.RegisterMe
         _MyID = id
+        _MyServiceName = serviceName
     End Sub
+
+    Public Function GetClientsList(serviceName As String) As String() Implements IMessageTransport.GetClientsList
+        Dim list As New List(Of String)
+        For Each client In connectedClients
+            Dim add = False
+
+            If serviceName = "*" Then add = True
+            If client.userInfo.RegisteredServiceName = serviceName Then add = True
+
+            If add Then list.Add(client.userInfo.RegisteredID)
+        Next
+        Return list.ToArray
+    End Function
 End Class
 
 Public Class NetServerFactory
