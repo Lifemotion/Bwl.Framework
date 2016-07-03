@@ -119,6 +119,50 @@ Public Class NetMessage
         partCount = partsCount
         ReDim parts(partsCount - 1)
     End Sub
+
+    Public Class Adresses
+        Public Property FromID As String = ""
+        Public Property ToID As String = ""
+        Public Property ServiceName As String = ""
+        Public Sub New()
+        End Sub
+        Public Sub New(fromId As String, toId As String, serviceName As String)
+            Me.FromID = fromId
+            Me.ToID = toId
+            Me.ServiceName = serviceName
+        End Sub
+    End Class
+
+    Sub New(addresses As Adresses, ByVal ParamArray newParts() As String)
+        Me.New("S", addresses, newParts)
+    End Sub
+
+    Sub New(ByVal newDataType As Char, addresses As Adresses, ByVal ParamArray newParts() As String)
+        ToID = addresses.ToID
+        FromID = addresses.FromID
+        ServiceName = addresses.ServiceName
+        DataType = newDataType
+        partCount = newParts.Length
+        ReDim parts(partCount - 1)
+        Dim i As Integer
+        For i = 0 To partCount - 1
+            parts(i) = GetBytes(newParts(i))
+        Next
+    End Sub
+
+    Sub New(inReplyToMessage As NetMessage, ByVal ParamArray newParts() As String)
+        DataType = inReplyToMessage.DataType
+        ToID = inReplyToMessage.FromID
+        FromID = inReplyToMessage.ToID
+        ServiceName = inReplyToMessage.ServiceName
+        partCount = newParts.Length
+        ReDim parts(partCount - 1)
+        Dim i As Integer
+        For i = 0 To partCount - 1
+            parts(i) = GetBytes(newParts(i))
+        Next
+    End Sub
+
     Sub New(ByVal newDataType As Char, ByVal ParamArray newParts() As String)
         DataType = newDataType
         partCount = newParts.Length
@@ -128,6 +172,7 @@ Public Class NetMessage
             parts(i) = GetBytes(newParts(i))
         Next
     End Sub
+
     Public Property Part(ByVal index As Integer) As String
         Get
             Return System.Text.Encoding.GetEncoding(1251).GetString(PartBytes(index))

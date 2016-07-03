@@ -29,6 +29,9 @@ Public Class RemoteAppServer
     Public Sub New(serverPort As Integer, storage As SettingsStorage, logger As Logger, ui As IAutoUI, beaconName As String, beaconMode As RemoteAppBeaconMode)
         Me.New(New NetServer, serverPort, "remote-app", storage, logger, ui, beaconName, beaconMode)
         _MessageTransport.Open("*:" + serverPort.ToString, "")
+        Dim name = beaconName
+        If name = "" Then name = "RemoteAppServer"
+        _MessageTransport.RegisterMe(name, "", "RemoteAppServer", "")
     End Sub
 
     Public Sub New(remoteAddress As String, remoteUser As String, remotePassword As String,  appBase As AppBase)

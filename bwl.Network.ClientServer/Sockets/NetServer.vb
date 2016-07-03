@@ -576,6 +576,10 @@ Public Class NetServer
 
     Public Function GetClientsList(serviceName As String) As String() Implements IMessageTransport.GetClientsList
         Dim list As New List(Of String)
+        If Me.MyID > "" Then
+            If Me.MyServiceName = serviceName Or serviceName = "*" Then list.Add(Me.MyID)
+        End If
+
         For Each client In connectedClients
             Dim add = False
 

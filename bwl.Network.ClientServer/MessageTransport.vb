@@ -79,7 +79,7 @@ Public Class MessageTransport
     End Sub
 
     Public Sub New(storage As SettingsStorage, logger As Logger, Optional defaultMode As String = "NetClient", Optional defaultAddress As String = "localhost:3001", Optional defaultUser As String = "User1", Optional defaultTargetId As String = "User1", Optional defaultServiceName As String = "Service", Optional autoConnect As Boolean = True)
-        Me.New({New NetClientFactory, New NetServerFactory}, storage, logger, defaultMode, defaultAddress, defaultUser, defaultTargetId, defaultServiceName, autoConnect)
+        Me.New({New NetClientFactory, New NetServerFactory, New EmptyTransportFactory}, storage, logger, defaultMode, defaultAddress, defaultUser, defaultTargetId, defaultServiceName, autoConnect)
     End Sub
 
     Public Sub New(factories As IMessageTransportFactory(), storage As SettingsStorage, logger As Logger, Optional defaultMode As String = "NetClient", Optional defaultAddress As String = "localhost:3001", Optional defaultUser As String = "User1", Optional defaultTargetId As String = "User1", Optional defaultServiceName As String = "Service", Optional autoConnect As Boolean = True)
@@ -144,7 +144,7 @@ Public Class MessageTransport
 
     Public Sub OpenAndRegister()
         _transport.Open(AddressSetting.Value, "")
-        _transport.RegisterMe(UserSetting.Value, PasswordSetting.Value, "RemoteAppClient", "")
+        _transport.RegisterMe(UserSetting.Value, PasswordSetting.Value, ServiceNameSetting.Value, "")
         _logger.AddMessage("Connected to server " + AddressSetting.Value + " as " + UserSetting.Value)
     End Sub
 
