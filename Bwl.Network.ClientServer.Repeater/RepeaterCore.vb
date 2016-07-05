@@ -20,6 +20,12 @@ Public Class RepeaterCore
         _logger.AddMessage("Created server on " + _port.Value.ToString)
     End Sub
 
+    Public ReadOnly Property PortSetting As IntegerSetting
+        Get
+            Return _port
+        End Get
+    End Property
+
     Private Sub _netServer_ReceivedMessage(message As NetMessage, client As ConnectedClient) Handles _netServer.ReceivedMessage
         SyncLock _netServer
             If client.RegisteredID > "" Then

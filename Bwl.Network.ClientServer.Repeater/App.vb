@@ -16,7 +16,7 @@ Public Module App
         Dim useGui As Boolean = False
         For Each arg In args
             If arg.ToLower = "-gui" Then useGui = True
-            If arg.ToLower = "-remoting" Then _appRemoting = New RemoteAppServer(3198, _app, "NetClientRepeater", RemoteAppBeaconMode.localhost)
+            If arg.ToLower = "-remoting" Then _appRemoting = New RemoteAppServer(_core.PortSetting.Value + 1, _app, "NetClientRepeater", RemoteAppBeaconMode.localhost)
         Next
         If useGui Then
             Application.EnableVisualStyles()
