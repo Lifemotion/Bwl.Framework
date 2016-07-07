@@ -57,31 +57,35 @@
         AutoUIDisplay1.AutoFormDescriptor.Update()
     End Sub
 
-    Private Sub updateTimer_Tick(sender As Object, e As EventArgs) Handles updateTimer.Tick
-
-    End Sub
-
     Private Sub AutoUIForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         _ui = Nothing
         AutoUIDisplay1.ConnectedUI = Nothing
     End Sub
 
     Private Sub checkAlive_Tick(sender As Object, e As EventArgs) Handles checkAlive.Tick
-        If _ui.CheckAlive() = False Then
-            If Text.Contains(" (no connection)") = False Then
-                Text += " (no connection)"
-                For Each cnt As Control In Controls
-                    cnt.Enabled = False
-                Next
-            End If
-        Else
-            If Text.Contains(" (no connection)") = True Then
-                Text = Text.Replace(" (no connection)", "")
-                For Each cnt As Control In Controls
-                    cnt.Enabled = True
-                Next
-            End If
-        End If
-        _loggerServer.RequestLogsTransmission()
+        Dim thr As New Threading.Thread(Sub()
+                                            If _ui.CheckAlive() = False Then
+                                                Me.Invoke(Sub()
+                                                              If Text.Contains(" (no connection)") = False Then
+                                                                  Text += " (no connection)"
+                                                                  For Each cnt As Control In Controls
+                                                                      cnt.Enabled = False
+                                                                  Next
+                                                              End If
+                                                          End Sub)
+                                            Else
+                                                Me.Invoke(Sub()
+                                                              If Text.Contains(" (no connection)") = True Then
+                                                                  Text = Text.Replace(" (no connection)", "")
+                                                                  For Each cnt As Control In Controls
+                                                                      cnt.Enabled = True
+                                                                  Next
+                                                              End If
+                                                          End Sub)
+                                            End If
+                                            _loggerServer.RequestLogsTransmission()
+                                        End Sub)
+        thr.IsBackground = True
+        thr.Start()
     End Sub
 End Class

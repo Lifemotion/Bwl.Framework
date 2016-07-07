@@ -23,7 +23,6 @@ Partial Class AutoUIForm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.AutoUIDisplay1 = New Bwl.Framework.AutoUIDisplay()
-        Me.updateTimer = New System.Windows.Forms.Timer(Me.components)
         Me.checkAlive = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
@@ -44,15 +43,10 @@ Partial Class AutoUIForm
         Me.AutoUIDisplay1.Size = New System.Drawing.Size(776, 532)
         Me.AutoUIDisplay1.TabIndex = 2
         '
-        'updateTimer
-        '
-        Me.updateTimer.Enabled = True
-        Me.updateTimer.Interval = 500
-        '
         'checkAlive
         '
         Me.checkAlive.Enabled = True
-        Me.checkAlive.Interval = 3000
+        Me.checkAlive.Interval = 10000
         '
         'AutoUIForm
         '
@@ -69,6 +63,5 @@ Partial Class AutoUIForm
     End Sub
 
     Friend WithEvents AutoUIDisplay1 As AutoUIDisplay
-    Friend WithEvents updateTimer As Timer
     Friend WithEvents checkAlive As Timer
 End Class
