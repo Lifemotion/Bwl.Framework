@@ -68,18 +68,18 @@
                                                 Me.Invoke(Sub()
                                                               If Text.Contains(" (no connection)") = False Then
                                                                   Text += " (no connection)"
-                                                                  For Each cnt As Control In Controls
-                                                                      cnt.Enabled = False
-                                                                  Next
+                                                                  ' For Each cnt As Control In Controls
+                                                                  ' cnt.Enabled = False
+                                                                  ' Next
                                                               End If
                                                           End Sub)
                                             Else
                                                 Me.Invoke(Sub()
                                                               If Text.Contains(" (no connection)") = True Then
                                                                   Text = Text.Replace(" (no connection)", "")
-                                                                  For Each cnt As Control In Controls
-                                                                      cnt.Enabled = True
-                                                                  Next
+                                                                  ' For Each cnt As Control In Controls
+                                                                  'cnt.Enabled = True
+                                                                  ' Next
                                                               End If
                                                           End Sub)
                                             End If
