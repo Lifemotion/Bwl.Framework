@@ -227,6 +227,7 @@
     <Compile Include="src\Settings\Settings\DoubleSetting.vb" />
     <Compile Include="src\Settings\Settings\StringSetting.vb" />
     <Compile Include="src\Settings\Settings\VariantSetting.vb" />
+    <Compile Include="src\Settings\Writers\Realizations\ReadOnlyIniFileSettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\MemoryReaderWriter.vb" />
     <Compile Include="src\Settings\Writers\Interface\ISettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\IniFileSettingsWriter.vb" />

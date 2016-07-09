@@ -41,6 +41,24 @@ Public Class SettingsStorageRoot
     End Sub
 
     ''' <summary>
+    ''' Создать новое хранилище настроек, являющееся корневым.
+    ''' </summary>
+    ''' <param name="iniFileName">Имя ini-файла с настройками.</param>
+    ''' <param name="rootCategoryName">Имя корневой категории настроек.</param>
+    ''' <remarks></remarks>
+    Sub New(iniFileName As String, rootCategoryName As String, isReadOnly As Boolean)
+        If rootCategoryName Is Nothing OrElse rootCategoryName = "" Then Throw New Exception("RootName can't be empty")
+        If isReadOnly Then
+            _defaultWriter = New ReadOnlyIniFileSettingsWriter(iniFileName)
+        Else
+            _defaultWriter = New IniFileSettingsWriter(iniFileName)
+        End If
+        _readOnly = isReadOnly
+        _name = rootCategoryName
+        AutoSave = True
+    End Sub
+
+    ''' <summary>
     ''' Включить автосохранение. По-умолчанию включено.
     ''' </summary>
     ''' <value></value>

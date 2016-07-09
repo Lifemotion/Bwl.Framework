@@ -28,6 +28,51 @@ Public Class IniFile
     Sub New(filename As String)
         _iniFile = filename
     End Sub
+
+    ''' <summary>
+    ''' Читает значение параметра. Если параметр не найден, возвращает заданную строку. Только чтение, ничего не пишет.
+    ''' </summary>
+    ''' <param name="groupName">Имя группы параметров в ini-файле.</param>
+    ''' <param name="paramName">Имя параметра.</param>
+    ''' <param name="returnIsNotExist">Что возвращает, если параметр не найден.</param>
+    ''' <returns>Значение параметра.</returns>
+    ''' <remarks></remarks>
+    Function GetSettingNoWrite(groupName As String, paramName As String, returnIsNotExist As String) As String
+        Dim sr As IO.StreamReader = Nothing
+
+        Try
+            sr = New IO.StreamReader(New IO.FileStream(_iniFile, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read), Text.Encoding.Default)
+        Catch ex As Exception
+            Return returnIsNotExist
+        End Try
+
+        Dim currentString As String
+        Dim currentGroup As String = ""
+        Do While Not sr.EndOfStream
+            currentString = sr.ReadLine
+            If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
+                If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
+                    currentGroup = Mid(currentString, 2, currentString.Length - 2)
+                End If
+                If currentGroup.ToUpper = groupName.ToUpper Or groupName = "" Then
+                    Dim i As Integer = InStr(currentString, "=")
+                    If i > 0 Then
+                        Dim param, value As String
+                        param = Trim(Mid(currentString, 1, i - 1))
+                        value = Trim(Mid(currentString, i + 1, currentString.Length))
+                        If param.ToUpper = paramName.ToUpper Then
+                            sr.Close()
+                            Return value
+                        End If
+                    End If
+                End If
+            End If
+        Loop
+
+        sr.Close()
+        Return returnIsNotExist
+    End Function
+
     ''' <summary>
     ''' Читает значение параметра. Если параметр не найден, возвращает заданную строку.
     ''' </summary>
