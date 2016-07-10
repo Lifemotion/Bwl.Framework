@@ -159,7 +159,7 @@ Public Class SettingsStorageBackup
 
     Private Sub DeleteFileSafely(fileName As String)
         If File.Exists(fileName) Then
-            File.SetAttributes(fileName, FileAttributes.Normal)
+            'File.SetAttributes(fileName, FileAttributes.Normal)
             File.Delete(fileName)
         End If
     End Sub

@@ -208,7 +208,7 @@ Public Class IniFile
                 System.IO.File.SetAttributes(bakFName, IO.FileAttributes.Normal)
                 System.IO.File.Delete(bakFName)
             End If
-            System.IO.File.SetAttributes(_iniFile, IO.FileAttributes.Normal)
+            'System.IO.File.SetAttributes(_iniFile, IO.FileAttributes.Normal)
             System.IO.File.Move(_iniFile, bakFName)
         End If
 
