@@ -133,11 +133,15 @@ Public Class SettingsStorage
     End Sub
 
     Public Sub SaveSettings()
-        SaveSettings(_defaultWriter, True)
+        If Not IsReadOnly Then
+            SaveSettings(_defaultWriter, True)
+        End If
     End Sub
 
     Public Sub SaveSettings(changedOnly As Boolean)
-        SaveSettings(_defaultWriter, changedOnly)
+        If Not IsReadOnly Then
+            SaveSettings(_defaultWriter, changedOnly)
+        End If
     End Sub
 
     Friend Overrides Sub SetSettingChanged(setting As SettingOnStorage)
