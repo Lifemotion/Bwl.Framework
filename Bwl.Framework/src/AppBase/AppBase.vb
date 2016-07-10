@@ -15,14 +15,15 @@ Public Class AppBase
     Public ReadOnly Property Services As ServiceLocator
     Public ReadOnly Property AutoUI As AutoUI
 
-    Public Property IsSettingReadonly As Boolean
+    Public ReadOnly Property IsSettingReadonly As Boolean
 
-    Public Sub New(Optional initFolders As Boolean = True, Optional appName As String = "Application")
-        _appName = appName
-        _baseFolder = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..")
-        _logsFolder = IO.Path.Combine(_baseFolder, "logs")
-        _settingsFolder = IO.Path.Combine(_baseFolder, "conf")
-        _dataFolder = IO.Path.Combine(_baseFolder, "data")
+    Public Sub New(Optional initFolders As Boolean = True, Optional appName As String = "Application", Optional settingsReadOnly As Boolean = False)
+        IsSettingReadonly = settingsReadOnly
+        _AppName = appName
+        _BaseFolder = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..")
+        _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
+        _SettingsFolder = IO.Path.Combine(_BaseFolder, "conf")
+        _DataFolder = IO.Path.Combine(_BaseFolder, "data")
         If initFolders Then Init()
     End Sub
 
@@ -33,7 +34,11 @@ Public Class AppBase
         _RootLogger = New Logger
         _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile))
         _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors))
-        _RootStorage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_SettingsFolder, "settings.ini")), _appName, IsSettingReadonly)
+        If IsSettingReadonly Then
+            _RootStorage = New SettingsStorageRoot(New ReadOnlyIniFileSettingsWriter(Path.Combine(_SettingsFolder, "settings.ini")), _AppName, IsSettingReadonly)
+        Else
+            _RootStorage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_SettingsFolder, "settings.ini")), _AppName, IsSettingReadonly)
+        End If
         _Services = New ServiceLocator(RootLogger)
         _AutoUI = New AutoUI
 
