@@ -13,7 +13,7 @@ Public Module App
                                                 End Sub)
         startThread.Start()
 
-        Dim useGui As Boolean = False
+        Dim useGui As Boolean = True
         For Each arg In args
             If arg.ToLower = "-gui" Then useGui = True
             If arg.ToLower = "-remoting" Then _appRemoting = New RemoteAppServer(_core.PortSetting.Value + 1, _app, "NetClientRepeater", RemoteAppBeaconMode.localhost)

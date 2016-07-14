@@ -27,14 +27,18 @@ Public Class RepeaterCore
     End Property
 
     Private Sub _netServer_ReceivedMessage(message As NetMessage, client As ConnectedClient) Handles _netServer.ReceivedMessage
-        SyncLock _netServer
-            If client.RegisteredID > "" Then
-                If LogMessages Then _logger.AddInformation(client.RegisteredID + "-> " + message.ToString)
-                _netServer.SendMessage(message)
-            Else
-                _logger.AddWarning(client.ID.ToString + "-> " + "Trying to use repeater without registered id, from " + client.IPAddress)
-            End If
-        End SyncLock
+        Try
+            SyncLock _netServer
+                If client.RegisteredID > "" Then
+                    If LogMessages Then _logger.AddInformation(client.RegisteredID + "-> " + message.ToString)
+                    _netServer.SendMessage(message)
+                Else
+                    _logger.AddWarning(client.ID.ToString + "-> " + "Trying to use repeater without registered id, from " + client.IPAddress)
+                End If
+            End SyncLock
+        Catch ex As Exception
+            _logger.AddError(ex.Message)
+        End Try
     End Sub
 
     Private Sub _netServer_ClientConnected(client As ConnectedClient) Handles _netServer.ClientConnected
