@@ -457,13 +457,26 @@ Public Class NetServer
     Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
 
     Friend Sub SystemPerformRemove(ByVal client As ClientData)
-        If Not client.userInfo.Direct Then
-            client.tcpSocket.Close()
-        Else
-            client.directClient.DirectDisconnect()
-        End If
-        connectedClients.Remove(client)
-        RaiseEvent ClientDisconnected(client.userInfo)
+        Try
+            If Not client.userInfo.Direct Then
+                client.tcpSocket.Close()
+            Else
+                client.directClient.DirectDisconnect()
+            End If
+        Catch ex As Exception
+        End Try
+        Try
+            connectedClients.Remove(client)
+        Catch ex As Exception
+        End Try
+        Try
+            connectedClients.Remove(client)
+        Catch ex As Exception
+        End Try
+        Try
+            RaiseEvent ClientDisconnected(client.userInfo)
+        Catch ex As Exception
+        End Try
     End Sub
     Private Sub PingClients() Handles pingTimer.Elapsed
         Try
