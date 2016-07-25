@@ -241,6 +241,9 @@ Public Class NetServer
             Dim endPoint As IPEndPoint = newSocket.RemoteEndPoint
             newClient.userInfo = New ConnectedClient(endPoint.Address.ToString, GetID, newClient, Me, False)
             newClient.tcpSocket = newSocket
+            newClient.tcpSocket.NoDelay = True
+
+            ' newSocket.Blocking = True
             ReDim newClient.receiveBuffer(systemBufferSize)
             ReDim newClient.receivedData(bufferStepSize)
 

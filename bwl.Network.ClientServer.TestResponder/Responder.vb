@@ -11,10 +11,10 @@
     End Sub
 
     Private Sub server_ReceivedMessage(message As NetMessage, client As ConnectedClient) Handles server.ReceivedMessage
-        Dim msg As New NetMessage
-        For i = 0 To message.Count - 1
-            msg.PartBytes(i) = message.PartBytes(i)
-        Next
+        Dim msg As New NetMessage("S", "123")
+        '   For i = 0 To message.Count - 1
+        '   msg.PartBytes(i) = message.PartBytes(i)
+        '  Next
         client.SendMessage(msg)
     End Sub
 End Class

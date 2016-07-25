@@ -47,6 +47,8 @@ Public Class NetClient
         tcpSocket = New Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
         tcpSocket.SendBufferSize = systemBufferSize
         tcpSocket.ReceiveBufferSize = systemBufferSize
+        tcpSocket.NoDelay = True
+
     End Sub
 
     ''' <summary>
@@ -110,6 +112,7 @@ Public Class NetClient
             tcpSocket = New Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
             tcpSocket.SendBufferSize = systemBufferSize
             tcpSocket.ReceiveBufferSize = systemBufferSize
+            tcpSocket.NoDelay = True
             tcpSocket.Connect(host, port)
             If tcpSocket.Connected Then
                 ReDim receiveBuffer(systemBufferSize - 1)
