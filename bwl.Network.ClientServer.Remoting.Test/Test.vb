@@ -1,4 +1,5 @@
-﻿Imports bwl.Framework
+﻿Imports System.Timers
+Imports bwl.Framework
 
 Module Test
     Private _appBase As New AppBase
@@ -11,6 +12,7 @@ Module Test
     Private WithEvents _button4a As New AutoButton(_appBase.AutoUI, "Listbox1 Replace Items")
     Private WithEvents _button4b As New AutoButton(_appBase.AutoUI, "Listbox1 Auto Height")
     Private WithEvents _button4c As New AutoButton(_appBase.AutoUI, "Logger Add Settings Value")
+    Private WithEvents _button5 As New AutoButton(_appBase.AutoUI, "End App")
     Private WithEvents _image As New AutoBitmap(_appBase.AutoUI, "Bitmap")
     Private WithEvents _textbox1 As New AutoTextbox(_appBase.AutoUI, "Textbox1")
     Private WithEvents _textbox2 As New AutoTextbox(_appBase.AutoUI, "Textbox2")
@@ -30,6 +32,8 @@ Module Test
     Private _appBaseServerLocal As RemoteAppServer
     Private _appBaseServerOnRepeater As RemoteAppServer
 
+    Private WithEvents _timer As New System.Timers.Timer(5000)
+
     Public Sub Main()
 
         Try
@@ -42,6 +46,12 @@ Module Test
         Dim thread1 As New Threading.Thread(Sub()
                                                 Do
                                                     _appBase.RootLogger.AddMessage("logtest1")
+                                                    _textbox2.Text += "a"
+                                                    _listbox1.Items.Add("a")
+                                                    Dim bitmap As New Bitmap(100, 100)
+                                                    Dim g = Graphics.FromImage(bitmap)
+                                                    g.Clear(Color.Yellow)
+                                                    _image.Image = bitmap
                                                     Threading.Thread.Sleep(3000)
                                                 Loop
                                             End Sub)
@@ -126,5 +136,13 @@ Module Test
         _appBase.RootLogger.AddMessage("Setting3: " + _setting3.Value.ToString)
         _appBase.RootLogger.AddMessage("Setting4: " + _setting4.Value.ToString)
         _appBase.RootLogger.AddMessage("Setting5: " + _setting5.Value.ToString)
+    End Sub
+
+    Private Sub _timer_Elapsed(sender As Object, e As ElapsedEventArgs) Handles _timer.Elapsed
+
+    End Sub
+
+    Private Sub _button5_Click(source As AutoButton) Handles _button5.Click
+        End
     End Sub
 End Module

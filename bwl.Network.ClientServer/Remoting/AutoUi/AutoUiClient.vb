@@ -34,13 +34,19 @@ Public Class AutoUiClient
         Dim msg As New NetMessage("#", "AutoUiRemoting", _prefix, id, dataname)
         msg.ToID = _target
         msg.PartBytes(4) = data
-        _client.SendMessage(msg)
+        Try
+            _client.SendMessage(msg)
+        Catch ex As Exception
+        End Try
     End Sub
 
     Private Sub GetBaseInfos() Implements IAutoUI.GetBaseInfos
         Dim msg = New NetMessage("#", "AutoUiRemoting", _prefix, "#baseinfos")
         msg.ToID = _target
-        _client.SendMessage(msg)
+        Try
+            _client.SendMessage(msg)
+        Catch ex As Exception
+        End Try
     End Sub
 
     Public Function CheckAlive() As Boolean Implements IAutoUI.CheckAlive

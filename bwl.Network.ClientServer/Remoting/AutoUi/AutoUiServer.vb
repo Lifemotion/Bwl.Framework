@@ -19,7 +19,10 @@ Public Class AutoUiServer
                 msg.PartBytes(3 + i) = infos(i)
             Next
             msg.ToID = _clientID
-            _server.SendMessage(msg)
+            Try
+                _server.SendMessage(msg)
+            Catch ex As Exception
+            End Try
         End If
     End Sub
 
@@ -28,7 +31,10 @@ Public Class AutoUiServer
             Dim msg As New NetMessage("#", "AutoUiRemoting", _prefix, id, dataname)
             msg.PartBytes(4) = data
             msg.ToID = _clientID
-            _server.SendMessage(msg)
+            Try
+                _server.SendMessage(msg)
+            Catch ex As Exception
+            End Try
         End If
     End Sub
 
@@ -41,7 +47,10 @@ Public Class AutoUiServer
                 Case "#alive"
                     Dim msg As New NetMessage("S", "#alive-ok", "AutoUiRemoting", _prefix)
                     msg.ToID = _clientID
-                    _server.SendMessage(msg)
+                    Try
+                        _server.SendMessage(msg)
+                    Catch ex As Exception
+                    End Try
                 Case Else
                     Dim id = message.Part(2)
                     Dim dataname = message.Part(3)
