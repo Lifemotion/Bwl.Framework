@@ -1,5 +1,11 @@
 ﻿Imports Bwl.Framework
 
+Public Class TestClass
+    <Parameter("Настройка 1")>
+    Public Property Setting1 As String = "test"
+    Public Property Setting2 As Boolean = True
+End Class
+
 Module Main
     Private _appBase As New AppBase
     Private WithEvents _button1 As New AutoButton(_appBase.AutoUI, "button1")
@@ -13,10 +19,15 @@ Module Main
 
     Private WithEvents _formDesc As New AutoFormDescriptor(_appBase.AutoUI, "form") With {.FormWidth = 1000, .FormHeight = 500, .LoggerExtended = False}
 
+    Private _test1 As New TestClass
+    Dim asm As AutoSettings
+
     Public Sub Main()
+        asm = New AutoSettings(_appBase.RootStorage, _test1)
+
         Application.EnableVisualStyles()
         AutoUIForm.Create(_appBase).Show()
-        Application.Run()
+         Application.Run()
     End Sub
 
     Private Sub _button1_Click(source As AutoButton) Handles _button1.Click
@@ -24,6 +35,7 @@ Module Main
         Dim g = Graphics.FromImage(bitmap)
         g.Clear(Color.Red)
         _image.Image = bitmap
+        MsgBox(_test1.Setting1)
     End Sub
 
     Private Sub _button2_Click(source As AutoButton) Handles _button2.Click
@@ -32,6 +44,7 @@ Module Main
         g.Clear(Color.Blue)
         _image.Image = bitmap
         _listbox1.AutoHeight = True
+        _test1.Setting1 = "cat"
     End Sub
 
     Private Sub _button3_Click(source As AutoButton) Handles _button3.Click

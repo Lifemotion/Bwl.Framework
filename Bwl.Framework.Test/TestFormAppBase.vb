@@ -45,6 +45,7 @@ Public Class TestFormAppBase
 
     Private Sub AddMessageButton_Click(sender As Object, e As EventArgs) Handles AddMessageButton.Click
         _logger.AddMessage("Some text")
+
     End Sub
 
     Private Sub _btnSholLogForm_Click(sender As Object, e As EventArgs) Handles _btnShowLogForm.Click
