@@ -45,6 +45,51 @@ Public Class Logger
         End If
     End Sub
 
+    Public Sub CollectLogs(target As Object, Optional filter As String = "Logger")
+        For Each evnt In target.GetType.GetEvents()
+            If filter = "" OrElse evnt.Name.Contains(filter) Then
+                Dim method1 = Me.GetType.GetMethod("CollectLogsHandler1", BindingFlags.Default Or BindingFlags.NonPublic Or BindingFlags.Instance)
+                Dim method2 = Me.GetType.GetMethod("CollectLogsHandler2", BindingFlags.Default Or BindingFlags.NonPublic Or BindingFlags.Instance)
+                Dim delegate1 As [Delegate] = Nothing
+                Try
+                    delegate1 = [Delegate].CreateDelegate(evnt.EventHandlerType, Me, method1)
+                Catch ex As Exception
+                End Try
+                If delegate1 Is Nothing Then
+                    Try
+                        delegate1 = [Delegate].CreateDelegate(evnt.EventHandlerType, Me, method2)
+                    Catch ex As Exception
+                    End Try
+                End If
+                If delegate1 IsNot Nothing Then
+                    evnt.AddEventHandler(target, delegate1)
+                End If
+            End If
+        Next
+    End Sub
+
+    Private Sub CollectLogsHandler1(message As Object)
+        AddMessage(message.ToString)
+    End Sub
+
+    Private Sub CollectLogsHandler2(type As String, message As Object)
+        If type Is Nothing Then type = ""
+        Select Case type.ToLower
+            Case "message", "msg", "mes"
+                AddMessage(message.ToString)
+            Case "information", "info", "inf"
+                AddInformation(message.ToString)
+            Case "error", "err"
+                AddError(message.ToString)
+            Case "warning", "war", "warn", "wrn"
+                AddWarning(message.ToString)
+            Case "debug", "deb", "dbg"
+                AddDebug(message.ToString)
+            Case Else
+                AddInformation("(Log Type Not recognized) " + message.ToString)
+        End Select
+    End Sub
+
     Public Function CreateChildLogger(categoryName As String) As Logger Implements ILoggerChilds.CreateChildLogger
         Return New Logger(Me, categoryName)
     End Function

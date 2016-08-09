@@ -1,9 +1,21 @@
 ﻿Imports Bwl.Framework
 
 Public Class TestClass
-    <Parameter("Настройка 1")>
     Public Property Setting1 As String = "test"
     Public Property Setting2 As Boolean = True
+    Public Event TestLogger1(message As String)
+    Public Event TestLogger2(messageType As String, message As String)
+
+    ' Private _monitor As New FieldMonitor("Setting1,Setting2")
+
+    Public Sub Fire()
+        RaiseEvent TestLogger1("test1")
+        RaiseEvent TestLogger2("error", "test1")
+    End Sub
+
+    Public Sub SettingsChanged()
+
+    End Sub
 End Class
 
 Module Main
@@ -24,6 +36,9 @@ Module Main
 
     Public Sub Main()
         asm = New AutoSettings(_appBase.RootStorage, _test1)
+        AddHandler asm.FieldChanged, AddressOf _test1.SettingsChanged
+
+        _appBase.RootLogger.CollectLogs(_test1)
 
         Application.EnableVisualStyles()
         AutoUIForm.Create(_appBase).Show()
@@ -35,6 +50,7 @@ Module Main
         Dim g = Graphics.FromImage(bitmap)
         g.Clear(Color.Red)
         _image.Image = bitmap
+        _test1.Fire()
         MsgBox(_test1.Setting1)
     End Sub
 
@@ -50,7 +66,7 @@ Module Main
     Private Sub _button3_Click(source As AutoButton) Handles _button3.Click
         _listbox1.Items.Add("test")
         _textbox1.Text += "E"
-
+        _test1 = Nothing
     End Sub
 
     Private Sub _button4_Click(source As AutoButton) Handles _button4.Click

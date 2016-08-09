@@ -1,6 +1,8 @@
 ﻿Imports System.Reflection
 
 Public Class AutoSettings
+    Implements IDisposable
+
     Protected Class AutoSettingInfo(Of TSetting As Setting, TValue)
         Public Property Setting As TSetting
         Public Property LastFieldValue As TValue
@@ -27,6 +29,9 @@ Public Class AutoSettings
 
     Private _storage As SettingsStorage
     Private _items As New List(Of Object)
+    Private _thread As Threading.Thread
+
+    Public Event FieldChanged(target As Object, field As PropertyInfo)
 
     Public Sub New(storage As SettingsStorage, target As Object, Optional filterByName As String = "Setting")
         _storage = storage
@@ -79,79 +84,132 @@ Public Class AutoSettings
         Next
 
         If _items.Count > 0 Then
-            Dim thread As New Threading.Thread(AddressOf MonitorThread)
-            thread.Name = "AutoSettings Monitor"
-            thread.IsBackground = True
-            thread.Start()
+            _thread = New Threading.Thread(AddressOf MonitorThread)
+            _thread.Name = "AutoSettings Monitor"
+            _thread.IsBackground = True
+            _thread.Start()
         End If
     End Sub
 
     Private Sub MonitorThread()
         Do
-            For Each item In _items
-                Try
-                    Select Case item.GetType
-                        Case GetType(AutoSettingInfoString)
-                            Dim itemTyped = DirectCast(item, AutoSettingInfoString)
-                            Dim fieldVal = CStr(itemTyped.PropertyInfo.GetValue(itemTyped.Target))
-                            Dim settingVal = itemTyped.Setting.Value
-                            If settingVal <> itemTyped.LastSettingValue Then
-                                itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
-                                fieldVal = settingVal
-                            End If
-                            If fieldVal <> itemTyped.LastFieldValue Then
-                                itemTyped.Setting.Value = fieldVal
-                                settingVal = fieldVal
-                            End If
-                            itemTyped.LastFieldValue = fieldVal
-                            itemTyped.LastSettingValue = settingVal
-                        Case GetType(AutoSettingInfoInteger)
-                            Dim itemTyped = DirectCast(item, AutoSettingInfoInteger)
-                            Dim fieldVal = CInt(itemTyped.PropertyInfo.GetValue(itemTyped.Target))
-                            Dim settingVal = itemTyped.Setting.Value
-                            If settingVal <> itemTyped.LastSettingValue Then
-                                itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
-                                fieldVal = settingVal
-                            End If
-                            If fieldVal <> itemTyped.LastFieldValue Then
-                                itemTyped.Setting.Value = fieldVal
-                                settingVal = fieldVal
-                            End If
-                            itemTyped.LastFieldValue = fieldVal
-                            itemTyped.LastSettingValue = settingVal
-                        Case GetType(AutoSettingInfoDouble)
-                            Dim itemTyped = DirectCast(item, AutoSettingInfoDouble)
-                            Dim fieldVal = CDbl(itemTyped.PropertyInfo.GetValue(itemTyped.Target))
-                            Dim settingVal = itemTyped.Setting.Value
-                            If settingVal <> itemTyped.LastSettingValue Then
-                                itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
-                                fieldVal = settingVal
-                            End If
-                            If fieldVal <> itemTyped.LastFieldValue Then
-                                itemTyped.Setting.Value = fieldVal
-                                settingVal = fieldVal
-                            End If
-                            itemTyped.LastFieldValue = fieldVal
-                            itemTyped.LastSettingValue = settingVal
-                        Case GetType(AutoSettingInfoBoolean)
-                            Dim itemTyped = DirectCast(item, AutoSettingInfoBoolean)
-                            Dim fieldVal = CBool(itemTyped.PropertyInfo.GetValue(itemTyped.Target))
-                            Dim settingVal = itemTyped.Setting.Value
-                            If settingVal <> itemTyped.LastSettingValue Then
-                                itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
-                                fieldVal = settingVal
-                            End If
-                            If fieldVal <> itemTyped.LastFieldValue Then
-                                itemTyped.Setting.Value = fieldVal
-                                settingVal = fieldVal
-                            End If
-                            itemTyped.LastFieldValue = fieldVal
-                            itemTyped.LastSettingValue = settingVal
-                    End Select
-                Catch ex As Exception
-                End Try
-            Next
+            Try
+                For Each item In _items
+                    Try
+                        Select Case item.GetType
+                            Case GetType(AutoSettingInfoString)
+                                Dim itemTyped = DirectCast(item, AutoSettingInfoString)
+                                Dim fieldVal = CStr(itemTyped.PropertyInfo.GetValue(itemTyped.Target))
+                                Dim settingVal = itemTyped.Setting.Value
+                                If settingVal <> itemTyped.LastSettingValue Then
+                                    itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
+                                    fieldVal = settingVal
+                                End If
+                                If fieldVal <> itemTyped.LastFieldValue Then
+                                    itemTyped.Setting.Value = fieldVal
+                                    settingVal = fieldVal
+                                End If
+                                itemTyped.LastFieldValue = fieldVal
+                                itemTyped.LastSettingValue = settingVal
+                            Case GetType(AutoSettingInfoInteger)
+                                Dim itemTyped = DirectCast(item, AutoSettingInfoInteger)
+                                Dim fieldVal = CInt(itemTyped.PropertyInfo.GetValue(itemTyped.Target))
+                                Dim settingVal = itemTyped.Setting.Value
+                                If settingVal <> itemTyped.LastSettingValue Then
+                                    itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
+                                    fieldVal = settingVal
+                                End If
+                                If fieldVal <> itemTyped.LastFieldValue Then
+                                    itemTyped.Setting.Value = fieldVal
+                                    settingVal = fieldVal
+                                End If
+                                itemTyped.LastFieldValue = fieldVal
+                                itemTyped.LastSettingValue = settingVal
+                            Case GetType(AutoSettingInfoDouble)
+                                Dim itemTyped = DirectCast(item, AutoSettingInfoDouble)
+                                Dim fieldVal = CDbl(itemTyped.PropertyInfo.GetValue(itemTyped.Target))
+                                Dim settingVal = itemTyped.Setting.Value
+                                If settingVal <> itemTyped.LastSettingValue Then
+                                    itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
+                                    fieldVal = settingVal
+                                End If
+                                If fieldVal <> itemTyped.LastFieldValue Then
+                                    itemTyped.Setting.Value = fieldVal
+                                    settingVal = fieldVal
+                                End If
+                                itemTyped.LastFieldValue = fieldVal
+                                itemTyped.LastSettingValue = settingVal
+                            Case GetType(AutoSettingInfoBoolean)
+                                Dim itemTyped = DirectCast(item, AutoSettingInfoBoolean)
+                                Dim fieldVal = CBool(itemTyped.PropertyInfo.GetValue(itemTyped.Target))
+                                Dim settingVal = itemTyped.Setting.Value
+                                If settingVal <> itemTyped.LastSettingValue Then
+                                    itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
+                                    fieldVal = settingVal
+                                End If
+                                If fieldVal <> itemTyped.LastFieldValue Then
+                                    itemTyped.Setting.Value = fieldVal
+                                    settingVal = fieldVal
+                                End If
+                                itemTyped.LastFieldValue = fieldVal
+                                itemTyped.LastSettingValue = settingVal
+                        End Select
+                    Catch ex As Exception
+                    End Try
+                Next
+            Catch ex As Exception
+
+            End Try
             Threading.Thread.Sleep(500)
         Loop
     End Sub
+
+#Region "IDisposable Support"
+    Private disposedValue As Boolean ' Для определения избыточных вызовов
+
+    Protected Overridable Sub Dispose(disposing As Boolean)
+        If Not disposedValue Then
+            If disposing Then
+                Try
+                    _thread.Abort()
+                Catch ex As Exception
+                End Try
+
+                For Each item In _items
+                    Try
+                        Select Case item.GetType
+                            Case GetType(AutoSettingInfoString)
+                                ' _storage.setting     DirectCast(item,AutoSettingInfoString).Setting 
+                        End Select
+                    Catch ex As Exception
+                    End Try
+                Next
+
+                Try
+                    _items.Clear()
+                Catch ex As Exception
+                End Try
+                _items = Nothing
+                _thread = Nothing
+                _storage = Nothing
+            End If
+        End If
+        disposedValue = True
+    End Sub
+
+    ' TODO: переопределить Finalize(), только если Dispose(disposing As Boolean) выше имеет код для освобождения неуправляемых ресурсов.
+    'Protected Overrides Sub Finalize()
+    '    ' Не изменяйте этот код. Разместите код очистки выше в методе Dispose(disposing As Boolean).
+    '    Dispose(False)
+    '    MyBase.Finalize()
+    'End Sub
+
+    ' Этот код добавлен редактором Visual Basic для правильной реализации шаблона высвобождаемого класса.
+    Public Sub Dispose() Implements IDisposable.Dispose
+        ' Не изменяйте этот код. Разместите код очистки выше в методе Dispose(disposing As Boolean).
+        Dispose(True)
+        ' TODO: раскомментировать следующую строку, если Finalize() переопределен выше.
+        ' GC.SuppressFinalize(Me)
+    End Sub
+#End Region
 End Class
