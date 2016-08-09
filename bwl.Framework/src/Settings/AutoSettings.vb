@@ -104,10 +104,12 @@ Public Class AutoSettings
                                 If settingVal <> itemTyped.LastSettingValue Then
                                     itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
                                     fieldVal = settingVal
+                                    RaiseEvent FieldChanged(itemTyped.Target, itemTyped.PropertyInfo)
                                 End If
                                 If fieldVal <> itemTyped.LastFieldValue Then
                                     itemTyped.Setting.Value = fieldVal
                                     settingVal = fieldVal
+                                    RaiseEvent FieldChanged(itemTyped.Target, itemTyped.PropertyInfo)
                                 End If
                                 itemTyped.LastFieldValue = fieldVal
                                 itemTyped.LastSettingValue = settingVal
@@ -118,10 +120,12 @@ Public Class AutoSettings
                                 If settingVal <> itemTyped.LastSettingValue Then
                                     itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
                                     fieldVal = settingVal
+                                    RaiseEvent FieldChanged(itemTyped.Target, itemTyped.PropertyInfo)
                                 End If
                                 If fieldVal <> itemTyped.LastFieldValue Then
                                     itemTyped.Setting.Value = fieldVal
                                     settingVal = fieldVal
+                                    RaiseEvent FieldChanged(itemTyped.Target, itemTyped.PropertyInfo)
                                 End If
                                 itemTyped.LastFieldValue = fieldVal
                                 itemTyped.LastSettingValue = settingVal
@@ -132,10 +136,12 @@ Public Class AutoSettings
                                 If settingVal <> itemTyped.LastSettingValue Then
                                     itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
                                     fieldVal = settingVal
+                                    RaiseEvent FieldChanged(itemTyped.Target, itemTyped.PropertyInfo)
                                 End If
                                 If fieldVal <> itemTyped.LastFieldValue Then
                                     itemTyped.Setting.Value = fieldVal
                                     settingVal = fieldVal
+                                    RaiseEvent FieldChanged(itemTyped.Target, itemTyped.PropertyInfo)
                                 End If
                                 itemTyped.LastFieldValue = fieldVal
                                 itemTyped.LastSettingValue = settingVal
@@ -146,10 +152,12 @@ Public Class AutoSettings
                                 If settingVal <> itemTyped.LastSettingValue Then
                                     itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
                                     fieldVal = settingVal
+                                    RaiseEvent FieldChanged(itemTyped.Target, itemTyped.PropertyInfo)
                                 End If
                                 If fieldVal <> itemTyped.LastFieldValue Then
                                     itemTyped.Setting.Value = fieldVal
                                     settingVal = fieldVal
+                                    RaiseEvent FieldChanged(itemTyped.Target, itemTyped.PropertyInfo)
                                 End If
                                 itemTyped.LastFieldValue = fieldVal
                                 itemTyped.LastSettingValue = settingVal
@@ -163,6 +171,8 @@ Public Class AutoSettings
             Threading.Thread.Sleep(500)
         Loop
     End Sub
+
+    'Private Sub MonitorSetting(of TSetting, T)
 
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' Для определения избыточных вызовов
