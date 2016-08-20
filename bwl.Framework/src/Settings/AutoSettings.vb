@@ -39,41 +39,41 @@ Public Class AutoSettings
             If filterByName = "" OrElse prop.Name.Contains(filterByName) Then
                 Select Case prop.PropertyType
                     Case GetType(String)
-                        Dim val As String = CStr(prop.GetValue(target))
+                        Dim val As String = CStr(prop.GetValue(target, Nothing))
                         If val Is Nothing Then val = ""
                         Dim info As New AutoSettingInfoString
                         info.Setting = New StringSetting(storage, prop.Name, val)
-                        prop.SetValue(target, info.Setting.Value)
+                        prop.SetValue(target, info.Setting.Value, Nothing)
                         info.LastFieldValue = info.Setting.Value
                         info.LastSettingValue = info.Setting.Value
                         info.PropertyInfo = prop
                         info.Target = target
                         _items.Add(info)
                     Case GetType(Integer)
-                        Dim val As Integer = CInt(prop.GetValue(target))
+                        Dim val As Integer = CInt(prop.GetValue(target, Nothing))
                         Dim info As New AutoSettingInfoInteger
                         info.Setting = New IntegerSetting(storage, prop.Name, val)
-                        prop.SetValue(target, info.Setting.Value)
+                        prop.SetValue(target, info.Setting.Value, Nothing)
                         info.LastFieldValue = info.Setting.Value
                         info.LastSettingValue = info.Setting.Value
                         info.PropertyInfo = prop
                         info.Target = target
                         _items.Add(info)
                     Case GetType(Double), GetType(Single)
-                        Dim val As Double = CDbl(prop.GetValue(target))
+                        Dim val As Double = CDbl(prop.GetValue(target, Nothing))
                         Dim info As New AutoSettingInfoDouble
                         info.Setting = New DoubleSetting(storage, prop.Name, val)
-                        prop.SetValue(target, info.Setting.Value)
+                        prop.SetValue(target, info.Setting.Value, Nothing)
                         info.LastFieldValue = info.Setting.Value
                         info.LastSettingValue = info.Setting.Value
                         info.PropertyInfo = prop
                         info.Target = target
                         _items.Add(info)
                     Case GetType(Boolean)
-                        Dim val As Boolean = CBool(prop.GetValue(target))
+                        Dim val As Boolean = CBool(prop.GetValue(target, Nothing))
                         Dim info As New AutoSettingInfoBoolean
                         info.Setting = New BooleanSetting(storage, prop.Name, val)
-                        prop.SetValue(target, info.Setting.Value)
+                        prop.SetValue(target, info.Setting.Value, Nothing)
                         info.LastFieldValue = info.Setting.Value
                         info.LastSettingValue = info.Setting.Value
                         info.PropertyInfo = prop
@@ -99,10 +99,10 @@ Public Class AutoSettings
                         Select Case item.GetType
                             Case GetType(AutoSettingInfoString)
                                 Dim itemTyped = DirectCast(item, AutoSettingInfoString)
-                                Dim fieldVal = CStr(itemTyped.PropertyInfo.GetValue(itemTyped.Target))
+                                Dim fieldVal = CStr(itemTyped.PropertyInfo.GetValue(itemTyped.Target, Nothing))
                                 Dim settingVal = itemTyped.Setting.Value
                                 If settingVal <> itemTyped.LastSettingValue Then
-                                    itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
+                                    itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal, Nothing)
                                     fieldVal = settingVal
                                     RaiseEvent FieldChanged(itemTyped.Target, itemTyped.PropertyInfo)
                                 End If
@@ -115,10 +115,10 @@ Public Class AutoSettings
                                 itemTyped.LastSettingValue = settingVal
                             Case GetType(AutoSettingInfoInteger)
                                 Dim itemTyped = DirectCast(item, AutoSettingInfoInteger)
-                                Dim fieldVal = CInt(itemTyped.PropertyInfo.GetValue(itemTyped.Target))
+                                Dim fieldVal = CInt(itemTyped.PropertyInfo.GetValue(itemTyped.Target, Nothing))
                                 Dim settingVal = itemTyped.Setting.Value
                                 If settingVal <> itemTyped.LastSettingValue Then
-                                    itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
+                                    itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal, Nothing)
                                     fieldVal = settingVal
                                     RaiseEvent FieldChanged(itemTyped.Target, itemTyped.PropertyInfo)
                                 End If
@@ -131,10 +131,10 @@ Public Class AutoSettings
                                 itemTyped.LastSettingValue = settingVal
                             Case GetType(AutoSettingInfoDouble)
                                 Dim itemTyped = DirectCast(item, AutoSettingInfoDouble)
-                                Dim fieldVal = CDbl(itemTyped.PropertyInfo.GetValue(itemTyped.Target))
+                                Dim fieldVal = CDbl(itemTyped.PropertyInfo.GetValue(itemTyped.Target, Nothing))
                                 Dim settingVal = itemTyped.Setting.Value
                                 If settingVal <> itemTyped.LastSettingValue Then
-                                    itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
+                                    itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal, Nothing)
                                     fieldVal = settingVal
                                     RaiseEvent FieldChanged(itemTyped.Target, itemTyped.PropertyInfo)
                                 End If
@@ -147,10 +147,10 @@ Public Class AutoSettings
                                 itemTyped.LastSettingValue = settingVal
                             Case GetType(AutoSettingInfoBoolean)
                                 Dim itemTyped = DirectCast(item, AutoSettingInfoBoolean)
-                                Dim fieldVal = CBool(itemTyped.PropertyInfo.GetValue(itemTyped.Target))
+                                Dim fieldVal = CBool(itemTyped.PropertyInfo.GetValue(itemTyped.Target, Nothing))
                                 Dim settingVal = itemTyped.Setting.Value
                                 If settingVal <> itemTyped.LastSettingValue Then
-                                    itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal)
+                                    itemTyped.PropertyInfo.SetValue(itemTyped.Target, settingVal, Nothing)
                                     fieldVal = settingVal
                                     RaiseEvent FieldChanged(itemTyped.Target, itemTyped.PropertyInfo)
                                 End If
