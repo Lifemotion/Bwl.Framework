@@ -235,6 +235,7 @@
     <Compile Include="src\Settings\Writers\Realizations\IniFileSettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\NullSettingsWriter.vb" />
     <Compile Include="src\MailSender\MailSender.vb" />
+    <Compile Include="src\Settings\Writers\Realizations\ReadOnlyIniFileSettingsWriter.vb" />
     <Compile Include="src\Tools\RunMonitorHelper.vb" />
   </ItemGroup>
   <ItemGroup>
