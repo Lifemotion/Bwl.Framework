@@ -6,7 +6,7 @@ Public Class AppBase
     Public ReadOnly Property LogsFolder As String
     Public ReadOnly Property SettingsFolder As String
     Public ReadOnly Property DataFolder As String
-    Public ReadOnly Property BaseFolder As String
+    Private ReadOnly Property BaseFolder As String
 
     Public ReadOnly Property AppName As String
 
@@ -17,15 +17,53 @@ Public Class AppBase
 
     Public ReadOnly Property IsSettingReadonly As Boolean
 
-    Public Sub New(Optional initFolders As Boolean = True, Optional appName As String = "Application", Optional settingsReadOnly As Boolean = False)
+    Public Sub New()
+        Me.New(True, "Application", False)
+    End Sub
+
+    Public Sub New(initFolders As Boolean, appName As String, settingsReadOnly As Boolean)
+        Me.New(initFolders, appName, settingsReadOnly, "")
+    End Sub
+
+    Public Sub New(initFolders As Boolean, appName As String,
+                    settingsReadOnly As Boolean,
+                    baseFolderOverride As String)
+        IsSettingReadonly = settingsReadOnly
+        _AppName = appName
+        _BaseFolder = CheckPath(baseFolderOverride)
+        _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
+        _SettingsFolder = IO.Path.Combine(_BaseFolder, "conf")
+        _DataFolder = IO.Path.Combine(_BaseFolder, "data")
+        If initFolders Then Init()
+    End Sub
+
+    Public Sub New(initFolders As Boolean, appName As String,
+                    settingsReadOnly As Boolean,
+                    settingsFolderOverride As String,
+                    logsFolderOverride As String,
+                    dataFolderOverride As String)
         IsSettingReadonly = settingsReadOnly
         _AppName = appName
         _BaseFolder = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..")
         _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
         _SettingsFolder = IO.Path.Combine(_BaseFolder, "conf")
         _DataFolder = IO.Path.Combine(_BaseFolder, "data")
+        If settingsFolderOverride > "" Then _SettingsFolder = settingsFolderOverride
+        If logsFolderOverride > "" Then _LogsFolder = settingsFolderOverride
+        If dataFolderOverride > "" Then _DataFolder = settingsFolderOverride
+        _SettingsFolder = CheckPath(_SettingsFolder)
+        _BaseFolder = CheckPath(_BaseFolder)
+        _LogsFolder = CheckPath(_LogsFolder)
+        _DataFolder = CheckPath(_DataFolder)
         If initFolders Then Init()
     End Sub
+
+    Private Function CheckPath(source As String) As String
+        Dim result = source.Replace("\", Path.DirectorySeparatorChar).Replace("/", Path.DirectorySeparatorChar)
+        result = Environment.ExpandEnvironmentVariables(result)
+        Return result
+    End Function
+
 
     Public Sub Init()
         TryCreateFolder(_settingsFolder)

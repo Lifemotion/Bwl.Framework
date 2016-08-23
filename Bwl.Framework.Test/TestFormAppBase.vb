@@ -16,6 +16,11 @@ Public Class TestFormAppBase
     Private _mailSender As MailSender
     Private _backUper = New SettingsStorageBackup(AppBase.SettingsFolder, _logger, AppBase.RootStorage.CreateChildStorage("BackupSettings", "Резервное копирование настроек"))
 
+    Public Sub New()
+        MyBase.New(False, "%TEMP\TestApp")
+        InitializeComponent()
+    End Sub
+
     Private Sub TestApp_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'AppBase.RootStorage.AutoSave = False
 

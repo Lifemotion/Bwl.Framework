@@ -14,8 +14,16 @@
     End Sub
 
     Sub New(settingsReadOnly As Boolean)
+        Me.New(settingsReadOnly, "")
+    End Sub
+
+    Sub New(settingsReadOnly As Boolean, overrideBaseFolder As String)
+        Me.New("Application", settingsReadOnly, overrideBaseFolder)
+    End Sub
+
+    Sub New(appName As String, settingsReadOnly As Boolean, overrideBaseFolder As String)
         MyBase.New()
-        AppBase = New AppBase(True,, settingsReadOnly)
+        AppBase = New AppBase(True, appName, settingsReadOnly, overrideBaseFolder)
         MyBase.Init(AppBase.RootStorage, AppBase.RootLogger)
         _storage = AppBase.RootStorage
         _logger = AppBase.RootLogger
