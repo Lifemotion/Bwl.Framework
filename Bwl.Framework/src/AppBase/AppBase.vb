@@ -21,13 +21,14 @@ Public Class AppBase
         Me.New(True, "Application", False)
     End Sub
 
-    Public Sub New(initFolders As Boolean, appName As String, settingsReadOnly As Boolean)
-        Me.New(initFolders, appName, settingsReadOnly, "")
+    Public Sub New(initFolders As Boolean, appName As String,
+                   settingsReadOnly As Boolean)
+        Me.New(initFolders, appName, settingsReadOnly, "..")
     End Sub
 
     Public Sub New(initFolders As Boolean, appName As String,
-                    settingsReadOnly As Boolean,
-                    baseFolderOverride As String)
+                   settingsReadOnly As Boolean,
+                   baseFolderOverride As String)
         IsSettingReadonly = settingsReadOnly
         _AppName = appName
         _BaseFolder = CheckPath(baseFolderOverride)
@@ -38,10 +39,10 @@ Public Class AppBase
     End Sub
 
     Public Sub New(initFolders As Boolean, appName As String,
-                    settingsReadOnly As Boolean,
-                    settingsFolderOverride As String,
-                    logsFolderOverride As String,
-                    dataFolderOverride As String)
+                   settingsReadOnly As Boolean,
+                   settingsFolderOverride As String,
+                   logsFolderOverride As String,
+                   dataFolderOverride As String)
         IsSettingReadonly = settingsReadOnly
         _AppName = appName
         _BaseFolder = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..")
@@ -99,5 +100,4 @@ Public Class AppBase
     Public Sub Dispose() Implements IDisposable.Dispose
         _services.Dispose()
     End Sub
-
 End Class
