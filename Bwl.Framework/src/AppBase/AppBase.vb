@@ -23,7 +23,7 @@ Public Class AppBase
 
     Public Sub New(initFolders As Boolean, appName As String,
                    settingsReadOnly As Boolean)
-        Me.New(initFolders, appName, settingsReadOnly, "..")
+        Me.New(initFolders, appName, settingsReadOnly, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."))
     End Sub
 
     Public Sub New(initFolders As Boolean, appName As String,
@@ -64,7 +64,6 @@ Public Class AppBase
         result = Environment.ExpandEnvironmentVariables(result)
         Return result
     End Function
-
 
     Public Sub Init()
         TryCreateFolder(_settingsFolder)
