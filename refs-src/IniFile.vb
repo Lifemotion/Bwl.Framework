@@ -18,6 +18,8 @@
 ''' <remarks></remarks>
 Public Class IniFile
     Private _iniFile As String
+    Private _syncRoot As New Object
+
     ''' <summary>
     ''' Создает iniReader, настроенный на работу с заданным файлом.
     ''' </summary>
@@ -38,39 +40,40 @@ Public Class IniFile
     ''' <returns>Значение параметра.</returns>
     ''' <remarks></remarks>
     Function GetSettingNoWrite(groupName As String, paramName As String, returnIsNotExist As String) As String
-        Dim sr As IO.StreamReader = Nothing
+        SyncLock _syncRoot
+            Dim sr As IO.StreamReader = Nothing
+            Try
+                sr = New IO.StreamReader(New IO.FileStream(_iniFile, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read), Text.Encoding.Default)
+            Catch ex As Exception
+                Return returnIsNotExist
+            End Try
 
-        Try
-            sr = New IO.StreamReader(New IO.FileStream(_iniFile, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read), Text.Encoding.Default)
-        Catch ex As Exception
-            Return returnIsNotExist
-        End Try
-
-        Dim currentString As String
-        Dim currentGroup As String = ""
-        Do While Not sr.EndOfStream
-            currentString = sr.ReadLine
-            If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
-                If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
-                    currentGroup = Mid(currentString, 2, currentString.Length - 2)
-                End If
-                If currentGroup.ToUpper = groupName.ToUpper Or groupName = "" Then
-                    Dim i As Integer = InStr(currentString, "=")
-                    If i > 0 Then
-                        Dim param, value As String
-                        param = Trim(Mid(currentString, 1, i - 1))
-                        value = Trim(Mid(currentString, i + 1, currentString.Length))
-                        If param.ToUpper = paramName.ToUpper Then
-                            sr.Close()
-                            Return value
+            Dim currentString As String
+            Dim currentGroup As String = ""
+            Do While Not sr.EndOfStream
+                currentString = sr.ReadLine
+                If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
+                    If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
+                        currentGroup = Mid(currentString, 2, currentString.Length - 2)
+                    End If
+                    If currentGroup.ToUpper = groupName.ToUpper Or groupName = "" Then
+                        Dim i As Integer = InStr(currentString, "=")
+                        If i > 0 Then
+                            Dim param, value As String
+                            param = Trim(Mid(currentString, 1, i - 1))
+                            value = Trim(Mid(currentString, i + 1, currentString.Length))
+                            If param.ToUpper = paramName.ToUpper Then
+                                sr.Close()
+                                Return value
+                            End If
                         End If
                     End If
                 End If
-            End If
-        Loop
+            Loop
 
-        sr.Close()
-        Return returnIsNotExist
+            sr.Close()
+            Return returnIsNotExist
+        End SyncLock
     End Function
 
     ''' <summary>
@@ -82,57 +85,60 @@ Public Class IniFile
     ''' <returns>Значение параметра.</returns>
     ''' <remarks></remarks>
     Function GetSetting(groupName As String, paramName As String, Optional defaultValue As String = Nothing, Optional returnIsNotExist As String = "") As String
-        Dim fileID As Integer = FreeFile()
-
-        If Not System.IO.File.Exists(_iniFile) Then
-            Dim bakName = _iniFile + ".bak"
-            If System.IO.File.Exists(bakName) Then
-                System.IO.File.Copy(bakName, _iniFile)
-            End If
-        End If
-
-        Try
-            FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
-        Catch ex As Exception
-            Try
-                FileOpen(fileID, _iniFile, OpenMode.Output)
-                FileClose(fileID)
-                FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
-            Catch ex2 As Exception
-                Return returnIsNotExist
-            End Try
-        End Try
-
-        Dim currentString As String
-        Dim currentGroup As String = ""
-        Do While Not EOF(fileID)
-            currentString = LineInput(fileID)
-            If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
-                If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
-                    currentGroup = Mid(currentString, 2, currentString.Length - 2)
+        SyncLock _syncRoot
+            Dim fileID As Integer = FreeFile()
+            If Not System.IO.File.Exists(_iniFile) Then
+                Dim bakName = _iniFile + ".bak"
+                If System.IO.File.Exists(bakName) Then
+                    System.IO.File.Copy(bakName, _iniFile)
                 End If
-                If currentGroup.ToUpper = groupName.ToUpper Or groupName = "" Then
-                    Dim i As Integer = InStr(currentString, "=")
-                    If i > 0 Then
-                        Dim param, value As String
-                        param = Trim(Mid(currentString, 1, i - 1))
-                        value = Trim(Mid(currentString, i + 1, currentString.Length))
-                        If param.ToUpper = paramName.ToUpper Then
-                            FileClose(fileID)
-                            Return value
+            End If
+
+            Try
+                FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
+            Catch ex As Exception
+                Try
+                    FileOpen(fileID, _iniFile, OpenMode.Output)
+                    FileClose(fileID)
+                    FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
+                Catch ex2 As Exception
+                    Return returnIsNotExist
+                End Try
+            End Try
+
+
+            Dim currentString As String
+            Dim currentGroup As String = ""
+            Do While Not EOF(fileID)
+                currentString = LineInput(fileID)
+                If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
+                    If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
+                        currentGroup = Mid(currentString, 2, currentString.Length - 2)
+                    End If
+                    If currentGroup.ToUpper = groupName.ToUpper Or groupName = "" Then
+                        Dim i As Integer = InStr(currentString, "=")
+                        If i > 0 Then
+                            Dim param, value As String
+                            param = Trim(Mid(currentString, 1, i - 1))
+                            value = Trim(Mid(currentString, i + 1, currentString.Length))
+                            If param.ToUpper = paramName.ToUpper Then
+                                FileClose(fileID)
+                                Return value
+                            End If
                         End If
                     End If
                 End If
+            Loop
+            FileClose(fileID)
+            If Not defaultValue Is Nothing Then
+                SetSetting(groupName, paramName, defaultValue)
+                Return defaultValue
+            Else
+                Return returnIsNotExist
             End If
-        Loop
-        FileClose(fileID)
-        If Not defaultValue Is Nothing Then
-            SetSetting(groupName, paramName, defaultValue)
-            Return defaultValue
-        Else
-            Return returnIsNotExist
-        End If
+        End SyncLock
     End Function
+
     ''' <summary>
     ''' Записывает значение параметра. Создает файл, группу, параметр, если они не найдены.
     ''' </summary>
@@ -141,79 +147,82 @@ Public Class IniFile
     ''' <param name="value">Значение параметра.</param>
     ''' <remarks></remarks>
     Sub SetSetting(groupName As String, paramName As String, value As String)
-        Dim fileID As Integer = FreeFile()
-        Dim fileBuff() As String
-        Dim flagGroup, flagParam As Boolean
-        ReDim fileBuff(0)
-        Dim currentString As String
-        Try
-            FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
-            Do While Not EOF(fileID)
-                fileBuff(fileBuff.Length - 1) = LineInput(fileID)
-                ReDim Preserve fileBuff(fileBuff.Length)
-            Loop
-            FileClose(fileID)
-        Catch ex As Exception
+        SyncLock _syncRoot
+            Dim fileID As Integer = FreeFile()
+            Dim fileBuff() As String
+            Dim flagGroup, flagParam As Boolean
+            ReDim fileBuff(0)
+            Dim currentString As String
+            Try
+                FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
+                Do While Not EOF(fileID)
+                    fileBuff(fileBuff.Length - 1) = LineInput(fileID)
+                    ReDim Preserve fileBuff(fileBuff.Length)
+                Loop
+                FileClose(fileID)
+            Catch ex As Exception
 
-        End Try
-        fileID = FreeFile()
+            End Try
+            fileID = FreeFile()
 
-        Dim tmpFName = _iniFile + ".tmp"
-        If System.IO.File.Exists(tmpFName) Then
-            System.IO.File.SetAttributes(tmpFName, IO.FileAttributes.Normal)
-            System.IO.File.Delete(tmpFName)
-        End If
+            Dim tmpFName = _iniFile + ".tmp"
+            If System.IO.File.Exists(tmpFName) Then
+                System.IO.File.SetAttributes(tmpFName, IO.FileAttributes.Normal)
+                System.IO.File.Delete(tmpFName)
+            End If
 
-        FileOpen(fileID, tmpFName, OpenMode.Output, OpenAccess.Write)
-        Dim currentGroup As String = ""
-        Dim i As Integer
-        For i = 0 To fileBuff.Length - 2
-            currentString = fileBuff(i)
-            If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
-                If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
-                    currentGroup = Mid(currentString, 2, currentString.Length - 2)
-                    If flagGroup = True And flagParam = False Then
-                        Print(fileID, paramName + "=" + value + vbCrLf)
-                        flagParam = True
-                    End If
-                End If
-                If currentGroup.ToUpper = groupName.ToUpper Then
-                    flagGroup = True
-                    Dim j As Integer = InStr(currentString, "=")
-                    If j > 0 Then
-                        Dim param As String
-                        param = Trim(Mid(currentString, 1, j - 1))
-                        If param.ToUpper = paramName.ToUpper Then
+            FileOpen(fileID, tmpFName, OpenMode.Output, OpenAccess.Write)
+            Dim currentGroup As String = ""
+            Dim i As Integer
+            For i = 0 To fileBuff.Length - 2
+                currentString = fileBuff(i)
+                If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
+                    If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
+                        currentGroup = Mid(currentString, 2, currentString.Length - 2)
+                        If flagGroup = True And flagParam = False Then
+                            Print(fileID, paramName + "=" + value + vbCrLf)
                             flagParam = True
-                            fileBuff(i) = param + "=" + value
+                        End If
+                    End If
+                    If currentGroup.ToUpper = groupName.ToUpper Then
+                        flagGroup = True
+                        Dim j As Integer = InStr(currentString, "=")
+                        If j > 0 Then
+                            Dim param As String
+                            param = Trim(Mid(currentString, 1, j - 1))
+                            If param.ToUpper = paramName.ToUpper Then
+                                flagParam = True
+                                fileBuff(i) = param + "=" + value
+                            End If
                         End If
                     End If
                 End If
+                Print(fileID, fileBuff(i) + vbCrLf)
+            Next
+            If flagParam = False Then
+                If flagGroup = False Then
+                    Print(fileID, "[" + groupName + "]" + vbCrLf)
+                    Print(fileID, paramName + "=" + value + vbCrLf)
+                Else
+                    Print(fileID, paramName + "=" + value + vbCrLf)
+                End If
             End If
-            Print(fileID, fileBuff(i) + vbCrLf)
-        Next
-        If flagParam = False Then
-            If flagGroup = False Then
-                Print(fileID, "[" + groupName + "]" + vbCrLf)
-                Print(fileID, paramName + "=" + value + vbCrLf)
-            Else
-                Print(fileID, paramName + "=" + value + vbCrLf)
-            End If
-        End If
-        FileClose(fileID)
+            FileClose(fileID)
 
-        If System.IO.File.Exists(_iniFile) Then
-            Dim bakFName = _iniFile + ".bak"
-            If System.IO.File.Exists(bakFName) Then
-                System.IO.File.SetAttributes(bakFName, IO.FileAttributes.Normal)
-                System.IO.File.Delete(bakFName)
+            If System.IO.File.Exists(_iniFile) Then
+                Dim bakFName = _iniFile + ".bak"
+                If System.IO.File.Exists(bakFName) Then
+                    System.IO.File.SetAttributes(bakFName, IO.FileAttributes.Normal)
+                    System.IO.File.Delete(bakFName)
+                End If
+                'System.IO.File.SetAttributes(_iniFile, IO.FileAttributes.Normal)
+                System.IO.File.Move(_iniFile, bakFName)
             End If
-            'System.IO.File.SetAttributes(_iniFile, IO.FileAttributes.Normal)
-            System.IO.File.Move(_iniFile, bakFName)
-        End If
 
-        System.IO.File.Move(tmpFName, _iniFile)
+            System.IO.File.Move(tmpFName, _iniFile)
+        End SyncLock
     End Sub
+
     ''' <summary>
     ''' Проверяет, присутсвует ли указанный файл.
     ''' </summary>
@@ -228,27 +237,30 @@ Public Class IniFile
         End Try
         Return True
     End Function
+
     ''' <summary>
     ''' Возвращает список групп из файла.
     ''' </summary>
     ''' <returns></returns>
     ''' <remarks></remarks>
     Function GetGroupList() As String()
-        Dim groups() As String
-        ReDim groups(0)
-        Dim fileID As Integer = FreeFile()
-        FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
-        Dim currentString As String
-        Do While Not EOF(fileID)
-            currentString = LineInput(fileID)
-            If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
-                groups(groups.Length - 1) = Mid(currentString, 2, currentString.Length - 2)
-                ReDim Preserve groups(groups.Length)
-            End If
-        Loop
-        ReDim Preserve groups(groups.Length - 2)
-        FileClose(fileID)
-        Return groups
+        SyncLock _syncRoot
+            Dim groups() As String
+            ReDim groups(0)
+            Dim fileID As Integer = FreeFile()
+            FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
+            Dim currentString As String
+            Do While Not EOF(fileID)
+                currentString = LineInput(fileID)
+                If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
+                    groups(groups.Length - 1) = Mid(currentString, 2, currentString.Length - 2)
+                    ReDim Preserve groups(groups.Length)
+                End If
+            Loop
+            ReDim Preserve groups(groups.Length - 2)
+            FileClose(fileID)
+            Return groups
+        End SyncLock
     End Function
     ''' <summary>
     ''' Возвращает список параметров в указанной группе из файла.
@@ -257,31 +269,33 @@ Public Class IniFile
     ''' <returns></returns>
     ''' <remarks></remarks>
     Function GetParamList(groupName As String) As String()
-        Dim params() As String
-        ReDim params(0)
-        Dim fileID As Integer = FreeFile()
-        FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
-        Dim currentString As String
-        Dim currentGroup As String = ""
-        Do While Not EOF(fileID)
-            currentString = LineInput(fileID)
-            If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
-                If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
-                    currentGroup = Mid(currentString, 2, currentString.Length - 2)
-                End If
-                If currentGroup.ToUpper = groupName.ToUpper Or groupName = "" Then
-                    Dim i As Integer = InStr(currentString, "=")
-                    If i > 0 Then
-                        Dim param As String
-                        param = Trim(Mid(currentString, 1, i - 1))
-                        params(params.Length - 1) = param
-                        ReDim Preserve params(params.Length)
+        SyncLock _syncRoot
+            Dim params() As String
+            ReDim params(0)
+            Dim fileID As Integer = FreeFile()
+            FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
+            Dim currentString As String
+            Dim currentGroup As String = ""
+            Do While Not EOF(fileID)
+                currentString = LineInput(fileID)
+                If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
+                    If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
+                        currentGroup = Mid(currentString, 2, currentString.Length - 2)
+                    End If
+                    If currentGroup.ToUpper = groupName.ToUpper Or groupName = "" Then
+                        Dim i As Integer = InStr(currentString, "=")
+                        If i > 0 Then
+                            Dim param As String
+                            param = Trim(Mid(currentString, 1, i - 1))
+                            params(params.Length - 1) = param
+                            ReDim Preserve params(params.Length)
+                        End If
                     End If
                 End If
-            End If
-        Loop
-        ReDim Preserve params(params.Length - 2)
-        FileClose(fileID)
-        Return params
+            Loop
+            ReDim Preserve params(params.Length - 2)
+            FileClose(fileID)
+            Return params
+        End SyncLock
     End Function
 End Class
