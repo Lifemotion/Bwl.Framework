@@ -10,13 +10,24 @@ Public Class SettingsClient
     Public ReadOnly Property RemoteStorage As New ClonedSettingsStorage
     Private _settingsForm As SettingsDialog
     Private _invokeForm As Form
+    Private _netClient As IMessageTransport
 
     Public Sub New(netClient As IMessageTransport, prefix As String, target As String)
         MyBase.New(netClient, prefix, target)
-        AddHandler netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
+        _netClient = netClient
+        AddHandler _netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
 
         AddHandler SettingsReceived, AddressOf SettingsReceivedHanlder
         AddHandler SettingChangeError, AddressOf SettingChangeErrorHandler
+    End Sub
+
+    Public Sub Dispose()
+        RemoveHandler _netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
+        RemoveHandler SettingsReceived, AddressOf SettingsReceivedHanlder
+        RemoveHandler SettingChangeError, AddressOf SettingChangeErrorHandler
+        _netClient = nothing
+        _settingsForm = Nothing
+        _invokeForm = Nothing
     End Sub
 
     Private Sub _client_ReceivedMessage(message As NetMessage)

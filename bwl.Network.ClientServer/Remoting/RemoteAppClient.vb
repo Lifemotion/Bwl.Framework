@@ -32,6 +32,28 @@ Public Class RemoteAppClient
         _MessageTransport.Open(address, options)
     End Sub
 
+    Public Sub Dispose()
+        If _MessageTransport.IsConnected Then _MessageTransport.Close()
+        _MessageTransport = Nothing
+        _SettingsClient.Dispose()
+        _SettingsClient = Nothing
+
+        _LogsClient.Dispose()
+        _LogsClient = Nothing
+
+        _AutoUIClient.Dispose()
+        _AutoUIClient = Nothing
+
+        If _createdForm IsNot Nothing Then
+            Try
+                _createdForm.Close()
+                _createdForm.Dispose()
+            Catch ex As Exception
+            End Try
+            _createdForm = Nothing
+        End If
+    End Sub
+
     Public Function CreateAutoUiForm() As AutoUIForm
         If _createdForm IsNot Nothing Then
             Try

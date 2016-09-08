@@ -6,10 +6,17 @@ Public Class AutoUiClient
 
     Public Event RequestToSend As IAutoUI.RequestToSendEventHandler Implements IAutoUI.RequestToSend
     Public Event BaseInfosReady As IAutoUI.BaseInfosReadyEventHandler Implements IAutoUI.BaseInfosReady
+    Private _netClient As IMessageTransport
 
     Public Sub New(netClient As IMessageTransport, prefix As String, target As String)
         MyBase.New(netClient, prefix, target)
-        AddHandler netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
+        _netClient = netClient
+        AddHandler _netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
+    End Sub
+
+    Public Sub Dispose()
+        RemoveHandler _netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
+        _netClient = Nothing
     End Sub
 
     Private Sub _client_ReceivedMessage(message As NetMessage)
