@@ -151,7 +151,34 @@ Public MustInherit Class SettingsStorageBase
     Friend MustOverride Sub LoadSetting(setting As SettingOnStorage)
 
     Public Function FindSetting(name As String) As SettingOnStorage
-        Dim nameParts = name.Split("."c)
+
+        Dim part0 = ""
+        Dim parts = ""
+
+        If name.ToLower().StartsWith(_name.ToLower()) Then
+            If Not name.ToLower() = _name.ToLower() Then
+                part0 = _name
+                parts = name.Remove(0, _name.Count() + 1)
+            Else
+                part0 = name
+            End If
+        Else
+            parts = name
+        End If
+
+        Dim settingParts = parts.Split("."c)
+
+        Dim nameParts As String()
+
+        If Not String.IsNullOrEmpty(part0) Then
+            Dim tempPartsList = New List(Of String)
+            tempPartsList.Add(part0)
+            tempPartsList.AddRange(settingParts)
+            nameParts = tempPartsList.ToArray()
+        Else
+            nameParts = settingParts.ToArray()
+        End If
+
         If _parentStorage Is Nothing Then
             If nameParts(0).ToLower = _name.ToLower Then
                 Dim newName = nameParts(1)
