@@ -44,6 +44,7 @@ Partial Class ConnectWindow
         Me.SettingField2 = New Bwl.Framework.SettingField()
         Me.bClient = New System.Windows.Forms.Button()
         Me.SettingField1 = New Bwl.Framework.SettingField()
+        Me.bConnectCmd = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
@@ -56,7 +57,7 @@ Partial Class ConnectWindow
         Me.bConnect.Name = "bConnect"
         Me.bConnect.Size = New System.Drawing.Size(90, 23)
         Me.bConnect.TabIndex = 0
-        Me.bConnect.Text = "Connect"
+        Me.bConnect.Text = "Connect UI"
         Me.bConnect.UseVisualStyleBackColor = True
         '
         'cbAddress
@@ -109,7 +110,7 @@ Partial Class ConnectWindow
         'bSetNetwork
         '
         Me.bSetNetwork.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.bSetNetwork.Location = New System.Drawing.Point(317, 296)
+        Me.bSetNetwork.Location = New System.Drawing.Point(221, 296)
         Me.bSetNetwork.Name = "bSetNetwork"
         Me.bSetNetwork.Size = New System.Drawing.Size(105, 23)
         Me.bSetNetwork.TabIndex = 5
@@ -129,6 +130,7 @@ Partial Class ConnectWindow
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.bConnectCmd)
         Me.TabPage1.Controls.Add(Me.cbAddress)
         Me.TabPage1.Controls.Add(Me.bSetNetwork)
         Me.TabPage1.Controls.Add(Me.bConnect)
@@ -254,6 +256,16 @@ Partial Class ConnectWindow
         Me.SettingField1.Size = New System.Drawing.Size(274, 43)
         Me.SettingField1.TabIndex = 33
         '
+        'bConnectCmd
+        '
+        Me.bConnectCmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bConnectCmd.Location = New System.Drawing.Point(332, 296)
+        Me.bConnectCmd.Name = "bConnectCmd"
+        Me.bConnectCmd.Size = New System.Drawing.Size(90, 23)
+        Me.bConnectCmd.TabIndex = 6
+        Me.bConnectCmd.Text = "Connect CMD"
+        Me.bConnectCmd.UseVisualStyleBackColor = True
+        '
         'ConnectWindow
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -293,4 +305,5 @@ Partial Class ConnectWindow
     Friend WithEvents bConnectRemoteApp As Button
     Friend WithEvents lbClients As ListBox
     Friend WithEvents bFindClients As Button
+    Friend WithEvents bConnectCmd As Button
 End Class

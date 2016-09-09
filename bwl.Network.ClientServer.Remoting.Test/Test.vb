@@ -36,6 +36,9 @@ Module Test
 
     Public Sub Main()
 
+        Dim cmdServer As New CmdlineServer(3465, "cmd",,, "CmdShell")
+        cmdServer.Start()
+
         Try
             _appBaseServerLocal = New RemoteAppServer(3155, _appBase, "TestRemApp", RemoteAppBeaconMode.broadcast)
         Catch ex As Exception
@@ -56,6 +59,7 @@ Module Test
                                                 Loop
                                             End Sub)
         thread1.Start()
+
     End Sub
 
     Private Sub _button1_Click(source As AutoButton) Handles _button1.Click

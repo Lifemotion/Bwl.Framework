@@ -117,4 +117,18 @@ Public Class ConnectWindow
         _transport.TargetSetting.Value = lbClients.Text
         bConnectRemoteApp_Click(Nothing, Nothing)
     End Sub
+
+    Private Sub bConnectCmd_Click(sender As Object, e As EventArgs) Handles bConnectCmd.Click
+        Dim tran As IMessageTransport = New NetClient
+        Try
+            tran.Open(cbAddress.Text, Val(ComboBox2.Text))
+            tran.RegisterMe("User", "", "RemoteCmdClient", "")
+            Dim _cmdClient As New CmdlineClient(tran, "remotecmd", "")
+            Dim form = _cmdClient.CreateCmdForm
+            form.Show()
+        Catch ex As Exception
+            MsgBox(ex.Message)
+            tran.Close()
+        End Try
+    End Sub
 End Class

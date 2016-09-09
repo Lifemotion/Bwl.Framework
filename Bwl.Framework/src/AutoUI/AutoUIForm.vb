@@ -40,6 +40,7 @@
         If Not DesignMode Then
             If _ui IsNot Nothing Then
                 AutoUIDisplay1.ConnectedUI = _ui
+                AutoUIDisplay1.RecreateControls()
                 _loggerServer.RequestLogsTransmission()
             End If
         End If

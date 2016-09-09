@@ -20,7 +20,7 @@ Public Class AutoUiClient
     End Sub
 
     Private Sub _client_ReceivedMessage(message As NetMessage)
-        If message.Part(0) = "AutoUiRemoting" And message.Part(1) = _prefix And message.FromID = _target Then
+        If message.Part(0) = "AutoUiRemoting" And message.Part(1) = _prefix And (message.FromID = _target Or _target = "") Then
             Select Case message.Part(2)
                 Case "#baseinfos"
                     Dim infos As New List(Of Byte())
