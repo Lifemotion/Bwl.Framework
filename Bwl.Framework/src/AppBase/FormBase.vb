@@ -28,7 +28,7 @@
     End Sub
 
     Private Sub exitMenuItem_Click(sender As Object, e As EventArgs) Handles exitMenuItem.Click
-        Application.Exit()
+        Close()
     End Sub
 
     Private Sub settingsMenuItem_Click(sender As Object, e As EventArgs) Handles settingsMenuItem.Click
