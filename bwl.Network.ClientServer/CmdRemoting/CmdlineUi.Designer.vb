@@ -30,6 +30,7 @@ Partial Class CmdlineUi
         Me.cbHasExited = New System.Windows.Forms.CheckBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.timerUpdate = New System.Windows.Forms.Timer(Me.components)
+        Me.cbHasStarted = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'cbInput
@@ -69,7 +70,7 @@ Partial Class CmdlineUi
         '
         Me.cbHasExited.AutoSize = True
         Me.cbHasExited.Enabled = False
-        Me.cbHasExited.Location = New System.Drawing.Point(152, 6)
+        Me.cbHasExited.Location = New System.Drawing.Point(237, 6)
         Me.cbHasExited.Name = "cbHasExited"
         Me.cbHasExited.Size = New System.Drawing.Size(74, 17)
         Me.cbHasExited.TabIndex = 3
@@ -93,11 +94,23 @@ Partial Class CmdlineUi
         Me.timerUpdate.Enabled = True
         Me.timerUpdate.Interval = 500
         '
+        'cbHasStarted
+        '
+        Me.cbHasStarted.AutoSize = True
+        Me.cbHasStarted.Enabled = False
+        Me.cbHasStarted.Location = New System.Drawing.Point(152, 6)
+        Me.cbHasStarted.Name = "cbHasStarted"
+        Me.cbHasStarted.Size = New System.Drawing.Size(79, 17)
+        Me.cbHasStarted.TabIndex = 5
+        Me.cbHasStarted.Text = "HasStarted"
+        Me.cbHasStarted.UseVisualStyleBackColor = True
+        '
         'CmdlineUi
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(623, 493)
+        Me.Controls.Add(Me.cbHasStarted)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.cbHasExited)
         Me.Controls.Add(Me.cbResponding)
@@ -117,4 +130,5 @@ Partial Class CmdlineUi
     Friend WithEvents cbHasExited As Windows.Forms.CheckBox
     Friend WithEvents TextBox1 As Windows.Forms.TextBox
     Friend WithEvents timerUpdate As Windows.Forms.Timer
+    Friend WithEvents cbHasStarted As Windows.Forms.CheckBox
 End Class

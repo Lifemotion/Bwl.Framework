@@ -9,8 +9,11 @@ Public Class CmdlineServer
     Private _prefix As String = ""
     Private _transport As IMessageTransport
     Private _outputBuffer As New StringBuilder
-    Private _errorBuffer As New StringBuilder
     Private _beacon As NetBeacon
+
+    Private _filename As String
+    Private _arguments As String
+    Private _directory As String
 
     Public Sub New(serverPort As Integer, filename As String, Optional arguments As String = "", Optional workDirectory As String = "", Optional beaconName As String = "")
         Me.New(New NetServer(serverPort), "remotecmd", filename, arguments, workDirectory, serverPort, beaconName)
@@ -25,17 +28,18 @@ Public Class CmdlineServer
         Me.New(transport, prefix, filename, arguments, workDirectory, 0, "")
     End Sub
 
+    Public ReadOnly Property Process As Process
+        Get
+            Return _process
+        End Get
+    End Property
+
     Public Sub New(transport As IMessageTransport, prefix As String, filename As String, Optional arguments As String = "", Optional workDirectory As String = "", Optional netPort As Integer = 0, Optional beaconName As String = "")
         If beaconName > "" And netPort > 0 Then _beacon = New NetBeacon(netPort, "RemoteCmd" + beaconName, True, True)
+        _filename = filename
+        _arguments = arguments
+        _directory = workDirectory
 
-        _process.StartInfo.FileName = filename
-        _process.StartInfo.WorkingDirectory = workDirectory
-        _process.StartInfo.Arguments = arguments
-        _process.StartInfo.UseShellExecute = False
-        _process.StartInfo.RedirectStandardError = True
-        _process.StartInfo.RedirectStandardInput = True
-        _process.StartInfo.RedirectStandardOutput = True
-        _process.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(866)
         _transport = transport
         AddHandler _transport.ReceivedMessage, AddressOf ReceivedHandler
     End Sub
@@ -44,18 +48,24 @@ Public Class CmdlineServer
         If message.Part(0) = "CmdRemoting" And message.Part(1) = _prefix Then
             Select Case message.Part(2)
                 Case "update-request"
-                    Dim buffo, buffe As String
+                    Dim buffo As String
                     SyncLock _outputBuffer
                         buffo = _outputBuffer.ToString
                         _outputBuffer.Clear()
                     End SyncLock
-                    SyncLock _errorBuffer
-                        buffe = _errorBuffer.ToString
-                        _errorBuffer.Clear()
-                    End SyncLock
-                    Dim msg1 As New NetMessage(message, "CmdRemoting", _prefix, "buffers", buffo, buffe)
+                    Dim msg1 As New NetMessage(message, "CmdRemoting", _prefix, "buffers", buffo)
                     _transport.SendMessage(msg1)
-                    Dim msg2 As New NetMessage(message, "CmdRemoting", _prefix, "state", _process.HasExited.ToString, _process.Responding.ToString, _process.MainWindowTitle)
+                    Dim hasExited = False.ToString
+                    Dim responding = False.ToString
+                    Dim mainWindowTitle = _filename
+                    Try
+                        hasExited = _process.HasExited
+                        responding = _process.Responding
+                        mainWindowTitle = _process.MainWindowTitle
+                    Catch ex As Exception
+                    End Try
+
+                    Dim msg2 As New NetMessage(message, "CmdRemoting", _prefix, "state", HasStarted.ToString, hasExited, responding)
                     _transport.SendMessage(msg2)
                 Case "kill-request"
                     Try
@@ -78,41 +88,79 @@ Public Class CmdlineServer
         End If
     End Sub
 
+    Public ReadOnly Property HasStarted As Boolean
+
+    Public ReadOnly Property HasExited As Boolean
+        Get
+            If Not HasStarted Then Return False
+            Return _process.HasExited
+        End Get
+    End Property
+
+    Public Property Encoding As Encoding = Encoding.GetEncoding(866)
+
     Public Sub Start()
+        Kill()
+        _process.StartInfo = New ProcessStartInfo
+        _process.StartInfo.FileName = _filename
+        _process.StartInfo.WorkingDirectory = _arguments
+        _process.StartInfo.Arguments = _directory
+        _process.StartInfo.UseShellExecute = False
+        _process.StartInfo.RedirectStandardError = True
+        _process.StartInfo.RedirectStandardInput = True
+        _process.StartInfo.RedirectStandardOutput = True
+
+        _process.StartInfo.StandardErrorEncoding = Encoding
+        _process.StartInfo.StandardOutputEncoding = Encoding
+
         _process.Start()
-        _outputReader = New Threading.Thread(Sub()
-                                                 Do
-                                                     Dim line = _process.StandardOutput.ReadLine
-                                                     If line IsNot Nothing AndAlso line.Length > 0 Then
-                                                         SyncLock _outputBuffer
-                                                             _outputBuffer.AppendLine(line)
-                                                         End SyncLock
-                                                     End If
-                                                     Threading.Thread.Sleep(1)
-                                                 Loop
-                                             End Sub)
-        _errorReader = New Threading.Thread(Sub()
-                                                Do
-                                                    Dim line = _process.StandardError.ReadLine
-                                                    If line IsNot Nothing AndAlso line.Length > 0 Then
-                                                        SyncLock _errorBuffer
-                                                            _errorBuffer.AppendLine(line)
-                                                        End SyncLock
-                                                    End If
-                                                    Threading.Thread.Sleep(1)
-                                                Loop
-                                            End Sub)
-        _outputReader.IsBackground = True
-        _errorReader.IsBackground = True
-        _outputReader.Start()
-        _errorReader.Start()
+        _HasStarted = True
+
+        If _outputReader Is Nothing Then
+            _outputReader = New Threading.Thread(AddressOf ReadOutputThread)
+            _errorReader = New Threading.Thread(AddressOf ReadErrorThread)
+            _outputReader.IsBackground = True
+            _errorReader.IsBackground = True
+            _outputReader.Start()
+            _errorReader.Start()
+        End If
+
+    End Sub
+
+    Private Sub ReadOutputThread()
+        Do
+            Try
+                Dim line = _process.StandardOutput.ReadLine
+                If line IsNot Nothing AndAlso line.Length > 0 Then
+                    SyncLock _outputBuffer
+                        _outputBuffer.AppendLine(line)
+                    End SyncLock
+                End If
+            Catch ex As Exception
+            End Try
+            Threading.Thread.Sleep(1)
+        Loop
+    End Sub
+
+    Private Sub ReadErrorThread()
+        Do
+            Try
+                Dim line = _process.StandardError.ReadLine
+                If line IsNot Nothing AndAlso line.Length > 0 Then
+                    SyncLock _outputBuffer
+                        _outputBuffer.AppendLine("[E] " + line)
+                    End SyncLock
+                End If
+            Catch ex As Exception
+            End Try
+            Threading.Thread.Sleep(1)
+        Loop
     End Sub
 
     Public Sub Kill()
         Try
             _process.Kill()
-            _outputReader.Abort()
-            _errorReader.Abort()
+            _HasStarted = False
         Catch ex As Exception
         End Try
     End Sub
@@ -125,6 +173,14 @@ Public Class CmdlineServer
         If Not disposedValue Then
             If disposing Then
                 Kill()
+                Try
+                    _outputReader.Abort()
+                Catch ex As Exception
+                End Try
+                Try
+                    _errorReader.Abort()
+                Catch ex As Exception
+                End Try
             End If
         End If
         disposedValue = True

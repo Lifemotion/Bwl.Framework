@@ -17,18 +17,12 @@ Public Class CmdlineUi
         InitializeComponent()
         _client = client
         ' Добавить код инициализации после вызова InitializeComponent().
-        AddHandler client.BuffersReceived, AddressOf BuffersRecievedHandler
+        AddHandler client.OutputReceived, AddressOf BuffersRecievedHandler
     End Sub
 
-    Private Sub BuffersRecievedHandler(standartOutput() As String, standartError() As String)
-        Dim sb As New Text.StringBuilder
-        For Each line In standartOutput
-            sb.AppendLine(line)
-        Next
-        For Each line In standartError
-            sb.AppendLine(line)
-        Next
-        Me.Invoke(Sub() TextBox1.AppendText(sb.ToString))
+    Private Sub BuffersRecievedHandler(standartOutput As String)
+
+        Me.Invoke(Sub() TextBox1.AppendText(standartOutput))
     End Sub
 
     Private Sub CmdlineUi_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -52,6 +46,7 @@ Public Class CmdlineUi
         End Try
         cbAlive.Checked = _client.ServerAlive
         cbHasExited.Checked = _client.HasExited
+        cbHasStarted.Checked = _client.HasStarted
         cbResponding.Checked = _client.Responding
         Me.Text = "RemoteCmd " + _client.WindowTitle
     End Sub

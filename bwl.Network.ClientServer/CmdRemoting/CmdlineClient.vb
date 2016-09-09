@@ -3,11 +3,12 @@
     Private _transport As IMessageTransport
 
     Public Property ServerAlive As Boolean = False
+    Public Property HasStarted As Boolean = False
     Public Property HasExited As Boolean = False
     Public Property Responding As Boolean = False
     Public Property WindowTitle As String = ""
 
-    Public Event BuffersReceived(standartOutput As String(), standartError As String())
+    Public Event OutputReceived(output As String)
 
     Public Sub New(transport As IMessageTransport, prefix As String, target As String)
         _transport = transport
@@ -39,13 +40,17 @@
             Select Case message.Part(2)
                 Case "buffers"
                     Dim buffo = message.Part(3).Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
-                    Dim buffe = message.Part(4).Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
+                    Dim sb As New Text.StringBuilder
+                    For Each line In buffo
+                        sb.AppendLine(line)
+                    Next
                     ServerAlive = True
-                    RaiseEvent BuffersReceived(buffo, buffe)
+                    RaiseEvent OutputReceived(sb.ToString)
                 Case "state"
-                    HasExited = message.Part(3) = "True"
-                    Responding = message.Part(4) = "True"
-                    WindowTitle = message.Part(5)
+                    HasStarted = message.Part(3) = "True"
+                    HasExited = message.Part(4) = "True"
+                    Responding = message.Part(5) = "True"
+                    WindowTitle = message.Part(6)
                     ServerAlive = True
             End Select
         End If

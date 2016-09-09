@@ -38,6 +38,8 @@ Module Test
 
         Dim cmdServer As New CmdlineServer(3465, "cmd",,, "CmdShell")
         cmdServer.Start()
+        cmdServer.Kill()
+        cmdServer.Start()
 
         Try
             _appBaseServerLocal = New RemoteAppServer(3155, _appBase, "TestRemApp", RemoteAppBeaconMode.broadcast)
@@ -56,6 +58,10 @@ Module Test
                                                     g.Clear(Color.Yellow)
                                                     _image.Image = bitmap
                                                     Threading.Thread.Sleep(3000)
+
+                                                    If cmdServer.HasExited Then
+                                                        cmdServer.Start()
+                                                    End If
                                                 Loop
                                             End Sub)
         thread1.Start()
