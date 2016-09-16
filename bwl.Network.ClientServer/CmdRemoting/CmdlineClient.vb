@@ -12,6 +12,7 @@
 
     Public Sub New(transport As IMessageTransport, prefix As String, target As String)
         _transport = transport
+        _prefix = prefix
         AddHandler _transport.ReceivedMessage, AddressOf ReceivedHandler
     End Sub
 

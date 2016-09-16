@@ -39,8 +39,15 @@ Public Class CmdlineServer
         _filename = filename
         _arguments = arguments
         _directory = workDirectory
-
+        _prefix = prefix
         _transport = transport
+        AddHandler _transport.ReceivedMessage, AddressOf ReceivedHandler
+    End Sub
+
+    Public Sub New(transport As IMessageTransport, prc As Process, prefix As String)
+        _process = prc
+        _transport = transport
+        _prefix = prefix
         AddHandler _transport.ReceivedMessage, AddressOf ReceivedHandler
     End Sub
 
