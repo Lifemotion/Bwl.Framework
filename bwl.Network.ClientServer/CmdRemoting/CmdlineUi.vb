@@ -50,4 +50,8 @@ Public Class CmdlineUi
         cbResponding.Checked = _client.Responding
         Me.Text = "RemoteCmd " + _client.WindowTitle
     End Sub
+
+    Private Sub CmdlineUi_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        RemoveHandler _client.OutputReceived, AddressOf BuffersRecievedHandler
+    End Sub
 End Class

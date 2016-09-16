@@ -1,4 +1,6 @@
 ﻿Public Class CmdlineClient
+    Implements IDisposable
+
     Private _prefix As String = ""
     Private _transport As IMessageTransport
 
@@ -56,4 +58,40 @@
             End Select
         End If
     End Sub
+
+#Region "IDisposable Support"
+    Private disposedValue As Boolean ' Для определения избыточных вызовов
+
+    ' IDisposable
+    Protected Overridable Sub Dispose(disposing As Boolean)
+        If Not disposedValue Then
+            If disposing Then
+                Try
+                    RemoveHandler _transport.ReceivedMessage, AddressOf ReceivedHandler
+                Catch ex As Exception
+                End Try
+                ' TODO: освободить управляемое состояние (управляемые объекты).
+            End If
+
+            ' TODO: освободить неуправляемые ресурсы (неуправляемые объекты) и переопределить ниже Finalize().
+            ' TODO: задать большим полям значение NULL.
+        End If
+        disposedValue = True
+    End Sub
+
+    ' TODO: переопределить Finalize(), только если Dispose(disposing As Boolean) выше имеет код для освобождения неуправляемых ресурсов.
+    'Protected Overrides Sub Finalize()
+    '    ' Не изменяйте этот код. Разместите код очистки выше в методе Dispose(disposing As Boolean).
+    '    Dispose(False)
+    '    MyBase.Finalize()
+    'End Sub
+
+    ' Этот код добавлен редактором Visual Basic для правильной реализации шаблона высвобождаемого класса.
+    Public Sub Dispose() Implements IDisposable.Dispose
+        ' Не изменяйте этот код. Разместите код очистки выше в методе Dispose(disposing As Boolean).
+        Dispose(True)
+        ' TODO: раскомментировать следующую строку, если Finalize() переопределен выше.
+        ' GC.SuppressFinalize(Me)
+    End Sub
+#End Region
 End Class

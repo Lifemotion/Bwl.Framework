@@ -60,6 +60,14 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CmdRemoting\CmdlineClient.vb" />
+    <Compile Include="CmdRemoting\CmdlineServer.vb" />
+    <Compile Include="CmdRemoting\CmdlineUi.Designer.vb">
+      <DependentUpon>CmdlineUi.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CmdRemoting\CmdlineUi.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Interfaces\IMessageClient.vb" />
     <Compile Include="Interfaces\IMessageServer.vb" />
     <Compile Include="Interfaces\IMessageTransport.vb" />
@@ -108,6 +116,9 @@
     <Compile Include="MessageTransport.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CmdRemoting\CmdlineUi.resx">
+      <DependentUpon>CmdlineUi.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -136,13 +147,13 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\bwl.Framework\Bwl.Framework.vbproj">
-      <Project>{e18c7249-22c8-4147-91ef-8a2721f0f026}</Project>
-      <Name>Bwl.Framework</Name>
-    </ProjectReference>
+    <Folder Include="Remoting\GlobalStates\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Remoting\GlobalStates\" />
+    <ProjectReference Include="..\bwl.Framework\Bwl.Framework.Fw4.vbproj">
+      <Project>{e18c7249-22c8-4147-91ef-8a2721f0f026}</Project>
+      <Name>Bwl.Framework.Fw4</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
