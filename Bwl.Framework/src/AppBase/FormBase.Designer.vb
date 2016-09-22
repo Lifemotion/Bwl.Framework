@@ -27,83 +27,65 @@ Partial Class FormBase
         Me.УправлениеToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.openAppDirMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.settingsMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ЛогToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.exitMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.logWriter = New Bwl.Framework.DatagridLogWriter()
-        Me.ЛогToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
         '
+        resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.УправлениеToolStripMenuItem})
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(4, 2, 0, 2)
-        Me.MenuStrip1.Size = New System.Drawing.Size(784, 24)
-        Me.MenuStrip1.TabIndex = 1
-        Me.MenuStrip1.Text = "MenuStrip1"
         '
         'УправлениеToolStripMenuItem
         '
+        resources.ApplyResources(Me.УправлениеToolStripMenuItem, "УправлениеToolStripMenuItem")
         Me.УправлениеToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.openAppDirMenuItem, Me.settingsMenuItem, Me.ЛогToolStripMenuItem, Me.exitMenuItem})
         Me.УправлениеToolStripMenuItem.Name = "УправлениеToolStripMenuItem"
-        Me.УправлениеToolStripMenuItem.Size = New System.Drawing.Size(85, 20)
-        Me.УправлениеToolStripMenuItem.Text = "Управление"
         '
         'openAppDirMenuItem
         '
+        resources.ApplyResources(Me.openAppDirMenuItem, "openAppDirMenuItem")
         Me.openAppDirMenuItem.Name = "openAppDirMenuItem"
-        Me.openAppDirMenuItem.Size = New System.Drawing.Size(225, 22)
-        Me.openAppDirMenuItem.Text = "Открыть папку программы"
         '
         'settingsMenuItem
         '
+        resources.ApplyResources(Me.settingsMenuItem, "settingsMenuItem")
         Me.settingsMenuItem.Name = "settingsMenuItem"
-        Me.settingsMenuItem.Size = New System.Drawing.Size(225, 22)
-        Me.settingsMenuItem.Text = "Настройки..."
+        '
+        'ЛогToolStripMenuItem
+        '
+        resources.ApplyResources(Me.ЛогToolStripMenuItem, "ЛогToolStripMenuItem")
+        Me.ЛогToolStripMenuItem.Name = "ЛогToolStripMenuItem"
         '
         'exitMenuItem
         '
+        resources.ApplyResources(Me.exitMenuItem, "exitMenuItem")
         Me.exitMenuItem.Name = "exitMenuItem"
-        Me.exitMenuItem.Size = New System.Drawing.Size(225, 22)
-        Me.exitMenuItem.Text = "Выход"
         '
         'logWriter
         '
-        Me.logWriter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        resources.ApplyResources(Me.logWriter, "logWriter")
         Me.logWriter.ExtendedView = True
         Me.logWriter.FilterText = ""
-        Me.logWriter.Location = New System.Drawing.Point(2, 238)
         Me.logWriter.LogEnabled = True
-        Me.logWriter.Margin = New System.Windows.Forms.Padding(0)
         Me.logWriter.Name = "logWriter"
         Me.logWriter.ShowDebug = False
         Me.logWriter.ShowErrors = True
         Me.logWriter.ShowInformation = True
         Me.logWriter.ShowMessages = True
         Me.logWriter.ShowWarnings = True
-        Me.logWriter.Size = New System.Drawing.Size(781, 322)
-        Me.logWriter.TabIndex = 0
-        '
-        'ЛогToolStripMenuItem
-        '
-        Me.ЛогToolStripMenuItem.Name = "ЛогToolStripMenuItem"
-        Me.ЛогToolStripMenuItem.Size = New System.Drawing.Size(225, 22)
-        Me.ЛогToolStripMenuItem.Text = "Лог"
         '
         'FormBase
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(784, 561)
         Me.Controls.Add(Me.logWriter)
         Me.Controls.Add(Me.MenuStrip1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "FormBase"
-        Me.Text = "Application"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
