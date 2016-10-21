@@ -268,6 +268,7 @@ Public Class NetServer
             working = False
         End Try
     End Sub
+
     Friend Sub DirectConnectClient(ByVal directClient As NetClient)
         Dim newClient As New ClientData
         newClient.userInfo = New ConnectedClient("direct", GetID, newClient, Me, True)
@@ -279,6 +280,7 @@ Public Class NetServer
         'вызываем событие
         RaiseEvent ClientConnected(newClient.userInfo)
     End Sub
+
     Friend Sub DirectDisconnectClient(ByVal directClient As NetClient)
         Dim disconnectThis As ClientData = Nothing
         For Each connClient In connectedClients.ToArray
@@ -286,6 +288,7 @@ Public Class NetServer
         Next
         If disconnectThis IsNot Nothing Then SystemPerformRemove(disconnectThis)
     End Sub
+
     Friend Sub DirectReceiveMessage(ByVal directClient As NetClient, ByVal message As NetMessage)
         For Each connClient In connectedClients.ToArray
             If connClient.directClient.Equals(directClient) Then
@@ -299,10 +302,12 @@ Public Class NetServer
             End If
         Next
     End Sub
+
     Private Class MessageClientPack
         Public message As NetMessage
         Public client As ConnectedClient
     End Class
+
     Private Sub DirectMessageReceived(ByVal pack As MessageClientPack)
         RaiseEvent ReceivedMessage(pack.message, pack.client)
         RaiseEvent ReceivedMessageUniversal(pack.message)

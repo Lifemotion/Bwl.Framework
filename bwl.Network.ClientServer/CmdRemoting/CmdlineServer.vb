@@ -71,7 +71,9 @@ Public Class CmdlineServer
                         mainWindowTitle = _process.MainWindowTitle
                     Catch ex As Exception
                     End Try
-
+                    If Environment.OSVersion.Platform = PlatformID.Unix Then
+                        responding = True
+                    End If
                     Dim msg2 As New NetMessage(message, "CmdRemoting", _prefix, "state", HasStarted.ToString, hasExited, responding)
                     _transport.SendMessage(msg2)
                 Case "kill-request"
@@ -110,8 +112,8 @@ Public Class CmdlineServer
         Kill()
         _process.StartInfo = New ProcessStartInfo
         _process.StartInfo.FileName = _filename
-        _process.StartInfo.WorkingDirectory = _arguments
-        _process.StartInfo.Arguments = _directory
+        _process.StartInfo.WorkingDirectory = _directory
+        _process.StartInfo.Arguments = _arguments
         _process.StartInfo.UseShellExecute = False
         _process.StartInfo.RedirectStandardError = True
         _process.StartInfo.RedirectStandardInput = True

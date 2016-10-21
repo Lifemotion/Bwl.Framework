@@ -10,6 +10,7 @@
 
     Public Property LogEnabled As Boolean = True Implements ILogWriter.LogEnabled
 
+    Public Property WriteExtended As Boolean = False
 
     Public Sub WriteEvent(datetime As DateTime, path() As String, type As LogEventType, text As String, ParamArray params() As Object) Implements ILogWriter.WriteEvent
         Dim lastclr = System.Console.ForegroundColor
@@ -25,7 +26,16 @@
             Case LogEventType.message
                 System.Console.ForegroundColor = ConsoleColor.Green
         End Select
-        If LogEnabled Then System.Console.WriteLine("[{0}] {1}", datetime.ToLongTimeString, text + " ")
+        If LogEnabled Then
+            System.Console.WriteLine("[{0}] {1}", datetime.ToLongTimeString, text + " ")
+            If WriteExtended Then
+                For Each param In params
+                    System.Console.Write(param.ToString())
+                Next
+                  System.Console.WriteLine
+            End If
+
+        End If
         System.Console.ForegroundColor = lastclr
     End Sub
 End Class

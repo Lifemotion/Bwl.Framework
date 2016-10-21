@@ -21,8 +21,10 @@ Public Class CmdlineUi
     End Sub
 
     Private Sub BuffersRecievedHandler(standartOutput As String)
-
-        Me.Invoke(Sub() TextBox1.AppendText(standartOutput))
+        Try
+            Me.Invoke(Sub() TextBox1.AppendText(standartOutput))
+        Catch ex As Exception
+        End Try
     End Sub
 
     Private Sub CmdlineUi_Load(sender As Object, e As EventArgs) Handles MyBase.Load

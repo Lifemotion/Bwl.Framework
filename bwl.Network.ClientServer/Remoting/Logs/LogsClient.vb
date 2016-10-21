@@ -30,7 +30,7 @@ Public Class LogsClient
     End Sub
 
     Private Sub _client_ReceivedMessage(message As NetMessage)
-        If message.Part(0) = "LogsRemoting" And message.Part(1) = _prefix And message.FromID = _target Then
+        If message.Part(0) = "LogsRemoting" And message.Part(1) = _prefix And (message.FromID = _target Or _target = "") Then
             Dim mtype As LogEventType = LogEventType.debug
             Dim mdate = New DateTime(CLng(message.Part(2)))
             [Enum].TryParse(Of LogEventType)(message.Part(3), mtype)
