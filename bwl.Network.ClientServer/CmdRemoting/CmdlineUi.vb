@@ -22,7 +22,18 @@ Public Class CmdlineUi
 
     Private Sub BuffersRecievedHandler(standartOutput As String)
         Try
-            Me.Invoke(Sub() TextBox1.AppendText(standartOutput))
+            Me.Invoke(Sub()
+                          If cbFilter.Checked And tbFilter.Text > "" Then
+                              Dim lines = standartOutput.Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
+                              For Each line In lines
+                                  If line.ToLower.Contains(tbFilter.Text.ToLower) Then
+                                      TextBox1.AppendText(line + vbCrLf)
+                                  End If
+                              Next
+                          Else
+                              TextBox1.AppendText(standartOutput)
+                          End If
+                      End Sub)
         Catch ex As Exception
         End Try
     End Sub
@@ -55,5 +66,9 @@ Public Class CmdlineUi
 
     Private Sub CmdlineUi_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         RemoveHandler _client.OutputReceived, AddressOf BuffersRecievedHandler
+    End Sub
+
+    Private Sub bClear_Click(sender As Object, e As EventArgs) Handles bClear.Click
+        TextBox1.Text = ""
     End Sub
 End Class

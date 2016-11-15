@@ -129,6 +129,8 @@ Public Class CmdlineServer
             _outputReader = New Threading.Thread(AddressOf ReadOutputThread)
             _errorReader = New Threading.Thread(AddressOf ReadErrorThread)
             _outputReader.IsBackground = True
+            _outputReader.Name = "CmdRemoting Output Reader"
+            _errorReader.Name = "CmdRemoting Error Reader"
             _errorReader.IsBackground = True
             _outputReader.Start()
             _errorReader.Start()
@@ -136,33 +138,46 @@ Public Class CmdlineServer
 
     End Sub
 
+    Private Function ReadChar(reader As IO.StreamReader) As Char
+        Dim buffer(0) As Char
+        Dim count = reader.Read(buffer, 0, buffer.Length)
+        If count = 1 Then
+            Return buffer(0)
+        Else
+            Return vbNullChar
+        End If
+    End Function
+
     Private Sub ReadOutputThread()
         Do
             Try
-                Dim line = _process.StandardOutput.ReadLine
-                If line IsNot Nothing AndAlso line.Length > 0 Then
+
+                Dim out = ReadChar(_process.StandardOutput)
+                If out <> vbNullChar Then
                     SyncLock _outputBuffer
-                        _outputBuffer.AppendLine(line)
+                        _outputBuffer.Append(out)
                     End SyncLock
                 End If
+
             Catch ex As Exception
             End Try
-            Threading.Thread.Sleep(1)
+            If _process.HasExited Then   Threading.Thread.Sleep(1)
         Loop
     End Sub
 
     Private Sub ReadErrorThread()
         Do
             Try
-                Dim line = _process.StandardError.ReadLine
-                If line IsNot Nothing AndAlso line.Length > 0 Then
+                Dim err = ReadChar(_process.StandardError)
+                If err <> vbNullChar Then
                     SyncLock _outputBuffer
-                        _outputBuffer.AppendLine("[E] " + line)
+                        _outputBuffer.Append(err)
                     End SyncLock
                 End If
             Catch ex As Exception
             End Try
-            Threading.Thread.Sleep(1)
+            If _process.HasExited Then Threading.Thread.Sleep(1)
+            ' Threading.Thread.Sleep(1)
         Loop
     End Sub
 

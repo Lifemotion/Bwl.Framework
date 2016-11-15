@@ -31,6 +31,9 @@ Partial Class CmdlineUi
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.timerUpdate = New System.Windows.Forms.Timer(Me.components)
         Me.cbHasStarted = New System.Windows.Forms.CheckBox()
+        Me.tbFilter = New System.Windows.Forms.TextBox()
+        Me.bClear = New System.Windows.Forms.Button()
+        Me.cbFilter = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'cbInput
@@ -38,10 +41,11 @@ Partial Class CmdlineUi
         Me.cbInput.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cbInput.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.HistoryList
+        Me.cbInput.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.cbInput.FormattingEnabled = True
         Me.cbInput.Location = New System.Drawing.Point(2, 469)
         Me.cbInput.Name = "cbInput"
-        Me.cbInput.Size = New System.Drawing.Size(619, 21)
+        Me.cbInput.Size = New System.Drawing.Size(880, 22)
         Me.cbInput.TabIndex = 0
         '
         'cbAlive
@@ -82,11 +86,12 @@ Partial Class CmdlineUi
         Me.TextBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox1.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
         Me.TextBox1.Location = New System.Drawing.Point(2, 29)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox1.Size = New System.Drawing.Size(619, 434)
+        Me.TextBox1.Size = New System.Drawing.Size(880, 434)
         Me.TextBox1.TabIndex = 4
         '
         'timerUpdate
@@ -105,11 +110,43 @@ Partial Class CmdlineUi
         Me.cbHasStarted.Text = "HasStarted"
         Me.cbHasStarted.UseVisualStyleBackColor = True
         '
+        'tbFilter
+        '
+        Me.tbFilter.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.tbFilter.Location = New System.Drawing.Point(772, 4)
+        Me.tbFilter.Name = "tbFilter"
+        Me.tbFilter.Size = New System.Drawing.Size(100, 20)
+        Me.tbFilter.TabIndex = 6
+        '
+        'bClear
+        '
+        Me.bClear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bClear.Location = New System.Drawing.Point(638, 3)
+        Me.bClear.Name = "bClear"
+        Me.bClear.Size = New System.Drawing.Size(75, 21)
+        Me.bClear.TabIndex = 7
+        Me.bClear.Text = "Clear"
+        Me.bClear.UseVisualStyleBackColor = True
+        '
+        'cbFilter
+        '
+        Me.cbFilter.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cbFilter.AutoSize = True
+        Me.cbFilter.Location = New System.Drawing.Point(719, 6)
+        Me.cbFilter.Name = "cbFilter"
+        Me.cbFilter.Size = New System.Drawing.Size(48, 17)
+        Me.cbFilter.TabIndex = 8
+        Me.cbFilter.Text = "Filter"
+        Me.cbFilter.UseVisualStyleBackColor = True
+        '
         'CmdlineUi
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(623, 493)
+        Me.ClientSize = New System.Drawing.Size(884, 493)
+        Me.Controls.Add(Me.cbFilter)
+        Me.Controls.Add(Me.bClear)
+        Me.Controls.Add(Me.tbFilter)
         Me.Controls.Add(Me.cbHasStarted)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.cbHasExited)
@@ -131,4 +168,7 @@ Partial Class CmdlineUi
     Friend WithEvents TextBox1 As Windows.Forms.TextBox
     Friend WithEvents timerUpdate As Windows.Forms.Timer
     Friend WithEvents cbHasStarted As Windows.Forms.CheckBox
+    Friend WithEvents tbFilter As Windows.Forms.TextBox
+    Friend WithEvents bClear As Windows.Forms.Button
+    Friend WithEvents cbFilter As Windows.Forms.CheckBox
 End Class

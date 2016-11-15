@@ -60,7 +60,7 @@ Module Test
                                                     Threading.Thread.Sleep(3000)
 
                                                     If cmdServer.HasExited Then
-                                                        cmdServer.Start()
+                                                        '   cmdServer.Start()
                                                     End If
                                                 Loop
                                             End Sub)
