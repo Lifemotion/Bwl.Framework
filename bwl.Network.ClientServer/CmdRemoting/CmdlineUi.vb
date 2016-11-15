@@ -50,7 +50,7 @@ Public Class CmdlineUi
         cbHasExited.Checked = _client.HasExited
         cbHasStarted.Checked = _client.HasStarted
         cbResponding.Checked = _client.Responding
-        Me.Text = "RemoteCmd " + _client.WindowTitle
+        '   Me.Text = "RemoteCmd " + _client.WindowTitle
     End Sub
 
     Private Sub CmdlineUi_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing

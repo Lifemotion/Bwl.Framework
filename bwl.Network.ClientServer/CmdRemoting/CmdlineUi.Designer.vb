@@ -118,7 +118,7 @@ Partial Class CmdlineUi
         Me.Controls.Add(Me.cbInput)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "CmdlineUi"
-        Me.Text = "CmdlineUi"
+        Me.Text = "RemoteCmd"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
