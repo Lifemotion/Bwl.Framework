@@ -1,2 +1,2 @@
-﻿Bwl Remoting Tool,!build-all.cmd,release\Bwl Remoting Tool\bin\Bwl.Network.ClientServer.Remoting.Tool.exe
-Bwl ClientServer Tool,!build-all.cmd,release\Bwl ClientServer Tool\bin\Bwl.Network.ClientServer.Tool.exe
+﻿Bwl Remoting Tool,!build-all.cmd,release\Bwl Remoting Tool\bin\Bwl.Network.ClientServer.Remoting.Tool.exe,RemoteUI Apps client.
+Bwl ClientServer Tool,!build-all.cmd,release\Bwl ClientServer Tool\bin\Bwl.Network.ClientServer.Tool.exe,ClientServer testing app.
