@@ -9,6 +9,10 @@
         Set(value As String)
             If value Is Nothing Then value = ""
             _text = value
+            Try
+                Info.ElemValue = value
+            Catch
+            End Try
             SendUpdate()
         End Set
     End Property

@@ -14,6 +14,10 @@ Public Class AutoBitmap
         End Get
         Set(value As Bitmap)
             _bitmap = value
+            Try
+                Info.ElemValue = value
+            Catch
+            End Try
             SendUpdate()
         End Set
     End Property

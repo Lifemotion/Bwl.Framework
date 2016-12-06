@@ -22,6 +22,10 @@ Public Class RemoteAutoBitmap
             If Info.BackColor.A = 255 Then PictureBox1.BackColor = Info.BackColor
             If Info.Width > 0 Then Me.Width = Info.Width
             If Info.Height > 0 Then Me.Height = Info.Height
+            Try
+                If Info.ElemValue IsNot Nothing Then Me.PictureBox1.Image = CType(Info.ElemValue, Bitmap)
+            Catch ex As Exception
+            End Try
         End If
     End Sub
 

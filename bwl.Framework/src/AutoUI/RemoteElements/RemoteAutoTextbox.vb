@@ -22,6 +22,10 @@ Public Class RemoteAutoTextbox
             If Info.BackColor.A = 255 Then TextBox1.BackColor = Info.BackColor
             If Info.Width > 0 Then Me.Width = Info.Width
             If Info.Height > 0 Then Me.Height = Info.Height
+            Try
+                If Info.ElemValue IsNot Nothing Then Me.TextBox1.Text = CType(Info.ElemValue, String)
+            Catch ex As Exception
+            End Try
         End If
     End Sub
 

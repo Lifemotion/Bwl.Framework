@@ -1,4 +1,6 @@
 ﻿Imports System.Drawing
+Imports System.IO
+Imports System.Runtime.Serialization.Formatters.Binary
 
 Public Class UIElementInfo
     Private _category As String = ""
@@ -6,6 +8,7 @@ Public Class UIElementInfo
     Private _width As Integer = 0
     Private _height As Integer = 0
     Private _backColor As Color = Color.FromArgb(0, 0, 0, 0)
+    Private _elemValue As Object = Nothing
 
     Public Event Changed(source As UIElementInfo)
     ReadOnly Property ID As String
@@ -66,6 +69,15 @@ Public Class UIElementInfo
             RaiseEvent Changed(Me)
         End Set
     End Property
+    Property ElemValue As Object
+        Get
+            Return _elemValue
+        End Get
+        Set
+            _elemValue = Value
+            RaiseEvent Changed(Me)
+        End Set
+    End Property
 
     Public Function ToBytes() As Byte()
         Dim list As New List(Of String)
@@ -77,6 +89,7 @@ Public Class UIElementInfo
             list.Add(.Width.ToString)
             list.Add(.Height.ToString)
             list.Add(.BackColor.A.ToString + ";" + .BackColor.R.ToString + ";" + .BackColor.G.ToString + ";" + .BackColor.B.ToString)
+            list.Add(ObjectToString(.ElemValue))
         End With
         Dim str = AutoUIByteCoding.GetString(list.ToArray)
         Dim bytes = AutoUIByteCoding.GetBytes(str)
@@ -90,6 +103,7 @@ Public Class UIElementInfo
         Me._height = ui.Height
         Me._width = ui.Width
         Me._backColor = ui.BackColor
+        Me.ElemValue = ui.ElemValue
         RaiseEvent Changed(Me)
     End Sub
 
@@ -105,6 +119,32 @@ Public Class UIElementInfo
             info.BackColor = Color.FromArgb(CInt(cols(0)), CInt(cols(1)), CInt(cols(2)), CInt(cols(3)))
         Catch ex As Exception
         End Try
+        info.ElemValue = StringToObject(parts(7))
         Return info
+    End Function
+
+    Private Shared Function ObjectToString(obj As Object) As String
+        Try
+            Using ms As New MemoryStream()
+                Dim bf = New BinaryFormatter
+                bf.Serialize(ms, obj)
+                Return Convert.ToBase64String(ms.ToArray())
+            End Using
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+
+    Private Shared Function StringToObject(base64String As String) As Object
+        Try
+            Dim bytes As Byte() = Convert.FromBase64String(base64String)
+            Using ms As New MemoryStream(bytes, 0, bytes.Length)
+                ms.Write(bytes, 0, bytes.Length)
+                ms.Position = 0
+                Return New BinaryFormatter().Deserialize(ms)
+            End Using
+        Catch ex As Exception
+            Return Nothing
+        End Try
     End Function
 End Class
