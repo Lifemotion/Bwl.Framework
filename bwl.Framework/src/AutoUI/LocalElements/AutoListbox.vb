@@ -21,6 +21,16 @@ Public Class AutoListbox
             SendUpdate()
         End Set
     End Property
+
+    Private _setSelected As Integer
+
+    Public WriteOnly Property SetSelected As Integer
+        Set(setSelected As Integer)
+            _setSelected = setSelected
+            SendUpdate()
+        End Set
+    End Property
+
     Public Sub New(iface As AutoUI, id As String)
         MyBase.New(iface, id, GetType(AutoListbox))
         AddHandler Items.CollectionChanged, AddressOf SendUpdate
@@ -36,5 +46,6 @@ Public Class AutoListbox
     Public Overrides Sub SendUpdate()
         Send("items", Items.ToArray)
         Send("parameters", AutoHeight.ToString)
+        Send("setSelected", _setSelected.ToString)
     End Sub
 End Class
