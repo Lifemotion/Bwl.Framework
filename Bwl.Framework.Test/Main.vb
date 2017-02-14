@@ -1,6 +1,13 @@
 ﻿Imports Bwl.Framework
 
+Public Class InternalTestClass
+    Public Property IntSetting1 As String = "test"
+    Public Property IntSetting2 As Boolean = True
+End Class
+
 Public Class TestClass
+
+    Private Property IntClassSettingsCollection As New InternalTestClass
     Public Property Setting1 As String = "test"
     Public Property Setting2 As Boolean = True
     Public Event TestLogger1(message As String)
@@ -35,7 +42,7 @@ Module Main
     Dim asm As AutoSettings
 
     Public Sub Main()
-        asm = New AutoSettings(_appBase.RootStorage, _test1)
+        asm = New AutoSettings(_appBase.RootStorage, _test1,, True)
         AddHandler asm.FieldChanged, AddressOf _test1.SettingsChanged
 
         _appBase.RootLogger.CollectLogs(_test1)

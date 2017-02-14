@@ -33,9 +33,20 @@ Public Class AutoSettings
 
     Public Event FieldChanged(target As Object, field As PropertyInfo)
 
-    Public Sub New(storage As SettingsStorage, target As Object, Optional filterByName As String = "Setting")
+    Public Sub New(storage As SettingsStorage, target As Object, Optional filterByName As String = "Setting", Optional recursive As Boolean = False)
         _storage = storage
-        For Each prop In target.GetType.GetProperties
+        CollectFields(target, storage, filterByName, recursive)
+
+        If _items.Count > 0 Then
+            _thread = New Threading.Thread(AddressOf MonitorThread)
+            _thread.Name = "AutoSettings Monitor"
+            _thread.IsBackground = True
+            _thread.Start()
+        End If
+    End Sub
+
+    Private Sub CollectFields(target As Object, storage As SettingsStorage, filterByName As String, recursive As Boolean)
+        For Each prop In target.GetType.GetProperties(BindingFlags.Public Or BindingFlags.NonPublic Or BindingFlags.Instance)
             If filterByName = "" OrElse prop.Name.Contains(filterByName) Then
                 Select Case prop.PropertyType
                     Case GetType(String)
@@ -81,14 +92,15 @@ Public Class AutoSettings
                         _items.Add(info)
                 End Select
             End If
+            If prop.PropertyType.IsClass And prop.PropertyType <> GetType(String) Then
+                Dim val = prop.GetValue(target)
+                If recursive Then
+                    If val IsNot Nothing Then CollectFields(val, storage.CreateChildStorage(prop.Name), filterByName, True)
+                ElseIf prop.Name.Contains("SettingsCollection") Then
+                    If val IsNot Nothing Then CollectFields(val, storage.CreateChildStorage(prop.Name.Replace("SettingsCollection", "")), filterByName, True)
+                End If
+            End If
         Next
-
-        If _items.Count > 0 Then
-            _thread = New Threading.Thread(AddressOf MonitorThread)
-            _thread.Name = "AutoSettings Monitor"
-            _thread.IsBackground = True
-            _thread.Start()
-        End If
     End Sub
 
     Private Sub MonitorThread()
