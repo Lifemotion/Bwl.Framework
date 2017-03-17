@@ -27,12 +27,10 @@ Public Class NetClient
     Private waitingDatatype As Char
     Private waitingResult As NetMessage
     Private waiterRoot As New Object
-
-    Private waitingAnswer2 As String
-    Private waiterRoot2 As New Object
-
+    Private waitingDic As New Dictionary(Of String, NetMessage)
     Private directMode As Boolean
     Private directServer As NetServer
+
     Public Property IgnoreNotConnected As Boolean Implements IMessageClient.IgnoreNotConnected
     Public Property DefaultAddress As String = "localhost" Implements IMessageClient.DefaultAddress
     Public Property DefaultPort As Integer = 3130 Implements IMessageClient.DefaultPort
@@ -48,7 +46,6 @@ Public Class NetClient
         tcpSocket.SendBufferSize = systemBufferSize
         tcpSocket.ReceiveBufferSize = systemBufferSize
         tcpSocket.NoDelay = True
-
     End Sub
 
     ''' <summary>
@@ -128,6 +125,7 @@ Public Class NetClient
             Throw New NoConnectException(ex, "Не удалось подключиться к " + host + ":" + port.ToString)
         End Try
     End Sub
+
     ''' <summary>
     ''' Отключиться от сервера.
     ''' </summary>
@@ -147,6 +145,7 @@ Public Class NetClient
         End If
         RaiseEvent Disconnected()
     End Sub
+
     ''' <summary>
     ''' Подключены ли мы сейчас к серверу.
     ''' </summary>
@@ -226,6 +225,7 @@ Public Class NetClient
             Disconnect()
         End If
     End Sub
+
     ''' <summary>
     ''' Обрабатывает байты в сообщении.
     ''' </summary>
@@ -240,29 +240,43 @@ Public Class NetClient
         End If
     End Sub
 
+    'Private Sub MessageReceived(ByVal message As NetMessage)
+    '    RaiseEvent ReceivedMessage(message)
+    '    If waitingAnswer > "" AndAlso message.DataType = waitingDatatype AndAlso message.Part(0).ToUpper = waitingAnswer.ToUpper Then
+    '        waitingAnswer = ""
+    '        waitingResult = message
+    '    End If
+    'End Sub
+
     Private Sub MessageReceived(ByVal message As NetMessage)
+        Dim waitingKey = message.DataType + ":" + message.Part(0).ToUpper()
+        SyncLock waitingDic
+            If waitingDic.ContainsKey(waitingKey) Then
+                waitingDic(waitingKey) = message
+            End If
+        End SyncLock
         RaiseEvent ReceivedMessage(message)
-        If waitingAnswer > "" AndAlso message.DataType = waitingDatatype AndAlso message.Part(0).ToUpper = waitingAnswer.ToUpper Then
-            waitingAnswer = ""
-            waitingResult = message
-        End If
     End Sub
+
     ''' <summary>
     ''' Завершено успешное подключение к серверу.
     ''' </summary>
     ''' <remarks></remarks>
     Public Event Connected() Implements IMessageClient.Connected
+
     ''' <summary>
     ''' Отключились от сервера.
     ''' </summary>
     ''' <remarks></remarks>
     Public Event Disconnected() Implements IMessageClient.Disconnected
+
     ''' <summary>
     ''' Серверу было отправлено сообщение.
     ''' </summary>
     ''' <param name="message">Ссылка на сообещние.</param>
     ''' <remarks></remarks>
     Public Event SentMessage(ByVal message As NetMessage) Implements IMessageClient.SentMessage
+
     ''' <summary>
     ''' Было принято сообщение от сервера.
     ''' </summary>
@@ -270,7 +284,8 @@ Public Class NetClient
     ''' <remarks></remarks>
     Public Event ReceivedMessage(ByVal message As NetMessage) Implements IMessageClient.ReceivedMessage
     Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
-    '  Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
+
+    ' Public Event RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String) Implements IMessageTransport.RegisterClientRequest
     ' Public Event ReceivedHierarchicMessage(ByVal message As Hierarchic)
     Private Sub PingServer() Handles pingTimer.Elapsed
         If Not directMode Then
@@ -297,11 +312,13 @@ Public Class NetClient
             End If
         End If
     End Sub
-    ' Public Sub SendMessage(ByVal message As Hierarchic)
+
+    'Public Sub SendMessage(ByVal message As Hierarchic)
     'Dim msg As NetMessage
     '     msg = HierarchicConverter.FromHierarchic(message)
     '     SendMessage(msg)
     ' End Sub
+
     ''' <summary>
     ''' Отправить серверу сообщение.
     ''' </summary>
@@ -334,6 +351,35 @@ Public Class NetClient
             If Not IgnoreNotConnected Then Throw New NoConnectException(Nothing, "Нет соединения с сервером!")
         End If
     End Sub
+
+    '''' <summary>
+    '''' Отправляет сообщение и ждет ответа.
+    '''' Выполняется синхронно.
+    '''' </summary>
+    '''' <param name="message">Сетевое сообщение</param>
+    '''' <param name="answerFirstPart">Первое поле ответа (регистр не важен).</param>
+    '''' <param name="timeout">Максимальное время ожидания в секундах.</param>
+    '''' <returns>Сообщение-ответ или Nothing, если ответ не пришел.</returns>
+    '''' <remarks></remarks>
+    'Public Function SendMessageWaitAnswer(ByVal message As NetMessage, ByVal answerFirstPart As String, Optional ByVal timeout As Single = 20.0) As NetMessage Implements IMessageClient.SendMessageWaitAnswer
+    '    SyncLock waiterRoot
+    '        Try
+    '            waitingAnswer = answerFirstPart
+    '            waitingDatatype = message.DataType
+    '            waitingResult = Nothing
+    '            SendMessage(message)
+    '            Dim time As Single = Microsoft.VisualBasic.Timer
+    '            Do While waitingResult Is Nothing And Math.Abs(Microsoft.VisualBasic.Timer - time) < timeout
+    '                Threading.Thread.Sleep(50)
+    '            Loop
+    '            waitingAnswer = ""
+    '            Return waitingResult
+    '        Catch ex As Exception
+    '            Return Nothing
+    '        End Try
+    '    End SyncLock
+    'End Function
+
     ''' <summary>
     ''' Отправляет сообщение и ждет ответа.
     ''' Выполняется синхронно.
@@ -344,23 +390,33 @@ Public Class NetClient
     ''' <returns>Сообщение-ответ или Nothing, если ответ не пришел.</returns>
     ''' <remarks></remarks>
     Public Function SendMessageWaitAnswer(ByVal message As NetMessage, ByVal answerFirstPart As String, Optional ByVal timeout As Single = 20.0) As NetMessage Implements IMessageClient.SendMessageWaitAnswer
-        SyncLock waiterRoot
-            Try
-                waitingAnswer = answerFirstPart
-                waitingDatatype = message.DataType
-                waitingResult = Nothing
-                SendMessage(message)
-                Dim time As Single = Microsoft.VisualBasic.Timer
-                Do While waitingResult Is Nothing And Math.Abs(Microsoft.VisualBasic.Timer - time) < timeout
+        Try
+            Dim waitingKey = message.DataType + ":" + answerFirstPart.ToUpper()
+            SyncLock waitingDic
+                If Not waitingDic.ContainsKey(waitingKey) Then
+                    waitingDic.Add(waitingKey, Nothing)
+                End If
+            End SyncLock
+            SendMessage(message)
+            Dim time As Single = Microsoft.VisualBasic.Timer
+            Dim waitingResult As NetMessage = Nothing
+            Do While Math.Abs(Microsoft.VisualBasic.Timer - time) < timeout
+                SyncLock waitingDic
+                    waitingResult = waitingDic(waitingKey)
+                End SyncLock
+                If waitingResult Is Nothing Then
                     Threading.Thread.Sleep(50)
-                Loop
-                waitingAnswer = ""
-                Return waitingResult
-            Catch ex As Exception
-                Return Nothing
-            End Try
-        End SyncLock
+                Else
+                    waitingDic.Remove(waitingKey)
+                    Exit Do
+                End If
+            Loop
+            Return waitingResult
+        Catch ex As Exception
+            Return Nothing
+        End Try
     End Function
+
     ''' <summary>
     ''' Принимает сообщение напрямую от объекта-сервера без использования сети.
     ''' </summary>
@@ -370,6 +426,7 @@ Public Class NetClient
         Dim thread As New Threading.Thread(AddressOf MessageReceived)
         thread.Start(message)
     End Sub
+
     Friend Sub DirectDisconnect()
         working = False
         RaiseEvent Disconnected()
