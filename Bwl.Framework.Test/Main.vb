@@ -37,7 +37,7 @@ Module Main
     Private WithEvents _listbox1 As New AutoListbox(_appBase.AutoUI, "listbox1")
 
     Private WithEvents _formDesc As New AutoFormDescriptor(_appBase.AutoUI, "form") With {.FormWidth = 1000, .FormHeight = 500, .LoggerExtended = False}
-
+    Private _childLogger As Logger = _appBase.RootLogger.CreateChildLogger("Child")
     Private _test1 As New TestClass
     Dim asm As AutoSettings
 
@@ -73,12 +73,13 @@ Module Main
     Private Sub _button3_Click(source As AutoButton) Handles _button3.Click
         _listbox1.Items.Add("test")
         _textbox1.Text += "E"
-        _test1 = Nothing
+        '  _test1 = Nothing
     End Sub
 
     Private Sub _button4_Click(source As AutoButton) Handles _button4.Click
         _listbox1.Items.Clear()
         _appBase.RootLogger.AddMessage("12434")
+        _childLogger.AddMessage("88888")
         _listbox1.Info.BackColor = Color.Red
         _listbox1.Info.Caption += "ff"
 

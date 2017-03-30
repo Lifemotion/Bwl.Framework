@@ -26,6 +26,12 @@ Partial Class DatagridLogWriter
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(DatagridLogWriter))
         Me.tWrite = New System.Windows.Forms.Timer(Me.components)
         Me.grid = New System.Windows.Forms.DataGridView()
+        Me.cEventDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.cEventTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.cEventType = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.cPath = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.cText = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colExtended = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.cbAutoScroll = New System.Windows.Forms.CheckBox()
         Me.cbMessages = New System.Windows.Forms.CheckBox()
         Me.cbDebug = New System.Windows.Forms.CheckBox()
@@ -37,12 +43,10 @@ Partial Class DatagridLogWriter
         Me.tFilterApply = New System.Windows.Forms.Timer(Me.components)
         Me.bClear = New System.Windows.Forms.Button()
         Me.cbExtended = New System.Windows.Forms.CheckBox()
-        Me.cEventDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.cEventTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.cEventType = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.cPath = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.cText = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colExtended = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.cbCats = New System.Windows.Forms.CheckedListBox()
+        Me.bRefreshPlaces = New System.Windows.Forms.Button()
+        Me.bRefreshClasses = New System.Windows.Forms.Button()
+        Me.bRefreshNone = New System.Windows.Forms.Button()
         CType(Me.grid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -52,10 +56,10 @@ Partial Class DatagridLogWriter
         '
         'grid
         '
-        resources.ApplyResources(Me.grid, "grid")
         Me.grid.AllowUserToAddRows = False
         Me.grid.AllowUserToDeleteRows = False
         Me.grid.AllowUserToResizeRows = False
+        resources.ApplyResources(Me.grid, "grid")
         Me.grid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.grid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.cEventDate, Me.cEventTime, Me.cEventType, Me.cPath, Me.cText, Me.colExtended})
@@ -70,6 +74,43 @@ Partial Class DatagridLogWriter
         Me.grid.ShowCellErrors = False
         Me.grid.ShowEditingIcon = False
         Me.grid.ShowRowErrors = False
+        '
+        'cEventDate
+        '
+        resources.ApplyResources(Me.cEventDate, "cEventDate")
+        Me.cEventDate.Name = "cEventDate"
+        Me.cEventDate.ReadOnly = True
+        '
+        'cEventTime
+        '
+        resources.ApplyResources(Me.cEventTime, "cEventTime")
+        Me.cEventTime.Name = "cEventTime"
+        Me.cEventTime.ReadOnly = True
+        '
+        'cEventType
+        '
+        resources.ApplyResources(Me.cEventType, "cEventType")
+        Me.cEventType.Name = "cEventType"
+        Me.cEventType.ReadOnly = True
+        '
+        'cPath
+        '
+        resources.ApplyResources(Me.cPath, "cPath")
+        Me.cPath.Name = "cPath"
+        Me.cPath.ReadOnly = True
+        '
+        'cText
+        '
+        Me.cText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        resources.ApplyResources(Me.cText, "cText")
+        Me.cText.Name = "cText"
+        Me.cText.ReadOnly = True
+        '
+        'colExtended
+        '
+        resources.ApplyResources(Me.colExtended, "colExtended")
+        Me.colExtended.Name = "colExtended"
+        Me.colExtended.ReadOnly = True
         '
         'cbAutoScroll
         '
@@ -146,47 +187,38 @@ Partial Class DatagridLogWriter
         Me.cbExtended.Name = "cbExtended"
         Me.cbExtended.UseVisualStyleBackColor = True
         '
-        'cEventDate
+        'cbCats
         '
-        resources.ApplyResources(Me.cEventDate, "cEventDate")
-        Me.cEventDate.Name = "cEventDate"
-        Me.cEventDate.ReadOnly = True
+        resources.ApplyResources(Me.cbCats, "cbCats")
+        Me.cbCats.FormattingEnabled = True
+        Me.cbCats.Name = "cbCats"
         '
-        'cEventTime
+        'bRefreshPlaces
         '
-        resources.ApplyResources(Me.cEventTime, "cEventTime")
-        Me.cEventTime.Name = "cEventTime"
-        Me.cEventTime.ReadOnly = True
+        resources.ApplyResources(Me.bRefreshPlaces, "bRefreshPlaces")
+        Me.bRefreshPlaces.Name = "bRefreshPlaces"
+        Me.bRefreshPlaces.UseVisualStyleBackColor = True
         '
-        'cEventType
+        'bRefreshClasses
         '
-        resources.ApplyResources(Me.cEventType, "cEventType")
-        Me.cEventType.Name = "cEventType"
-        Me.cEventType.ReadOnly = True
+        resources.ApplyResources(Me.bRefreshClasses, "bRefreshClasses")
+        Me.bRefreshClasses.Name = "bRefreshClasses"
+        Me.bRefreshClasses.UseVisualStyleBackColor = True
         '
-        'cPath
+        'bRefreshNone
         '
-        resources.ApplyResources(Me.cPath, "cPath")
-        Me.cPath.Name = "cPath"
-        Me.cPath.ReadOnly = True
-        '
-        'cText
-        '
-        Me.cText.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        resources.ApplyResources(Me.cText, "cText")
-        Me.cText.Name = "cText"
-        Me.cText.ReadOnly = True
-        '
-        'colExtended
-        '
-        resources.ApplyResources(Me.colExtended, "colExtended")
-        Me.colExtended.Name = "colExtended"
-        Me.colExtended.ReadOnly = True
+        resources.ApplyResources(Me.bRefreshNone, "bRefreshNone")
+        Me.bRefreshNone.Name = "bRefreshNone"
+        Me.bRefreshNone.UseVisualStyleBackColor = True
         '
         'DatagridLogWriter
         '
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.bRefreshNone)
+        Me.Controls.Add(Me.bRefreshClasses)
+        Me.Controls.Add(Me.bRefreshPlaces)
+        Me.Controls.Add(Me.cbCats)
         Me.Controls.Add(Me.cbExtended)
         Me.Controls.Add(Me.bClear)
         Me.Controls.Add(Me.cbAutoScroll)
@@ -223,4 +255,8 @@ Partial Class DatagridLogWriter
     Friend WithEvents cPath As DataGridViewTextBoxColumn
     Friend WithEvents cText As DataGridViewTextBoxColumn
     Friend WithEvents colExtended As DataGridViewTextBoxColumn
+    Friend WithEvents cbCats As CheckedListBox
+    Friend WithEvents bRefreshPlaces As Button
+    Friend WithEvents bRefreshClasses As Button
+    Friend WithEvents bRefreshNone As Button
 End Class

@@ -1,13 +1,15 @@
 ﻿
 Public Class DatagridLogWriter
     Implements ILogWriter
-    Const messagesLimit As Integer = 1024
+    Const messagesLimit As Integer = 1024 * 8
     Private Class ListItem
         Public message As String
         Public additional As String
         Public dateTime As DateTime
         Public type As LogEventType
         Public path As String()
+        Public pathCombined As String
+        Public className As String
     End Class
     Private newMessages As New List(Of ListItem)
     Private oldMessages As New List(Of ListItem)
@@ -72,6 +74,17 @@ Public Class DatagridLogWriter
         End Set
     End Property
 
+    Private Function GetClassName(additional As String) As String
+        Dim parts = additional.Split({","c, " "c}, StringSplitOptions.RemoveEmptyEntries)
+        For Each part In parts
+                Dim subparts = part.Split("="c)
+                If subparts.Length = 2 Then
+                    If subparts(0) = "ClassName" Then Return subparts(1)
+                End If
+            Next
+        Return ""
+    End Function
+
     Private _newMessagesListLock As New Object
     Public Sub WriteEvent(datetime As DateTime, path() As String, type As LogEventType, text As String, ParamArray params() As Object) Implements ILogWriter.WriteEvent
         SyncLock _newMessagesListLock
@@ -83,6 +96,18 @@ Public Class DatagridLogWriter
                 item.additional = ""
                 If params IsNot Nothing AndAlso params.Length > 0 Then item.additional = params(0).ToString
                 item.type = type
+                Dim pathString = ""
+                If item.path.GetUpperBound(0) >= 0 Then
+                    pathString = item.path(0)
+                    For i As Integer = 1 To item.path.Length - 1
+                        pathString = item.path(i) + "." + pathString
+                    Next
+                Else
+                    pathString = rootName
+                End If
+
+
+                item.pathCombined = pathString
                 newMessages.Add(item)
             End If
         End SyncLock
@@ -103,6 +128,23 @@ Public Class DatagridLogWriter
     End Function
     Private Function Filter(message As ListItem) As Boolean
         With message
+            If cbCats.Items.Count > 0 Then
+                Dim pass = False
+                For Each cat As String In cbCats.CheckedItems
+                    If cat.StartsWith("#") Then
+                        cat = cat.Substring(1)
+                        If cat = .pathCombined Then pass = True : Exit For
+                    End If
+                    If cat.StartsWith("*") Then
+                        cat = cat.Substring(1)
+                        Dim className = GetClassName(.additional)
+                        If className = cat Then pass = True : Exit For
+                    End If
+                Next
+
+                If pass = False Then Return False
+            End If
+
             If Not cbDebug.Checked And .type = LogEventType.debug Then Return False
             If Not cbInformation.Checked And .type = LogEventType.information Then Return False
             If Not cbErrors.Checked And .type = LogEventType.errors Then Return False
@@ -116,16 +158,12 @@ Public Class DatagridLogWriter
             Else
                 textFilter = True
                 Dim parts = Split(tbFilter.Text, ",")
-                Dim path = ""
-                For i = 0 To .path.Length - 1
-                    path += "." + .path(i)
-                Next
                 For Each part In parts
                     Dim found As Boolean = False
                     part = Trim(part)
                     If part = "" Then found = True
                     If InStr(.message.ToLower, part.ToLower) > 0 Then found = True
-                    If InStr(path.ToLower, part.ToLower) > 0 Then found = True
+                    If InStr(.pathCombined.ToLower, part.ToLower) > 0 Then found = True
                     If InStr(.type.ToString, part.ToLower) > 0 Then found = True
                     If Not found Then textFilter = False
                 Next
@@ -136,18 +174,11 @@ Public Class DatagridLogWriter
     End Function
     Private Sub ShowMessage(message As ListItem)
         With message
-            Dim pathString As String
+            Dim pathString As String = .pathCombined
             Dim dateString As String = .dateTime.ToShortDateString
             Dim timeString As String = .dateTime.ToLongTimeString
             Dim typeString As String = GetTypeName(.type)
-            If .path.GetUpperBound(0) >= 0 Then
-                pathString = .path(0)
-                For i As Integer = 1 To .path.Length - 1
-                    pathString = .path(i) + "." + pathString
-                Next
-            Else
-                pathString = rootName
-            End If
+
             grid.RowTemplate.DefaultCellStyle.BackColor = GetRowColor(.type)
             grid.Rows.Add(dateString, timeString, typeString, pathString, .message,.additional)
             'grid.Rows.SharedRow (grid.Rows.Count-1).
@@ -276,10 +307,6 @@ Public Class DatagridLogWriter
         Clear()
     End Sub
 
-    Private Sub DatagridLogWriter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-    End Sub
-
     Private Sub cbExtended_CheckedChanged(sender As Object, e As EventArgs) Handles cbExtended.CheckedChanged
         grid.Columns(2).Visible = cbExtended.Checked
         grid.Columns(3).Visible = cbExtended.Checked
@@ -294,4 +321,53 @@ Public Class DatagridLogWriter
             cbExtended.Checked = value
         End Set
     End Property
+
+    Private Sub bRefreshPlaces_Click(sender As Object, e As EventArgs) Handles bRefreshPlaces.Click
+        Dim places As New List(Of String)
+        SyncLock _newMessagesListLock
+            For Each msg In newMessages.ToArray
+                If places.Contains(msg.pathCombined) = False Then places.Add(msg.pathCombined)
+            Next
+            For Each msg In oldMessages.ToArray
+                If places.Contains(msg.pathCombined) = False Then places.Add(msg.pathCombined)
+            Next
+        End SyncLock
+        Dim arr = places.ToArray
+        Array.Sort(arr)
+        cbCats.Items.Clear()
+        For Each place In arr
+            cbCats.Items.Add("#" + place.ToString)
+        Next
+        RedrawItems()
+    End Sub
+
+    Private Sub cbCats_SelectedIndexChanged() Handles cbCats.MouseUp
+        RedrawItems()
+    End Sub
+
+    Private Sub bRefreshNone_Click(sender As Object, e As EventArgs) Handles bRefreshNone.Click
+        cbCats.Items.Clear()
+        RedrawItems()
+    End Sub
+
+    Private Sub bRefreshClasses_Click(sender As Object, e As EventArgs) Handles bRefreshClasses.Click
+        Dim classes As New List(Of String)
+        SyncLock _newMessagesListLock
+            For Each msg In newMessages.ToArray
+                Dim className = GetClassName(msg.additional)
+                If classes.Contains(className) = False Then classes.Add(className)
+            Next
+            For Each msg In oldMessages.ToArray
+                Dim className = GetClassName(msg.additional)
+                If classes.Contains(className) = False Then classes.Add(className)
+            Next
+        End SyncLock
+        Dim arr = classes.ToArray
+        Array.Sort(arr)
+        cbCats.Items.Clear()
+        For Each place In arr
+            cbCats.Items.Add("*" + place.ToString)
+        Next
+        RedrawItems()
+    End Sub
 End Class

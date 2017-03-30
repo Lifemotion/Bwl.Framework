@@ -152,7 +152,7 @@ Public Class Logger
         If method Is Nothing Then
             Return ""
         Else
-            Return method.DeclaringType.ToString + ". " + method.Name
+            Return "ClassName=" + method.DeclaringType.Name + ", FullName=" + method.DeclaringType.ToString + ", Method=" + method.Name
         End If
     End Function
 
