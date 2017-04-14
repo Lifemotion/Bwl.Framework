@@ -184,6 +184,9 @@ Public Class SimpleFileLogWriter
         Catch ex As Exception
         End Try
     End Sub
+
+    Public Property WriteAdditionalInfo As Boolean = True
+
     Private Sub WriteLine(message As ListItem)
         Dim msg As String = ""
         With message
@@ -192,6 +195,7 @@ Public Class SimpleFileLogWriter
             msg += PathToString(.path).ToUpper
             msg += " [" + GetCategoryName(.type) + "] "
             msg += .message
+            If WriteAdditionalInfo Then    msg += vbCrLf + "#" + .additional
             Dim fileId = FreeFile()
             Dim file As String = GetFileName(message)
             RenameBigFile(file)
