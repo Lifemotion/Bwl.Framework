@@ -11,25 +11,25 @@ Public Class AppBase
     Public ReadOnly Property AppName As String
 
     Public ReadOnly Property RootLogger As Logger
-    Public ReadOnly Property RootStorage As SettingsStorageRoot
+    Public ReadOnly Property RootStorage As SettingsStorage
     Public ReadOnly Property Services As ServiceLocator
     Public ReadOnly Property AutoUI As AutoUI
 
-    Public ReadOnly Property IsSettingReadonly As Boolean
+    Public ReadOnly Property UseBufferedStorage As Boolean
 
     Public Sub New()
         Me.New(True, "Application", False)
     End Sub
 
     Public Sub New(initFolders As Boolean, appName As String,
-                   settingsReadOnly As Boolean)
-        Me.New(initFolders, appName, settingsReadOnly, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."))
+                   useBufferedStorage As Boolean)
+        Me.New(initFolders, appName, useBufferedStorage, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."))
     End Sub
 
     Public Sub New(initFolders As Boolean, appName As String,
-                   settingsReadOnly As Boolean,
+                   useBufferedStorage As Boolean,
                    baseFolderOverride As String)
-        IsSettingReadonly = settingsReadOnly
+        Me.UseBufferedStorage = useBufferedStorage
         _AppName = appName
         _BaseFolder = CheckPath(baseFolderOverride)
         _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
@@ -39,11 +39,11 @@ Public Class AppBase
     End Sub
 
     Public Sub New(initFolders As Boolean, appName As String,
-                   settingsReadOnly As Boolean,
+                   useBufferedStorage As Boolean,
                    settingsFolderOverride As String,
                    logsFolderOverride As String,
                    dataFolderOverride As String)
-        IsSettingReadonly = settingsReadOnly
+        Me.UseBufferedStorage = useBufferedStorage
         _AppName = appName
         _BaseFolder = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..")
         _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
@@ -66,16 +66,16 @@ Public Class AppBase
     End Function
 
     Public Sub Init()
-        TryCreateFolder(_settingsFolder)
-        TryCreateFolder(_dataFolder)
-        TryCreateFolder(_logsFolder)
+        TryCreateFolder(_SettingsFolder)
+        TryCreateFolder(_DataFolder)
+        TryCreateFolder(_LogsFolder)
         _RootLogger = New Logger
         _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile))
         _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors))
-        If IsSettingReadonly Then
-            _RootStorage = New SettingsStorageRoot(New ReadOnlyIniFileSettingsWriter(Path.Combine(_SettingsFolder, "settings.ini")), _AppName, IsSettingReadonly)
+        If UseBufferedStorage Then
+            _RootStorage = New SettingsStorageBufferedRoot(Path.Combine(_SettingsFolder, "settings.ini"), _AppName)
         Else
-            _RootStorage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_SettingsFolder, "settings.ini")), _AppName, IsSettingReadonly)
+            _RootStorage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_SettingsFolder, "settings.ini")), _AppName, False)
         End If
         _Services = New ServiceLocator(RootLogger)
         _AutoUI = New AutoUI
@@ -97,6 +97,6 @@ Public Class AppBase
     End Sub
 
     Public Sub Dispose() Implements IDisposable.Dispose
-        _services.Dispose()
+        _Services.Dispose()
     End Sub
 End Class
