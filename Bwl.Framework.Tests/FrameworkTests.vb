@@ -32,6 +32,56 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.AreEqual(fileRW.GetSettingNoWrite("Test1.Test2.Test3", "Param 1", "!NoSetting"), v1)
     End Sub
 
+    <TestMethod()> Public Sub StringSettingsReadWriteBuffered()
+        Dim f1 = "test2.ini"
+
+        Dim v1 = "124354"
+        Dim v2 = "3465346 fghfgh ryuretgdsop656 0 0ry0hf0h0fd 5+%-623430-=664590-2w35 =-r6 -=60=-yepoizxfgmkre0-6y450-y-0rtbo0f0-hr0- 0-r 0-40-40o-hrd0-hr0dh"
+        Dim v3 = "Кот КОТ 3435547 Cat cat dfdfdf 565473e4"
+        Dim v4 = """Нет сигнала на мониторе, на клавиатуру не реагирует. Повторная перезагрузка не помогла, сервер не загружается."""
+
+
+        If IO.File.Exists(f1) Then IO.File.Delete(f1)
+        If IO.File.Exists(f1 + ".bak") Then IO.File.Delete(f1 + ".bak")
+
+        Dim ssr1 = New SettingsStorageBufferedRoot(f1, "App")
+        Dim s1 = New StringSetting(ssr1, "Setting 1", "Default")
+        Dim s2 = New StringSetting(ssr1, "Setting 2", "")
+        Dim s3 = New StringSetting(ssr1, "Setting 3", "")
+        Dim s4 = New StringSetting(ssr1, "Setting 4", "")
+
+        Assert.AreEqual("Default", s1.Value)
+        Assert.AreEqual("", s2.Value)
+        Assert.AreEqual("", s3.Value)
+
+        s1.Value = v1
+        s2.Value = v2
+        s3.Value = v3
+        s4.Value = v4
+
+        Assert.AreEqual(v1, s1.Value)
+        Assert.AreEqual(v2, s2.Value)
+        Assert.AreEqual(v3, s3.Value)
+        Assert.AreEqual(v4, s4.Value)
+
+        ssr1.SaveSettings()
+        ssr1.WriteIniFile()
+        ssr1 = Nothing
+
+        Dim ssr2 = New SettingsStorageBufferedRoot(f1, "App")
+        Dim s1a = New StringSetting(ssr2, "Setting 1", "Default")
+        Dim s2a = New StringSetting(ssr2, "Setting 2", "")
+        Dim s3a = New StringSetting(ssr2, "Setting 3", "")
+        Dim s4a = New StringSetting(ssr2, "Setting 4", "")
+
+        Assert.AreEqual(v1, s1a.Value)
+        Assert.AreEqual(v2, s2a.Value)
+        Assert.AreEqual(v3, s3a.Value)
+        Assert.AreEqual(v4, s4a.Value)
+
+
+    End Sub
+
     <TestMethod()> Public Sub StringSettingsReadWrite()
         Dim f1 = "test2.ini"
 
