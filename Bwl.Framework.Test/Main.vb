@@ -46,10 +46,15 @@ Module Main
         AddHandler asm.FieldChanged, AddressOf _test1.SettingsChanged
 
         _appBase.RootLogger.CollectLogs(_test1)
+        AddHandler _appBase.RootStorage.SettingsFormClosed, AddressOf OnSettingsFormClosed
 
         Application.EnableVisualStyles()
         AutoUIForm.Create(_appBase).Show()
          Application.Run()
+    End Sub
+
+    Private Sub OnSettingsFormClosed()
+        _appBase.RootLogger.AddInformation("Форма настройки закрыта")
     End Sub
 
     Private Sub _button1_Click(source As AutoButton) Handles _button1.Click

@@ -20,6 +20,7 @@ Public MustInherit Class SettingsStorageBase
     Protected _friendlyName As String = ""
 
     Public Event SettingChanged(storage As SettingsStorageBase, setting As Setting)
+    Public Event SettingsFormClosed()
 
     Public Sub New()
 
@@ -107,6 +108,7 @@ Public MustInherit Class SettingsStorageBase
             _settingsForm = New SettingsDialog
             _settingsForm.ShowSettings(Me)
             _settingsForm.Show()
+            AddHandler _settingsForm.FormClosed, Sub() RaiseEvent SettingsFormClosed()
             Return _settingsForm
         End If
     End Function
