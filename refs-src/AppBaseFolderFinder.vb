@@ -9,7 +9,7 @@ Public Class AppBaseFolderFinder
     ''' <summary>
     ''' Системный диск
     ''' </summary>
-    Private Shared ReadOnly SystemDrive = Environment.GetEnvironmentVariable("SYSTEMDRIVE")
+    Private Shared ReadOnly SystemDrive As String = Environment.GetEnvironmentVariable("SYSTEMDRIVE") + "\"
 
     ''' <summary>
     ''' Получение актуального пути к папке с данными
@@ -55,7 +55,7 @@ Public Class AppBaseFolderFinder
     ''' <returns>Путь к папке (если найден)</returns>
     Private Shared Function FindFolderOnDisks(pathWithoutDriveLetter As String) As String
         Dim res = ""
-        Dim drives = DriveInfo.GetDrives().Select(Function(f) f.RootDirectory.FullName).OrderBy(Function(f) f).ToList()
+        Dim drives = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray().OrderByDescending(Function(c) c).Select(Function(f) String.Concat(f.ToString(), ":\")).ToList()
         For Each drive In drives
             Dim pathToFolder = Path.Combine(drive, pathWithoutDriveLetter)
             If Directory.Exists(pathToFolder) Then
