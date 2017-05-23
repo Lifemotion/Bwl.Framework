@@ -74,7 +74,6 @@
     <Compile Include="Interfaces\IMessageTransportFactory.vb" />
     <Compile Include="EmptyTransport.vb" />
     <Compile Include="NetDetect\NetBeacon.vb" />
-    <Compile Include="NetDetect\NetBeaconInfo.vb" />
     <Compile Include="NetDetect\NetFinder.vb" />
     <Compile Include="NetworkAdapter\NetworkAdapter.vb" />
     <Compile Include="NetworkAdapter\NetworkAdapters.vb" />

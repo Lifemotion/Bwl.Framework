@@ -1,6 +1,16 @@
 ﻿Imports System.Net
 
 Public Class NetFinder
+    Public Class NetBeaconInfo
+        Public Property Address As String = ""
+        Public Property Port As Integer
+        Public Property Name As String = ""
+        Public Overrides Function ToString() As String
+            Return Address + ":" + Port.ToString + " - " + Name
+        End Function
+
+    End Class
+
     Public Shared Function Find(timeout As Integer) As NetBeaconInfo()
         Dim list As New List(Of NetBeaconInfo)
         Dim locEp As New IPEndPoint(IPAddress.Any, 19999)
