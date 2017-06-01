@@ -24,16 +24,33 @@ Public Class NetBeacon
         _thread.Start()
     End Sub
 
+    Private Sub WriteFile(path As String, filename As String)
+        Try
+            IO.Directory.CreateDirectory(path)
+        Catch ex As Exception
+        End Try
+        Try
+            IO.File.WriteAllText(IO.Path.Combine(path, filename), Now.Ticks.ToString)
+        Catch ex As Exception
+        End Try
+    End Sub
+
     Private Sub SenderThread()
         Do
-            Try
-                Dim str = "BwlNetBeacon###" + _servicePort.ToString + "###" + _beaconName
-                Dim bytes = System.Text.Encoding.UTF8.GetBytes(str)
-                Dim ie As New IPEndPoint(New IPAddress({255, 255, 255, 255}), 19999)
-                _sender.Send(bytes, bytes.Length, ie)
-            Catch ex As Exception
-            End Try
-            Thread.Sleep(500)
+            Dim str = "BwlNetBeacon###" + _servicePort.ToString + "###" + _beaconName
+            If _localhostOnly Then
+                WriteFile(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Temp", "BwlNetBeacons"), str)
+                WriteFile(IO.Path.Combine(Environment.GetEnvironmentVariable("Temp"), "BwlNetBeacons"), str)
+                Thread.Sleep(2000)
+            Else
+                Try
+                    Dim bytes = System.Text.Encoding.UTF8.GetBytes(Str)
+                    Dim ie As New IPEndPoint(New IPAddress({255, 255, 255, 255}), 19999)
+                    _sender.Send(bytes, bytes.Length, ie)
+                Catch ex As Exception
+                End Try
+                Thread.Sleep(500)
+            End If
         Loop
     End Sub
 

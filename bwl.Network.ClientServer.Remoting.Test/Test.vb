@@ -37,12 +37,12 @@ Module Test
     Public Sub Main()
 
         Dim cmdServer As New CmdlineServer(3465, "cmd",,, "CmdShell")
-        cmdServer.Start()
-        cmdServer.Kill()
-        cmdServer.Start()
+        '   э   cmdServer.Start()
+        ' э  cmdServer.Kill()
+        '    cmdServer.Start()
 
         Try
-            _appBaseServerLocal = New RemoteAppServer(3155, _appBase, "TestRemApp", RemoteAppBeaconMode.broadcast)
+            _appBaseServerLocal = New RemoteAppServer(3155, _appBase, "TestRemApp", RemoteAppBeaconMode.localhost)
         Catch ex As Exception
         End Try
         Dim rnd As New Random
