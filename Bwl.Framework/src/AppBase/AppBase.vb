@@ -21,24 +21,29 @@ Public Class AppBase
         Me.New(True, "Application", False)
     End Sub
 
-    Public Sub New(initFolders As Boolean, appName As String,
+    Public Sub New(initFolders As Boolean,
+                   appName As String,
                    useBufferedStorage As Boolean)
         Me.New(initFolders, appName, useBufferedStorage, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."))
     End Sub
 
-    Public Sub New(initFolders As Boolean, appName As String,
+    Public Sub New(initFolders As Boolean,
+                   appName As String,
                    useBufferedStorage As Boolean,
-                   baseFolderOverride As String)
+                   baseFolderOverride As String,
+                   Optional maxFilesCount As Integer = 5,
+                   Optional maxLogFileLength As Long = 10 * 1024 * 1024)
         Me.UseBufferedStorage = useBufferedStorage
         _AppName = appName
         _BaseFolder = CheckPath(baseFolderOverride)
         _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
         _SettingsFolder = IO.Path.Combine(_BaseFolder, "conf")
         _DataFolder = IO.Path.Combine(_BaseFolder, "data")
-        If initFolders Then Init()
+        If initFolders Then Init(maxFilesCount, maxLogFileLength)
     End Sub
 
-    Public Sub New(initFolders As Boolean, appName As String,
+    Public Sub New(initFolders As Boolean,
+                   appName As String,
                    useBufferedStorage As Boolean,
                    settingsFolderOverride As String,
                    logsFolderOverride As String,
@@ -65,13 +70,13 @@ Public Class AppBase
         Return result
     End Function
 
-    Public Sub Init()
+    Public Sub Init(Optional maxFilesCount As Integer = 5, Optional maxLogFileLength As Long = 10 * 1024 * 1024)
         TryCreateFolder(_SettingsFolder)
         TryCreateFolder(_DataFolder)
         TryCreateFolder(_LogsFolder)
         _RootLogger = New Logger
-        _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile))
-        _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors))
+        _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile,,,,, maxLogFileLength, maxFilesCount))
+        _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors,,, maxLogFileLength, maxFilesCount))
         If UseBufferedStorage Then
             _RootStorage = New SettingsStorageBufferedRoot(Path.Combine(_SettingsFolder, "settings.ini"), _AppName)
         Else
