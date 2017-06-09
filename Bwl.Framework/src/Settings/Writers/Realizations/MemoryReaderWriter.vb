@@ -1,6 +1,6 @@
 ﻿Public Class MemoryReaderWriter
     Implements ISettingsReaderWriter, ISettingsStructureReader
-
+    Private _magic As String = "~@#@%@!@"
     Private _list As New List(Of String())
 
     Public ReadOnly Property List As List(Of String())
@@ -13,7 +13,7 @@
         Dim sb As New Text.StringBuilder
         For Each line In _list
             For Each part In line
-                sb.Append(part)
+                sb.Append(part.Replace(";", _magic))
                 sb.Append(";")
             Next
             sb.AppendLine()
@@ -29,6 +29,9 @@
         Dim lines = textString.Split({vbCrLf}, StringSplitOptions.None)
         For Each line In lines
             Dim parts = line.Split(";"c)
+            For i = 0 To parts.Length - 1
+                parts(i) = parts(i).Replace(_magic, ";")
+            Next
             _list.Add(parts)
         Next
     End Sub
