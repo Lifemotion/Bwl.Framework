@@ -82,7 +82,7 @@ Public Class SettingsClient
     End Sub
 
     Private Sub SettingChangeErrorHandler(settingName As String, errorName As String)
-        If _settingsForm IsNot Nothing Then _settingsForm.Close()
+        If _settingsForm IsNot Nothing Then _settingsForm.Invoke(Sub() _settingsForm.Close())
         MsgBox("Setting [" + settingName + "] save error: " + errorName, MsgBoxStyle.Critical)
     End Sub
 

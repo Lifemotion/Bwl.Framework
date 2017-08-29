@@ -157,7 +157,7 @@ Public MustInherit Class SettingsStorageBase
         Dim part0 = ""
         Dim parts = ""
 
-        If name.ToLower().StartsWith(_name.ToLower()) Then
+        If name.ToLower().StartsWith((_name + ".").ToLower()) Then
             If Not name.ToLower() = _name.ToLower() Then
                 part0 = _name
                 parts = name.Remove(0, _name.Count() + 1)
