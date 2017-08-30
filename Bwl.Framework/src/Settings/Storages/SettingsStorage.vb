@@ -27,8 +27,8 @@ Public Class SettingsStorage
 		_defaultWriter = _parentStorage.DefaultWriter
 
 		For Each child In _parentStorage.ChildStorages
-			If child.CategoryName.ToLower = name.ToLower Then Throw New Exception("Category already exists")
-		Next
+            If child.CategoryName.ToLower = name.ToLower Then Throw New Exception("Category already exists " + child.CategoryName.ToLower)
+        Next
 	End Sub
 
 	Public Function CreateIntegerSetting(name As String, defaultValue As Integer, Optional friendlyName As String = "", Optional description As String = "") As IntegerSetting
