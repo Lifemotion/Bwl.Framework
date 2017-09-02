@@ -81,103 +81,6 @@
     <Compile Include="..\refs-src\StringTools.vb">
       <Link>refs\StringTools.vb</Link>
     </Compile>
-    <Compile Include="src\AppBase\AppBase.vb" />
-    <Compile Include="src\AppBase\FormAppBase.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\AppBase\FormBase.Designer.vb">
-      <DependentUpon>FormBase.vb</DependentUpon>
-    </Compile>
-    <Compile Include="src\AppBase\FormBase.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\AppBase\ServiceLocator.vb" />
-    <Compile Include="src\Attributes\ImageAttr.vb" />
-    <Compile Include="src\AutoUI\AutoUIForm.Designer.vb">
-      <DependentUpon>AutoUIForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="src\AutoUI\AutoUIForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\AutoUI\AutoUI\AutoUI.vb" />
-    <Compile Include="src\AutoUI\AutoUI\AutoUIByteCoding.vb" />
-    <Compile Include="src\AutoUI\AutoUI\AutoUIDisplay.Designer.vb">
-      <DependentUpon>AutoUIDisplay.vb</DependentUpon>
-    </Compile>
-    <Compile Include="src\AutoUI\AutoUI\AutoUIDisplay.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="src\AutoUI\AutoUI\IAutoUI.vb" />
-    <Compile Include="src\AutoUI\Interfaces\UIElementInfo.vb" />
-    <Compile Include="src\AutoUI\LocalElements\AutoButton.vb" />
-    <Compile Include="src\AutoUI\LocalElements\AutoBitmap.vb" />
-    <Compile Include="src\AutoUI\LocalElements\AutoFormDescriptor.vb" />
-    <Compile Include="src\AutoUI\LocalElements\AutoListbox.vb" />
-    <Compile Include="src\AutoUI\LocalElements\AutoTextbox.vb" />
-    <Compile Include="src\AutoUI\LocalElements\BaseLocalElement.vb" />
-    <Compile Include="src\AutoUI\Interfaces\IUIElementRemote.vb" />
-    <Compile Include="src\AutoUI\Interfaces\IUIElementLocal.vb" />
-    <Compile Include="src\AutoUI\Interfaces\IUIElement.vb" />
-    <Compile Include="src\AutoUI\RemoteElements\BaseRemoteElement.Designer.vb">
-      <DependentUpon>BaseRemoteElement.vb</DependentUpon>
-    </Compile>
-    <Compile Include="src\AutoUI\RemoteElements\BaseRemoteElement.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="src\AutoUI\RemoteElements\BaseRemoteClass.vb" />
-    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoFormDescriptor.vb" />
-    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoListbox.Designer.vb">
-      <DependentUpon>RemoteAutoListbox.vb</DependentUpon>
-    </Compile>
-    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoListbox.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoTextbox.Designer.vb">
-      <DependentUpon>RemoteAutoTextbox.vb</DependentUpon>
-    </Compile>
-    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoTextbox.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoBitmap.Designer.vb">
-      <DependentUpon>RemoteAutoBitmap.vb</DependentUpon>
-    </Compile>
-    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoBitmap.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoButton.Designer.vb">
-      <DependentUpon>RemoteAutoButton.vb</DependentUpon>
-    </Compile>
-    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoButton.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="src\ListWithEvents.vb" />
-    <Compile Include="src\Logger\Interface\ILoggerChilds.vb" />
-    <Compile Include="src\Logger\Interface\ILoggerReceiver.vb" />
-    <Compile Include="src\Logger\Interface\ILoggerDispatcher.vb" />
-    <Compile Include="src\Logger\LogWriters\Realizations\FormLogInfo.Designer.vb">
-      <DependentUpon>FormLogInfo.vb</DependentUpon>
-    </Compile>
-    <Compile Include="src\Logger\LogWriters\Realizations\FormLogInfo.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\Attributes\DisplayAttribute.vb" />
-    <Compile Include="src\Attributes\ParameterAttribute.vb" />
-    <Compile Include="src\Attributes\StateAttribute.vb" />
-    <Compile Include="src\Logger\LogWriters\Realizations\ConsoleLogWriter.vb" />
-    <Compile Include="src\AppBase\ConsoleAppBase.vb" />
-    <Compile Include="src\Identity\IDescription.vb" />
-    <Compile Include="src\Identity\IIdentity.vb" />
-    <Compile Include="src\Identity\ListWithIdentity.vb" />
-    <Compile Include="src\Logger\LogWriters\Interface\LogEventType.vb" />
-    <Compile Include="src\Logger\LogWriters\Realizations\SimpleFileLogWriter.vb" />
-    <Compile Include="src\Logger\Logger.vb" />
-    <Compile Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.Designer.vb">
-      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
-    </Compile>
-    <Compile Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="src\Logger\LogWriters\Interface\ILogWriter.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -193,15 +96,113 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="src\AppBase\AppBase.vb" />
+    <Compile Include="src\AppBase\ConsoleAppBase.vb" />
+    <Compile Include="src\AppBase\FormAppBase.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\AppBase\FormBase.Designer.vb">
+      <DependentUpon>FormBase.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AppBase\FormBase.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\AppBase\ServiceLocator.vb" />
+    <Compile Include="src\Attributes\DisplayAttribute.vb" />
+    <Compile Include="src\Attributes\ImageAttr.vb" />
+    <Compile Include="src\Attributes\ParameterAttribute.vb" />
+    <Compile Include="src\Attributes\StateAttribute.vb" />
+    <Compile Include="src\AutoUI\AutoUIForm.Designer.vb">
+      <DependentUpon>AutoUIForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\AutoUIForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\AutoUI\AutoUI.vb" />
+    <Compile Include="src\AutoUI\AutoUI\AutoUIByteCoding.vb" />
+    <Compile Include="src\AutoUI\AutoUI\AutoUIDisplay.Designer.vb">
+      <DependentUpon>AutoUIDisplay.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\AutoUI\AutoUIDisplay.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\AutoUI\IAutoUI.vb" />
+    <Compile Include="src\AutoUI\Interfaces\IUIElement.vb" />
+    <Compile Include="src\AutoUI\Interfaces\IUIElementLocal.vb" />
+    <Compile Include="src\AutoUI\Interfaces\IUIElementRemote.vb" />
+    <Compile Include="src\AutoUI\Interfaces\UIElementInfo.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoBitmap.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoButton.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoFormDescriptor.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoListbox.vb" />
+    <Compile Include="src\AutoUI\LocalElements\AutoTextbox.vb" />
+    <Compile Include="src\AutoUI\LocalElements\BaseLocalElement.vb" />
+    <Compile Include="src\AutoUI\RemoteElements\BaseRemoteClass.vb" />
+    <Compile Include="src\AutoUI\RemoteElements\BaseRemoteElement.Designer.vb">
+      <DependentUpon>BaseRemoteElement.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\BaseRemoteElement.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoBitmap.Designer.vb">
+      <DependentUpon>RemoteAutoBitmap.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoBitmap.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoButton.Designer.vb">
+      <DependentUpon>RemoteAutoButton.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoButton.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoFormDescriptor.vb" />
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoListbox.Designer.vb">
+      <DependentUpon>RemoteAutoListbox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoListbox.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoTextbox.Designer.vb">
+      <DependentUpon>RemoteAutoTextbox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\AutoUI\RemoteElements\RemoteAutoTextbox.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\GlobalStates\GlobalStates.vb" />
+    <Compile Include="src\Identity\IDescription.vb" />
+    <Compile Include="src\Identity\IIdentity.vb" />
+    <Compile Include="src\Identity\ListWithIdentity.vb" />
+    <Compile Include="src\ListWithEvents.vb" />
+    <Compile Include="src\Logger\Interface\ILoggerChilds.vb" />
+    <Compile Include="src\Logger\Interface\ILoggerDispatcher.vb" />
+    <Compile Include="src\Logger\Interface\ILoggerReceiver.vb" />
+    <Compile Include="src\Logger\Logger.vb" />
+    <Compile Include="src\Logger\LogWriters\Interface\ILogWriter.vb" />
+    <Compile Include="src\Logger\LogWriters\Interface\LogEventType.vb" />
+    <Compile Include="src\Logger\LogWriters\Realizations\ConsoleLogWriter.vb" />
+    <Compile Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.Designer.vb">
+      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\Logger\LogWriters\Realizations\FormLogInfo.Designer.vb">
+      <DependentUpon>FormLogInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="src\Logger\LogWriters\Realizations\FormLogInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Logger\LogWriters\Realizations\SimpleFileLogWriter.vb" />
     <Compile Include="src\Logger\UI\LoggerForm.designer.vb">
       <DependentUpon>LoggerForm.vb</DependentUpon>
     </Compile>
     <Compile Include="src\Logger\UI\LoggerForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="src\MailSender\MailSender.vb" />
     <Compile Include="src\Settings\AutoSettings.vb" />
-    <Compile Include="src\Settings\Settings\PasswordSetting.vb" />
-    <Compile Include="src\Settings\Storages\ClonedSettingsStorage.vb" />
+    <Compile Include="src\Settings\Backup\SettingsStorageBackup.vb" />
     <Compile Include="src\Settings\Gui\SettingField.Designer.vb">
       <DependentUpon>SettingField.vb</DependentUpon>
     </Compile>
@@ -214,33 +215,44 @@
     <Compile Include="src\Settings\Gui\SettingsDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Settings\Storages\Common\ISettingsStorage.vb" />
-    <Compile Include="src\GlobalStates\GlobalStates.vb" />
-    <Compile Include="src\Settings\Backup\SettingsStorageBackup.vb" />
-    <Compile Include="src\Settings\Storages\Common\ISettingsStorageForm.vb" />
-    <Compile Include="src\Settings\Storages\SettingsStorageRoot.vb" />
-    <Compile Include="src\Settings\Storages\SettingsStorage.vb" />
-    <Compile Include="src\Settings\Storages\Common\SettingsStorageBase.vb" />
     <Compile Include="src\Settings\Settings\BooleanSetting.vb" />
+    <Compile Include="src\Settings\Settings\Common\ObjectSetting.vb" />
     <Compile Include="src\Settings\Settings\Common\Setting.vb" />
-    <Compile Include="src\Settings\Settings\IntegerSetting.vb" />
     <Compile Include="src\Settings\Settings\Common\SettingOnStorage.vb" />
     <Compile Include="src\Settings\Settings\DoubleSetting.vb" />
+    <Compile Include="src\Settings\Settings\IntegerSetting.vb" />
+    <Compile Include="src\Settings\Settings\PasswordSetting.vb" />
     <Compile Include="src\Settings\Settings\StringSetting.vb" />
     <Compile Include="src\Settings\Settings\VariantSetting.vb" />
-    <Compile Include="src\Settings\Writers\Realizations\ReadOnlyIniFileSettingsWriter.vb" />
-    <Compile Include="src\Settings\Writers\Realizations\MemoryReaderWriter.vb" />
+    <Compile Include="src\Settings\Storages\ClonedSettingsStorage.vb" />
+    <Compile Include="src\Settings\Storages\Common\ISettingsStorage.vb" />
+    <Compile Include="src\Settings\Storages\Common\ISettingsStorageForm.vb" />
+    <Compile Include="src\Settings\Storages\Common\SettingsStorageBase.vb" />
+    <Compile Include="src\Settings\Storages\Legacy\SettingsStorageRoot.vb" />
+    <Compile Include="src\Settings\Storages\SettingsStorage.vb" />
+    <Compile Include="src\Settings\Storages\SettingsStorageBufferedRoot.vb" />
     <Compile Include="src\Settings\Writers\Interface\ISettingsWriter.vb" />
-    <Compile Include="src\Settings\Writers\Realizations\IniFileSettingsWriter.vb" />
+    <Compile Include="src\Settings\Writers\Legacy\IniFileSettingsWriter.vb" />
+    <Compile Include="src\Settings\Writers\Legacy\ReadOnlyIniFileSettingsWriter.vb" />
+    <Compile Include="src\Settings\Writers\Realizations\BufferedSettingsWriter.vb" />
+    <Compile Include="src\Settings\Writers\Realizations\MemoryReaderWriter.vb" />
     <Compile Include="src\Settings\Writers\Realizations\NullSettingsWriter.vb" />
-    <Compile Include="src\MailSender\MailSender.vb" />
     <Compile Include="src\Tools\RunMonitorHelper.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\AppBase\FormAppBase.resx">
       <DependentUpon>FormAppBase.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\AppBase\FormBase.resx">
+      <DependentUpon>FormBase.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\AppBase\FormBase.ru.resx">
       <DependentUpon>FormBase.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\AutoUI\AutoUIForm.resx">
@@ -249,29 +261,29 @@
     <EmbeddedResource Include="src\AutoUI\AutoUI\AutoUIDisplay.resx">
       <DependentUpon>AutoUIDisplay.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoListbox.resx">
-      <DependentUpon>RemoteAutoListbox.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoTextbox.resx">
-      <DependentUpon>RemoteAutoTextbox.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoBitmap.resx">
       <DependentUpon>RemoteAutoBitmap.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoButton.resx">
       <DependentUpon>RemoteAutoButton.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\Logger\LogWriters\Realizations\FormLogInfo.resx">
-      <DependentUpon>FormLogInfo.vb</DependentUpon>
+    <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoListbox.resx">
+      <DependentUpon>RemoteAutoListbox.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\AutoUI\RemoteElements\RemoteAutoTextbox.resx">
+      <DependentUpon>RemoteAutoTextbox.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.resx">
       <DependentUpon>DatagridLogWriter.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="My Project\Resources.resx">
-      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
-      <CustomToolNamespace>My.Resources</CustomToolNamespace>
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.ru.resx">
+      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Logger\LogWriters\Realizations\FormLogInfo.resx">
+      <DependentUpon>FormLogInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Logger\LogWriters\Realizations\FormLogInfo.ru.resx">
+      <DependentUpon>FormLogInfo.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Logger\UI\LoggerForm.resx">
       <DependentUpon>LoggerForm.vb</DependentUpon>
