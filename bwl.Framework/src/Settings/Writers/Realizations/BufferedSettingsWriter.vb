@@ -52,7 +52,7 @@
         SyncLock _settings
             Dim lines As New List(Of String)
             lines.Add("# Bwl.Framework BufferedSettingsWriter")
-            lines.Add("# Written: " + Now.ToString)
+            'lines.Add("# Written: " + Now.ToString) 'убрано, т.к. мешает анализировать схожесть коняигов
             Dim categories As New List(Of String)
             For Each setting In _settings
                 If Not categories.Contains(setting.Category) Then categories.Add(setting.Category)
