@@ -126,7 +126,7 @@
             ns.Category = PathToCategory(path)
             ns.Name = newSetting.Name
             ns.FriendlyName = newSetting.FriendlyName
-            ns.Value = newSetting.ValueAsString
+            ns.Value = newSetting.DefaultValueAsString
             SyncLock _settings
                 _settings.Add(ns)
             End SyncLock
