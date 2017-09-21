@@ -1,4 +1,5 @@
-﻿Imports bwl.Framework
+﻿Imports System.Linq
+Imports bwl.Framework
 
 Public Enum RemoteAppBeaconMode
     none
@@ -7,11 +8,47 @@ Public Enum RemoteAppBeaconMode
 End Enum
 
 Public Class RemoteAppServer
-    Public ReadOnly Property LogsServer As LogsServer
-    Public ReadOnly Property SettingsServer As SettingsServer
-    Public ReadOnly Property MessageTransport As IMessageTransport
-    Public ReadOnly Property UiServer As AutoUiServer
+    Private _settingsServers As New List(Of SettingsServer)
+    Private _logsServers As New List(Of LogsServer)
+    Private _autoUiServers As New List(Of AutoUiServer)
 
+    Public ReadOnly Property SettingsServer As SettingsServer
+        Get
+            Return _settingsServers.FirstOrDefault
+        End Get
+    End Property
+
+    Public ReadOnly Property LogsServer As LogsServer
+        Get
+            Return _logsServers.FirstOrDefault
+        End Get
+    End Property
+
+    Public ReadOnly Property AutoUiServer As AutoUiServer
+        Get
+            Return _autoUiServers.FirstOrDefault
+        End Get
+    End Property
+
+    Public ReadOnly Property SettingsServers As SettingsServer()
+        Get
+            Return _settingsServers.ToArray()
+        End Get
+    End Property
+
+    Public ReadOnly Property LogsServers As LogsServer()
+        Get
+            Return _logsServers.ToArray()
+        End Get
+    End Property
+
+    Public ReadOnly Property AutoUiServers As AutoUiServer()
+        Get
+            Return _autoUiServers.ToArray()
+        End Get
+    End Property
+
+    Public ReadOnly Property MessageTransport As IMessageTransport
     Private _beacon As NetBeacon
 
     Public Sub New(serverPort As Integer, appBase As AppBase)
@@ -26,7 +63,23 @@ Public Class RemoteAppServer
         Me.New(serverPort, storage, logger, ui, "", RemoteAppBeaconMode.none)
     End Sub
 
-    Public Sub New(serverPort As Integer, storage As SettingsStorage, logger As Logger, ui As IAutoUI, beaconName As String, beaconMode As RemoteAppBeaconMode)
+    Public Sub New(serverPort As Integer, prefix As IEnumerable(Of String),
+                   storage As SettingsStorage, logger As Logger, ui As IEnumerable(Of IAutoUI))
+        Me.New(serverPort, prefix, storage, logger, ui, "", RemoteAppBeaconMode.none)
+    End Sub
+
+    Public Sub New(serverPort As Integer, prefix As IEnumerable(Of String),
+                   storage As SettingsStorage, logger As Logger, ui As IEnumerable(Of IAutoUI),
+                   beaconName As String, beaconMode As RemoteAppBeaconMode)
+        Me.New(New NetServer, serverPort, prefix, storage, logger, ui, beaconName, beaconMode)
+        _MessageTransport.Open("*:" + serverPort.ToString, "")
+        Dim name = beaconName
+        If name = "" Then name = "RemoteAppServer"
+        _MessageTransport.RegisterMe(name, "", "RemoteAppServer", "")
+    End Sub
+
+    Public Sub New(serverPort As Integer, storage As SettingsStorage, logger As Logger, ui As IAutoUI,
+                   beaconName As String, beaconMode As RemoteAppBeaconMode)
         Me.New(New NetServer, serverPort, "remote-app", storage, logger, ui, beaconName, beaconMode)
         _MessageTransport.Open("*:" + serverPort.ToString, "")
         Dim name = beaconName
@@ -34,7 +87,7 @@ Public Class RemoteAppServer
         _MessageTransport.RegisterMe(name, "", "RemoteAppServer", "")
     End Sub
 
-    Public Sub New(remoteAddress As String, remoteUser As String, remotePassword As String,  appBase As AppBase)
+    Public Sub New(remoteAddress As String, remoteUser As String, remotePassword As String, appBase As AppBase)
         Me.New(remoteAddress, remoteUser, remotePassword, appBase.RootStorage, appBase.RootLogger, appBase.AutoUI)
     End Sub
 
@@ -74,18 +127,40 @@ Public Class RemoteAppServer
         Me.New(transport, "remote-app", storage, logger, ui)
     End Sub
 
-    Public Sub New(transport As IMessageTransport, prefix As String, storage As SettingsStorage, logger As Logger, ui As IAutoUI)
+    Public Sub New(transport As IMessageTransport, prefix As String,
+                   storage As SettingsStorage, logger As Logger, ui As IAutoUI)
         Me.New(transport, 0, prefix, storage, logger, ui, "", RemoteAppBeaconMode.none)
     End Sub
 
-    Public Sub New(transport As IMessageTransport, netPort As Integer, prefix As String, storage As SettingsStorage, logger As Logger, ui As IAutoUI, beaconName As String, beaconMode As RemoteAppBeaconMode)
+    Public Sub New(transport As IMessageTransport, prefix As IEnumerable(Of String),
+                   storage As SettingsStorage, logger As Logger, ui As IEnumerable(Of IAutoUI))
+        Me.New(transport, 0, prefix, storage, logger, ui, "", RemoteAppBeaconMode.none)
+    End Sub
+
+    Public Sub New(transport As IMessageTransport, netPort As Integer, prefix As String,
+                   storage As SettingsStorage, logger As Logger, ui As IAutoUI,
+                   beaconName As String, beaconMode As RemoteAppBeaconMode)
+        Me.New(transport, netPort, {prefix}, storage, logger, {ui}, beaconName, beaconMode)
+    End Sub
+
+    Public Sub New(transport As IMessageTransport, netPort As Integer, prefix As IEnumerable(Of String),
+                   storage As SettingsStorage, logger As Logger, ui As IEnumerable(Of IAutoUI),
+                   beaconName As String, beaconMode As RemoteAppBeaconMode)
         If logger Is Nothing Then logger = New Logger
         If storage Is Nothing Then storage = New SettingsStorageRoot
 
         _MessageTransport = transport
-        _SettingsServer = New SettingsServer(storage, transport, prefix)
-        _LogsServer = New LogsServer(logger, transport, prefix)
-        _UiServer = New AutoUiServer(ui, transport, prefix)
+
+        If prefix.Count <> ui.Count Then
+            Throw New Exception("prefix.Count <> ui.Count")
+        End If
+
+        For i = 0 To prefix.Count - 1
+            _settingsServers.Add(New SettingsServer(storage, transport, prefix(i)))
+            _logsServers.Add(New LogsServer(logger, transport, prefix(i)))
+            _autoUiServers.Add(New AutoUiServer(ui(i), transport, prefix(i)))
+        Next
+
         AddHandler MessageTransport.RegisterClientRequest, AddressOf RegisterClientRequest
         If beaconMode = RemoteAppBeaconMode.localhost Then _beacon = New NetBeacon(netPort, beaconName, True, True)
         If beaconMode = RemoteAppBeaconMode.broadcast Then _beacon = New NetBeacon(netPort, beaconName, False, True)

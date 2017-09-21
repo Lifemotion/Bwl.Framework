@@ -91,7 +91,7 @@ Public Class ConnectWindow
     Private Sub bConnectRemoteApp_Click(sender As Object, e As EventArgs) Handles bConnectRemoteApp.Click
         Dim _appBaseClient As RemoteAppClient = Nothing
         Try
-            _appBaseClient = New RemoteAppClient(_transport, "remote-app", _transport.TargetSetting)
+            _appBaseClient = New RemoteAppClient(_transport, "remote-app", _transport.TargetSetting.Value)
             Dim form = _appBaseClient.CreateAutoUiForm()
             form.Show()
         Catch ex As Exception
