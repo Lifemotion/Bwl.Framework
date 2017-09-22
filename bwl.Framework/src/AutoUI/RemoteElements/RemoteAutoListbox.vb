@@ -69,7 +69,10 @@ Public Class RemoteAutoListbox
         If dataname.ToLower = "setselected" Then
             Dim items = AutoUIByteCoding.GetParts(data)
             Me.Invoke(Sub()
-                          ListBox1.SetSelected(CType(items(0), Integer), True)
+                          Dim idx = CType(items(0), Integer)
+                          If ListBox1.Items.Count > 0 AndAlso idx < ListBox1.Items.Count Then
+                              ListBox1.SetSelected(idx, True)
+                          End If
                       End Sub)
         End If
     End Sub
