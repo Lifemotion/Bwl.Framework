@@ -6,6 +6,7 @@ Public Class AutoUI
     Public ReadOnly Property Elements As New List(Of IUIElementLocal)
     Public Event RequestToSend(id As String, dataname As String, data As Byte()) Implements IAutoUI.RequestToSend
     Public Event BaseInfosReady(infos As Byte()()) Implements IAutoUI.BaseInfosReady
+    Public Event ConnectionLost() Implements IAutoUI.ConnectionLost
 
     Friend Sub RegisterElement(element As IUIElementLocal)
         For Each elem In Elements
@@ -19,6 +20,10 @@ Public Class AutoUI
                                              Dim bytes = elem.ToBytes
                                              RaiseEvent RequestToSend(elem.ID, "base-info-change", bytes)
                                          End Sub
+    End Sub
+
+    Public Sub NoConnection() Implements IAutoUI.NoConnection
+        RaiseEvent ConnectionLost()
     End Sub
 
     Public Sub ProcessData(id As String, dataname As String, data As Byte()) Implements IAutoUI.ProcessData

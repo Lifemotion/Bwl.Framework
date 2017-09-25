@@ -6,6 +6,8 @@ Public Class AutoUiClient
 
     Public Event RequestToSend As IAutoUI.RequestToSendEventHandler Implements IAutoUI.RequestToSend
     Public Event BaseInfosReady As IAutoUI.BaseInfosReadyEventHandler Implements IAutoUI.BaseInfosReady
+    Public Event ConnectionLost() Implements IAutoUI.ConnectionLost
+
     Private _netClient As IMessageTransport
 
     Public Sub New(netClient As IMessageTransport, prefix As String, target As String)
@@ -17,6 +19,9 @@ Public Class AutoUiClient
     Public Sub Dispose()
         RemoveHandler _netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
         _netClient = Nothing
+    End Sub
+
+    Public Sub NoConnection() Implements IAutoUI.NoConnection
     End Sub
 
     Private Sub _client_ReceivedMessage(message As NetMessage)
