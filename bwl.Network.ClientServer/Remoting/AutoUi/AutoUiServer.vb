@@ -4,7 +4,7 @@ Imports bwl.Framework
 Public Class AutoUiServer
     Inherits BaseServer
     Private _ui As IAutoUI
-    Protected _lastUiAlive As DateTime = Now
+    Private _lastUiAlive As DateTime = DateTime.MaxValue
     Private _syncRoot As New Object
 
     Public Sub New(ui As IAutoUI, netServer As IMessageTransport, prefix As String)
@@ -19,9 +19,10 @@ Public Class AutoUiServer
                                                    SyncLock _syncRoot
                                                        If (Now - _lastUiAlive).TotalSeconds > 5 Then
                                                            _ui.NoConnection()
+                                                           _lastUiAlive = DateTime.MaxValue 'Сообщили о проблемах со связью, и опять ждем входящего сигнала
                                                        End If
                                                    End SyncLock
-                                                   Thread.Sleep(5000)
+                                                   Thread.Sleep(1000)
                                                End While
                                            End Sub) With {.IsBackground = True}
         connectionMonitor.Start()
