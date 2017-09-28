@@ -21,7 +21,10 @@ Public Class AutoUiClient
         _netClient = Nothing
     End Sub
 
-    Public Sub NoConnection() Implements IAutoUI.NoConnection
+    Public Sub RaiseConnectionLost() Implements IAutoUI.RaiseConnectionLost
+    End Sub
+
+    Public Sub RaiseBaseInfosReady() Implements IAutoUI.RaiseBaseInfosReady
     End Sub
 
     Private Sub _client_ReceivedMessage(message As NetMessage)

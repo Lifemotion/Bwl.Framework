@@ -18,5 +18,4 @@ Public Class AutoButton
     Public Overrides Sub SendUpdate()
 
     End Sub
-
 End Class

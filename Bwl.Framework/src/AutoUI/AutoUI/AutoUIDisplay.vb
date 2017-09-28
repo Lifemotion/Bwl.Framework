@@ -88,7 +88,6 @@ Public Class AutoUIDisplay
                                                                           _ui.ProcessData(source.Info.ID, dataname, data)
                                                                       End Sub
                         _AutoFormDescriptor.Update()
-
                 End Select
                 If ctl IsNot Nothing Then
                     AddHandler ctl.RequestToSend, Sub(source As IUIElement, dataname As String, data As Byte())

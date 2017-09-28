@@ -5,5 +5,6 @@
     Function CheckAlive() As Boolean
     Sub ProcessData(id As String, dataname As String, data() As Byte)
     Sub GetBaseInfos()
-    Sub NoConnection()
+    Sub RaiseConnectionLost()
+    Sub RaiseBaseInfosReady()
 End Interface

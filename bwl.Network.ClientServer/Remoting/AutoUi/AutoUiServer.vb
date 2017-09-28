@@ -18,7 +18,7 @@ Public Class AutoUiServer
                                                While True
                                                    SyncLock _syncRoot
                                                        If (Now - _lastUiAlive).TotalSeconds > 5 Then
-                                                           _ui.NoConnection()
+                                                           _ui.RaiseConnectionLost()
                                                            _lastUiAlive = DateTime.MaxValue 'Сообщили о проблемах со связью, и опять ждем входящего сигнала
                                                        End If
                                                    End SyncLock
