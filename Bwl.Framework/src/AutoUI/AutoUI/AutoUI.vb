@@ -9,10 +9,13 @@ Public Class AutoUI
     Public Event ConnectionLost() Implements IAutoUI.ConnectionLost
 
     Friend Sub RegisterElement(element As IUIElementLocal)
-        For Each elem In Elements
+        For Each elem In GetElementsSafeCopy()
             If elem.Info.ID.ToLower = element.Info.ID.ToLower Then Throw New Exception("Element with this ID already registered")
         Next
-        Elements.Add(element)
+        SyncLock Elements
+            Elements.Add(element)
+        End SyncLock
+
         AddHandler element.RequestToSend, Sub(source As IUIElement, dataname As String, data As Byte())
                                               RaiseEvent RequestToSend(source.Info.ID, dataname, data)
                                           End Sub
@@ -27,14 +30,14 @@ Public Class AutoUI
     End Sub
 
     Public Sub ProcessData(id As String, dataname As String, data As Byte()) Implements IAutoUI.ProcessData
-        For Each elem In Elements
+        For Each elem In GetElementsSafeCopy()
             If elem.Info.ID.ToLower = id.ToLower Then elem.ProcessData(dataname, data)
         Next
     End Sub
 
     Private Sub GetBaseInfos() Implements IAutoUI.GetBaseInfos
         Dim datas As New List(Of Byte())
-        For Each elem In Elements
+        For Each elem In GetElementsSafeCopy()
             datas.Add(elem.Info.ToBytes())
         Next
         RaiseEvent BaseInfosReady(datas.ToArray)
@@ -42,5 +45,11 @@ Public Class AutoUI
 
     Public Function CheckAlive() As Boolean Implements IAutoUI.CheckAlive
         Return True
+    End Function
+
+    Private Function GetElementsSafeCopy() As IUIElementLocal()
+        SyncLock Elements
+            Return Elements.ToArray()
+        End SyncLock
     End Function
 End Class
