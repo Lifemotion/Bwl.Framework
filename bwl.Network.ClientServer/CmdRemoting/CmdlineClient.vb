@@ -20,16 +20,19 @@
 
     Public Sub RequestUpdate()
         Dim msg As New NetMessage("S", "CmdRemoting", _prefix, "update-request")
+        msg.FromID = _transport.MyID
         _transport.SendMessage(msg)
     End Sub
 
     Public Sub RequestKill()
         Dim msg As New NetMessage("S", "CmdRemoting", _prefix, "kill-request")
+        msg.FromID = _transport.MyID
         _transport.SendMessage(msg)
     End Sub
 
     Public Sub SendStandartInput(lines As String)
         Dim msg As New NetMessage("S", "CmdRemoting", _prefix, "input", lines)
+        msg.FromID = _transport.MyID
         _transport.SendMessage(msg)
     End Sub
 
