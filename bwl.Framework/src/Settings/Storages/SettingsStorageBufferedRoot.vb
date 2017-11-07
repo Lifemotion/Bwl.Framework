@@ -17,7 +17,7 @@ Public Class SettingsStorageBufferedRoot
     ''' </summary>
     ''' <param name="iniFileName">Имя ini-файла с настройками.</param>
     ''' <param name="rootName">Имя.</param>
-    ''' <param name="logAllEvents">Логировать все события, связанные с логом?</param>
+    ''' <param name="logAllEvents">Логировать все события, связанные ini-файлом?</param>
     Sub New(iniFileName As String, rootName As String, Optional logAllEvents As Boolean = False)
         If rootName Is Nothing OrElse rootName = "" Then Throw New Exception("RootName can't be empty")
         _defaultWriter = New BufferedSettingsWriter(iniFileName, logAllEvents)
