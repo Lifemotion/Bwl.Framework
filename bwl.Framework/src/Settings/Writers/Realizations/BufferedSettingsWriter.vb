@@ -1,4 +1,6 @@
-﻿Public Class BufferedSettingsWriter
+﻿Imports System.IO
+
+Public Class BufferedSettingsWriter
     Implements ISettingsReaderWriter
     Private Class BufferedSetting
         Public Category As String
@@ -17,12 +19,30 @@
 
     Public Sub ReadSettingsFromFile()
         SyncLock _settings
-            If IO.File.Exists(_filename) Then
-                ReadSettingsFromFile(_filename) 'Обычная загрузка
-            ElseIf IO.File.Exists(_filename + ".bak") Then
-                IO.File.Copy(_filename + ".bak", _filename) 'Копирование бакапа конфига в рабочий файл...
-                ReadSettingsFromFile(_filename) '...и ещё одна попытка загрузки
-            End If
+            Dim deletedDataCounter = 0
+            Try
+                ReadSettingsFromFile(_filename) 'Если обычная загрузка провалилась...
+            Catch
+                Try
+                    If SafeDelete(_filename) Then '...удаляем основной файл (первая попытка загрузки)...
+                        deletedDataCounter += 1 'Учитываем, что какие-то данные уже были
+                    End If
+                    File.Copy(_filename + ".bak", _filename) '...и восстанавливаем его из копии...
+                    ReadSettingsFromFile(_filename) '...и ещё одна попытка загрузки
+                Catch
+                    Try
+                        If SafeDelete(_filename) Then '...удаляем основной файл (вторая попытка загрузки)...
+                            deletedDataCounter += 1 'Учитываем, что какие-то данные уже были
+                        End If
+                        File.Copy(_filename + ".old.bak", _filename) '...и восстанавливаем его из старой копии...
+                        ReadSettingsFromFile(_filename) '...и ещё одна попытка загрузки
+                    Catch
+                        If deletedDataCounter <> 0 Then 'Если были неудачные попытки загрузки из каких-то данных, и так и не загрузили настройки - фейл!
+                            Throw New Exception("ReadSettingsFromFile failed")
+                        End If
+                    End Try
+                End Try
+            End Try
         End SyncLock
     End Sub
 
@@ -80,40 +100,53 @@
             Next
             If settingsWritten <> _settings.Count Then Throw New Exception("WriteSettingsToFile: not all settings written, not normal!")
 
-            'Убираем временный файл и пишем содержимое конфига в него            
+            'Эталонные данные (для проверки)
+            Dim etalonData = lines.ToArray()
+
+            'Убираем временный файл и пишем содержимое конфига в него (с проверкой корректности записи!)
             Dim tmpFName = filename + ".tmp." + Now.Ticks.ToString()
-            If System.IO.File.Exists(tmpFName) Then
-                System.IO.File.SetAttributes(tmpFName, IO.FileAttributes.Normal)
-                System.IO.File.Delete(tmpFName)
-            End If
-            IO.File.WriteAllLines(tmpFName, lines.ToArray, System.Text.Encoding.UTF8)
+            SafeDelete(tmpFName)
+            File.WriteAllLines(tmpFName, etalonData, System.Text.Encoding.UTF8)
 
-            'Проверка данных, записанных во временный файл
-            Dim srcData = lines.ToArray()
-            Dim checkData = IO.File.ReadAllLines(tmpFName).ToArray()
-            If srcData.Length <> checkData.Length Then
-                Throw New Exception("WriteSettingsToFile: srcData.Length <> checkData.Length")
-            End If
-            For i = 0 To srcData.Length - 1
-                If srcData(i) <> checkData(i) Then
-                    Throw New Exception("WriteSettingsToFile: srcData(i) <> checkData(i)")
-                End If
-            Next
+            Dim tmpCheckData = IO.File.ReadAllLines(tmpFName).ToArray()
+            VerifyData(etalonData, tmpCheckData)
 
-            'Перенос существующего файла настроек в bak
-            If System.IO.File.Exists(filename) Then
-                Dim bakFName = filename + ".bak"
-                If System.IO.File.Exists(bakFName) Then
-                    System.IO.File.SetAttributes(bakFName, IO.FileAttributes.Normal)
-                    System.IO.File.Delete(bakFName)
-                End If
-                System.IO.File.Move(filename, bakFName)
+            'Перенос существующего файла настроек в old.bak
+            If File.Exists(filename) Then
+                SafeDelete(filename + ".old.bak")
+                File.Move(filename, filename + ".old.bak")
             End If
 
             'Перенос временного в текущий
-            System.IO.File.Move(tmpFName, filename)
+            File.Move(tmpFName, filename)
+
+            'Копирование текущего в "свежий" bak (с проверкой корректности записи!)
+            SafeDelete(filename + ".bak")
+            File.Copy(filename, filename + ".bak")
+            Dim bakCheckData = IO.File.ReadAllLines(filename + ".bak").ToArray()
+            VerifyData(etalonData, bakCheckData)
         End SyncLock
     End Sub
+
+    Private Sub VerifyData(etalonData As String(), checkData As String())
+        If etalonData.Length <> checkData.Length Then
+            Throw New Exception("VerifyData: ethalonData.Length <> checkData.Length")
+        End If
+        For i = 0 To etalonData.Length - 1
+            If etalonData(i) <> checkData(i) Then
+                Throw New Exception("VerifyData: ethalonData(i) <> checkData(i)")
+            End If
+        Next
+    End Sub
+
+    Private Function SafeDelete(filename As String) As Boolean
+        If File.Exists(filename) Then
+            File.SetAttributes(filename, IO.FileAttributes.Normal)
+            File.Delete(filename)
+            Return True
+        End If
+        Return False
+    End Function
 
     Private Function PathToCategory(path() As String) As String
         Return (StringTools.CombineStrings(path, False, "."))
