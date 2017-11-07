@@ -32,14 +32,15 @@ Public Class AppBase
                    useBufferedStorage As Boolean,
                    baseFolderOverride As String,
                    Optional maxFilesCount As Integer = 5,
-                   Optional maxLogFileLength As Long = 10 * 1024 * 1024)
+                   Optional maxLogFileLength As Long = 10 * 1024 * 1024,
+                   Optional logAllBufferedIniEvents As Boolean = False)
         Me.UseBufferedStorage = useBufferedStorage
         _AppName = appName
         _BaseFolder = CheckPath(baseFolderOverride)
         _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
         _SettingsFolder = IO.Path.Combine(_BaseFolder, "conf")
         _DataFolder = IO.Path.Combine(_BaseFolder, "data")
-        If initFolders Then Init(maxFilesCount, maxLogFileLength)
+        If initFolders Then Init(maxFilesCount, maxLogFileLength, logAllBufferedIniEvents)
     End Sub
 
     Public Sub New(initFolders As Boolean,
@@ -70,7 +71,9 @@ Public Class AppBase
         Return result
     End Function
 
-    Public Sub Init(Optional maxFilesCount As Integer = 5, Optional maxLogFileLength As Long = 10 * 1024 * 1024)
+    Public Sub Init(Optional maxFilesCount As Integer = 5,
+                    Optional maxLogFileLength As Long = 10 * 1024 * 1024,
+                    Optional logAllBufferedIniEvents As Boolean = False)
         TryCreateFolder(_SettingsFolder)
         TryCreateFolder(_DataFolder)
         TryCreateFolder(_LogsFolder)
@@ -78,7 +81,7 @@ Public Class AppBase
         _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile,,,,, maxLogFileLength, maxFilesCount))
         _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors,,, maxLogFileLength, maxFilesCount))
         If UseBufferedStorage Then
-            _RootStorage = New SettingsStorageBufferedRoot(Path.Combine(_SettingsFolder, "settings.ini"), _AppName)
+            _RootStorage = New SettingsStorageBufferedRoot(Path.Combine(_SettingsFolder, "settings.ini"), _AppName, logAllBufferedIniEvents)
         Else
             _RootStorage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_SettingsFolder, "settings.ini")), _AppName, False)
         End If

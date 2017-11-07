@@ -16,10 +16,11 @@ Public Class SettingsStorageBufferedRoot
     ''' Создать новое хранилище настроек, являющееся корневым.
     ''' </summary>
     ''' <param name="iniFileName">Имя ini-файла с настройками.</param>
-    ''' <remarks></remarks>
-    Sub New(iniFileName As String, rootName As String)
+    ''' <param name="rootName">Имя.</param>
+    ''' <param name="logAllEvents">Логировать все события, связанные с логом?</param>
+    Sub New(iniFileName As String, rootName As String, Optional logAllEvents As Boolean = False)
         If rootName Is Nothing OrElse rootName = "" Then Throw New Exception("RootName can't be empty")
-        _defaultWriter = New BufferedSettingsWriter(iniFileName)
+        _defaultWriter = New BufferedSettingsWriter(iniFileName, logAllEvents)
         _name = rootName
     End Sub
 
