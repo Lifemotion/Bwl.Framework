@@ -22,6 +22,8 @@ Public Class BufferedSettingsWriter
 
     Public Sub ReadSettingsFromFile()
         Dim log As New StringBuilder()
+        log.AppendLine()
+
         Dim deletedDataCounter = 0
         Dim failed = False
 
@@ -117,6 +119,8 @@ Public Class BufferedSettingsWriter
         Threading.Thread.Sleep(1) 'Для обеспечения уникальности tmp-маркера, основанного на тиках
 
         Dim log As New StringBuilder()
+        log.AppendLine()
+
         Dim failed = False
 
         Dim SafeDeleteWithLogging = Sub(filenameToDelete As String)
@@ -160,7 +164,7 @@ Public Class BufferedSettingsWriter
 
             Try
                 'ДОБАВЛЕНИ ДАННЫХ КОНФИГА В МАССИВ СТРОК (ПОД ЗАПИСЬ В ФАЙЛ)
-                log.AppendLine(String.Format("Now.Ticks: {0}, append data to linesData BEGIN)", Now.Ticks))
+                log.AppendLine(String.Format("Now.Ticks: {0}, append data to linesData BEGIN", Now.Ticks))
                 Dim lines As New List(Of String)
                 lines.Add("# Bwl.Framework BufferedSettingsWriter")
                 Dim categories As New List(Of String)
@@ -181,25 +185,29 @@ Public Class BufferedSettingsWriter
                 Next
                 Dim linesData = lines.ToArray()
                 If settingsWritten <> _settings.Count Then Throw New Exception("WriteSettingsToFile: not all settings written, not normal!")
-                log.AppendLine(String.Format("Now.Ticks: {0}, append data to linesData END OK)", Now.Ticks))
+                log.AppendLine(String.Format("Now.Ticks: {0}, append data to linesData END OK", Now.Ticks))
 
                 'ЗАПИСЬ В ФАЙЛ, ВЕРИФИКАЦИЯ, БАКАПЫ
-                Dim tmpFName = String.Format("{0}.{1}.{2}", filename, Now.Ticks.ToString(), "tmp") 'Временный файл формируется на основе файла конфига и тиков (для уникальности)
+                Try
+                    VerifyDataWithLogging(filename, linesData, "linesData") 'Сначала проверяем, действительно ли требуется перезаписать файл (разные ли данные)?
+                Catch ex As Exception 'Если в ходе проверки возникло исключение - файлы не совпадают, в любом случае - сравнение "не прошло", нужно переписывать settings.ini
+                    Dim tmpFName = String.Format("{0}.{1}.{2}", filename, Now.Ticks.ToString(), "tmp") 'Временный файл формируется на основе файла конфига и тиков (для уникальности)
 
-                SafeDeleteWithLogging(tmpFName) 'Безопасно удаляем временный файл (если таковой вдруг найдется)
-                WriteLinesWithLogging(tmpFName, linesData, "linesData") 'Пишем эталонные данные во временный файл...
-                VerifyDataWithLogging(tmpFName, linesData, "linesData") '...и проверяем их
+                    SafeDeleteWithLogging(tmpFName) 'Безопасно удаляем временный файл (если таковой вдруг найдется)
+                    WriteLinesWithLogging(tmpFName, linesData, "linesData") 'Пишем эталонные данные во временный файл...
+                    VerifyDataWithLogging(tmpFName, linesData, "linesData") '...и проверяем их
 
-                If File.Exists(filename) Then 'Если исходный файл существует, то его нужно перенести в ".old.bak"
-                    SafeDeleteWithLogging(filename + ".old.bak")
-                    MoveWithLogging(filename, filename + ".old.bak")
-                End If
+                    If File.Exists(filename) Then 'Если исходный файл существует, то его нужно перенести в ".old.bak"
+                        SafeDeleteWithLogging(filename + ".old.bak")
+                        MoveWithLogging(filename, filename + ".old.bak")
+                    End If
 
-                MoveWithLogging(tmpFName, filename) 'Перенос временного в текущий
+                    MoveWithLogging(tmpFName, filename) 'Перенос временного в текущий
 
-                SafeDeleteWithLogging(filename + ".bak") 'Копирование текущего в "свежий" bak (с проверкой корректности записи) (1/3)
-                CopyWithLogging(filename, filename + ".bak") 'Копирование текущего в "свежий" bak (с проверкой корректности записи) (2/3)
-                VerifyDataWithLogging(filename + ".bak", linesData, "linesData") 'Копирование текущего в "свежий" bak (с проверкой корректности записи) (3/3)
+                    SafeDeleteWithLogging(filename + ".bak") 'Копирование текущего в "свежий" bak (с проверкой корректности записи) (1/3)
+                    CopyWithLogging(filename, filename + ".bak") 'Копирование текущего в "свежий" bak (с проверкой корректности записи) (2/3)
+                    VerifyDataWithLogging(filename + ".bak", linesData, "linesData") 'Копирование текущего в "свежий" bak (с проверкой корректности записи) (3/3)
+                End Try
             Catch ex As Exception
                 failed = True
                 log.AppendLine(String.Format("Now.Ticks: {0}, WriteSettingsToFile ex: {1}", Now.Ticks, ex.Message)) '...пишем почему не получилась запись конфига
