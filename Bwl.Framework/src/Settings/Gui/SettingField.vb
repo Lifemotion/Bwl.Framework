@@ -176,10 +176,10 @@
 	End Sub
 
 	Private Sub menuFile_Click(sender As System.Object, e As System.EventArgs) Handles menuFile.Click
-		If selectFile.ShowDialog = Windows.Forms.DialogResult.OK Then
-			tbValue.Text = selectFile.FileName
-		End If
-	End Sub
+        If selectFile.ShowDialog = System.Windows.Forms.DialogResult.OK Then
+            tbValue.Text = selectFile.FileName
+        End If
+    End Sub
 
 	Private Sub tbKey_TextChanged(sender As Object, e As EventArgs) Handles tbKey.TextChanged
 		If settingReady And (Not Me.IsDisposed) Then
