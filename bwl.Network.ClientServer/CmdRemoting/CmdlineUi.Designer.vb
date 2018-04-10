@@ -161,14 +161,14 @@ Partial Class CmdlineUi
 
     End Sub
 
-    Friend WithEvents cbInput As Windows.Forms.ComboBox
-    Friend WithEvents cbAlive As Windows.Forms.CheckBox
-    Friend WithEvents cbResponding As Windows.Forms.CheckBox
-    Friend WithEvents cbHasExited As Windows.Forms.CheckBox
-    Friend WithEvents TextBox1 As Windows.Forms.TextBox
-    Friend WithEvents timerUpdate As Windows.Forms.Timer
-    Friend WithEvents cbHasStarted As Windows.Forms.CheckBox
-    Friend WithEvents tbFilter As Windows.Forms.TextBox
-    Friend WithEvents bClear As Windows.Forms.Button
-    Friend WithEvents cbFilter As Windows.Forms.CheckBox
+    Friend WithEvents cbInput As System.Windows.Forms.ComboBox
+    Friend WithEvents cbAlive As System.Windows.Forms.CheckBox
+    Friend WithEvents cbResponding As System.Windows.Forms.CheckBox
+    Friend WithEvents cbHasExited As System.Windows.Forms.CheckBox
+    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents timerUpdate As System.Windows.Forms.Timer
+    Friend WithEvents cbHasStarted As System.Windows.Forms.CheckBox
+    Friend WithEvents tbFilter As System.Windows.Forms.TextBox
+    Friend WithEvents bClear As System.Windows.Forms.Button
+    Friend WithEvents cbFilter As System.Windows.Forms.CheckBox
 End Class

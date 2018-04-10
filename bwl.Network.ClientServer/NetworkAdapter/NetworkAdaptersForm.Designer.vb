@@ -71,7 +71,7 @@ Partial Class NetworkAdaptersForm
 
     End Sub
 
-    Friend WithEvents lbAdapters As Windows.Forms.ListBox
-    Friend WithEvents bOK As Windows.Forms.Button
-    Friend WithEvents bCancel As Windows.Forms.Button
+    Friend WithEvents lbAdapters As System.Windows.Forms.ListBox
+    Friend WithEvents bOK As System.Windows.Forms.Button
+    Friend WithEvents bCancel As System.Windows.Forms.Button
 End Class
