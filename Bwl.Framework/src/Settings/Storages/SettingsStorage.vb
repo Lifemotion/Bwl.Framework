@@ -7,8 +7,9 @@
 Public Class SettingsStorage
     Inherits SettingsStorageBase
 
-    Protected Sub New()
+    Private _syncRoot As New Object
 
+    Protected Sub New()
     End Sub
 
     ''' <summary>
@@ -17,7 +18,7 @@ Public Class SettingsStorage
     ''' <param name="parentStorage">Родительское хранилище.</param>
     ''' <param name="name">Имя подкатегории настроек.</param>
     ''' <remarks></remarks>
-	Protected Sub New(parentStorage As SettingsStorage, name As String, friendlyName As String, Optional isReadOnly As Boolean = False)
+    Protected Sub New(parentStorage As SettingsStorage, name As String, friendlyName As String, Optional isReadOnly As Boolean = False)
 		If name = "" Then Throw New ArgumentException("Name can't be empty")
 		If parentStorage Is Nothing Then Throw New ArgumentException("Parent storage is nothing")
 		_readOnly = isReadOnly
@@ -70,9 +71,11 @@ Public Class SettingsStorage
 	Public Function CreateChildStorage(name As String, friendlyName As String) As SettingsStorage
 		If name = "" Then Throw New Exception("Имя категории настроек не может быть пустым.")
 		If friendlyName Is Nothing Then friendlyName = ""
-		Dim childStorage As New SettingsStorage(Me, name, friendlyName, _readOnly)
-		_childStorages.Add(childStorage)
-		Return childStorage
+        Dim childStorage As New SettingsStorage(Me, name, friendlyName, _readOnly)
+        SyncLock _syncRoot
+            _childStorages.Add(childStorage)
+        End SyncLock
+        Return childStorage
 	End Function
 
     ''' <summary>
@@ -81,18 +84,20 @@ Public Class SettingsStorage
     ''' <param name="name"></param>
     ''' <remarks></remarks>
     Public Sub DeleteChildStorage(name As String)
-        Dim forDelete As SettingsStorage = Nothing
-        For Each storage In _childStorages
-            If storage.Name = name Then
-                forDelete = DirectCast(storage, SettingsStorage)
+        SyncLock _syncRoot
+            Dim forDelete As SettingsStorage = Nothing
+            For Each storage In _childStorages
+                If storage.Name = name Then
+                    forDelete = DirectCast(storage, SettingsStorage)
+                End If
+            Next
+            If forDelete IsNot Nothing Then
+                forDelete._parentStorage = Nothing
+                _childStorages.Remove(forDelete)
+            Else
+                Throw New Exception("Child storage not found: " + name)
             End If
-        Next
-        If forDelete IsNot Nothing Then
-            forDelete._parentStorage = Nothing
-            _childStorages.Remove(forDelete)
-        Else
-            Throw New Exception("Child storage not found: " + name)
-        End If
+        End SyncLock
     End Sub
 
     Friend Overrides Sub LoadSetting(setting As SettingOnStorage)
@@ -105,42 +110,43 @@ Public Class SettingsStorage
     End Sub
 
     Public Sub ReloadSettings(writer As ISettingsReaderWriter)
-        Dim path = GetStoragePath
-
-        For Each setting In _settings
-            setting.LoadSettingFromStorage(writer, path)
-        Next
-
-        For Each child As SettingsStorage In _childStorages
-            child.ReloadSettings(writer)
-        Next
+        SyncLock _syncRoot
+            Dim path = GetStoragePath()
+            For Each setting In _settings
+                setting.LoadSettingFromStorage(writer, path)
+            Next
+            For Each child As SettingsStorage In _childStorages
+                child.ReloadSettings(writer)
+            Next
+        End SyncLock
     End Sub
 
     Public Sub SaveSettings(writer As ISettingsReaderWriter, changedOnly As Boolean)
-        Dim path = GetStoragePath
-
-        If _parentStorage Is Nothing Then writer.WriteRoot(_name, _friendlyName)
-        For Each setting In _settings
-            If setting.Changed Or Not changedOnly Then
-                writer.WriteSetting(path, setting)
-                setting.Changed = False
-            End If
-        Next
-        For Each child As SettingsStorage In _childStorages
-            writer.WriteCategory(path, child.Name, child.FriendlyName)
-            child.SaveSettings(writer, changedOnly)
-        Next
-    End Sub
-
-    Public Sub SaveSettings()
-        If Not IsReadOnly Then
-            SaveSettings(_defaultWriter, True)
-        End If
+        SyncLock _syncRoot
+            Dim path = GetStoragePath()
+            If _parentStorage Is Nothing Then writer.WriteRoot(_name, _friendlyName)
+            For Each setting In _settings
+                If setting.Changed Or Not changedOnly Then
+                    writer.WriteSetting(path, setting)
+                    setting.Changed = False
+                End If
+            Next
+            For Each child As SettingsStorage In _childStorages
+                writer.WriteCategory(path, child.Name, child.FriendlyName)
+                child.SaveSettings(writer, changedOnly)
+            Next
+        End SyncLock
     End Sub
 
     Public Sub SaveSettings(changedOnly As Boolean)
         If Not IsReadOnly Then
             SaveSettings(_defaultWriter, changedOnly)
+        End If
+    End Sub
+
+    Public Sub SaveSettings()
+        If Not IsReadOnly Then
+            SaveSettings(_defaultWriter, True)
         End If
     End Sub
 
@@ -151,5 +157,4 @@ Public Class SettingsStorage
             _parentStorage.SetSettingChanged(setting)
         End If
     End Sub
-
 End Class

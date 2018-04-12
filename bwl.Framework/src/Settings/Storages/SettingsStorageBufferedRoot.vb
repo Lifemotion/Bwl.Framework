@@ -3,6 +3,8 @@
 Public Class SettingsStorageBufferedRoot
     Inherits SettingsStorage
 
+    Private _syncRoot As New Object
+
     ''' <summary>
     ''' Создать хранилище настроек с виртуальным интерфейсом загрузки\сохранения и корневой категорией Root.
     ''' </summary>
@@ -25,10 +27,15 @@ Public Class SettingsStorageBufferedRoot
     End Sub
 
     Public Sub ReadIniFile()
-        DirectCast(_defaultWriter, BufferedSettingsWriter).ReadSettingsFromFile()
+        SyncLock _syncRoot
+            DirectCast(_defaultWriter, BufferedSettingsWriter).ReadSettingsFromFile()
+        End SyncLock
     End Sub
 
     Public Sub WriteIniFile()
-        DirectCast(_defaultWriter, BufferedSettingsWriter).WriteSettingsToFile()
+        SyncLock _syncRoot
+            SaveSettings(_defaultWriter, False) 'False - пишем все значение
+            DirectCast(_defaultWriter, BufferedSettingsWriter).WriteSettingsToFile()
+        End SyncLock
     End Sub
 End Class
