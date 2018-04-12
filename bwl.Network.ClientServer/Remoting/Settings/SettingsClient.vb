@@ -6,6 +6,7 @@ Public Class SettingsClient
     Implements ISettingsStorageForm
     Public Event SettingsReceived(settingsClient As SettingsClient)
     Public Event SettingChangeError(settingName As String, errorName As String)
+    Public Event SettingChangeOk(settingName As String, settingValue As String)
 
     Public ReadOnly Property RemoteStorage As New ClonedSettingsStorage
     Private _settingsForm As SettingsDialog
@@ -19,13 +20,15 @@ Public Class SettingsClient
 
         AddHandler SettingsReceived, AddressOf SettingsReceivedHanlder
         AddHandler SettingChangeError, AddressOf SettingChangeErrorHandler
+        AddHandler SettingChangeOk, AddressOf SettingChangeOkHandler
     End Sub
 
     Public Sub Dispose()
         RemoveHandler _netClient.ReceivedMessage, AddressOf _client_ReceivedMessage
         RemoveHandler SettingsReceived, AddressOf SettingsReceivedHanlder
         RemoveHandler SettingChangeError, AddressOf SettingChangeErrorHandler
-        _netClient = nothing
+        RemoveHandler SettingChangeOk, AddressOf SettingChangeOkHandler
+        _netClient = Nothing
         _settingsForm = Nothing
         _invokeForm = Nothing
     End Sub
@@ -47,6 +50,12 @@ Public Class SettingsClient
                     Dim settingsName = message.Part(3)
                     If message.Part(4) = "Error" Then
                         RaiseEvent SettingChangeError(settingsName, message.Part(5))
+                    ElseIf message.Part(4) = "Ok" Then
+                        If message.Count > 5 Then
+                            RaiseEvent SettingChangeOk(settingsName, message.Part(5))
+                        Else
+                            RaiseEvent SettingChangeOk(settingsName, "-//-")
+                        End If
                     End If
             End Select
         End If
@@ -84,6 +93,18 @@ Public Class SettingsClient
     Private Sub SettingChangeErrorHandler(settingName As String, errorName As String)
         If _settingsForm IsNot Nothing Then _settingsForm.Invoke(Sub() _settingsForm.Close())
         MsgBox("Setting [" + settingName + "] save error: " + errorName, MsgBoxStyle.Critical)
+    End Sub
+
+    Private Sub SettingChangeOkHandler(settingName As String, settingValue As String)
+        If _settingsForm IsNot Nothing Then
+            Static savedPrefix As String = Nothing
+            If savedPrefix Is Nothing Then
+                savedPrefix = _settingsForm.Text
+            End If
+            _settingsForm.Invoke(Sub()
+                                     _settingsForm.Text = savedPrefix + String.Format(": {0}={1}, {2}", settingName, settingValue, Now.ToString("dd.MM.yyyy HH:mm:ss"))
+                                 End Sub)
+        End If
     End Sub
 
     Public Function CreateSettingsForm(invokeForm As Form) As SettingsDialog Implements ISettingsStorageForm.CreateSettingsForm

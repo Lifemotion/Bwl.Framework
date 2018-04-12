@@ -28,7 +28,7 @@ Public Class SettingsServer
                     If setting IsNot Nothing Then
                         Try
                             setting.ValueAsString = value
-                            Dim msg As New NetMessage("#", "SettingsRemoting", _prefix, "SetSettingValueResult", settingName, "Ok")
+                            Dim msg As New NetMessage("#", "SettingsRemoting", _prefix, "SetSettingValueResult", settingName, "Ok", value)
                             msg.ToID = message.FromID
                             _server.SendMessage(msg)
                         Catch ex As Exception
