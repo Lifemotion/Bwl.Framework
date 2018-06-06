@@ -1,4 +1,5 @@
 ﻿Imports System.Linq
+Imports System.Threading
 Imports bwl.Framework
 
 Public Class MessageTransport
@@ -7,6 +8,9 @@ Public Class MessageTransport
     Protected _factories As New List(Of IMessageTransportFactory)
     Protected _storage As SettingsStorage
     Protected _logger As Logger
+
+    Private _disposed As Boolean = False
+    Private ReadOnly _disposedEvent As New ManualResetEvent(False)
 
     Protected WithEvents _transport As IMessageTransport
 
@@ -79,6 +83,19 @@ Public Class MessageTransport
         _transport.Close()
     End Sub
 
+    Public Sub Dispose() Implements IMessageTransport.Dispose
+        _disposed = True
+        _disposedEvent.Set()
+
+        If _transport IsNot Nothing Then _transport.Close()
+        _transport.Dispose()
+        _transport = Nothing
+        _factories.Clear()
+
+        _logger = Nothing
+        _storage = Nothing
+    End Sub
+
     Public Sub New(storage As SettingsStorage, logger As Logger, Optional defaultMode As String = "NetClient", Optional defaultAddress As String = "localhost:3001", Optional defaultUser As String = "User1", Optional defaultTargetId As String = "User1", Optional defaultServiceName As String = "Service", Optional autoConnect As Boolean = True)
         Me.New({New NetClientFactory, New NetServerFactory, New EmptyTransportFactory}, storage, logger, defaultMode, defaultAddress, defaultUser, defaultTargetId, defaultServiceName, autoConnect)
     End Sub
@@ -137,16 +154,16 @@ Public Class MessageTransport
     End Sub
 
     Private Sub WorkThreadSub()
-        Do
-            Threading.Thread.Sleep(1000)
+        While Not _disposed
             Try
                 CreateTransport()
                 If AutoConnect And _transport.IsConnected = False Then OpenAndRegister()
+                _disposedEvent.WaitOne(New TimeSpan(0, 0, 1))
             Catch ex As Exception
                 _logger.AddWarning(ex.Message)
-                Threading.Thread.Sleep(3000)
+                _disposedEvent.WaitOne(New TimeSpan(0, 0, 3))
             End Try
-        Loop
+        End While
     End Sub
 
     Public Sub OpenAndRegister()

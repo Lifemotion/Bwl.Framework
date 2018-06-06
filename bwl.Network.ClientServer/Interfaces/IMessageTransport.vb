@@ -1,4 +1,5 @@
 ﻿Public Interface IMessageTransport
+    Inherits IDisposable
     ReadOnly Property MyID As String
     ReadOnly Property MyServiceName As String
     ReadOnly Property IsConnected() As Boolean

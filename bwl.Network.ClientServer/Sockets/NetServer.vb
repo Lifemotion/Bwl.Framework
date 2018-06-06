@@ -212,6 +212,15 @@ Public Class NetServer
     End Sub
 
     ''' <summary>
+    ''' Остановить сервер.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Sub Dispose() Implements IMessageTransport.Dispose
+        StopServer()
+        pingTimer.Enabled = False
+    End Sub
+
+    ''' <summary>
     ''' Запущен ли сервер и принимает ли он подключения.
     ''' </summary>
     ''' <returns></returns>
@@ -314,7 +323,7 @@ Public Class NetServer
         pack.client.RaiseNewMessage(pack.message)
     End Sub
 
-    Private Function GetID()
+    Private Function GetID() As Integer
         Dim i As Integer
         Do
             i += 1

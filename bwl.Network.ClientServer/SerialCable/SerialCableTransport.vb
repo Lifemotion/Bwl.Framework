@@ -31,6 +31,10 @@ Public Class SerialCableTransport
         Throw New NotImplementedException()
     End Sub
 
+    Public Sub Dispose() Implements IMessageTransport.Dispose
+        Throw New NotImplementedException()
+    End Sub
+
     Public Sub Open(address As String, options As String) Implements IMessageTransport.Open
         Throw New NotImplementedException()
     End Sub

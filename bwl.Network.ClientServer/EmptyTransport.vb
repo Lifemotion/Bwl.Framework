@@ -19,6 +19,10 @@ Public Class EmptyTransport
         _IsConnected = False
     End Sub
 
+    Public Sub Dispose() Implements IMessageTransport.Dispose
+        _IsConnected = False
+    End Sub
+
     Public Sub Open(address As String, options As String) Implements IMessageTransport.Open
         _IsConnected = True
     End Sub

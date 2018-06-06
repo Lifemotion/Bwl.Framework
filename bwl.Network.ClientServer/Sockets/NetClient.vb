@@ -1,5 +1,6 @@
 ﻿Imports System.Net.Sockets
 Imports System.Net
+Imports System.Threading
 Imports bwl.Network.ClientServer
 
 ''' <summary>
@@ -27,6 +28,7 @@ Public Class NetClient
     Private waitingDatatype As Char
     Private waitingResult As NetMessage
     Private waiterRoot As New Object
+    Private _disposedEvent As New ManualResetEvent(False)
 
     Private waitingAnswer2 As String
     Private waiterRoot2 As New Object
@@ -128,6 +130,7 @@ Public Class NetClient
             Throw New NoConnectException(ex, "Не удалось подключиться к " + host + ":" + port.ToString)
         End Try
     End Sub
+
     ''' <summary>
     ''' Отключиться от сервера.
     ''' </summary>
@@ -147,6 +150,22 @@ Public Class NetClient
         End If
         RaiseEvent Disconnected()
     End Sub
+
+    Public Sub Dispose() Implements IMessageTransport.Dispose
+        _disposedEvent.Set()
+        Disconnect()
+        pingTimer.Enabled = False
+        tcpSocket.Dispose()
+        tcpSocket = Nothing
+        If directServer IsNot Nothing Then
+            If directServer.IsWorking Then
+                directServer.StopServer()
+            End If
+            directServer.Dispose()
+            directServer = Nothing
+        End If
+    End Sub
+
     ''' <summary>
     ''' Подключены ли мы сейчас к серверу.
     ''' </summary>
@@ -352,7 +371,7 @@ Public Class NetClient
                 SendMessage(message)
                 Dim time As Single = Microsoft.VisualBasic.Timer
                 Do While waitingResult Is Nothing And Math.Abs(Microsoft.VisualBasic.Timer - time) < timeout
-                    Threading.Thread.Sleep(50)
+                    _disposedEvent.WaitOne(50)
                 Loop
                 waitingAnswer = ""
                 Return waitingResult
