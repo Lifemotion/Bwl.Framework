@@ -190,46 +190,49 @@ Public Class NetClient
 
         Dim i As Integer
         For i = 0 To receivedLen - 1
-            'пришел байт
-            currByte = receiveBuffer(i)
-            Select Case currByte
+            Try
+                'пришел байт
+                currByte = receiveBuffer(i)
+                Select Case currByte
                 '1 - символ нового сообщения.
-                Case 1
-                    If wasPacketStart Then
-                        'log.Add("Пришел символ нового сообщения, когда старое еще не кончилось.")
-                    End If
-                    receivePosition = 0
-                    wasPacketStart = True
-                '2 - символ конца сообщения.
-                Case 2
-                    If Not wasPacketStart Then
-                        'log.Add("Пришел символ конца сообщения, когда еще не начиналось.")
-                    End If
-                    wasPacketStart = False
-                    ParseBytesInMessage(False)
-                    receivePosition = 0
-                Case 3
-                    '3 - входящий запрос пинга.
-                    Dim bytes(0) As Byte
-                    bytes(0) = 4
-                    Try
-                        tcpSocket.Send(bytes, 0, 1, 0)
-                    Catch ex As Exception
-                    End Try
-                Case 4
-                    '4 - ответ пинга.
-                    pingsLost = 0
-                Case Else
-                    If wasPacketStart Then
-                        receivedData(receivePosition) = currByte
-                        receivePosition += 1
-                        If receivePosition > receivedData.GetUpperBound(0) Then
-                            ReDim Preserve receivedData(receivedData.GetUpperBound(0) + bufferStepSize)
+                    Case 1
+                        If wasPacketStart Then
+                            'log.Add("Пришел символ нового сообщения, когда старое еще не кончилось.")
                         End If
-                    Else
-                        'log.Add("Пришел символ вне сообщения.")
-                    End If
-            End Select
+                        receivePosition = 0
+                        wasPacketStart = True
+                '2 - символ конца сообщения.
+                    Case 2
+                        If Not wasPacketStart Then
+                            'log.Add("Пришел символ конца сообщения, когда еще не начиналось.")
+                        End If
+                        wasPacketStart = False
+                        ParseBytesInMessage(False)
+                        receivePosition = 0
+                    Case 3
+                        '3 - входящий запрос пинга.
+                        Dim bytes(0) As Byte
+                        bytes(0) = 4
+                        Try
+                            tcpSocket.Send(bytes, 0, 1, 0)
+                        Catch ex As Exception
+                        End Try
+                    Case 4
+                        '4 - ответ пинга.
+                        pingsLost = 0
+                    Case Else
+                        If wasPacketStart Then
+                            receivedData(receivePosition) = currByte
+                            receivePosition += 1
+                            If receivePosition > receivedData.GetUpperBound(0) Then
+                                ReDim Preserve receivedData(receivedData.GetUpperBound(0) + bufferStepSize)
+                            End If
+                        Else
+                            'log.Add("Пришел символ вне сообщения.")
+                        End If
+                End Select
+            Catch ex As Exception
+            End Try
         Next
         lastReceivedLen = receivedLen
         If receivedLen > 0 Then
