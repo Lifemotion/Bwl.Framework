@@ -1,4 +1,6 @@
-﻿Public Class FormAppBase
+﻿Imports System.IO
+
+Public Class FormAppBase
     Inherits FormBase
     Protected _logger As Logger
     Protected _storage As SettingsStorage
@@ -14,7 +16,7 @@
     End Sub
 
     Sub New(useBufferedStorage As Boolean)
-        Me.New(useBufferedStorage, "")
+        Me.New(useBufferedStorage, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."))
     End Sub
 
     Sub New(useBufferedStorage As Boolean, overrideBaseFolder As String)
