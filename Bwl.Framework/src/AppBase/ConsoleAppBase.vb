@@ -8,8 +8,8 @@ Public Class ConsoleAppBase
     Private Shared _consoleColor As VariantSetting
     Private Shared _consoleBack As VariantSetting
 
-    Sub New(settingsReadOnly As Boolean)
-        MyBase.New(True, "Application", settingsReadOnly)
+    Sub New(useBufferedStorage As Boolean)
+        MyBase.New(True, "Application", useBufferedStorage)
 
         _consoleSettings = RootStorage.CreateChildStorage("Console")
         _consoleColor = New VariantSetting(_consoleSettings, "Font Color", "gray", {"gray", "white", "black", "green", "red", "blue"})

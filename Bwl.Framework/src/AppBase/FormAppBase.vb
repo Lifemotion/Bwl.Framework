@@ -13,17 +13,17 @@
         _loggerServer = AppBase.RootLogger
     End Sub
 
-    Sub New(settingsReadOnly As Boolean)
-        Me.New(settingsReadOnly, "")
+    Sub New(useBufferedStorage As Boolean)
+        Me.New(useBufferedStorage, "")
     End Sub
 
-    Sub New(settingsReadOnly As Boolean, overrideBaseFolder As String)
-        Me.New("Application", settingsReadOnly, overrideBaseFolder)
+    Sub New(useBufferedStorage As Boolean, overrideBaseFolder As String)
+        Me.New("Application", useBufferedStorage, overrideBaseFolder)
     End Sub
 
-    Sub New(appName As String, settingsReadOnly As Boolean, overrideBaseFolder As String)
+    Sub New(appName As String, useBufferedStorage As Boolean, overrideBaseFolder As String)
         MyBase.New()
-        AppBase = New AppBase(True, appName, settingsReadOnly, overrideBaseFolder)
+        AppBase = New AppBase(True, appName, useBufferedStorage, overrideBaseFolder)
         MyBase.Init(AppBase.RootStorage, AppBase.RootLogger)
         _storage = AppBase.RootStorage
         _logger = AppBase.RootLogger
@@ -42,6 +42,5 @@
         Me.Name = "FormAppBase"
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
     End Sub
 End Class
