@@ -23,6 +23,7 @@ Public Class RemoteAutoListbox
         Else
             ElementCaption.Text = Info.Caption
             If Info.BackColor.A = 255 Then If ListBox1.BackColor <> Info.BackColor Then ListBox1.BackColor = Info.BackColor
+            If Info.ForeColor.A = 255 Then If ListBox1.ForeColor <> Info.ForeColor Then ListBox1.ForeColor = Info.ForeColor
             If Info.Width > 0 Then If Me.Width <> Info.Width Then Me.Width = Info.Width
             If Info.Height > 0 Then If Me.Height <> Info.Height Then Me.Height = Info.Height
         End If

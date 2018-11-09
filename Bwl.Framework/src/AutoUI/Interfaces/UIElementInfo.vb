@@ -8,6 +8,7 @@ Public Class UIElementInfo
     Private _width As Integer = 0
     Private _height As Integer = 0
     Private _backColor As Color = Color.FromArgb(0, 0, 0, 0)
+    Private _foreColor As Color = Color.FromArgb(0, 0, 0, 0)
     Private _elemValue As Object = Nothing
 
     Public Event Changed(source As UIElementInfo)
@@ -69,6 +70,15 @@ Public Class UIElementInfo
             RaiseEvent Changed(Me)
         End Set
     End Property
+    Property ForeColor As Color
+        Get
+            Return _foreColor
+        End Get
+        Set(value As Color)
+            _foreColor = value
+            RaiseEvent Changed(Me)
+        End Set
+    End Property
     Property ElemValue As Object
         Get
             Return _elemValue
@@ -89,6 +99,7 @@ Public Class UIElementInfo
             list.Add(.Width.ToString)
             list.Add(.Height.ToString)
             list.Add(.BackColor.A.ToString + ";" + .BackColor.R.ToString + ";" + .BackColor.G.ToString + ";" + .BackColor.B.ToString)
+            list.Add(.ForeColor.A.ToString + ";" + .ForeColor.R.ToString + ";" + .ForeColor.G.ToString + ";" + .ForeColor.B.ToString)
             list.Add(ObjectToString(.ElemValue))
         End With
         Dim str = AutoUIByteCoding.GetString(list.ToArray)
@@ -103,6 +114,7 @@ Public Class UIElementInfo
         Me._height = ui.Height
         Me._width = ui.Width
         Me._backColor = ui.BackColor
+        Me._foreColor = ui.ForeColor
         Me.ElemValue = ui.ElemValue
         RaiseEvent Changed(Me)
     End Sub
@@ -117,6 +129,8 @@ Public Class UIElementInfo
         Try
             Dim cols = parts(6).Split(";"c)
             info.BackColor = Color.FromArgb(CInt(cols(0)), CInt(cols(1)), CInt(cols(2)), CInt(cols(3)))
+            Dim forecols = parts(7).Split(";"c)
+            info.ForeColor = Color.FromArgb(CInt(forecols(0)), CInt(forecols(1)), CInt(forecols(2)), CInt(forecols(3)))
         Catch ex As Exception
         End Try
         info.ElemValue = StringToObject(parts(7))

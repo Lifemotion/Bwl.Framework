@@ -20,6 +20,7 @@ Public Class RemoteAutoBitmap
         Else
             ElementCaption.Text = Info.Caption
             If Info.BackColor.A = 255 Then PictureBox1.BackColor = Info.BackColor
+            If Info.ForeColor.A = 255 Then PictureBox1.ForeColor = Info.ForeColor
             If Info.Width > 0 Then Me.Width = Info.Width
             If Info.Height > 0 Then Me.Height = Info.Height
             Try

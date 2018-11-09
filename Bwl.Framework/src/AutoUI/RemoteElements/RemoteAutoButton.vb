@@ -18,6 +18,7 @@
         Else
             bButton.Text = Info.Caption
             If Info.BackColor.A = 255 Then bButton.BackColor = Info.BackColor
+            If Info.ForeColor.A = 255 Then bButton.ForeColor = Info.ForeColor
             If Info.Width > 0 Then Me.Width = Info.Width
             If Info.Height > 0 Then Me.Height = Info.Height
         End If
