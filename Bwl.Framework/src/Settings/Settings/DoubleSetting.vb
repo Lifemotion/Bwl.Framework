@@ -21,7 +21,7 @@
 
     Public Property Value() As Double
         Get
-			Return CDbl(MyBase.ValueAsString)
+            Return CDbl2(MyBase.ValueAsString)
         End Get
         Set(value As Double)
             MyBase.ValueAsString = value.ToString
@@ -31,7 +31,7 @@
     Private Function CheckValueIsCorrect(str As String) As Boolean
         If str Is Nothing Then Return False
         If IsNumeric(str) = False Then Return False
-        If CDbl(str).ToString <> str Then Return False
+        If CDbl2(str).ToString <> str Then Return False
         Return True
     End Function
 End Class

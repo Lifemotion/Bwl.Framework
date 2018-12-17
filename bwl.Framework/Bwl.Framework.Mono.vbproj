@@ -78,6 +78,9 @@
     <Compile Include="..\refs-src\JpegSaver.vb">
       <Link>refs\JpegSaver.vb</Link>
     </Compile>
+    <Compile Include="..\refs-src\SharedTools.vb">
+      <Link>refs\SharedTools.vb</Link>
+    </Compile>
     <Compile Include="..\refs-src\StringTools.vb">
       <Link>refs\StringTools.vb</Link>
     </Compile>
