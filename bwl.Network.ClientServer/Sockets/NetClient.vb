@@ -110,6 +110,30 @@ Public Class NetClient
         pingsLost = 0
         receivePosition = 0
         directMode = False
+        Dim ascii = System.Text.Encoding.ASCII
+        Dim proxyConnectionString = ""
+        If host.ToLower.StartsWith("proxy@") Then
+            'указан адрес прокси
+            Dim hostparts = host.Split("@"c)
+            If hostparts.Length = 4 AndAlso IsNumeric(hostparts(2)) Then
+                '@proxy@proxyHost@proxyPort@targetHost
+                proxyConnectionString += "CONNECT " + hostparts(3) + ":" + port.ToString + " HTTP/1.1" + vbCrLf
+                proxyConnectionString += vbCrLf
+                host = hostparts(1)
+                port = CInt(hostparts(2))
+            ElseIf hostparts.Length = 6 AndAlso IsNumeric(hostparts(2)) Then
+                '@proxy@proxyHost@proxyPort@proxyName@proxyPass@targetHost
+                Dim auth = System.Convert.ToBase64String(ascii.GetBytes(hostparts(3) + ":" + hostparts(4)))
+                proxyConnectionString += "CONNECT " + hostparts(5) + ":" + port.ToString + " HTTP/1.1" + vbCrLf
+                proxyConnectionString += "Proxy-Authorization: basic " + auth + vbCrLf
+                proxyConnectionString += vbCrLf
+                host = hostparts(1)
+                port = CInt(hostparts(2))
+            Else
+                Throw New Exception("If proxy used, host must be in proxy@proxyhost@proxyport@host or proxy@proxyhost@proxyport@login@pass@host format!")
+            End If
+        End If
+
         Try
             tcpSocket = New Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
             tcpSocket.SendBufferSize = systemBufferSize
@@ -117,6 +141,18 @@ Public Class NetClient
             tcpSocket.NoDelay = True
             tcpSocket.Connect(host, port)
             If tcpSocket.Connected Then
+                If proxyConnectionString > "" Then
+                    tcpSocket.Send(ascii.GetBytes(proxyConnectionString))
+                    Dim tempReceive(1024) As Byte
+                    Dim realReceived = tcpSocket.Receive(tempReceive)
+                    Dim receivedString = ascii.GetString(tempReceive, 0, realReceived)
+                    Dim receivedParts = receivedString.Split(" "c)
+                    If receivedParts.Length >= 2 AndAlso receivedParts(0).StartsWith("HTTP") AndAlso receivedParts(1) = 200 Then
+                        'proxy connected
+                    Else
+                        Throw New Exception("Proxy fail: " + receivedString)
+                    End If
+                End If
                 ReDim receiveBuffer(systemBufferSize - 1)
                 ReDim receivedData(bufferStepSize - 1)
                 receivePosition = 0
@@ -127,7 +163,7 @@ Public Class NetClient
                 RaiseEvent Connected()
             End If
         Catch ex As Exception
-            Throw New NoConnectException(ex, "Не удалось подключиться к " + host + ":" + port.ToString)
+            Throw New NoConnectException(ex, "Не удалось подключиться к " + host + ":" + port.ToString + "; " + ex.Message)
         End Try
     End Sub
 
