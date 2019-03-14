@@ -3,7 +3,8 @@
 
     Private _prefix As String = ""
     Private _transport As IMessageTransport
-
+	Private _target As String
+	
     Public Property ServerAlive As Boolean = False
     Public Property HasStarted As Boolean = False
     Public Property HasExited As Boolean = False
@@ -15,6 +16,7 @@
     Public Sub New(transport As IMessageTransport, prefix As String, target As String)
         _transport = transport
         _prefix = prefix
+		_target = target
         AddHandler _transport.ReceivedMessage, AddressOf ReceivedHandler
     End Sub
 
@@ -42,7 +44,7 @@
     End Function
 
     Private Sub ReceivedHandler(message As NetMessage)
-        If message.Part(0) = "CmdRemoting" And message.Part(1) = _prefix Then
+        If message.Part(0) = "CmdRemoting" And message.Part(1) = _prefix And message.FromID = _target Then
             Select Case message.Part(2)
                 Case "buffers"
                     Dim buffo = message.Part(3).Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
