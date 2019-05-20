@@ -9,8 +9,8 @@
     </SchemaVersion>
     <ProjectGuid>{E8D43E81-DE74-4F1C-9A3B-F3B16ADDFC18}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>bwl.Network.ClientServer</RootNamespace>
-    <AssemblyName>bwl.Network.ClientServer</AssemblyName>
+    <RootNamespace>Bwl.Network.ClientServer</RootNamespace>
+    <AssemblyName>Bwl.Network.ClientServer</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -22,7 +22,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\debug\dll\</OutputPath>
-    <DocumentationFile>bwl.Network.ClientServer.xml</DocumentationFile>
+    <DocumentationFile>Bwl.Network.ClientServer.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
@@ -34,7 +34,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>..\release\dll\</OutputPath>
-    <DocumentationFile>bwl.Network.ClientServer.xml</DocumentationFile>
+    <DocumentationFile>Bwl.Network.ClientServer.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
@@ -51,6 +51,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -155,6 +158,12 @@
     <Folder Include="Remoting\GlobalStates\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>"$(SolutionDir)tools\NetRevisionTool.exe" /patch "$(ProjectDir)My Project"</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)tools\NetRevisionTool.exe" /restore "$(ProjectDir)My Project"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

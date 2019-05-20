@@ -30,12 +30,19 @@ Public Class Serializer
     End Function
 
     Public Shared Function LoadObjectFromJsonBytes(Of T)(bytes As Byte()) As T
-        Dim ds = New DataContractJsonSerializer(GetType(T))
-        Return DirectCast(ds.ReadObject(New MemoryStream(bytes)), T)
+        Return DirectCast(LoadObjectFromJsonBytes(bytes, GetType(T)), T)
+    End Function
+
+    Public Shared Function LoadObjectFromJsonBytes(bytes As Byte(), t As Type) As Object
+        Dim ds = New DataContractJsonSerializer(t)
+        Return ds.ReadObject(New MemoryStream(bytes))
     End Function
 
     Public Shared Function LoadObjectFromJsonString(Of T)(jsonString As String) As T
-        Dim bytes = Encoding.UTF8.GetBytes(jsonString)
-        Return LoadObjectFromJsonBytes(Of T)(bytes)
+        Return LoadObjectFromJsonBytes(Of T)(Encoding.UTF8.GetBytes(jsonString))
+    End Function
+
+    Public Shared Function LoadObjectFromJsonString(jsonString As String, t As Type) As Object
+        Return LoadObjectFromJsonBytes(Encoding.UTF8.GetBytes(jsonString), t)
     End Function
 End Class
