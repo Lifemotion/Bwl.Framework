@@ -7,6 +7,9 @@ Public Class StateItem
     Public Property ValueType As String = ""
     Public Property Time As DateTime
     Public Property ValidUntil As DateTime = Now.AddSeconds(30)
+
+    Public Property MaxValue As TimeSpan = TimeSpan.MinValue
+    Public Property MaxValueLastTimeStamp As DateTime = DateTime.MinValue
 End Class
 
 Public Class GlobalStates
@@ -28,19 +31,19 @@ Public Class GlobalStates
     Public Shared Sub SetState(source As Object, id As String, value As TimeSpan, validTimeSeconds As Integer)
         Select Case value.TotalSeconds
             Case >= 60
-                SetState(source, id, value.TotalMinutes.ToString("0.00"), "min", validTimeSeconds)
+                SetState(source, id, value.TotalMinutes.ToString("0.00"), "min", value, validTimeSeconds)
             Case 1 To 60
-                SetState(source, id, value.TotalSeconds.ToString("0.0"), "sec", validTimeSeconds)
+                SetState(source, id, value.TotalSeconds.ToString("0.0"), "sec", value, validTimeSeconds)
             Case 0.1 To 1
-                SetState(source, id, value.TotalMilliseconds.ToString("0.0"), "ms", validTimeSeconds)
+                SetState(source, id, value.TotalMilliseconds.ToString("0.0"), "ms", value, validTimeSeconds)
             Case 0.01 To 0.1
-                SetState(source, id, value.TotalMilliseconds.ToString("0.00"), "ms", validTimeSeconds)
+                SetState(source, id, value.TotalMilliseconds.ToString("0.00"), "ms", value, validTimeSeconds)
             Case Else
-                SetState(source, id, value.TotalMilliseconds.ToString("0.000"), "ms", validTimeSeconds)
+                SetState(source, id, value.TotalMilliseconds.ToString("0.000"), "ms", value, validTimeSeconds)
         End Select
     End Sub
 
-    Public Shared Sub SetState(source As Object, id As String, value As String, valueType As String, validTimeSeconds As Integer)
+    Public Shared Sub SetState(source As Object, id As String, value As String, valueType As String, valueTS As TimeSpan, validTimeSeconds As Integer)
         If id Is Nothing OrElse id.Length = 0 Then Throw New ArgumentException
         If value Is Nothing OrElse value.Length = 0 Then Throw New ArgumentException
         If valueType Is Nothing Then valueType = ""
@@ -64,8 +67,17 @@ Public Class GlobalStates
                 .ValueType = valueType
                 .ValidUntil = Now.AddSeconds(validTimeSeconds)
                 .Time = Now
+
+                If ((Now - .MaxValueLastTimeStamp).TotalSeconds > 30) OrElse (valueTS > TimeSpan.MinValue AndAlso .MaxValue < valueTS) Then
+                    .MaxValue = valueTS
+                    .MaxValueLastTimeStamp = Now
+                End If
             End With
         End SyncLock
+    End Sub
+
+    Public Shared Sub SetState(source As Object, id As String, value As String, valueType As String, validTimeSeconds As Integer)
+        SetState(source, id, value, valueType, TimeSpan.MinValue, validTimeSeconds)
     End Sub
 
     Public Shared Function GetStates() As StateItem()
@@ -84,7 +96,7 @@ Public Class GlobalStates
             For Each item In _list
                 Dim source = "()"
                 If item.Source IsNot Nothing Then source = item.Source.GetType().ToString()
-                sb.AppendLine(source + " " + item.ID + " - " + item.Value + " " + item.ValueType + " " + item.Time.ToLongTimeString())
+                sb.AppendLine(source + " " + item.ID + " - " + item.Value + " " + item.ValueType + " " + item.Time.ToLongTimeString() + " max " + item.MaxValue.TotalMilliseconds.ToString)
             Next
         End SyncLock
 
