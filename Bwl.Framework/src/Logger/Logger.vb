@@ -22,6 +22,8 @@ Public Class Logger
         ReDim _path(-1)
     End Sub
 
+    Public Property UseDebug As Boolean = True
+
     Friend Sub New(newParentLogger As Logger, categoryName As String)
         If categoryName = "" Then Throw New Exception("Имя категории не указано!")
         If newParentLogger Is Nothing Then Throw New Exception("Родительский логгер не создан!")
@@ -116,6 +118,10 @@ Public Class Logger
     End Sub
 
     Public Sub Add(type As LogEventType, text As String, ParamArray additional() As Object) Implements ILoggerReceiver.Add
+        If type = LogEventType.debug AndAlso (Not UseDebug) Then
+            Exit Sub
+        End If
+
         Dim list As New List(Of Object)
         list.Add("CallFrom: " + ExtractCallingMethodInfo())
         list.AddRange(additional)
@@ -155,7 +161,6 @@ Public Class Logger
             Return "ClassName=" + method.DeclaringType.Name + ", FullName=" + method.DeclaringType.ToString + ", Method=" + method.Name
         End If
     End Function
-
 
     Public Sub AddInformation(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddInformation
         Add(LogEventType.information, messageText)
