@@ -13,6 +13,7 @@ Public Class Logger
     Private _childLoggers As New List(Of Logger)
     Private _category As String = ""
     Private _path() As String
+    Private _useDebug As Boolean = True
 
     ''' <summary>
     ''' Новый корневой журнал.
@@ -22,7 +23,19 @@ Public Class Logger
         ReDim _path(-1)
     End Sub
 
-    Public Property UseDebug As Boolean = True
+    Public Property UseDebug As Boolean
+        Get
+            Return _useDebug
+        End Get
+        Set(value As Boolean)
+            _useDebug = value
+            SyncLock _childLoggers
+                For Each logger In _childLoggers
+                    logger.UseDebug = _useDebug
+                Next
+            End SyncLock
+        End Set
+    End Property
 
     Friend Sub New(newParentLogger As Logger, categoryName As String)
         If categoryName = "" Then Throw New Exception("Имя категории не указано!")
@@ -32,7 +45,9 @@ Public Class Logger
         ReDim _path(_parentLogger._path.GetUpperBound(0) + 1)
         _path(0) = categoryName
         Array.ConstrainedCopy(_parentLogger._path, 0, _path, 1, _parentLogger._path.GetUpperBound(0) + 1)
-        _parentLogger._childLoggers.Add(Me)
+        SyncLock _parentLogger._childLoggers
+            _parentLogger._childLoggers.Add(Me)
+        End SyncLock
         NewChildConnected()
     End Sub
 
@@ -93,20 +108,24 @@ Public Class Logger
     End Sub
 
     Public Function CreateChildLogger(categoryName As String) As Logger Implements ILoggerChilds.CreateChildLogger
-        Return New Logger(Me, categoryName)
+        Dim newLogger = New Logger(Me, categoryName)
+        newLogger.UseDebug = UseDebug
+        Return newLogger
     End Function
 
     Public Function DeleteChildLogger(categoryName As String) As Logger Implements ILoggerChilds.DeleteChildLogger
         Dim forDelete As Logger = Nothing
-        For Each logger In _childLoggers
-            If logger.CategoryName = categoryName Then
-                forDelete = logger
+        SyncLock _childLoggers
+            For Each logger In _childLoggers
+                If logger.CategoryName = categoryName Then
+                    forDelete = logger
+                End If
+            Next
+            If forDelete IsNot Nothing Then
+                forDelete._parentLogger = Nothing
+                _childLoggers.Remove(forDelete)
             End If
-        Next
-        If forDelete IsNot Nothing Then
-            forDelete._parentLogger = Nothing
-            _childLoggers.Remove(forDelete)
-        End If
+        End SyncLock
         Return forDelete
     End Function
 
@@ -219,13 +238,15 @@ Public Class Logger
     Public ReadOnly Property CategoriesList(Optional onlyLeaves As Boolean = False) As List(Of String())
         Get
             Dim list As New List(Of String())
-            If Not onlyLeaves Then list.Add(_path)
-            For Each child In _childLoggers
-                Dim childList As List(Of String()) = child.CategoriesList
-                For Each item In childList
-                    list.Add(item)
+            SyncLock _childLoggers
+                If Not onlyLeaves Then list.Add(_path)
+                For Each child In _childLoggers
+                    Dim childList As List(Of String()) = child.CategoriesList
+                    For Each item In childList
+                        list.Add(item)
+                    Next
                 Next
-            Next
+            End SyncLock
             Return list
         End Get
     End Property
