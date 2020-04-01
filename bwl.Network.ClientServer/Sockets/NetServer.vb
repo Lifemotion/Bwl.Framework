@@ -367,7 +367,11 @@ Public Class NetServer
                         '    log.Add("Пришел символ конца сообщения, когда еще не начиналось.")
                     End If
                     client.wasPacketStart = False
-                    ParseBytesInMessage(client, False)
+                    Try
+                        ParseBytesInMessage(client, False)
+                    Catch ex As Exception
+                        '      log.Add("Не удалось обработать сообщение!")
+                    End Try
                     client.receivePosition = 0
                 Case 3
                     '3 - входящий запрос пинга.
