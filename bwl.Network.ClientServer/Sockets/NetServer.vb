@@ -1,6 +1,7 @@
 ﻿Imports System.Net.Sockets
 Imports System.Net
-Imports bwl.Network.ClientServer
+Imports System.Threading
+Imports Bwl.Network.ClientServer
 
 ''' <summary>
 ''' Класс, представляющий подключившегося клиента.
@@ -75,6 +76,7 @@ Public Class ClientData
     Public pingsLost As Integer
     Public directClient As NetClient
     Public directReceiveSyncRoot As New Object
+    Public LastActivity As Date
 End Class
 
 ''' <summary>
@@ -96,6 +98,7 @@ Public Class NetServer
     Private WithEvents pingTimer As System.Timers.Timer
     Private directOnly As Boolean
     Private _netBeacon As NetBeacon
+    Private _cleanerThread As Thread
     Public ReadOnly Property MyID As String = "" Implements IMessageServer.MyID
     Public ReadOnly Property MyServiceName As String = "" Implements IMessageServer.MyServiceName
 
@@ -168,6 +171,8 @@ Public Class NetServer
             ' log.Add("Сервер запущен на порту " + incomingPort.ToString)
             working = True
             directOnly = False
+            _cleanerThread = New Thread(AddressOf OldConnectionCleaner) With {.IsBackground = True}
+            _cleanerThread.Start()
         Catch ex As Exception
             tcpListener = Nothing
             working = False
@@ -251,6 +256,7 @@ Public Class NetServer
             newClient.userInfo = New ConnectedClient(endPoint.Address.ToString, GetID, newClient, Me, False)
             newClient.tcpSocket = newSocket
             newClient.tcpSocket.NoDelay = True
+            newClient.LastActivity = Now
 
             ' newSocket.Blocking = True
             ReDim newClient.receiveBuffer(systemBufferSize)
@@ -395,6 +401,7 @@ Public Class NetServer
                         '     log.Add("Пришел символ вне сообщения.")
                     End If
             End Select
+            client.LastActivity = Now
         Next
 
         If receivedLen = 0 Then
@@ -481,8 +488,10 @@ Public Class NetServer
         Try
             If Not client.userInfo.Direct Then
                 client.tcpSocket.Close()
+                client.tcpSocket.Dispose()
             Else
                 client.directClient.DirectDisconnect()
+                client.directClient.Dispose()
             End If
         Catch ex As Exception
         End Try
@@ -624,6 +633,20 @@ Public Class NetServer
         Next
         Return list.ToArray
     End Function
+
+    Private Sub OldConnectionCleaner()
+        While IsWorking
+            SyncLock (connectedClients)
+                For Each client As ClientData In connectedClients
+                    If (Now - client.LastActivity).TotalSeconds > 60 Then
+                        SystemPerformRemove(client)
+                    End If
+                Next
+            End SyncLock
+            Thread.Sleep(1000)
+        End While
+    End Sub
+
 End Class
 
 Public Class NetServerFactory
