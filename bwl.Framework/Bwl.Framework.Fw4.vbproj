@@ -255,9 +255,6 @@
     <EmbeddedResource Include="src\AppBase\FormBase.resx">
       <DependentUpon>FormBase.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\AppBase\FormBase.ru.resx">
-      <DependentUpon>FormBase.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="src\AutoUI\AutoUIForm.resx">
       <DependentUpon>AutoUIForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -279,13 +276,7 @@
     <EmbeddedResource Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.resx">
       <DependentUpon>DatagridLogWriter.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\Logger\LogWriters\Realizations\DatagridLogWriter.ru.resx">
-      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="src\Logger\LogWriters\Realizations\FormLogInfo.resx">
-      <DependentUpon>FormLogInfo.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\Logger\LogWriters\Realizations\FormLogInfo.ru.resx">
       <DependentUpon>FormLogInfo.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Logger\UI\LoggerForm.resx">
