@@ -25,6 +25,7 @@ Public MustInherit Class SettingOnStorage
         _friendlyName = friendlyName
         _description = description
         storage.InsertSetting(Me)
+        MyBase.RaiseSettingCreated(Me)
     End Sub
 
     Public Function IsValueCorrect(value As String) As Boolean

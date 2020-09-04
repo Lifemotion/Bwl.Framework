@@ -9,13 +9,13 @@
 
     Public Event ParametersChanged(setting As Setting)
     Public Event ValueChanged(setting As Setting)
+    Public Shared Event SettingCreated(setting As Setting)
 
     Public ReadOnly Property Type As String
         Get
             Return _type
         End Get
     End Property
-
 
     Public Overridable Property Restrictions As String
         Get
@@ -75,11 +75,9 @@
             _value = newValue
             If newValue <> lastValue Then RaiseEvent ValueChanged(Me)
         End Set
-
         Get
             Return _value
         End Get
-
     End Property
 
     Public ReadOnly Property DefaultValueAsString() As String
@@ -96,4 +94,7 @@
         RaiseEvent ParametersChanged(Me)
     End Sub
 
+    Protected Sub RaiseSettingCreated(setting As Setting)
+        RaiseEvent SettingCreated(Me)
+    End Sub
 End Class
