@@ -6,8 +6,10 @@
 ''' <remarks></remarks>
 Public MustInherit Class SettingsStorageBase
     Implements ISettingsStorage
+#If Not NETSTANDARD Then
     Implements ISettingsStorageForm
-
+    Protected _settingsForm As SettingsDialog
+#End If
     Protected _settings As New List(Of SettingOnStorage)
     Protected _childStorages As New List(Of SettingsStorageBase)
 
@@ -15,7 +17,6 @@ Public MustInherit Class SettingsStorageBase
     Protected _parentStorage As SettingsStorageBase
     Protected _readOnly As Boolean = False
     Protected _name As String
-    Protected _settingsForm As SettingsDialog
 
     Protected _friendlyName As String = ""
 
@@ -100,7 +101,7 @@ Public MustInherit Class SettingsStorageBase
             Return _settings.ToArray
         End Get
     End Property
-
+#If Not NETSTANDARD Then
     Public Function ShowSettingsForm(invokeForm As Form) As SettingsDialog Implements ISettingsStorageForm.ShowSettingsForm
         If invokeForm IsNot Nothing AndAlso invokeForm.InvokeRequired Then
             Return DirectCast(invokeForm.Invoke(Function() ShowSettingsForm(invokeForm)), SettingsDialog)
@@ -122,11 +123,11 @@ Public MustInherit Class SettingsStorageBase
             Return form
         End If
     End Function
-
+#End If
     Friend Sub InsertSetting(setting As SettingOnStorage)
-        _name = Trim(_name)
+        _name = _name.Trim
         If setting Is Nothing Then Throw New Exception("Объект настройки не был создан.")
-        If Trim(setting.Name) = "" Then Throw New Exception("Не указано имя настройки в хранилище.")
+        If setting.Name.Trim = "" Then Throw New Exception("Не указано имя настройки в хранилище.")
         If _name = "" Then Throw New Exception("Не указана категория настройки в хранилище.")
         For Each oldSetting In _settings
             If oldSetting.Name.ToUpper = setting.Name.ToUpper Then

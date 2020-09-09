@@ -30,7 +30,7 @@ Public Class NetBeacon
         Catch ex As Exception
         End Try
         Try
-            IO.File.WriteAllText(IO.Path.Combine(path, filename), Now.Ticks.ToString)
+            IO.File.WriteAllText(IO.Path.Combine(path, filename), DateTime.Now.Ticks.ToString)
         Catch ex As Exception
         End Try
     End Sub

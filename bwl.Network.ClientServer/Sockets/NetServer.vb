@@ -1,7 +1,6 @@
 ﻿Imports System.Net.Sockets
 Imports System.Net
 Imports System.Threading
-Imports Bwl.Network.ClientServer
 
 ''' <summary>
 ''' Класс, представляющий подключившегося клиента.
@@ -54,7 +53,7 @@ Public Class ConnectedClient
             Return myid
         End Get
     End Property
-    Public ReadOnly Property Direct()
+    Public ReadOnly Property Direct() As Boolean
         Get
             Return isDirect
         End Get
@@ -151,8 +150,9 @@ Public Class NetServer
     Public Sub StartServer(address As String, options As String) Implements IMessageTransport.Open
         Dim parts = address.Split({":"}, StringSplitOptions.RemoveEmptyEntries)
         If parts.Length <> 2 Then Throw New Exception("Address has wrong format! Must be hostname:port")
-        If IsNumeric(parts(1)) = False Then Throw New Exception("Address has wrong format! Must be hostname:port")
-        StartServer(CInt(Val(parts(1))))
+        Dim port = 0
+        If Integer.TryParse(parts(1), port) = False Then Throw New Exception("Address has wrong format! Must be hostname:port")
+        StartServer(port)
     End Sub
     ''' <summary>
     ''' Запускает сервер. При успешном вызове сервер ждет подключения клиентов.
@@ -256,7 +256,7 @@ Public Class NetServer
             newClient.userInfo = New ConnectedClient(endPoint.Address.ToString, GetID, newClient, Me, False)
             newClient.tcpSocket = newSocket
             newClient.tcpSocket.NoDelay = True
-            newClient.LastActivity = Now
+            newClient.LastActivity = DateTime.Now
 
             ' newSocket.Blocking = True
             ReDim newClient.receiveBuffer(systemBufferSize)
@@ -401,7 +401,7 @@ Public Class NetServer
                         '     log.Add("Пришел символ вне сообщения.")
                     End If
             End Select
-            client.LastActivity = Now
+            client.LastActivity = DateTime.Now
         Next
 
         If receivedLen = 0 Then
@@ -638,7 +638,7 @@ Public Class NetServer
         While IsWorking
             SyncLock (connectedClients)
                 For Each client As ClientData In connectedClients
-                    If (Now - client.LastActivity).TotalSeconds > 60 Then
+                    If (DateTime.Now - client.LastActivity).TotalSeconds > 60 Then
                         SystemPerformRemove(client)
                     End If
                 Next

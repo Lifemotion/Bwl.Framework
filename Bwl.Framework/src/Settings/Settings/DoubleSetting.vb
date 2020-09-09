@@ -30,7 +30,8 @@
 
     Private Function CheckValueIsCorrect(str As String) As Boolean
         If str Is Nothing Then Return False
-        If IsNumeric(str) = False Then Return False
+        Dim i As Double
+        If Double.TryParse(str, i) = False Then Return False
         If CDbl2(str).ToString <> str Then Return False
         Return True
     End Function

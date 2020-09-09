@@ -32,7 +32,7 @@ Public Class NetFinder
         For Each file In files
             Try
                 Dim fi = New IO.FileInfo(file)
-                If (Now - fi.LastWriteTime).TotalSeconds > 0 And (Now - fi.LastWriteTime).TotalSeconds < 10 Then
+                If (DateTime.Now - fi.LastWriteTime).TotalSeconds > 0 And (DateTime.Now - fi.LastWriteTime).TotalSeconds < 10 Then
                     Dim str = fi.Name
                     ProcessBeaconString(str, "TempFile", "127.0.0.1", list)
                 Else
@@ -46,9 +46,9 @@ Public Class NetFinder
     Private Shared Sub FindNet(list As List(Of NetBeaconInfo), timeout As Integer)
         Dim locEp As New IPEndPoint(IPAddress.Any, 19999)
         Dim udp As New Net.Sockets.UdpClient(locEp)
-        Dim time = Now
+        Dim time = DateTime.Now
         Try
-            Do While (Now - time).TotalMilliseconds < timeout
+            Do While (DateTime.Now - time).TotalMilliseconds < timeout
                 Dim t = udp.Available
                 If t > 0 Then
                     Dim iep = New IPEndPoint(IPAddress.Any, 0)

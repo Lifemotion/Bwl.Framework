@@ -1,0 +1,93 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Bwl.Framework</RootNamespace>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Bwl.Framework.Standard</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\debug\bwl-framework-standard\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\release\bwl-framework-standard\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\bwl.Framework\src\AppBase\AppBase.vb" Link="framework\AppBase\AppBase.vb" />
+    <Compile Include="..\bwl.Framework\src\AppBase\ConsoleAppBase.vb" Link="framework\AppBase\ConsoleAppBase.vb" />
+    <Compile Include="..\bwl.Framework\src\AppBase\ServiceLocator.vb" Link="framework\AppBase\ServiceLocator.vb" />
+    <Compile Include="..\bwl.Framework\src\AutoUI\AutoUI\AutoUI.vb" Link="framework\AutoUI\AutoUI.vb" />
+    <Compile Include="..\bwl.Framework\src\AutoUI\AutoUI\AutoUIByteCoding.vb" Link="framework\AutoUI\AutoUIByteCoding.vb" />
+    <Compile Include="..\bwl.Framework\src\AutoUI\AutoUI\IAutoUI.vb" Link="framework\AutoUI\IAutoUI.vb" />
+    <Compile Include="..\bwl.Framework\src\AutoUI\Interfaces\IUIElement.vb" Link="framework\AutoUI\IUIElement.vb" />
+    <Compile Include="..\bwl.Framework\src\AutoUI\Interfaces\IUIElementLocal.vb" Link="framework\AutoUI\IUIElementLocal.vb" />
+    <Compile Include="..\bwl.Framework\src\AutoUI\Interfaces\IUIElementRemote.vb" Link="framework\AutoUI\IUIElementRemote.vb" />
+    <Compile Include="..\bwl.Framework\src\AutoUI\Interfaces\UIElementInfo.vb" Link="framework\AutoUI\UIElementInfo.vb" />
+    <Compile Include="..\bwl.Framework\src\AutoUI\LocalElements\AutoButton.vb" Link="framework\AutoUI\AutoButton.vb" />
+    <Compile Include="..\bwl.Framework\src\AutoUI\LocalElements\AutoFormDescriptor.vb" Link="framework\AutoUI\AutoFormDescriptor.vb" />
+    <Compile Include="..\bwl.Framework\src\AutoUI\LocalElements\AutoListbox.vb" Link="framework\AutoUI\AutoListbox.vb" />
+    <Compile Include="..\bwl.Framework\src\AutoUI\LocalElements\AutoTextbox.vb" Link="framework\AutoUI\AutoTextbox.vb" />
+    <Compile Include="..\bwl.Framework\src\AutoUI\LocalElements\BaseLocalElement.vb" Link="framework\AutoUI\BaseLocalElement.vb" />
+    <Compile Include="..\bwl.Framework\src\ListWithEvents.vb" Link="framework\ListWithEvents.vb" />
+    <Compile Include="..\bwl.Framework\src\Logger\Interface\ILoggerChilds.vb" Link="framework\Logger\Interface\ILoggerChilds.vb" />
+    <Compile Include="..\bwl.Framework\src\Logger\Interface\ILoggerDispatcher.vb" Link="framework\Logger\Interface\ILoggerDispatcher.vb" />
+    <Compile Include="..\bwl.Framework\src\Logger\Interface\ILoggerReceiver.vb" Link="framework\Logger\Interface\ILoggerReceiver.vb" />
+    <Compile Include="..\bwl.Framework\src\Logger\Logger.vb" Link="framework\Logger\Logger.vb" />
+    <Compile Include="..\bwl.Framework\src\Logger\LogWriters\Interface\ILogWriter.vb" Link="framework\Logger\LogWriters\ILogWriter.vb" />
+    <Compile Include="..\bwl.Framework\src\Logger\LogWriters\Interface\LogEventType.vb" Link="framework\Logger\Interface\LogEventType.vb" />
+    <Compile Include="..\bwl.Framework\src\Logger\LogWriters\Realizations\ConsoleLogWriter.vb" Link="framework\Logger\LogWriters\ConsoleLogWriter.vb" />
+    <Compile Include="..\bwl.Framework\src\Logger\LogWriters\Realizations\SimpleFileLogWriter.vb" Link="framework\Logger\LogWriters\SimpleFileLogWriter.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\AutoSettings.vb" Link="framework\Settings\AutoSettings.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Settings\BooleanSetting.vb" Link="framework\Settings\Settings\BooleanSetting.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Settings\Common\Setting.vb" Link="framework\Settings\Settings\Setting.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Settings\Common\SettingOnStorage.vb" Link="framework\Settings\Settings\SettingOnStorage.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Settings\DoubleSetting.vb" Link="framework\Settings\Settings\DoubleSetting.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Settings\IntegerSetting.vb" Link="framework\Settings\Settings\IntegerSetting.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Settings\PasswordSetting.vb" Link="framework\Settings\Settings\PasswordSetting.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Settings\StringSetting.vb" Link="framework\Settings\Settings\StringSetting.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Settings\VariantSetting.vb" Link="framework\Settings\Settings\VariantSetting.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Storages\ClonedSettingsStorage.vb" Link="framework\Settings\Storages\ClonedSettingsStorage.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Storages\Common\ISettingsStorage.vb" Link="framework\Settings\Storages\ISettingsStorage.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Storages\Common\SettingsStorageBase.vb" Link="framework\Settings\Storages\SettingsStorageBase.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Storages\SettingsStorage.vb" Link="framework\Settings\Storages\SettingsStorage.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Storages\SettingsStorageBufferedRoot.vb" Link="framework\Settings\Storages\SettingsStorageBufferedRoot.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Writers\Interface\ISettingsWriter.vb" Link="framework\Settings\Writers\ISettingsWriter.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Writers\Realizations\BufferedSettingsWriter.vb" Link="framework\Settings\Writers\BufferedSettingsWriter.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Writers\Realizations\MemoryReaderWriter.vb" Link="framework\Settings\Writers\MemoryReaderWriter.vb" />
+    <Compile Include="..\bwl.Framework\src\Settings\Writers\Realizations\NullSettingsWriter.vb" Link="framework\Settings\Writers\NullSettingsWriter.vb" />
+    <Compile Include="..\bwl.Network.ClientServer\CmdRemoting\CmdlineServer.vb" Link="clientserver\CmdRemoting\CmdlineServer.vb" />
+    <Compile Include="..\bwl.Network.ClientServer\EmptyTransport.vb" Link="clientserver\EmptyTransport.vb" />
+    <Compile Include="..\bwl.Network.ClientServer\Interfaces\IMessageClient.vb" Link="clientserver\Interfaces\IMessageClient.vb" />
+    <Compile Include="..\bwl.Network.ClientServer\Interfaces\IMessageServer.vb" Link="clientserver\Interfaces\IMessageServer.vb" />
+    <Compile Include="..\bwl.Network.ClientServer\Interfaces\IMessageTransport.vb" Link="clientserver\Interfaces\IMessageTransport.vb" />
+    <Compile Include="..\bwl.Network.ClientServer\Interfaces\IMessageTransportFactory.vb" Link="clientserver\Interfaces\IMessageTransportFactory.vb" />
+    <Compile Include="..\bwl.Network.ClientServer\MessageTransport.vb" Link="clientserver\MessageTransport.vb" />
+    <Compile Include="..\bwl.Network.ClientServer\Message\NetMessage.vb" Link="clientserver\Message\NetMessage.vb" />
+    <Compile Include="..\bwl.Network.ClientServer\NetDetect\NetBeacon.vb" Link="clientserver\NetDetect\NetBeacon.vb" />
+    <Compile Include="..\bwl.Network.ClientServer\NetDetect\NetFinder.vb" Link="clientserver\NetDetect\NetFinder.vb" />
+    <Compile Include="..\bwl.Network.ClientServer\Sockets\NetClient.vb" Link="clientserver\Sockets\NetClient.vb" />
+    <Compile Include="..\bwl.Network.ClientServer\Sockets\NetServer.vb" Link="clientserver\Sockets\NetServer.vb" />
+    <Compile Include="..\refs-src\CryptoTools.vb" Link="refs\CryptoTools.vb" />
+    <Compile Include="..\refs-src\SharedTools.vb" Link="refs\SharedTools.vb" />
+    <Compile Include="..\refs-src\StringTools.vb" Link="refs\StringTools.vb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="clientserver\Interfaces\" />
+    <Folder Include="clientserver\Message\" />
+    <Folder Include="clientserver\Sockets\" />
+    <Folder Include="clientserver\NetDetect\" />
+    <Folder Include="clientserver\CmdRemoting\" />
+    <Folder Include="framework\Logger\Interface\" />
+    <Folder Include="framework\Logger\LogWriters\" />
+    <Folder Include="framework\Settings\Settings\" />
+    <Folder Include="framework\Settings\Storages\" />
+    <Folder Include="framework\Settings\Writers\" />
+    <Folder Include="framework\AppBase\" />
+    <Folder Include="framework\AutoUI\" />
+    <Folder Include="refs\" />
+  </ItemGroup>
+
+</Project>

@@ -1,7 +1,6 @@
 ﻿Imports System.Net.Sockets
 Imports System.Net
 Imports System.Threading
-Imports bwl.Network.ClientServer
 
 ''' <summary>
 ''' Клиент, работающий с сервером BWN по протоколу TCP\IP.
@@ -92,8 +91,9 @@ Public Class NetClient
     Public Sub Connect(address As String, options As String) Implements IMessageClient.Open
         Dim parts = address.Split({":"}, StringSplitOptions.RemoveEmptyEntries)
         If parts.Length <> 2 Then Throw New Exception("Address has wrong format! Must be hostname:port")
-        If IsNumeric(parts(1)) = False Then Throw New Exception("Address has wrong format! Must be hostname:port")
-        Connect(parts(0), CInt(Val(parts(1))))
+        Dim port = 0
+        If Integer.TryParse(parts(1), port) = False Then Throw New Exception("Address has wrong format! Must be hostname:port")
+        Connect(parts(0), port)
     End Sub
 
     ''' <summary>
@@ -115,20 +115,18 @@ Public Class NetClient
         If host.ToLower.StartsWith("proxy@") Then
             'указан адрес прокси
             Dim hostparts = host.Split("@"c)
-            If hostparts.Length = 4 AndAlso IsNumeric(hostparts(2)) Then
+            If hostparts.Length = 4 AndAlso Integer.TryParse(hostparts(2), port) Then
                 '@proxy@proxyHost@proxyPort@targetHost
                 proxyConnectionString += "CONNECT " + hostparts(3) + ":" + port.ToString + " HTTP/1.1" + vbCrLf
                 proxyConnectionString += vbCrLf
                 host = hostparts(1)
-                port = CInt(hostparts(2))
-            ElseIf hostparts.Length = 6 AndAlso IsNumeric(hostparts(2)) Then
+            ElseIf hostparts.Length = 6 AndAlso Integer.TryParse(hostparts(2), port) Then
                 '@proxy@proxyHost@proxyPort@proxyName@proxyPass@targetHost
                 Dim auth = System.Convert.ToBase64String(ascii.GetBytes(hostparts(3) + ":" + hostparts(4)))
                 proxyConnectionString += "CONNECT " + hostparts(5) + ":" + port.ToString + " HTTP/1.1" + vbCrLf
                 proxyConnectionString += "Proxy-Authorization: basic " + auth + vbCrLf
                 proxyConnectionString += vbCrLf
                 host = hostparts(1)
-                port = CInt(hostparts(2))
             Else
                 Throw New Exception("If proxy used, host must be in proxy@proxyhost@proxyport@host or proxy@proxyhost@proxyport@login@pass@host format!")
             End If
@@ -408,8 +406,8 @@ Public Class NetClient
                 waitingDatatype = message.DataType
                 waitingResult = Nothing
                 SendMessage(message)
-                Dim time As Single = Microsoft.VisualBasic.Timer
-                Do While waitingResult Is Nothing And Math.Abs(Microsoft.VisualBasic.Timer - time) < timeout
+                Dim time = DateTime.Now
+                Do While waitingResult Is Nothing And (DateTime.Now - time).TotalSeconds < timeout
                     _disposedEvent.WaitOne(50)
                 Loop
                 waitingAnswer = ""

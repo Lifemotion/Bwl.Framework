@@ -83,7 +83,11 @@ Public Class AppBase
         If UseBufferedStorage Then
             _RootStorage = New SettingsStorageBufferedRoot(Path.Combine(_SettingsFolder, "settings.ini"), _AppName, logAllBufferedIniEvents)
         Else
+#If Not NETSTANDARD Then
             _RootStorage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_SettingsFolder, "settings.ini")), _AppName, False)
+#Else
+            Throw New Exception("Legacy SettingsStorageRoot not supported on Net Standard, use buffered")
+#End If
         End If
         _Services = New ServiceLocator(RootLogger)
         _AutoUI = New AutoUI
@@ -91,14 +95,19 @@ Public Class AppBase
         _Services.AddService(RootStorage)
         _Services.AddService(Me)
         _RootLogger.Add(LogEventType.message, "Application startup")
-        _RootLogger.Add(LogEventType.information, "Application executable path: " + Application.ExecutablePath)
-        _RootLogger.Add(LogEventType.information, "Application executable date: " + IO.File.GetLastWriteTime(Application.ExecutablePath).ToString)
+        Try
+            _RootLogger.Add(LogEventType.information, "Application executable path: " + ApplicationExecutablePath())
+            _RootLogger.Add(LogEventType.information, "Application info: " + ApplicationProductName(True, True, True))
+        Catch ex As Exception
+            _RootLogger.Add(LogEventType.warning, ex.Message)
+        End Try
+
     End Sub
 
     Public Sub TryCreateFolder(path As String)
         Try
             If Not Directory.Exists(path) Then
-                MkDir(path)
+                IO.Directory.CreateDirectory(path)
             End If
         Catch ex As Exception
         End Try

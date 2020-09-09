@@ -84,7 +84,7 @@ Public Class NetMessage
             If fromRawBytes(i) = 58 Then count += 1
         Next
         ReDim parts(count - 1)
-        DataType = Chr(fromRawBytes(0))
+        DataType = System.Text.Encoding.ASCII.GetChars(fromRawBytes, 0, 1)(0)
         Dim currentPart As Integer = 0
         For i = 1 To fromRawBytes.Length
             If i = fromRawBytes.Length OrElse fromRawBytes(i) = 58 Then
@@ -101,7 +101,7 @@ Public Class NetMessage
             Dim lastPart = parts(partCount - 1)
             If lastPart.Length > 6 Then
                 If lastPart(0) = 35 And lastPart(1) = 37 And lastPart(2) = 126 Then
-                    Dim txtParts = System.Text.Encoding.GetEncoding(1251).GetString(lastPart).Split({"#%~"}, StringSplitOptions.None)
+                    Dim txtParts = StringTools.СP1251GetString(lastPart).Split({"#%~"}, StringSplitOptions.None)
                     If txtParts.Length = 6 AndAlso txtParts(1) = "ADDRESSES" Then
                         FromID = txtParts(2)
                         ToID = txtParts(3)
@@ -146,7 +146,7 @@ Public Class NetMessage
         ReDim parts(partCount - 1)
         Dim i As Integer
         For i = 0 To partCount - 1
-            parts(i) = GetBytes(newParts(i))
+            parts(i) = StringTools.СP1251GetBytes(newParts(i))
         Next
     End Sub
 
@@ -159,7 +159,7 @@ Public Class NetMessage
         ReDim parts(partCount - 1)
         Dim i As Integer
         For i = 0 To partCount - 1
-            parts(i) = GetBytes(newParts(i))
+            parts(i) = StringTools.СP1251GetBytes(newParts(i))
         Next
     End Sub
 
@@ -169,16 +169,16 @@ Public Class NetMessage
         ReDim parts(partCount - 1)
         Dim i As Integer
         For i = 0 To partCount - 1
-            parts(i) = GetBytes(newParts(i))
+            parts(i) = StringTools.СP1251GetBytes(newParts(i))
         Next
     End Sub
 
     Public Property Part(ByVal index As Integer) As String
         Get
-            Return System.Text.Encoding.GetEncoding(1251).GetString(PartBytes(index))
+            Return StringTools.СP1251GetString(PartBytes(index))
         End Get
         Set(ByVal value As String)
-            PartBytes(index) = System.Text.Encoding.GetEncoding(1251).GetBytes(value)
+            PartBytes(index) = StringTools.СP1251GetBytes(value)
         End Set
     End Property
     Public Property PartDouble(ByVal index As Integer) As Double
@@ -230,7 +230,7 @@ Public Class NetMessage
         Dim result As String = ""
         Dim i As Integer
         For i = 0 To partCount - 1
-            result += System.Text.Encoding.GetEncoding(1251).GetString(parts(i))
+            result += StringTools.СP1251GetString(parts(i))
             If i < partCount - 1 Then result += ":"
         Next
         Return result
@@ -251,7 +251,7 @@ Public Class NetMessage
         length -= 1
         Dim result(length) As Byte
         Dim position As Integer
-        result(rightLeftOffset) = Asc(DataType)
+        result(rightLeftOffset) = System.Text.Encoding.ASCII.GetBytes({DataType}, 0, 1)(0)
         position = rightLeftOffset + 1
         For i = 0 To partCount - 1
             If i > 0 Then result(position - 1) = 58
@@ -260,7 +260,7 @@ Public Class NetMessage
         Next
         If FromID > "" Or ToID > "" Or ServiceName > "" Then
             Dim addrString = "#%~ADDRESSES#%~" + FromID + "#%~" + ToID + "#%~" + ServiceName + "#%~"
-            Dim addrBytes = CodeBytes(System.Text.Encoding.GetEncoding(1251).GetBytes(addrString))
+            Dim addrBytes = CodeBytes(StringTools.СP1251GetBytes(addrString))
             ReDim Preserve result(result.Length + addrBytes.Length)
             If position > rightLeftOffset + 1 Then result(position - 1) = 58
             Array.ConstrainedCopy(addrBytes, 0, result, position, addrBytes.Length)
@@ -277,10 +277,6 @@ Public Class NetMessage
         Return newMessage
     End Function
 
-    Private Function GetString(ByVal bytes() As Byte) As String
-        Return System.Text.Encoding.GetEncoding(1251).GetString(bytes)
-    End Function
-    Private Function GetBytes(ByVal value As String) As Byte()
-        Return System.Text.Encoding.GetEncoding(1251).GetBytes(value)
-    End Function
+
+
 End Class

@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Text
+Imports System.DateTime
 
 Public Class BufferedSettingsWriter
     Implements ISettingsReaderWriter

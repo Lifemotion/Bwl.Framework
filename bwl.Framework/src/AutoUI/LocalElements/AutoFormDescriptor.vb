@@ -10,7 +10,7 @@
     Private _loggerExtended As Boolean = True
     Private _elementsLayoutVertical As Boolean = True
 
-    Public Event Click(source As AutoBitmap)
+    Public Event Click(source As AutoFormDescriptor)
 
     Public Property FormWidth As Integer
         Get
@@ -91,16 +91,7 @@
 
     Public Sub New(iface As AutoUI, id As String)
         MyBase.New(iface, id, GetType(AutoFormDescriptor))
-        CreateApplicationDescription()
-    End Sub
-
-    Public Sub CreateApplicationDescription()
-        _appDescription = Application.ProductName.ToString + " " + Application.ProductVersion.ToString
-        Try
-            Dim time = IO.File.GetLastWriteTime(Application.ExecutablePath)
-            _appDescription += " (" + time.ToString + ")"
-        Catch ex As Exception
-        End Try
+        _appDescription = ApplicationProductName()
     End Sub
 
     Public Overrides Sub ProcessData(dataname As String, data() As Byte)

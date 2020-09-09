@@ -106,7 +106,7 @@ Public Class CmdlineServer
         End Get
     End Property
 
-    Public Property Encoding As Encoding = Encoding.GetEncoding(866)
+    Public Property Encoding As Encoding = Encoding.ASCII
 
     Public Sub Start()
         Kill()

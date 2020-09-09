@@ -38,15 +38,19 @@ Public Class ConsoleAppBase
     End Sub
 
     Public Sub ShowSettings()
+#If Not NETSTANDARD Then
         Application.Run(RootStorage.ShowSettingsForm(Nothing))
         RootStorage.SaveSettings(False)
+#End If
     End Sub
 
     Public Sub Start()
+#If Not NETSTANDARD Then
         For Each arg In System.Environment.GetCommandLineArgs
             If arg.ToLower = "showsetup" Then ShowSettings()
         Next
         If My.Computer.Keyboard.ShiftKeyDown And My.Computer.Keyboard.CtrlKeyDown Then ShowSettings()
+#End If
     End Sub
 
     Public Sub Wait()

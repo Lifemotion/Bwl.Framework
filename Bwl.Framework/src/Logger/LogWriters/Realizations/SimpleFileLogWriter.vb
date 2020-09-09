@@ -142,14 +142,15 @@ Public Class SimpleFileLogWriter
     Private Sub RenameBigFile(fName As String)
         Try
             If IO.File.Exists(fName) Then
-                Dim fLen = FileLen(fName)
+                Dim fi = New IO.FileInfo(fName)
+                Dim fLen = fi.Length
                 If fLen > _maxLogFileLength Then
                     Dim path = IO.Path.GetDirectoryName(fName)
                     Dim name = IO.Path.GetFileNameWithoutExtension(fName)
                     Dim ext = IO.Path.GetExtension(fName)
                     Dim dtNow = DateTime.Now
                     Dim newName = path + IO.Path.DirectorySeparatorChar + name + dtNow.ToString(" HH-mm_dd.MM.yyyy") + ext
-                    Rename(fName, newName)
+                    IO.File.Move(fName, newName)
                 End If
             End If
         Catch ex As Exception
@@ -195,17 +196,14 @@ Public Class SimpleFileLogWriter
             msg += PathToString(.path).ToUpper
             msg += " [" + GetCategoryName(.type) + "] "
             msg += .message
-            If WriteAdditionalInfo Then    msg += vbCrLf + "#" + .additional
-            Dim fileId = FreeFile()
+            If WriteAdditionalInfo Then msg += vbCrLf + "#" + .additional
             Dim file As String = GetFileName(message)
             RenameBigFile(file)
             DeleteOldFiles(file)
             Try
-                FileOpen(fileId, file, OpenMode.Append)
-                Print(fileId, msg + vbCrLf)
+                IO.File.AppendAllText(file, msg + vbCrLf)
             Catch ex As Exception
             End Try
-            FileClose(fileId)
         End With
     End Sub
 End Class
