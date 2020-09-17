@@ -1,6 +1,4 @@
-﻿Imports bwl.Network.ClientServer
-
-Public Class EmptyTransport
+﻿Public Class EmptyTransport
     Implements IMessageTransport
 
     Public Property IgnoreNotConnected As Boolean Implements IMessageTransport.IgnoreNotConnected

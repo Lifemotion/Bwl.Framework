@@ -545,7 +545,7 @@ Public Class NetServer
             bytes(0) = 1
             bytes(bytes.GetUpperBound(0)) = 2
             Try
-                client.tcpSocket.Send(bytes, SocketFlags.Partial)
+                client.tcpSocket.Send(bytes)
                 RaiseEvent SentMessage(message, client.userInfo)
                 RaiseEvent SentMessageUniversal(message)
             Catch ex As Exception
