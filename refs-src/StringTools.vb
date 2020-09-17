@@ -33,10 +33,10 @@ Public Class StringTools
     End Function
 
 #If Not NETSTANDARD Then
-      Private Function СP1251GetString(ByVal bytes() As Byte) As String
+    Public Shared Function СP1251GetString(ByVal bytes() As Byte) As String
         Return System.Text.Encoding.GetEncoding(1251).GetString(bytes)
     End Function
-    Private Function СP1251GetBytes(ByVal value As String) As Byte()
+    Public Shared Function СP1251GetBytes(ByVal value As String) As Byte()
         Return System.Text.Encoding.GetEncoding(1251).GetBytes(value)
     End Function
 #Else

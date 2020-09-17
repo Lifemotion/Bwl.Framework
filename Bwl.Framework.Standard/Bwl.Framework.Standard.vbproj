@@ -4,6 +4,8 @@
     <RootNamespace>Bwl.Framework</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Bwl.Framework.Standard</AssemblyName>
+    <Version>20.09.17</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

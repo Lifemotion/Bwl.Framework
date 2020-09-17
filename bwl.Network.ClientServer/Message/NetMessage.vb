@@ -1,4 +1,5 @@
 ﻿'Сетевое сообщение
+Imports Bwl.Framework
 Public Class NetMessage
     Public Property DataType As Char
     Public Property FromID As String = ""
