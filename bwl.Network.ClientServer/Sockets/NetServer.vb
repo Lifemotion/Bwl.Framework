@@ -98,6 +98,9 @@ Public Class NetServer
     Private directOnly As Boolean
     Private _netBeacon As NetBeacon
     Private _cleanerThread As Thread
+
+    Private _syncRoot As New Object
+
     Public ReadOnly Property MyID As String = "" Implements IMessageServer.MyID
     Public ReadOnly Property MyServiceName As String = "" Implements IMessageServer.MyServiceName
 
@@ -115,14 +118,16 @@ Public Class NetServer
     Public ReadOnly Property Clients() As List(Of ConnectedClient) Implements IMessageServer.Clients
         Get
             Dim list As New List(Of ConnectedClient)
-            SyncLock connectedClients
-                Try
-                    For Each client In connectedClients.ToArray
+
+            Try
+                SyncLock _syncRoot
+                    For Each client In connectedClients
                         list.Add(client.userInfo)
                     Next
-                Catch ex As Exception
-                End Try
-            End SyncLock
+                End SyncLock
+            Catch ex As Exception
+            End Try
+
             Return list
         End Get
     End Property
@@ -199,8 +204,8 @@ Public Class NetServer
     Public Sub StopServer() Implements IMessageServer.StopServer, IMessageTransport.Close
         working = False
         Try
-            SyncLock (connectedClients)
-                For Each client In connectedClients.ToArray
+            SyncLock _syncRoot
+                For Each client In connectedClients
                     Try
                         client.userInfo.Disconnect()
                         client.tcpSocket.Close()
@@ -263,10 +268,10 @@ Public Class NetServer
             ReDim newClient.receivedData(bufferStepSize)
 
             'вызываем событие
-            SyncLock connectedClients
+            SyncLock _syncRoot
                 connectedClients.Add(newClient)
-                RaiseEvent ClientConnected(newClient.userInfo)
             End SyncLock
+            RaiseEvent ClientConnected(newClient.userInfo)
             Try
                 newSocket.BeginReceive(newClient.receiveBuffer, 0, bufferStepSize, 0, AddressOf SocketReceived, newClient)
             Catch ex As Exception
@@ -288,34 +293,36 @@ Public Class NetServer
         Dim newClient As New ClientData
         newClient.userInfo = New ConnectedClient("direct", GetID, newClient, Me, True)
         newClient.directClient = directClient
-        SyncLock (connectedClients)
+        SyncLock _syncRoot
             connectedClients.Add(newClient)
         End SyncLock
-
-        'вызываем событие
         RaiseEvent ClientConnected(newClient.userInfo)
     End Sub
 
     Friend Sub DirectDisconnectClient(ByVal directClient As NetClient)
         Dim disconnectThis As ClientData = Nothing
-        For Each connClient In connectedClients.ToArray
-            If connClient.directClient.Equals(directClient) Then disconnectThis = connClient
-        Next
+        SyncLock _syncRoot
+            For Each connClient In connectedClients
+                If connClient.directClient.Equals(directClient) Then disconnectThis = connClient
+            Next
+        End SyncLock
         If disconnectThis IsNot Nothing Then SystemPerformRemove(disconnectThis)
     End Sub
 
     Friend Sub DirectReceiveMessage(ByVal directClient As NetClient, ByVal message As NetMessage)
-        For Each connClient In connectedClients.ToArray
-            If connClient.directClient.Equals(directClient) Then
-                Dim pack As New MessageClientPack
-                pack.message = message.GetCopy
-                pack.client = connClient.userInfo
-                'Dim thread As New Threading.Thread(AddressOf DirectMessageReceived)
-                'thread.Start(pack)
-                DirectMessageReceived(pack)
-                Exit For
-            End If
-        Next
+        SyncLock _syncRoot
+            For Each connClient In connectedClients
+                If connClient.directClient.Equals(directClient) Then
+                    Dim pack As New MessageClientPack
+                    pack.message = message.GetCopy
+                    pack.client = connClient.userInfo
+                    'Dim thread As New Threading.Thread(AddressOf DirectMessageReceived)
+                    'thread.Start(pack)
+                    DirectMessageReceived(pack)
+                    Exit For
+                End If
+            Next
+        End SyncLock
     End Sub
 
     Private Class MessageClientPack
@@ -335,9 +342,11 @@ Public Class NetServer
             i += 1
             Dim notUsed As Boolean = True
             Try
-                For Each client In connectedClients.ToArray
-                    If client.userInfo.ID = i Then notUsed = False
-                Next
+                SyncLock _syncRoot
+                    For Each client In connectedClients
+                        If client.userInfo.ID = i Then notUsed = False
+                    Next
+                End SyncLock
             Catch ex As Exception
             End Try
             If notUsed Then Return i
@@ -495,14 +504,9 @@ Public Class NetServer
             End If
         Catch ex As Exception
         End Try
-        Try
+        SyncLock _syncRoot
             connectedClients.Remove(client)
-        Catch ex As Exception
-        End Try
-        Try
-            connectedClients.Remove(client)
-        Catch ex As Exception
-        End Try
+        End SyncLock
         Try
             RaiseEvent ClientDisconnected(client.userInfo)
         Catch ex As Exception
@@ -510,30 +514,32 @@ Public Class NetServer
     End Sub
     Private Sub PingClients() Handles pingTimer.Elapsed
         Try
-            For Each client In connectedClients.ToArray
-                If Not client.userInfo.Direct Then
-                    If client.pingsLost > pingFailsToDisconnect Then
-                        'простите :(((
-                        'придется вас отключить :(
-                        client.userInfo.Disconnect()
-                        Exit For
-                    Else
-                        Dim bytes(0) As Byte
-                        bytes(0) = 3
-                        Try
-                            client.tcpSocket.Send(bytes)
-                            client.pingsLost += 1
-                        Catch ex As Exception
-                            '   log.Add("Не удалось отправить пинг. " + ex.ToString)
+            SyncLock _syncRoot
+                For Each client In connectedClients
+                    If Not client.userInfo.Direct Then
+                        If client.pingsLost > pingFailsToDisconnect Then
+                            'простите :(((
+                            'придется вас отключить :(
                             client.userInfo.Disconnect()
-                        End Try
+                            Exit For
+                        Else
+                            Dim bytes(0) As Byte
+                            bytes(0) = 3
+                            Try
+                                client.tcpSocket.Send(bytes)
+                                client.pingsLost += 1
+                            Catch ex As Exception
+                                '   log.Add("Не удалось отправить пинг. " + ex.ToString)
+                                client.userInfo.Disconnect()
+                            End Try
+                        End If
+                    Else
+                        If client.directClient Is Nothing OrElse client.directClient.IsConnected = False Then
+                            client.userInfo.Disconnect()
+                        End If
                     End If
-                Else
-                    If client.directClient Is Nothing OrElse client.directClient.IsConnected = False Then
-                        client.userInfo.Disconnect()
-                    End If
-                End If
-            Next
+                Next
+            End SyncLock
         Catch ex As Exception
         End Try
     End Sub
@@ -570,11 +576,13 @@ Public Class NetServer
     ''' <param name="message"></param>
     ''' <remarks></remarks>
     Public Overloads Sub SendMessage(ByVal client As ConnectedClient, ByVal message As NetMessage) Implements IMessageServer.SendMessage
-        For Each connClient In connectedClients.ToArray
-            If connClient.userInfo.Equals(client) Then
-                SystemSendMessage(connClient, message)
-            End If
-        Next
+        SyncLock _syncRoot
+            For Each connClient In connectedClients
+                If connClient.userInfo.Equals(client) Then
+                    SystemSendMessage(connClient, message)
+                End If
+            Next
+        End SyncLock
     End Sub
     ''' <summary>
     ''' Отправить сообщение клиенту, если известен идентификатор, указывающий клиента.
@@ -583,11 +591,13 @@ Public Class NetServer
     ''' <param name="message"></param>
     ''' <remarks></remarks>
     Public Overloads Sub SendMessage(ByVal clientID As Integer, ByVal message As NetMessage)
-        For Each connClient In connectedClients.ToArray
-            If connClient.userInfo.ID = clientID Then
-                SystemSendMessage(connClient, message)
-            End If
-        Next
+        SyncLock _syncRoot
+            For Each connClient In connectedClients
+                If connClient.userInfo.ID = clientID Then
+                    SystemSendMessage(connClient, message)
+                End If
+            Next
+        End SyncLock
     End Sub
 
     ''' <summary>
@@ -595,11 +605,13 @@ Public Class NetServer
     ''' </summary>
     ''' <param name="message"></param>
     Public Overloads Sub SendMessage(message As NetMessage) Implements IMessageTransport.SendMessage
-        For Each connClient In connectedClients.ToArray
-            If connClient.userInfo.RegisteredID = message.ToID Or message.ToID = "" Then
-                SystemSendMessage(connClient, message)
-            End If
-        Next
+        SyncLock _syncRoot
+            For Each connClient In connectedClients
+                If connClient.userInfo.RegisteredID = message.ToID Or message.ToID = "" Then
+                    SystemSendMessage(connClient, message)
+                End If
+            Next
+        End SyncLock
     End Sub
 
     Public Function SendMessageWaitAnswer(message As NetMessage, answerFirstPart As String, Optional timeout As Single = 20) As NetMessage Implements IMessageTransport.SendMessageWaitAnswer
@@ -623,20 +635,23 @@ Public Class NetServer
             If Me.MyServiceName = serviceName Or serviceName = "*" Then list.Add(Me.MyID)
         End If
 
-        For Each client In connectedClients
-            Dim add = False
+        SyncLock _syncRoot
+            For Each client In connectedClients
+                Dim add = False
 
-            If serviceName = "*" Then add = True
-            If client.userInfo.RegisteredServiceName = serviceName Then add = True
+                If serviceName = "*" Then add = True
+                If client.userInfo.RegisteredServiceName = serviceName Then add = True
 
-            If add Then list.Add(client.userInfo.RegisteredID)
-        Next
-        Return list.ToArray
+                If add Then list.Add(client.userInfo.RegisteredID)
+            Next
+        End SyncLock
+
+        Return list.ToArray()
     End Function
 
     Private Sub OldConnectionCleaner()
         While IsWorking
-            SyncLock (connectedClients)
+            SyncLock _syncRoot
                 For Each client As ClientData In connectedClients
                     If (DateTime.Now - client.LastActivity).TotalSeconds > 60 Then
                         SystemPerformRemove(client)
