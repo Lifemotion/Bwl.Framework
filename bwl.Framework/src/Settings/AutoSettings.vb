@@ -33,9 +33,10 @@ Public Class AutoSettings
 
     Public Event FieldChanged(target As Object, field As PropertyInfo)
 
-    Public Sub New(storage As SettingsStorage, target As Object, Optional filterByName As String = "Setting", Optional recursive As Boolean = False)
+    Public Sub New(storage As SettingsStorage, target As Object,
+                   Optional filterByName As String = "Setting", Optional recursive As Boolean = False, Optional findMode As Boolean = False)
         _storage = storage
-        CollectFields(target, storage, filterByName, recursive)
+        CollectFields(target, storage, filterByName, recursive, findMode)
 
         If _items.Count > 0 Then
             _thread = New Threading.Thread(AddressOf MonitorThread)
@@ -45,7 +46,7 @@ Public Class AutoSettings
         End If
     End Sub
 
-    Private Sub CollectFields(target As Object, storage As SettingsStorage, filterByName As String, recursive As Boolean)
+    Private Sub CollectFields(target As Object, storage As SettingsStorage, filterByName As String, recursive As Boolean, findMode As Boolean)
         For Each prop In target.GetType.GetProperties(BindingFlags.Public Or BindingFlags.NonPublic Or BindingFlags.Instance)
             If filterByName = "" OrElse prop.Name.Contains(filterByName) Then
                 Select Case prop.PropertyType
@@ -53,7 +54,12 @@ Public Class AutoSettings
                         Dim val As String = CStr(prop.GetValue(target, Nothing))
                         If val Is Nothing Then val = ""
                         Dim info As New AutoSettingInfoString
-                        info.Setting = New StringSetting(storage, prop.Name, val)
+                        Dim sett = If(findMode, storage.FindSetting(prop.Name), Nothing)
+                        If sett IsNot Nothing Then
+                            info.Setting = DirectCast(sett, StringSetting)
+                        Else
+                            info.Setting = New StringSetting(storage, prop.Name, val)
+                        End If
                         prop.SetValue(target, info.Setting.Value, Nothing)
                         info.LastFieldValue = info.Setting.Value
                         info.LastSettingValue = info.Setting.Value
@@ -63,7 +69,12 @@ Public Class AutoSettings
                     Case GetType(Integer)
                         Dim val As Integer = CInt(prop.GetValue(target, Nothing))
                         Dim info As New AutoSettingInfoInteger
-                        info.Setting = New IntegerSetting(storage, prop.Name, val)
+                        Dim sett = If(findMode, storage.FindSetting(prop.Name), Nothing)
+                        If sett IsNot Nothing Then
+                            info.Setting = DirectCast(sett, IntegerSetting)
+                        Else
+                            info.Setting = New IntegerSetting(storage, prop.Name, val)
+                        End If
                         prop.SetValue(target, info.Setting.Value, Nothing)
                         info.LastFieldValue = info.Setting.Value
                         info.LastSettingValue = info.Setting.Value
@@ -73,7 +84,12 @@ Public Class AutoSettings
                     Case GetType(Double), GetType(Single)
                         Dim val As Double = CDbl(prop.GetValue(target, Nothing))
                         Dim info As New AutoSettingInfoDouble
-                        info.Setting = New DoubleSetting(storage, prop.Name, val)
+                        Dim sett = If(findMode, storage.FindSetting(prop.Name), Nothing)
+                        If sett IsNot Nothing Then
+                            info.Setting = DirectCast(sett, DoubleSetting)
+                        Else
+                            info.Setting = New DoubleSetting(storage, prop.Name, val)
+                        End If
                         prop.SetValue(target, info.Setting.Value, Nothing)
                         info.LastFieldValue = info.Setting.Value
                         info.LastSettingValue = info.Setting.Value
@@ -83,7 +99,12 @@ Public Class AutoSettings
                     Case GetType(Boolean)
                         Dim val As Boolean = CBool(prop.GetValue(target, Nothing))
                         Dim info As New AutoSettingInfoBoolean
-                        info.Setting = New BooleanSetting(storage, prop.Name, val)
+                        Dim sett = If(findMode, storage.FindSetting(prop.Name), Nothing)
+                        If sett IsNot Nothing Then
+                            info.Setting = DirectCast(sett, BooleanSetting)
+                        Else
+                            info.Setting = New BooleanSetting(storage, prop.Name, val)
+                        End If
                         prop.SetValue(target, info.Setting.Value, Nothing)
                         info.LastFieldValue = info.Setting.Value
                         info.LastSettingValue = info.Setting.Value
@@ -95,9 +116,9 @@ Public Class AutoSettings
             If prop.PropertyType.IsClass And prop.PropertyType <> GetType(String) Then
                 Dim val = prop.GetValue(target, Nothing)
                 If recursive Then
-                    If val IsNot Nothing Then CollectFields(val, storage.CreateChildStorage(prop.Name), filterByName, True)
+                    If val IsNot Nothing Then CollectFields(val, storage.CreateChildStorage(prop.Name), filterByName, True, findMode)
                 ElseIf prop.Name.Contains("SettingsCollection") Then
-                    If val IsNot Nothing Then CollectFields(val, storage.CreateChildStorage(prop.Name.Replace("SettingsCollection", "")), filterByName, True)
+                    If val IsNot Nothing Then CollectFields(val, storage.CreateChildStorage(prop.Name.Replace("SettingsCollection", "")), filterByName, True, findMode)
                 End If
             End If
         Next

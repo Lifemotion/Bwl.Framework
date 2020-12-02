@@ -101,6 +101,7 @@ Public MustInherit Class SettingsStorageBase
             Return _settings.ToArray
         End Get
     End Property
+
 #If Not NETSTANDARD Then
     Public Function ShowSettingsForm(invokeForm As Form) As SettingsDialog Implements ISettingsStorageForm.ShowSettingsForm
         If invokeForm IsNot Nothing AndAlso invokeForm.InvokeRequired Then
@@ -124,6 +125,19 @@ Public MustInherit Class SettingsStorageBase
         End If
     End Function
 #End If
+
+    Public Sub RemoveSetting(settingName As String, Optional silentMode As Boolean = False)
+        If settingName.Trim = "" Then Throw New Exception("Не указано имя настройки в хранилище.")
+        Dim setting = _settings.FirstOrDefault(Function(item) item.Name.ToUpper = settingName.ToUpper)
+        If setting IsNot Nothing Then
+            _settings.Remove(setting)
+        Else
+            If Not silentMode Then
+                Throw New Exception("Не найдено такое имя настройки в хранилище.")
+            End If
+        End If
+    End Sub
+
     Friend Sub InsertSetting(setting As SettingOnStorage)
         _name = _name.Trim
         If setting Is Nothing Then Throw New Exception("Объект настройки не был создан.")
