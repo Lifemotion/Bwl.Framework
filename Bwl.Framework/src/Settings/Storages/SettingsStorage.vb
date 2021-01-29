@@ -9,6 +9,8 @@ Public Class SettingsStorage
 
     Private _syncRoot As New Object
 
+    Public Event OnSaveSettings(changedOnly As Boolean)
+
     Protected Sub New()
     End Sub
 
@@ -140,13 +142,19 @@ Public Class SettingsStorage
 
     Public Sub SaveSettings(changedOnly As Boolean)
         If Not IsReadOnly Then
-            SaveSettings(_defaultWriter, changedOnly)
+            SyncLock _syncRoot
+                SaveSettings(_defaultWriter, changedOnly)
+                RaiseEvent OnSaveSettings(changedOnly)
+            End SyncLock
         End If
     End Sub
 
     Public Sub SaveSettings()
         If Not IsReadOnly Then
-            SaveSettings(_defaultWriter, True)
+            SyncLock _syncRoot
+                SaveSettings(_defaultWriter, True)
+                RaiseEvent OnSaveSettings(True)
+            End SyncLock
         End If
     End Sub
 

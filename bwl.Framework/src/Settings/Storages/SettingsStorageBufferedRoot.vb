@@ -32,9 +32,9 @@ Public Class SettingsStorageBufferedRoot
         End SyncLock
     End Sub
 
-    Public Sub WriteIniFile()
+    Private Sub WriteIniFile(changedOnly As Boolean) Handles MyBase.OnSaveSettings
         SyncLock _syncRoot
-            SaveSettings(_defaultWriter, False) 'False - пишем все значение
+            SaveSettings(_defaultWriter, False) 'False - пишем все значения
             DirectCast(_defaultWriter, BufferedSettingsWriter).WriteSettingsToFile()
         End SyncLock
     End Sub

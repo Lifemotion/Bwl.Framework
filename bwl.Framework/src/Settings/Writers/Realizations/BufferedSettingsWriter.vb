@@ -164,7 +164,7 @@ Public Class BufferedSettingsWriter
             log.AppendLine(String.Format("Now.Ticks: {0}, WriteSettingsToFile({1}) BEGIN", Now.Ticks, filename))
 
             Try
-                'ДОБАВЛЕНИ ДАННЫХ КОНФИГА В МАССИВ СТРОК (ПОД ЗАПИСЬ В ФАЙЛ)
+                'ДОБАВЛЕНИЕ ДАННЫХ КОНФИГА В МАССИВ СТРОК (ПОД ЗАПИСЬ В ФАЙЛ)
                 log.AppendLine(String.Format("Now.Ticks: {0}, append data to linesData BEGIN", Now.Ticks))
                 Dim lines As New List(Of String)
                 lines.Add("# Bwl.Framework BufferedSettingsWriter")
