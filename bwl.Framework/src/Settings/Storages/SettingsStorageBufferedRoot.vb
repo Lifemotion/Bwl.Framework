@@ -26,12 +26,6 @@ Public Class SettingsStorageBufferedRoot
         _name = rootName
     End Sub
 
-    Public Sub ReadIniFile()
-        SyncLock _syncRoot
-            DirectCast(_defaultWriter, BufferedSettingsWriter).ReadSettingsFromFile()
-        End SyncLock
-    End Sub
-
     Private Sub WriteIniFile(changedOnly As Boolean) Handles MyBase.OnSaveSettings
         SyncLock _syncRoot
             SaveSettings(_defaultWriter, False) 'False - пишем все значения
