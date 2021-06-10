@@ -86,7 +86,7 @@
         End Get
     End Property
 
-    Protected Sub RaiseValueChanged()
+    Public Sub RaiseValueChanged()
         RaiseEvent ValueChanged(Me)
     End Sub
 
