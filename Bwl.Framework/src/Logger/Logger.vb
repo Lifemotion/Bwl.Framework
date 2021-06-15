@@ -144,6 +144,7 @@ Public Class Logger
         Dim list As New List(Of Object)
         list.Add("CallFrom: " + ExtractCallingMethodInfo())
         list.AddRange(additional)
+
         SyncLock (_writers)
             For Each writer In _writers
                 writer.WriteEvent(DateTime.Now, _path, type, text, list.ToArray)
@@ -156,7 +157,6 @@ Public Class Logger
 
     Private Function ExtractCallingMethod() As MethodBase
         Dim stack = New StackTrace()
-
         For i = 0 To stack.FrameCount - 1
             Dim frame1 = stack.GetFrame(i)
             Dim mtd1 = frame1.GetMethod

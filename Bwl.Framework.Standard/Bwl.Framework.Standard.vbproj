@@ -72,6 +72,7 @@
     <Compile Include="..\bwl.Network.ClientServer\Sockets\NetClient.vb" Link="clientserver\Sockets\NetClient.vb" />
     <Compile Include="..\bwl.Network.ClientServer\Sockets\NetServer.vb" Link="clientserver\Sockets\NetServer.vb" />
     <Compile Include="..\refs-src\CryptoTools.vb" Link="refs\CryptoTools.vb" />
+    <Compile Include="..\refs-src\RunLimiter.vb" Link="refs\RunLimiter.vb" />
     <Compile Include="..\refs-src\SharedTools.vb" Link="refs\SharedTools.vb" />
     <Compile Include="..\refs-src\StringTools.vb" Link="refs\StringTools.vb" />
   </ItemGroup>
