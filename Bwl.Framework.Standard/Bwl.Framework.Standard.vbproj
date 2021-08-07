@@ -4,8 +4,16 @@
     <RootNamespace>Bwl.Framework</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Bwl.Framework.Standard</AssemblyName>
-    <Version>20.09.17</Version>
+    <Version>21.08.7</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>21.08.7.0</AssemblyVersion>
+    <PackageProjectUrl>https://github.com/Lifemotion/Bwl.Framework</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Lifemotion/Bwl.Framework.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>Common library for many projects, implements mechanisms for Settings storages, Loggers, provides Application Bases for console and gui apps.</PackageReleaseNotes>
+    <Copyright>APACHE 2.0, Sasha Sovenko and others</Copyright>
+    <Description>Common library for many projects, implements mechanisms for Settings storages, Loggers, provides Application Bases for console and gui apps.</Description>
+    <PackageId>_Bwl.Framework.Standard</PackageId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
