@@ -1,6 +1,6 @@
 ﻿Imports System.Net
 
-Public Class NetFinder2
+Public Class NetFinder
     Public Class NetBeaconInfo
         Public Property Address As String = ""
         Public Property Port As Integer
