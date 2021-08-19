@@ -1,6 +1,6 @@
 ﻿Imports System.Net
 
-Public Class NetFinder
+Public Class NetFinder2
     Public Class NetBeaconInfo
         Public Property Address As String = ""
         Public Property Port As Integer
@@ -12,12 +12,12 @@ Public Class NetFinder
 
     End Class
 
-    Public Shared Function Find(timeout As Integer) As NetBeaconInfo()
+    Public Shared Function Find(timeout As Integer, Optional port As Integer = 19999) As NetBeaconInfo()
         Dim list As New List(Of NetBeaconInfo)
         FindFiles(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Temp", "BwlNetBeacons"), list)
         FindFiles(IO.Path.Combine(Environment.GetEnvironmentVariable("Temp"), "BwlNetBeacons"), list)
         Try
-            FindNet(list, timeout)
+            FindNet(list, timeout, port)
         Catch ex As Exception
         End Try
         Return list.ToArray()
@@ -43,8 +43,8 @@ Public Class NetFinder
         Next
     End Sub
 
-    Private Shared Sub FindNet(list As List(Of NetBeaconInfo), timeout As Integer)
-        Dim locEp As New IPEndPoint(IPAddress.Any, 19999)
+    Private Shared Sub FindNet(list As List(Of NetBeaconInfo), timeout As Integer, port As Integer)
+        Dim locEp As New IPEndPoint(IPAddress.Any, port)
         Dim udp As New Net.Sockets.UdpClient(locEp)
         Dim time = DateTime.Now
         Try

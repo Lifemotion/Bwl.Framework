@@ -8,10 +8,12 @@ Public Class NetBeacon
     Private _servicePort As Integer
     Private _beaconName As String
     Private _localhostOnly As Boolean
+    Private _beaconPort As Integer
 
-    Public Sub New(port As Integer, beaconName As String, localhostOnly As Boolean, startNow As Boolean)
+    Public Sub New(port As Integer, beaconName As String, localhostOnly As Boolean, startNow As Boolean, Optional beaconPort As Integer = 19999)
         _servicePort = port
         _beaconName = beaconName
+        _beaconPort = beaconPort
         _localhostOnly = localhostOnly
         If startNow Then Start()
     End Sub
@@ -44,8 +46,8 @@ Public Class NetBeacon
                 Thread.Sleep(2000)
             Else
                 Try
-                    Dim bytes = System.Text.Encoding.UTF8.GetBytes(Str)
-                    Dim ie As New IPEndPoint(New IPAddress({255, 255, 255, 255}), 19999)
+                    Dim bytes = System.Text.Encoding.UTF8.GetBytes(str)
+                    Dim ie As New IPEndPoint(New IPAddress({255, 255, 255, 255}), _beaconPort)
                     _sender.Send(bytes, bytes.Length, ie)
                 Catch ex As Exception
                 End Try
