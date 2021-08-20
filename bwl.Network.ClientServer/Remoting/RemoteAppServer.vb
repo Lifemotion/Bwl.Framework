@@ -146,6 +146,12 @@ Public Class RemoteAppServer
     Public Sub New(transport As IMessageTransport, netPort As Integer, prefix As IEnumerable(Of String),
                    storage As SettingsStorage, logger As Logger, ui As IEnumerable(Of IAutoUI),
                    beaconName As String, beaconMode As RemoteAppBeaconMode)
+        Me.New(transport, netPort, prefix, storage, logger, ui, beaconName, beaconMode, 19999)
+    End Sub
+
+    Public Sub New(transport As IMessageTransport, netPort As Integer, prefix As IEnumerable(Of String),
+                   storage As SettingsStorage, logger As Logger, ui As IEnumerable(Of IAutoUI),
+                   beaconName As String, beaconMode As RemoteAppBeaconMode, beaconPort As Integer)
         If logger Is Nothing Then logger = New Logger
         If storage Is Nothing Then storage = New SettingsStorageRoot
 
@@ -162,8 +168,8 @@ Public Class RemoteAppServer
         Next
 
         AddHandler MessageTransport.RegisterClientRequest, AddressOf RegisterClientRequest
-        If beaconMode = RemoteAppBeaconMode.localhost Then _beacon = New NetBeacon(netPort, beaconName, True, True)
-        If beaconMode = RemoteAppBeaconMode.broadcast Then _beacon = New NetBeacon(netPort, beaconName, False, True)
+        If beaconMode = RemoteAppBeaconMode.localhost Then _beacon = New NetBeacon(netPort, beaconName, True, True, beaconPort)
+        If beaconMode = RemoteAppBeaconMode.broadcast Then _beacon = New NetBeacon(netPort, beaconName, False, True, beaconPort)
     End Sub
 
     Private Sub RegisterClientRequest(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String)
