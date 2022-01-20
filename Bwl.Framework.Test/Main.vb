@@ -1,4 +1,5 @@
-﻿Imports Bwl.Framework
+﻿Imports System.Drawing
+Imports System.Windows.Forms
 
 Public Class InternalTestClass
     Public Property IntSetting1 As String = "test"
@@ -50,7 +51,7 @@ Module Main
 
         Application.EnableVisualStyles()
         AutoUIForm.Create(_appBase).Show()
-         Application.Run()
+        Application.Run()
     End Sub
 
     Private Sub OnSettingsFormClosed()
