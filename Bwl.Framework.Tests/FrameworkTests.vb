@@ -1,9 +1,8 @@
-﻿Imports System.Text
-Imports Microsoft.VisualStudio.TestTools.UnitTesting
+﻿Imports NUnit.Framework
 
-<TestClass()> Public Class FrameworkTests
+<TestFixture()> Public Class FrameworkTests
 
-    <TestMethod()> Public Sub IniFileReadWrite()
+    <Test()> Public Sub IniFileReadWrite()
         Dim f1 = "test1.ini"
 
         Dim v1 = "124354"
@@ -32,7 +31,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.AreEqual(fileRW.GetSettingNoWrite("Test1.Test2.Test3", "Param 1", "!NoSetting"), v1)
     End Sub
 
-    <TestMethod()> Public Sub StringSettingsReadWriteBuffered1()
+    <Test()> Public Sub StringSettingsReadWriteBuffered1()
         Dim f1 = "test2.ini"
 
         Dim v1 = "124354"
@@ -78,7 +77,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.AreEqual(v4, s4a.Value)
     End Sub
 
-    <TestMethod()> Public Sub StringSettingsReadWriteBuffered2()
+    <Test()> Public Sub StringSettingsReadWriteBuffered2()
         Dim f1 = "test2.ini"
 
         Dim v1 = "124354"
@@ -124,7 +123,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.AreEqual(v4, s4a.Value)
     End Sub
 
-    <TestMethod()> Public Sub StringSettingsReadWrite()
+    <Test()> Public Sub StringSettingsReadWrite()
         Dim f1 = "test2.ini"
 
         Dim v1 = "124354"
