@@ -1,4 +1,6 @@
 ﻿Imports System.Text
+Imports System.Collections.Concurrent
+Imports System.Threading
 
 Public Class StateItem
     Public Property ID As String = ""
@@ -13,20 +15,7 @@ Public Class StateItem
 End Class
 
 Public Class GlobalStates
-    Private Shared _list As New LinkedList(Of StateItem)
-
-    Private Shared Sub DeleteOldStates()
-        SyncLock _list
-            Dim toRemove As New LinkedList(Of StateItem)
-            For Each item In _list
-                If item.ValidUntil < Now Then toRemove.AddLast(item)
-            Next
-
-            For Each item In toRemove
-                _list.Remove(item)
-            Next
-        End SyncLock
-    End Sub
+    Private Shared _items As New ConcurrentDictionary(Of String, StateItem)
 
     Public Shared Sub SetState(source As Object, id As String, value As TimeSpan, validTimeSeconds As Integer)
         Select Case value.TotalSeconds
@@ -44,36 +33,33 @@ Public Class GlobalStates
     End Sub
 
     Public Shared Sub SetState(source As Object, id As String, value As String, valueType As String, valueTS As TimeSpan, validTimeSeconds As Integer)
-        If id Is Nothing OrElse id.Length = 0 Then Throw New ArgumentException
-        If value Is Nothing OrElse value.Length = 0 Then Throw New ArgumentException
+        If String.IsNullOrEmpty(id) OrElse String.IsNullOrEmpty(value) Then Throw New ArgumentException()
         If valueType Is Nothing Then valueType = ""
-        If validTimeSeconds < 1 Then Throw New ArgumentException
+        If validTimeSeconds < 1 Then Throw New ArgumentException()
 
-        DeleteOldStates()
+        Dim nowTime = DateTime.Now
+        DeleteOldStates(nowTime)
 
-        Dim found As StateItem = Nothing
-        SyncLock _list
-            For Each item In _list
-                If item.ID.ToLower() = id.ToLower() Then found = item
-            Next
-            If found Is Nothing Then
-                found = New StateItem()
-                _list.AddLast(found)
+        Dim idKey = id.ToLower()
+        Dim item As StateItem = Nothing
+        _items.TryGetValue(idKey, item)
+        If item Is Nothing Then
+            item = New StateItem()
+            _items(idKey) = item
+        End If
+
+        With item
+            .Source = source
+            .ID = id
+            .Value = value
+            .ValueType = valueType
+            .ValidUntil = nowTime.AddSeconds(validTimeSeconds)
+            .Time = nowTime
+            If ((nowTime - .MaxValueLastTimeStamp).TotalSeconds > 30) OrElse (valueTS > TimeSpan.MinValue AndAlso .MaxValue < valueTS) Then
+                .MaxValue = valueTS
+                .MaxValueLastTimeStamp = nowTime
             End If
-            With found
-                .Source = source
-                .ID = id
-                .Value = value
-                .ValueType = valueType
-                .ValidUntil = Now.AddSeconds(validTimeSeconds)
-                .Time = Now
-
-                If ((Now - .MaxValueLastTimeStamp).TotalSeconds > 30) OrElse (valueTS > TimeSpan.MinValue AndAlso .MaxValue < valueTS) Then
-                    .MaxValue = valueTS
-                    .MaxValueLastTimeStamp = Now
-                End If
-            End With
-        End SyncLock
+        End With
     End Sub
 
     Public Shared Sub SetState(source As Object, id As String, value As String, valueType As String, validTimeSeconds As Integer)
@@ -81,25 +67,27 @@ Public Class GlobalStates
     End Sub
 
     Public Shared Function GetStates() As StateItem()
-        DeleteOldStates()
-
-        SyncLock _list
-            Dim result = _list.ToArray()
-            Return result
-        End SyncLock
+        DeleteOldStates(DateTime.Now)
+        Return _items.Values.ToArray()
     End Function
 
     Public Shared Shadows Function ToString() As String
-        Dim sb As New StringBuilder
-
-        SyncLock _list
-            For Each item In _list
-                Dim source = "()"
-                If item.Source IsNot Nothing Then source = item.Source.GetType().ToString()
-                sb.AppendLine(source + " " + item.ID + " - " + item.Value + " " + item.ValueType + " " + item.Time.ToLongTimeString() + " max " + item.MaxValue.TotalMilliseconds.ToString)
-            Next
-        End SyncLock
-
-        Return sb.ToString
+        Dim sb As New StringBuilder()
+        For Each item In _items.Values.ToArray()
+            Dim source = "()"
+            If item.Source IsNot Nothing Then
+                source = item.Source.GetType().ToString()
+            End If
+            sb.AppendLine(source & " " & item.ID & " - " & item.Value & " " & item.ValueType & " " & item.Time.ToLongTimeString() & " max " & item.MaxValue.TotalMilliseconds.ToString())
+        Next
+        Return sb.ToString()
     End Function
+
+    Private Shared Sub DeleteOldStates(nowTime As DateTime)
+        For Each item In _items.ToArray()
+            If item.Value.ValidUntil < nowTime Then
+                _items.TryRemove(item.Key, Nothing)
+            End If
+        Next
+    End Sub
 End Class
