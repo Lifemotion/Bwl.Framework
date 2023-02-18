@@ -72,13 +72,14 @@ Public Class GlobalStates
     End Function
 
     Public Shared Shadows Function ToString() As String
+        Dim nowTime = DateTime.Now
         Dim sb As New StringBuilder()
         For Each item In _items.Values.ToArray()
             Dim source = "()"
             If item.Source IsNot Nothing Then
                 source = item.Source.GetType().ToString()
             End If
-            sb.AppendLine(source & " " & item.ID & " - " & item.Value & " " & item.ValueType & " " & item.Time.ToLongTimeString() & " max " & item.MaxValue.TotalMilliseconds.ToString())
+            sb.AppendLine($"{source}::{item.ID}={item.Value} {item.ValueType}; max={item.MaxValue.TotalMilliseconds.ToString("0.0")} ms; age={(nowTime - item.Time).TotalMilliseconds.ToString("0")} ms;")
         Next
         Return sb.ToString()
     End Function
