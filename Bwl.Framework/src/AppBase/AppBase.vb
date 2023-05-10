@@ -36,9 +36,10 @@ Public Class AppBase
                    Optional logAllBufferedIniEvents As Boolean = False)
         Me.UseBufferedStorage = useBufferedStorage
         _AppName = appName
-        _BaseFolder = CheckPath(baseFolderOverride)
-        _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
+        If baseFolderOverride > "" Then _BaseFolder = baseFolderOverride
+        _BaseFolder = CheckPath(_BaseFolder)
         _SettingsFolder = IO.Path.Combine(_BaseFolder, "conf")
+        _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
         _DataFolder = IO.Path.Combine(_BaseFolder, "data")
         If initFolders Then Init(maxFilesCount, maxLogFileLength, logAllBufferedIniEvents)
     End Sub
@@ -48,21 +49,24 @@ Public Class AppBase
                    useBufferedStorage As Boolean,
                    settingsFolderOverride As String,
                    logsFolderOverride As String,
-                   dataFolderOverride As String)
+                   dataFolderOverride As String,
+                   Optional maxFilesCount As Integer = 5,
+                   Optional maxLogFileLength As Long = 10 * 1024 * 1024,
+                   Optional logAllBufferedIniEvents As Boolean = False)
         Me.UseBufferedStorage = useBufferedStorage
         _AppName = appName
         _BaseFolder = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..")
-        _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
         _SettingsFolder = IO.Path.Combine(_BaseFolder, "conf")
+        _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
         _DataFolder = IO.Path.Combine(_BaseFolder, "data")
         If settingsFolderOverride > "" Then _SettingsFolder = settingsFolderOverride
-        If logsFolderOverride > "" Then _LogsFolder = settingsFolderOverride
-        If dataFolderOverride > "" Then _DataFolder = settingsFolderOverride
-        _SettingsFolder = CheckPath(_SettingsFolder)
+        If logsFolderOverride > "" Then _LogsFolder = logsFolderOverride
+        If dataFolderOverride > "" Then _DataFolder = dataFolderOverride
         _BaseFolder = CheckPath(_BaseFolder)
+        _SettingsFolder = CheckPath(_SettingsFolder)
         _LogsFolder = CheckPath(_LogsFolder)
         _DataFolder = CheckPath(_DataFolder)
-        If initFolders Then Init()
+        If initFolders Then Init(maxFilesCount, maxLogFileLength, logAllBufferedIniEvents)
     End Sub
 
     Private Function CheckPath(source As String) As String

@@ -10,13 +10,28 @@ Public Class ConsoleAppBase
 
     Sub New(useBufferedStorage As Boolean)
         MyBase.New(True, "Application", useBufferedStorage)
+        InitInternal()
+    End Sub
 
+    Sub New(useBufferedStorage As Boolean, baseFolderOverride As String)
+        MyBase.New(True, "Application", useBufferedStorage, baseFolderOverride)
+        InitInternal()
+    End Sub
+
+    Sub New(useBufferedStorage As Boolean,
+            settingsFolderOverride As String,
+            logsFolderOverride As String,
+            dataFolderOverride As String)
+        MyBase.New(True, "Application", useBufferedStorage, settingsFolderOverride, logsFolderOverride, dataFolderOverride)
+        InitInternal()
+    End Sub
+
+    Private Sub InitInternal()
         _consoleSettings = RootStorage.CreateChildStorage("Console")
         _consoleColor = New VariantSetting(_consoleSettings, "Font Color", "gray", {"gray", "white", "black", "green", "red", "blue"})
         _consoleBack = New VariantSetting(_consoleSettings, "Background Color", "black", {"grey", "white", "black"})
         _consoleWriter = New ConsoleLogWriter
         RootLogger.ConnectWriter(_consoleWriter)
-
         Select Case _consoleColor.Value
             Case "white" : System.Console.ForegroundColor = ConsoleColor.White
             Case "black" : System.Console.ForegroundColor = ConsoleColor.Black
