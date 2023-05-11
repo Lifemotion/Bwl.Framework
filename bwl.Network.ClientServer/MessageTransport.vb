@@ -1,6 +1,6 @@
 ﻿Imports System.Linq
 Imports System.Threading
-Imports bwl.Framework
+Imports Bwl.Framework
 
 Public Class MessageTransport
     Implements IMessageTransport
@@ -110,20 +110,20 @@ Public Class MessageTransport
             vars.Add(factory.TransportClass.Name)
         Next
 
-        ModeSetting = If(_storage.Settings.Any(Function(f) f.Name = "TransportMode"), _storage.Settings.First(Function(f) f.Name = "TransportMode"),
-                         New VariantSetting(_storage, "TransportMode", defaultMode, vars.ToArray))
+        ModeSetting = If(_storage.GetSettings().Any(Function(f) f.Name = "TransportMode"), _storage.GetSettings().First(Function(f) f.Name = "TransportMode"),
+                         _storage.CreateVariantSetting("TransportMode", defaultMode, vars.ToArray))
 
-        AddressSetting = If(_storage.Settings.Any(Function(f) f.Name = "TransportAddress"), _storage.Settings.First(Function(f) f.Name = "TransportAddress"),
-                            New StringSetting(_storage, "TransportAddress", defaultAddress))
-        UserSetting = If(_storage.Settings.Any(Function(f) f.Name = "TransportUser"), _storage.Settings.First(Function(f) f.Name = "TransportUser"),
-                         New StringSetting(_storage, "TransportUser", defaultUser))
-        PasswordSetting = If(_storage.Settings.Any(Function(f) f.Name = "TransportPassword"), _storage.Settings.First(Function(f) f.Name = "TransportPassword"),
-                             New StringSetting(_storage, "TransportPassword", ""))
+        AddressSetting = If(_storage.GetSettings().Any(Function(f) f.Name = "TransportAddress"), _storage.GetSettings().First(Function(f) f.Name = "TransportAddress"),
+                            _storage.CreateStringSetting("TransportAddress", defaultAddress))
+        UserSetting = If(_storage.GetSettings().Any(Function(f) f.Name = "TransportUser"), _storage.GetSettings().First(Function(f) f.Name = "TransportUser"),
+                         _storage.CreateStringSetting("TransportUser", defaultUser))
+        PasswordSetting = If(_storage.GetSettings().Any(Function(f) f.Name = "TransportPassword"), _storage.GetSettings().First(Function(f) f.Name = "TransportPassword"),
+                             _storage.CreateStringSetting("TransportPassword", ""))
 
-        TargetSetting = If(_storage.Settings.Any(Function(f) f.Name = "TransportTargetID"), _storage.Settings.First(Function(f) f.Name = "TransportTargetID"),
-                           New StringSetting(_storage, "TransportTargetID", defaultTargetId))
-        ServiceNameSetting = If(_storage.Settings.Any(Function(f) f.Name = "TransportServiceName"), _storage.Settings.First(Function(f) f.Name = "TransportServiceName"),
-                                New StringSetting(_storage, "TransportServiceName", defaultServiceName))
+        TargetSetting = If(_storage.GetSettings().Any(Function(f) f.Name = "TransportTargetID"), _storage.GetSettings().First(Function(f) f.Name = "TransportTargetID"),
+                           _storage.CreateStringSetting("TransportTargetID", defaultTargetId))
+        ServiceNameSetting = If(_storage.GetSettings().Any(Function(f) f.Name = "TransportServiceName"), _storage.GetSettings().First(Function(f) f.Name = "TransportServiceName"),
+                                _storage.CreateStringSetting("TransportServiceName", defaultServiceName))
         Me.AutoConnect = autoConnect
         Try
             CreateTransport()

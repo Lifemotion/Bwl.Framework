@@ -23,12 +23,12 @@ Module Test
     Private _stor1 As SettingsStorage = _appBase.RootStorage.CreateChildStorage("Stor1")
     Private _stor2 As SettingsStorage = _appBase.RootStorage.CreateChildStorage("Setting4")
 
-    Private _setting0 As New StringSetting(_appBase.RootStorage, "Setting0", "Cat0")
-    Private _setting1 As New StringSetting(_stor1, "Stor1SettingString", "cat")
-    Private _setting2 As New IntegerSetting(_stor1, "Setting2", 1)
-    Private _setting3 As New BooleanSetting(_stor2, "Setting3", True)
-    Private _setting4 As New DoubleSetting(_stor2, "Setting4Setting", 0.4)
-    Private _setting5 As New VariantSetting(_stor2, "Setting5", "Cat", {"Aaa", "Cat", "Dog"})
+    Private _setting0 As StringSetting = _appBase.RootStorage.CreateStringSetting("Setting0", "Cat0")
+    Private _setting1 As StringSetting = _stor1.CreateStringSetting("Stor1SettingString", "cat")
+    Private _setting2 As IntegerSetting = _stor1.CreateIntegerSetting("Setting2", 1)
+    Private _setting3 As BooleanSetting = _stor2.CreateBooleanSetting("Setting3", True)
+    Private _setting4 As DoubleSetting = _stor2.CreateDoubleSetting("Setting4Setting", 0.4)
+    Private _setting5 As VariantSetting = _stor2.CreateVariantSetting("Setting5", "Cat", {"Aaa", "Cat", "Dog"})
 
     Private _appBaseServerLocal As RemoteAppServer
     Private _appBaseServerOnRepeater As RemoteAppServer
