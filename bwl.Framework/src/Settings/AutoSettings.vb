@@ -113,7 +113,7 @@ Public Class AutoSettings
                         _items.Add(info)
                 End Select
             End If
-            If prop.PropertyType.IsClass And prop.PropertyType <> GetType(String) Then
+            If prop.PropertyType.IsClass AndAlso prop.PropertyType <> GetType(String) Then
                 Dim val = prop.GetValue(target, Nothing)
                 If recursive Then
                     If val IsNot Nothing Then CollectFields(val, storage.CreateChildStorage(prop.Name), filterByName, True, findMode)

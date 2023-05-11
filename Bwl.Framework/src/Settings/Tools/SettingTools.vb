@@ -22,33 +22,45 @@ Public Module SettingTools
         Return result
     End Function
 
-    Function FindOrCreateBooleanSetting(storage As SettingsStorage, name As String, defaultValue As Boolean, friendlyName As String, description As String) As SettingOnStorage
-        Dim result = storage.Settings.FirstOrDefault(Function(item) item.Name = name)
-        result = If(result Is Nothing, storage.CreateBooleanSetting(name, defaultValue, friendlyName, description), result)
+    Function FindOrCreateIntegerSetting(storage As SettingsStorage, name As String, defaultValue As Integer, friendlyName As String, description As String,
+                                            Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False) As SettingOnStorage
+        Dim result = storage.GetSettings.FirstOrDefault(Function(item) item.Name = name)
+        result = If(result Is Nothing, storage.CreateIntegerSetting(name, defaultValue, friendlyName, description, userGroups, readOnlyField), result)
+        Return result
+    End Function
+    Function FindOrCreateDoubleSetting(storage As SettingsStorage, name As String, defaultValue As Double, friendlyName As String, description As String,
+                                            Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False) As SettingOnStorage
+        Dim result = storage.GetSettings.FirstOrDefault(Function(item) item.Name = name)
+        result = If(result Is Nothing, storage.CreateDoubleSetting(name, defaultValue, friendlyName, description, userGroups, readOnlyField), result)
         Return result
     End Function
 
-    Function FindOrCreateDoubleSetting(storage As SettingsStorage, name As String, defaultValue As Double, friendlyName As String, description As String) As SettingOnStorage
-        Dim result = storage.Settings.FirstOrDefault(Function(item) item.Name = name)
-        result = If(result Is Nothing, storage.CreateDoubleSetting(name, defaultValue, friendlyName, description), result)
+    Function FindOrCreateStringSetting(storage As SettingsStorage, name As String, defaultValue As String, friendlyName As String, description As String,
+                                            Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False) As SettingOnStorage
+        Dim result = storage.GetSettings.FirstOrDefault(Function(item) item.Name = name)
+        result = If(result Is Nothing, storage.CreateStringSetting(name, defaultValue, friendlyName, description, userGroups), result)
         Return result
     End Function
 
-    Function FindOrCreateIntegerSetting(storage As SettingsStorage, name As String, defaultValue As Integer, friendlyName As String, description As String) As SettingOnStorage
-        Dim result = storage.Settings.FirstOrDefault(Function(item) item.Name = name)
-        result = If(result Is Nothing, storage.CreateIntegerSetting(name, defaultValue, friendlyName, description), result)
+    Function FindOrCreateBooleanSetting(storage As SettingsStorage, name As String, defaultValue As Boolean, friendlyName As String, description As String,
+                                            Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False) As SettingOnStorage
+        Dim result = storage.GetSettings.FirstOrDefault(Function(item) item.Name = name)
+        result = If(result Is Nothing, storage.CreateBooleanSetting(name, defaultValue, friendlyName, description, userGroups, readOnlyField), result)
         Return result
     End Function
 
-    Function FindOrCreateStringSetting(storage As SettingsStorage, name As String, defaultValue As String, friendlyName As String, description As String) As SettingOnStorage
-        Dim result = storage.Settings.FirstOrDefault(Function(item) item.Name = name)
-        result = If(result Is Nothing, storage.CreateStringSetting(name, defaultValue, friendlyName, description), result)
+    Function FindOrCreateVariantSetting(storage As SettingsStorage, name As String, defaultValue As String, variants As String(), friendlyName As String, description As String,
+                                            Optional userGroups As String() = Nothing) As SettingOnStorage
+        Dim result = storage.GetSettings.FirstOrDefault(Function(item) item.Name = name)
+        result = If(result Is Nothing, storage.CreateVariantSetting(name, defaultValue, variants, friendlyName, description, userGroups), result)
         Return result
     End Function
 
-    Function FindOrCreateVariantSetting(storage As SettingsStorage, name As String, defaultValue As String, variants As String(), friendlyName As String, description As String) As SettingOnStorage
-        Dim result = storage.Settings.FirstOrDefault(Function(item) item.Name = name)
-        result = If(result Is Nothing, storage.CreateVariantSetting(name, defaultValue, variants, friendlyName, description), result)
+    Function FindOrCreatePasswordSetting(storage As SettingsStorage, name As String, Optional friendlyName As String = "", Optional description As String = "",
+                                            Optional userGroups As String() = Nothing) As SettingOnStorage
+        Dim result = storage.GetSettings.FirstOrDefault(Function(item) item.Name = name)
+        result = If(result Is Nothing, storage.CreatePasswordSetting(name, friendlyName, description, userGroups), result)
         Return result
     End Function
+
 End Module

@@ -40,10 +40,8 @@
         SyncLock _list
             For i = _list.Count - 1 To 0 Step -1
                 Dim parts = _list(i)
-                If parts(0) = "Setting" And parts.Length >= 3 Then
-                    If parts(1) = StringTools.CombineStrings(storagePath, False, ".") And parts(2) = name Then
-                        Return True
-                    End If
+                If parts(0) = "Setting" AndAlso parts.Length >= 3 AndAlso parts(1) = StringTools.CombineStrings(storagePath, False, ".") AndAlso parts(2) = name Then
+                    Return True
                 End If
             Next
             Return False
@@ -54,8 +52,8 @@
         SyncLock _list
             For i = _list.Count - 1 To 0 Step -1
                 Dim parts = _list(i)
-                If parts(0) = "Setting" And parts.Length >= 3 Then
-                    If parts(1) = StringTools.CombineStrings(storagePath, False, ".") And parts(2) = name Then
+                If parts(0) = "Setting" AndAlso parts.Length >= 3 Then
+                    If parts(1) = StringTools.CombineStrings(storagePath, False, ".") AndAlso parts(2) = name Then
                         Return parts(3)
                     End If
                 End If
@@ -72,8 +70,9 @@
 
     Public Sub WriteSetting(storagePath As String(), setting As Setting) Implements ISettingsReaderWriter.WriteSetting
         SyncLock _list
-            '      If setting.GetType.ToString = "Bwl.Framework.VariantSetting" Then Stop
-            _list.Add({"Setting", StringTools.CombineStrings(storagePath, False, "."), setting.Name, setting.ValueAsString, setting.GetType.ToString, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.Restrictions})
+            Dim userGroups = setting.GetUserGroups()
+            _list.Add({"Setting", StringTools.CombineStrings(storagePath, False, "."), setting.Name, setting.ValueAsString, setting.GetType.ToString, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.VariantsAsString,
+                      If(userGroups?.Any(), Serializer.SaveObjectToJsonString(userGroups), ""), setting.IsReadOnly.ToString()})
         End SyncLock
     End Sub
 
@@ -81,8 +80,8 @@
         SyncLock _list
             For i = _list.Count - 1 To 0 Step -1
                 Dim parts = _list(i)
-                If parts(0) = "Category" And parts.Length >= 3 Then
-                    If parts(1) = StringTools.CombineStrings(storagePath, False, ".") And parts(2) = name Then
+                If parts(0) = "Category" AndAlso parts.Length >= 3 Then
+                    If parts(1) = StringTools.CombineStrings(storagePath, False, ".") AndAlso parts(2) = name Then
                         Return parts(3)
                     End If
                 End If
@@ -97,7 +96,7 @@
             Dim path = StringTools.CombineStrings(storagePath, False, ".")
             For i = 0 To List.Count - 1
                 Dim parts = _list(i)
-                If parts(0) = "Setting" And parts.Length >= 3 Then
+                If parts(0) = "Setting" AndAlso parts.Length >= 3 Then
                     If parts(1) = path Then
                         result.Add(parts(2))
                     End If
@@ -112,7 +111,7 @@
         SyncLock _list
             For i = 0 To List.Count - 1
                 Dim parts = _list(i)
-                If parts(0) = "Category" And parts.Length >= 3 Then
+                If parts(0) = "Category" AndAlso parts.Length >= 3 Then
                     If parts(1) = StringTools.CombineStrings(storagePath, False, ".") Then
                         result.Add(parts(2))
                     End If
@@ -133,7 +132,7 @@
         SyncLock _list
             For i = _list.Count - 1 To 0 Step -1
                 Dim parts = _list(i)
-                If parts(0) = "Root" And parts.Length >= 2 Then
+                If parts(0) = "Root" AndAlso parts.Length >= 2 Then
                     result.Add(parts(1))
                 End If
             Next
@@ -145,16 +144,13 @@
         SyncLock _list
             For i = _list.Count - 1 To 0 Step -1
                 Dim parts = _list(i)
-                If parts(0) = "Setting" And parts.Length >= 3 Then
-                    If parts(1) = StringTools.CombineStrings(storagePath, False, ".") And parts(2) = name Then
-                        Dim setting = New Setting(parts(2), parts(5), parts(6), parts(7), parts(3), parts(4), parts(8))
-                        Return setting
-                    End If
+                If parts(0) = "Setting" AndAlso parts.Length >= 3 AndAlso (parts(1) = StringTools.CombineStrings(storagePath, False, ".") AndAlso parts(2) = name) Then
+                    Return New Setting(parts(2), parts(5), parts(6), parts(7), parts(3), parts(4), parts(8), parts(9), parts(10))
                 End If
             Next
             Return Nothing
         End SyncLock
     End Function
 
-  
+
 End Class

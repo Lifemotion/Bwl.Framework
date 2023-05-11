@@ -1,19 +1,19 @@
 ﻿Public Class VariantSetting
     Inherits SettingOnStorage
-    Private _variants() As String
 
-    Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, variants() As String)
-        Me.New(storage, name, defaultValue, variants, "", "")
-    End Sub
+    Private _variants As String()
 
-    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, variants() As String, friendlyName As String, description As String, value As String)
-        MyBase.New(storage, name, defaultValue, friendlyName, description, value)
+    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, variants As String(),
+                   Optional friendlyName As String = "", Optional description As String = "",
+                   Optional userGroups As String() = Nothing)
+        MyBase.New(storage, name, defaultValue, friendlyName, description,, userGroups)
         _isValueCorrectFunction = AddressOf CheckValueIsCorrect
         SetVariants(variants, defaultValue)
     End Sub
 
-    Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, variants() As String, friendlyName As String, description As String)
-        MyBase.New(storage, name, defaultValue, friendlyName, description)
+    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, variants() As String, friendlyName As String, description As String, value As String,
+                   Optional userGroups As String() = Nothing)
+        MyBase.New(storage, name, defaultValue, friendlyName, description, value, userGroups)
         _isValueCorrectFunction = AddressOf CheckValueIsCorrect
         SetVariants(variants, defaultValue)
     End Sub
@@ -56,36 +56,26 @@
         End Set
     End Property
 
-    Public Sub ReplaceVariants(variants() As String, defaultValue As String)
-        SetVariants(variants, defaultValue)
-
-        If FindElement(variants, Value) = "" Then Value = defaultValue
-    End Sub
-
-    Public Overrides Property Restrictions As String
+    Public Overrides Property VariantsAsString As String
         Get
-            Dim variants = _variants(0)
-            For i = 1 To _variants.Length - 1
-                variants = variants + "," + _variants(i)
-            Next
-            Return variants
+            Return _variants.Aggregate(Function(f, t) $"{f},{t}")
         End Get
         Set(value As String)
             ReplaceVariants(value.Split(","c), _defaultValue)
         End Set
     End Property
 
-    Public ReadOnly Property Variants() As String()
-        Get
-            Return _variants
-        End Get
-    End Property
+    Public Function GetVariants() As String()
+        Return _variants
+    End Function
+
+    Public Sub ReplaceVariants(variants() As String, defaultValue As String)
+        SetVariants(variants, defaultValue)
+        If FindElement(variants, Value) = "" Then Value = defaultValue
+    End Sub
 
     Private Function FindElement(array() As String, value As String) As String
-        For Each element In array
-            If element.ToUpper = value.ToUpper Then Return element
-        Next
-        Return ""
+        Return If(array.FirstOrDefault(Function(element) element.ToUpper = value.ToUpper), "")
     End Function
 
 End Class

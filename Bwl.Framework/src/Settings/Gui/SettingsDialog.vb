@@ -32,7 +32,7 @@ Public Class SettingsDialog
             node.Nodes.Add(newNode)
         Next
 
-        For Each childSetting As SettingOnStorage In storage.Settings
+        For Each childSetting As SettingOnStorage In storage.GetSettings
             Dim newNode As New TreeNode
             newNode.ImageIndex = 1
             newNode.SelectedImageIndex = 1

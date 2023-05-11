@@ -18,12 +18,14 @@ Public Class SettingsStorageBackup
     Private ReadOnly _settingsBackupPath As String
     Private ReadOnly _backupSync As New Object
 
-    Private _settingsStorage As SettingsStorage
-    Private _backupDepthInDays As DoubleSetting
-    Private _backupAtStart As BooleanSetting
-    Private _autoBackup As BooleanSetting
-    Private _autoBackupIntervalInMinutes As DoubleSetting
+    Private ReadOnly _settingsStorage As SettingsStorage
+    Private ReadOnly _backupDepthInDays As DoubleSetting
+    Private ReadOnly _backupAtStart As BooleanSetting
+    Private ReadOnly _autoBackup As BooleanSetting
+    Private ReadOnly _autoBackupIntervalInMinutes As DoubleSetting
+
     Private WithEvents _autoBackupTimer As New Timer With {.Enabled = False}
+    Private ReadOnly _autoBackupTimerLock As New Object
 
     Sub New(settingsFolder As String, logger As Logger, settings As SettingsStorage)
         _logger = logger
@@ -78,7 +80,7 @@ Public Class SettingsStorageBackup
     End Property
 
     Private Sub _autoBackupTimer_Elapsed(sender As Object, e As System.Timers.ElapsedEventArgs) Handles _autoBackupTimer.Elapsed
-        SyncLock _autoBackupTimer
+        SyncLock _autoBackupTimerLock
             BackupProcessing()
         End SyncLock
     End Sub
@@ -95,7 +97,7 @@ Public Class SettingsStorageBackup
     End Sub
 
     Private Sub ConfigureAutoBackupTimer(timerIntervalInSeconds As Double)
-        SyncLock _autoBackupTimer
+        SyncLock _autoBackupTimerLock
             _autoBackupTimer.Stop()
             _autoBackupTimer.Interval = timerIntervalInSeconds
             If _autoBackup.Value Then
@@ -118,11 +120,11 @@ Public Class SettingsStorageBackup
             Dim currentBackupFolderName = String.Format("{0}{1}", _backupName, .ToString(_dateTimeFormat, CultureInfo.InvariantCulture))
             Dim dateTimeNowFromFolderName = GetDateTimeFromFolderName(currentBackupFolderName)
             If dateTimeNowFromFolderName Is Nothing Then
-                If _logger IsNot Nothing Then _logger.AddError("dateTimeNowFromFolderName Is Nothing")
+                _logger?.AddError("dateTimeNowFromFolderName Is Nothing")
                 Throw New Exception("dateTimeNowFromFolderName Is Nothing")
             Else
                 If dateTimeNowFromFolderName <> CutDateTimeToSeconds(dateTimeNow) Then
-                    If _logger IsNot Nothing Then _logger.AddError("dateTimeNowFromFolderName <> dateTimeNow")
+                    _logger?.AddError("dateTimeNowFromFolderName <> dateTimeNow")
                     Throw New Exception("dateTimeNowFromFolderName <> dateTimeNow")
                 Else
                     Return currentBackupFolderName

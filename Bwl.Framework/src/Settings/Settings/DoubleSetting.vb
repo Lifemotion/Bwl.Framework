@@ -1,17 +1,16 @@
 ﻿Public Class DoubleSetting
     Inherits SettingOnStorage
 
-    Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As Double)
-        Me.New(storage, name, defaultValue, "", "")
-    End Sub
-
-    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, friendlyName As String, description As String, value As String)
-        MyBase.New(storage, name, defaultValue, friendlyName, description, value)
+    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As Double,
+                   Optional friendlyName As String = "", Optional description As String = "",
+                   Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False)
+        MyBase.New(storage, name, defaultValue.ToString, friendlyName, description,, userGroups, readOnlyField)
         _isValueCorrectFunction = AddressOf CheckValueIsCorrect
     End Sub
 
-    Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As Double, friendlyName As String, description As String)
-        MyBase.New(storage, name, defaultValue.ToString, friendlyName, description)
+    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, friendlyName As String, description As String, value As String,
+                   Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False)
+        MyBase.New(storage, name, defaultValue, friendlyName, description, value, userGroups, readOnlyField)
         _isValueCorrectFunction = AddressOf CheckValueIsCorrect
     End Sub
 

@@ -94,10 +94,10 @@ Public Class BufferedSettingsWriter
             Dim currentCategory As String = ""
             For i = 0 To lines.Length - 1
                 Dim line = lines(i).Trim
-                If line.StartsWith("[") And line.EndsWith("]") Then
+                If line.StartsWith("[") AndAlso line.EndsWith("]") Then
                     currentCategory = line.Substring(1, line.Length - 2)
                 Else
-                    If line.Length > 0 And Not line.StartsWith("#") Then
+                    If line.Length > 0 AndAlso Not line.StartsWith("#") Then
                         Dim keyvalue = line.Split({"="c}, 2)
                         If keyvalue.Length <> 2 Then Throw New Exception("ReadSettingsFromFile, bad line: " + filename + ", #" + i.ToString)
                         If currentCategory = "" Then Throw New Exception("ReadSettingsFromFile, bad line: " + filename + ", #" + i.ToString)
@@ -259,7 +259,7 @@ Public Class BufferedSettingsWriter
         SyncLock _settings
             Dim category = PathToCategory(path)
             For Each setting In _settings
-                If setting.Category = category And setting.Name.Trim.ToLower = name.Trim.ToLower Then
+                If setting.Category = category AndAlso setting.Name.Trim.ToLower = name.Trim.ToLower Then
                     Return setting
                 End If
             Next

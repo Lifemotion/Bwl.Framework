@@ -2,7 +2,6 @@
     Inherits SettingsStorageBase
 
     Public Sub New()
-
     End Sub
 
     Public Sub New(mrw As MemoryReaderWriter)
@@ -10,7 +9,6 @@
     End Sub
 
     Protected Sub New(mrw As MemoryReaderWriter, parentStoragePath As String(), name As String, friendlyname As String, parent As ClonedSettingsStorage)
-
         _name = name
         _friendlyName = friendlyname
         _parentStorage = parent
@@ -19,30 +17,24 @@
         Dim settingsNames = mrw.ReadSettingsNames(path)
         For Each settingName In settingsNames
             Dim setting = mrw.ReadSetting(path, settingName)
-            If setting.Type = GetType(IntegerSetting).ToString Then
-                Dim child = New IntegerSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
-            End If
-            If setting.Type = GetType(BooleanSetting).ToString Then
-                Dim child = New BooleanSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
-            End If
-            If setting.Type = GetType(StringSetting).ToString Then
-                Dim child = New StringSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
-            End If
-            If setting.Type = GetType(DoubleSetting).ToString Then
-                Dim child = New DoubleSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
-            End If
-            If setting.Type = GetType(VariantSetting).ToString Then
-                Dim child = New VariantSetting(Me, setting.Name, setting.DefaultValueAsString, setting.Restrictions.Split(","c), setting.FriendlyName, setting.Description, setting.ValueAsString)
-            End If
+            Dim childSetting As SettingOnStorage
+            Select Case setting.Type
+                Case GetType(IntegerSetting).ToString
+                    childSetting = New IntegerSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString, setting.GetUserGroups(), setting.IsReadOnly)
+                Case GetType(BooleanSetting).ToString
+                    childSetting = New BooleanSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
+                Case GetType(StringSetting).ToString
+                    childSetting = New StringSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
+                Case GetType(DoubleSetting).ToString
+                    childSetting = New DoubleSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
+                Case GetType(VariantSetting).ToString
+                    childSetting = New VariantSetting(Me, setting.Name, setting.DefaultValueAsString, setting.VariantsAsString.Split(","c), setting.FriendlyName, setting.Description, setting.ValueAsString)
+            End Select
         Next
 
-        Dim childNames = mrw.ReadChildStorageNames(path)
-        For Each childName In childNames
-            Dim childFrindly = mrw.ReadCategoryFriendlyName(path, childName)
-            Dim child = New ClonedSettingsStorage(mrw, path, childName, childFrindly, Me)
-            _childStorages.Add(child)
+        For Each childName In mrw.ReadChildStorageNames(path)
+            _childStorages.Add(New ClonedSettingsStorage(mrw, path, childName, mrw.ReadCategoryFriendlyName(path, childName), Me))
         Next
-
     End Sub
 
     Friend Overrides Sub SetSettingChanged(setting As SettingOnStorage)

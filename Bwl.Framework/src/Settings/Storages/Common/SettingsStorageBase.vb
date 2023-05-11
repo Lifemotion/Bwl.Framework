@@ -96,11 +96,12 @@ Public MustInherit Class SettingsStorageBase
         End Get
     End Property
 
-    Public ReadOnly Property Settings() As SettingOnStorage() Implements ISettingsStorage.Settings
-        Get
-            Return _settings.ToArray
-        End Get
-    End Property
+    Public Function GetSettings(Optional userGroups As String() = Nothing, Optional showAllSettings As Boolean = True) As SettingOnStorage() Implements ISettingsStorage.GetSettings
+        ' No need to check, just return everything
+        If showAllSettings Then Return _settings.ToArray()
+        ' Otherwise we should check every setting to make sure it's allowed for any of the specified users
+        Return _settings.Where(Function(setting) userGroups IsNot Nothing AndAlso userGroups.Any() AndAlso setting.GetUserGroups().Any(Function(f) userGroups.Contains(f))).ToArray()
+    End Function
 
 #If Not NETSTANDARD Then
     Public Function ShowSettingsForm(invokeForm As Form) As SettingsDialog Implements ISettingsStorageForm.ShowSettingsForm

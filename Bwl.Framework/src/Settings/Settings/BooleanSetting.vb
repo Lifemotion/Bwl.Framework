@@ -1,17 +1,16 @@
 ﻿Public Class BooleanSetting
     Inherits SettingOnStorage
 
-    Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As Boolean)
-        Me.New(storage, name, defaultValue, "", "")
-    End Sub
-
-    Public Sub New(storage As SettingsStorageBase, name As String, defaultValue As Boolean, friendlyName As String, description As String)
-        MyBase.New(storage, name, defaultValue.ToString, friendlyName, description)
+    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As Boolean,
+                   Optional friendlyName As String = "", Optional description As String = "",
+                   Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False)
+        MyBase.New(storage, name, defaultValue.ToString, friendlyName, description,, userGroups, readOnlyField)
         _isValueCorrectFunction = AddressOf CheckValueIsCorrect
     End Sub
 
-    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, friendlyName As String, description As String, value As String)
-        MyBase.New(storage, name, defaultValue, friendlyName, description, value)
+    Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, friendlyName As String, description As String, value As String,
+                   Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False)
+        MyBase.New(storage, name, defaultValue, friendlyName, description, value, userGroups, readOnlyField)
         _isValueCorrectFunction = AddressOf CheckValueIsCorrect
     End Sub
 

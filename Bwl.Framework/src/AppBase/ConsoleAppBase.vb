@@ -64,7 +64,7 @@ Public Class ConsoleAppBase
         For Each arg In System.Environment.GetCommandLineArgs
             If arg.ToLower = "showsetup" Then ShowSettings()
         Next
-        If My.Computer.Keyboard.ShiftKeyDown And My.Computer.Keyboard.CtrlKeyDown Then ShowSettings()
+        If My.Computer.Keyboard.ShiftKeyDown AndAlso My.Computer.Keyboard.CtrlKeyDown Then ShowSettings()
 #End If
     End Sub
 

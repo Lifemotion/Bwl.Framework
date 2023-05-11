@@ -145,11 +145,11 @@ Public Class DatagridLogWriter
                 If pass = False Then Return False
             End If
 
-            If Not cbDebug.Checked And .type = LogEventType.debug Then Return False
-            If Not cbInformation.Checked And .type = LogEventType.information Then Return False
-            If Not cbErrors.Checked And .type = LogEventType.errors Then Return False
-            If Not cbWarnings.Checked And .type = LogEventType.warning Then Return False
-            If Not cbMessages.Checked And .type = LogEventType.message Then Return False
+            If Not cbDebug.Checked AndAlso .type = LogEventType.debug Then Return False
+            If Not cbInformation.Checked AndAlso .type = LogEventType.information Then Return False
+            If Not cbErrors.Checked AndAlso .type = LogEventType.errors Then Return False
+            If Not cbWarnings.Checked AndAlso .type = LogEventType.warning Then Return False
+            If Not cbMessages.Checked AndAlso .type = LogEventType.message Then Return False
 
             Dim textFilter As Boolean
 

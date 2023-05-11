@@ -72,6 +72,9 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\refs-src\Serializer.vb">
+      <Link>refs\Serializer.vb</Link>
+    </Compile>
     <Compile Include="..\refs-src\CryptoTools.vb">
       <Link>refs\CryptoTools.vb</Link>
     </Compile>

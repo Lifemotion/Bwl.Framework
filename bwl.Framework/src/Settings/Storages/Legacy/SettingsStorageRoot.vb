@@ -92,7 +92,7 @@ Public Class SettingsStorageRoot
 
     Private Sub _autoSaveTimer_Elapsed(sender As Object, e As System.Timers.ElapsedEventArgs) Handles _autoSaveTimer.Elapsed
         SyncLock _autoSaveTimer
-            If Not _readOnly And _autoSave Then
+            If Not _readOnly AndAlso _autoSave Then
                 If _autoSaveNeeded Then
                     _autoSaveNeeded = False
                     SaveSettings(True)
