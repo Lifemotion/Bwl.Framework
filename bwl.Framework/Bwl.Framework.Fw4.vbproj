@@ -84,6 +84,12 @@
     <Compile Include="..\refs-src\StringTools.vb">
       <Link>refs\StringTools.vb</Link>
     </Compile>
+    <Compile Include="..\refs-src\RunLimiter.vb">
+      <Link>refs\RunLimiter.vb</Link>
+    </Compile>
+    <Compile Include="..\refs-src\Serializer.vb">
+      <Link>refs\Serializer.vb</Link>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
