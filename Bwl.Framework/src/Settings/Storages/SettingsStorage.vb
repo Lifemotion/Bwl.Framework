@@ -20,7 +20,7 @@ Public Class SettingsStorage
     ''' <param name="parentStorage">Родительское хранилище.</param>
     ''' <param name="name">Имя подкатегории настроек.</param>
     ''' <remarks></remarks>
-    Protected Sub New(parentStorage As SettingsStorage, name As String, friendlyName As String, Optional isReadOnly As Boolean = False)
+    Friend Sub New(parentStorage As SettingsStorage, name As String, friendlyName As String, Optional isReadOnly As Boolean = False)
         If name = "" Then Throw New ArgumentException("Name can't be empty")
         If parentStorage Is Nothing Then Throw New ArgumentException("Parent storage is nothing")
         _readOnly = isReadOnly

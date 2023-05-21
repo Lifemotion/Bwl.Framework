@@ -286,12 +286,12 @@ Public Class FrameworkTests
             ' This should return all settings allowed to admin. We check that there are 12 settings and 6 of them also contain user
             Dim adminSettings = settings.GetSettings({"admin"}, False)
             Assert.AreEqual(12, adminSettings.Count())
-            Assert.AreEqual(6, adminSettings.Count(Function(f) f.GetUserGroups()?.Contains("user")))
+            Assert.AreEqual(6, adminSettings.Count(Function(f) f.UserGroups?.Contains("user")))
 
             ' Same as before, but replace admin with user and vice versa
             Dim userSettings = settings.GetSettings({"user"}, False)
             Assert.AreEqual(12, userSettings.Count())
-            Assert.AreEqual(6, userSettings.Count(Function(f) f.GetUserGroups()?.Contains("admin")))
+            Assert.AreEqual(6, userSettings.Count(Function(f) f.UserGroups?.Contains("admin")))
 
             ' A group that has no settings should get none
             Dim catSettings = settings.GetSettings({"cat"}, False)

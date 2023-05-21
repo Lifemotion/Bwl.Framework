@@ -70,7 +70,7 @@
 
     Public Sub WriteSetting(storagePath As String(), setting As Setting) Implements ISettingsReaderWriter.WriteSetting
         SyncLock _list
-            Dim userGroups = setting.GetUserGroups()
+            Dim userGroups = setting.UserGroups
             _list.Add({"Setting", StringTools.CombineStrings(storagePath, False, "."), setting.Name, setting.ValueAsString, setting.GetType.ToString, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.VariantsAsString,
                       If(userGroups?.Any(), Serializer.SaveObjectToJsonString(userGroups), ""), setting.IsReadOnly.ToString()})
         End SyncLock

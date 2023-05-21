@@ -100,7 +100,7 @@ Public MustInherit Class SettingsStorageBase
         ' No need to check, just return everything
         If showAllSettings Then Return _settings.ToArray()
         ' Otherwise we should check every setting to make sure it's allowed for any of the specified users
-        Return _settings.Where(Function(setting) userGroups IsNot Nothing AndAlso userGroups.Any() AndAlso setting.GetUserGroups().Any(Function(f) userGroups.Contains(f))).ToArray()
+        Return _settings.Where(Function(setting) userGroups IsNot Nothing AndAlso userGroups.Any() AndAlso setting.UserGroups.Any(Function(f) userGroups.Contains(f))).ToArray()
     End Function
 
 #If Not NETSTANDARD Then

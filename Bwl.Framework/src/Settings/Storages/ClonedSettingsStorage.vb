@@ -20,7 +20,7 @@
             Dim childSetting As SettingOnStorage
             Select Case setting.Type
                 Case GetType(IntegerSetting).ToString
-                    childSetting = New IntegerSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString, setting.GetUserGroups(), setting.IsReadOnly)
+                    childSetting = New IntegerSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString, setting.UserGroups, setting.IsReadOnly)
                 Case GetType(BooleanSetting).ToString
                     childSetting = New BooleanSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
                 Case GetType(StringSetting).ToString

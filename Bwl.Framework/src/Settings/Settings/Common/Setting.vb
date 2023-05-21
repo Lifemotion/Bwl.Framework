@@ -68,6 +68,19 @@
         End Get
     End Property
 
+    Public Property UserGroups As String()
+        Get
+            Try
+                Return Serializer.LoadObjectFromJsonString(Of String())(_userGroups)
+            Catch ex As Exception
+                Return New String() {}
+            End Try
+        End Get
+        Set(value As String())
+            Serializer.SaveObjectToJsonString(value)
+        End Set
+    End Property
+
     Public ReadOnly Property IsReadOnly As Boolean
         Get
             Try
@@ -100,14 +113,6 @@
         _userGroups = userGroups
         _isReadOnly = isReadOnly
     End Sub
-
-    Public Function GetUserGroups() As String()
-        Try
-            Return Serializer.LoadObjectFromJsonString(Of String())(_userGroups)
-        Catch ex As Exception
-            Return New String() {}
-        End Try
-    End Function
 
     Public Sub RaiseValueChanged()
         RaiseEvent ValueChanged(Me)
