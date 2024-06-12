@@ -94,9 +94,7 @@
     <Compile Include="EmbLogger\EmbFormLogInfo.Designer.vb">
       <DependentUpon>EmbFormLogInfo.vb</DependentUpon>
     </Compile>
-    <Compile Include="EmbLogger\EmbFormLogInfo.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="EmbLogger\EmbFormLogInfo.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

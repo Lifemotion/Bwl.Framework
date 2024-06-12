@@ -243,12 +243,12 @@
     <Compile Include="src\Settings\Settings\VariantSetting.vb" />
     <Compile Include="src\Settings\Storages\SettingsStorageBufferedRoot.vb" />
     <Compile Include="src\Settings\Tools\SettingTools.vb" />
-    <Compile Include="src\Settings\Writers\Legacy\ReadOnlyIniFileSettingsWriter.vb" />
-    <Compile Include="src\Settings\Writers\Realizations\BufferedSettingsWriter.vb" />
-    <Compile Include="src\Settings\Writers\Realizations\MemoryReaderWriter.vb" />
+    <Compile Include="src\Settings\Writers\Implementation\Legacy\ReadOnlyIniFileSettingsWriter.vb" />
+    <Compile Include="src\Settings\Writers\Implementation\Buffered\BufferedSettingsWriter.vb" />
+    <Compile Include="src\Settings\Writers\Implementation\MemoryReaderWriter.vb" />
     <Compile Include="src\Settings\Writers\Interface\ISettingsWriter.vb" />
-    <Compile Include="src\Settings\Writers\Legacy\IniFileSettingsWriter.vb" />
-    <Compile Include="src\Settings\Writers\Realizations\NullSettingsWriter.vb" />
+    <Compile Include="src\Settings\Writers\Implementation\Legacy\IniFileSettingsWriter.vb" />
+    <Compile Include="src\Settings\Writers\Implementation\NullSettingsWriter.vb" />
     <Compile Include="src\MailSender\MailSender.vb" />
     <Compile Include="src\Tools\RunMonitorHelper.vb" />
   </ItemGroup>
