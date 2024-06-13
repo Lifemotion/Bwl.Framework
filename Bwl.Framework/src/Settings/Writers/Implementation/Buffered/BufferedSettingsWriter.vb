@@ -36,11 +36,13 @@ Public Class BufferedSettingsWriter
 
     Public Sub ReadSettingsFromFile(filename As String)
         SyncLock _settings
-            For Each fn In {filename, filename + ".bak", filename + ".old.bak"}
+            Dim fileList = {filename, filename + ".bak", filename + ".old.bak"}
+            For Each file In fileList
                 Try
-                    ReadSettingsFromFile(fn, _settings)
+                    ReadSettingsFromFile(file, _settings) 'Загрузили...
+                    Exit For '...вышли
                 Catch ex As Exception
-                    RaiseEvent Logger("err", ex.Message)
+                    RaiseEvent Logger("wrn", ex.Message)
                 End Try
             Next
         End SyncLock
@@ -73,7 +75,24 @@ Public Class BufferedSettingsWriter
                                       Optional allowEmptyLoad As Boolean = False,
                                       Optional allowSettingRepeats As Boolean = False)
         Try
-            Dim settingsLoaded As New Dictionary(Of (Category As String, Name As String), BufferedSetting)
+            'Проверка хеша
+            Dim hashCheckResult As Boolean? = Nothing
+            For Each line In lines
+                Try
+                    line = line.Replace(" ", "")
+                    If line.StartsWith("#SHA512:") Then
+                        If hashCheckResult Is Nothing Then hashCheckResult = False 'Зафиксировали наличи е сигнатуры
+                        If line.Contains(SHA512Base64(lines)) Then
+                            hashCheckResult = True 'Положительный флаг проверки...
+                            Exit For '...и выход
+                        End If
+                    End If
+                Catch
+                End Try
+            Next
+            If hashCheckResult IsNot Nothing AndAlso Not hashCheckResult Then Throw New Exception("SHA512 check failed")
+            'Вычитывание настроек из строк после проверки хеша
+            Dim settingsLoaded As New Dictionary(Of (Category As String, Name As String), BufferedSetting)()
             Dim currentCategory = String.Empty
             Dim i = 0
             For Each line In lines
@@ -101,10 +120,6 @@ Public Class BufferedSettingsWriter
                 End Try
                 i += 1
             Next
-            'Проверка хеша
-            If lines.Last.Replace(" ", "").StartsWith("#SHA512:") Then
-                If $"#SHA512:{CalculateHash(lines)}".Replace(" ", "") <> lines.Last.Replace(" ", "") Then Throw New Exception("SHA512 check failed")
-            End If
             'Если не разрешена "пустая загрузка" - в ini-файле должна быть хотя бы одна настройка
             If Not allowEmptyLoad AndAlso settingsLoaded.Count = 0 Then Throw New Exception($"settingsLoaded.Count = 0")
             'Проверка на допустимость записи в целевые настройки
@@ -125,7 +140,7 @@ Public Class BufferedSettingsWriter
         SyncLock settings
             Try
                 'Запись настроек в массив строк
-                Dim lines As New Queue(Of String)
+                Dim lines As New Queue(Of String)()
                 WriteSettingsToLines(lines, settings)
                 'Определение необходимости записи на диск (если массивы строк под запись и в файле не совпадают)
                 Dim needToWrite = False
@@ -162,36 +177,48 @@ Public Class BufferedSettingsWriter
                                      Optional name As String = Nothing)
         SyncLock settings
             Try
-                lines.Enqueue("# Bwl.Framework BufferedSettingsWriter")
+                'Заполнение массива строк
+                Dim accum As New Queue(Of String)
+                accum.Enqueue("# Bwl.Framework BufferedSettingsWriter")
                 Dim categoriesRecorded As New HashSet(Of String)
                 For Each settingKVP In settings.OrderBy(Function(item) item.Key.Category) 'Равные категории при сортировке образуют группы
                     If Not categoriesRecorded.Contains(settingKVP.Key.Category) Then
                         categoriesRecorded.Add(settingKVP.Key.Category)
-                        lines.Enqueue($"[{settingKVP.Key.Category}]")
+                        accum.Enqueue($"[{settingKVP.Key.Category}]")
                     End If
-                    If settingKVP.Value.FriendlyName > "" Then lines.Enqueue("# " + settingKVP.Value.FriendlyName) 'Комментарий
-                    lines.Enqueue($"{settingKVP.Value.Name}={settingKVP.Value.Value}") 'Значение
+                    If settingKVP.Value.FriendlyName > "" Then accum.Enqueue("# " + settingKVP.Value.FriendlyName) 'Комментарий
+                    accum.Enqueue($"{settingKVP.Value.Name}={settingKVP.Value.Value}") 'Значение
                 Next
-                lines.Enqueue($"# SHA512:{CalculateHash(lines)}")
+                'Рачет хеша по значимым строкам
+                Dim hashStr = $"# SHA512:{SHA512Base64(accum)}"
+                lines.Enqueue(hashStr) 'Начало файла
+                For Each line In accum
+                    lines.Enqueue(line)
+                Next
+                lines.Enqueue(hashStr) 'Конец файла
             Catch ex As Exception
                 Throw New Exception($"WriteSettingsToLines({name}): ex:{ex.Message}")
             End Try
         End SyncLock
     End Sub
 
-    Private Function CalculateHash(lines As IEnumerable(Of String)) As String
-        Using hash = Security.Cryptography.SHA512.Create()
+    Private Function SHA512Base64(lines As IEnumerable(Of String)) As String
+        Using sha512 = Security.Cryptography.SHA512.Create()
             Dim block As Byte() = Nothing
             For Each line In lines
                 line = line.Trim()
                 If (line.StartsWith("[") AndAlso line.EndsWith("]")) OrElse
                    (line.Length > 0 AndAlso Not line.StartsWith("#")) Then
                     block = Encoding.UTF8.GetBytes(line)
-                    hash.TransformBlock(block, 0, block.Length, Nothing, 0)
+                    sha512.TransformBlock(block, 0, block.Length, Nothing, 0)
                 End If
             Next
-            If block IsNot Nothing Then hash.TransformFinalBlock(block, 0, 0)
-            Return Convert.ToBase64String(hash.Hash)
+            If block IsNot Nothing Then
+                sha512.TransformFinalBlock(block, 0, 0)
+                Return Convert.ToBase64String(sha512.Hash)
+            Else
+                Return "Empty"
+            End If
         End Using
     End Function
 
@@ -225,16 +252,24 @@ Public Class BufferedSettingsWriter
     End Function
 
     Private Function SafeDelete(filename As String) As Boolean
-        If File.Exists(filename) Then
-            File.SetAttributes(filename, FileAttributes.Normal)
-            File.Delete(filename)
-            Return True
-        End If
+        Try
+            If File.Exists(filename) Then
+                File.SetAttributes(filename, FileAttributes.Normal)
+                File.Delete(filename)
+                Return True
+            End If
+        Catch
+        End Try
         Return False
     End Function
 
     Private Sub ReplaceFiles(source As String, target As String)
-        SafeDelete(target) : File.Move(source, target)
+        SafeDelete(target)
+        Try
+            File.Move(source, target)
+        Catch ex As Exception
+            Throw New Exception($"ReplaceFiles: File.Move({source}, {target})")
+        End Try
     End Sub
 
 #Region "ISettingsReaderWriter"

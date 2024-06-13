@@ -14,6 +14,7 @@ Public Class FrameworkTests
 
         If IO.File.Exists(f1) Then IO.File.Delete(f1)
         If IO.File.Exists(f1 + ".bak") Then IO.File.Delete(f1 + ".bak")
+        If IO.File.Exists(f1 + ".old.bak") Then IO.File.Delete(f1 + ".old.bak")
 
         Dim fileRW = New IniFile("test1.ini")
         Assert.AreEqual(fileRW.GetSetting("Test1.Test2.Test3", "Param 1",, "!NoSetting"), "!NoSetting")
@@ -44,6 +45,7 @@ Public Class FrameworkTests
 
         If IO.File.Exists(f1) Then IO.File.Delete(f1)
         If IO.File.Exists(f1 + ".bak") Then IO.File.Delete(f1 + ".bak")
+        If IO.File.Exists(f1 + ".old.bak") Then IO.File.Delete(f1 + ".old.bak")
 
         Dim ssr1 = New SettingsStorageBufferedRoot(f1, "App")
         Dim s1 = ssr1.CreateStringSetting("Setting 1", "Default")
@@ -91,6 +93,7 @@ Public Class FrameworkTests
 
         If IO.File.Exists(f1) Then IO.File.Delete(f1)
         If IO.File.Exists(f1 + ".bak") Then IO.File.Delete(f1 + ".bak")
+        If IO.File.Exists(f1 + ".old.bak") Then IO.File.Delete(f1 + ".old.bak")
 
         Dim ssr1 = New SettingsStorageBufferedRoot(f1, "App")
         Dim s1 = ssr1.CreateStringSetting("Setting 1", "Default")
@@ -139,6 +142,7 @@ Public Class FrameworkTests
 
         If IO.File.Exists(testFile) Then IO.File.Delete(testFile)
         If IO.File.Exists(testFile + ".bak") Then IO.File.Delete(testFile + ".bak")
+        If IO.File.Exists(testFile + ".old.bak") Then IO.File.Delete(testFile + ".old.bak")
 
         Dim settings1 = New SettingsStorageRoot(testFile, "App")
         Dim s1 = settings1.CreateStringSetting("Setting 1", "Default")
@@ -221,6 +225,7 @@ Public Class FrameworkTests
 
         If IO.File.Exists(testFile) Then IO.File.Delete(testFile)
         If IO.File.Exists(testFile + ".bak") Then IO.File.Delete(testFile + ".bak")
+        If IO.File.Exists(testFile + ".old.bak") Then IO.File.Delete(testFile + ".old.bak")
 
         Dim settings = New SettingsStorageRoot(testFile, "App")
         Dim variantSettingVariants = {"variant1", "variant2", "variant3"}
@@ -347,7 +352,5 @@ Public Class FrameworkTests
             Assert.AreNotEqual(s1origValue, s1.Value)
             Assert.AreNotEqual(b1origValue, b1.Value)
         End With
-
     End Sub
-
 End Class
