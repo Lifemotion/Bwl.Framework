@@ -1,4 +1,5 @@
-﻿Imports NUnit.Framework
+﻿Imports System.Collections.Specialized
+Imports NUnit.Framework
 
 <TestFixture> <Parallelizable(ParallelScope.Fixtures)>
 Public Class FrameworkTests
@@ -227,9 +228,9 @@ Public Class FrameworkTests
         If IO.File.Exists(testFile + ".bak") Then IO.File.Delete(testFile + ".bak")
         If IO.File.Exists(testFile + ".old.bak") Then IO.File.Delete(testFile + ".old.bak")
 
-        Dim settings = New SettingsStorageRoot(testFile, "App")
+        Dim settings = New SettingsStorageBufferedRoot(testFile, "App")
         Dim variantSettingVariants = {"variant1", "variant2", "variant3"}
-        Dim rand = New Random()
+        Dim rand = New Random(DateTime.Now.Ticks Mod Integer.MaxValue)
         With settings
             ' Default settings creation
             Dim i1 = .CreateIntegerSetting("i1", rand.Next())
@@ -352,5 +353,94 @@ Public Class FrameworkTests
             Assert.AreNotEqual(s1origValue, s1.Value)
             Assert.AreNotEqual(b1origValue, b1.Value)
         End With
+    End Sub
+
+    <Test> <Parallelizable(ParallelScope.Self)>
+    Public Sub StringSettingsReadWriteBufferedDamage1()
+        Dim filename = "test_damage.ini"
+
+        ' Etalon values
+        Dim v1 = "124354"
+        Dim v2 = "3465346 fghfgh ryuretgdsop656 0 0ry0hf0h0fd 5+%-623430-=664590-2w35 =-r6 -=60=-yepoizxfgmkre0-6y450-y-0rtbo0f0-hr0- 0-r 0-40-40o-hrd0-hr0dh"
+        Dim v3 = "Кот КОТ 3435547 Cat cat dfdfdf 565473e4"
+        Dim v4 = """Нет сигнала на мониторе, на клавиатуру не реагирует. Повторная перезагрузка не помогла, сервер не загружается."""
+
+        ' Clear existing data
+        If IO.File.Exists(filename) Then IO.File.Delete(filename)
+        If IO.File.Exists(filename + ".bak") Then IO.File.Delete(filename + ".bak")
+        If IO.File.Exists(filename + ".old.bak") Then IO.File.Delete(filename + ".old.bak")
+
+        ' Create settings...
+        Dim ssr1 = New SettingsStorageBufferedRoot(filename, "App")
+        Dim s1 = ssr1.CreateStringSetting("Setting 1", "Default")
+        Dim s2 = ssr1.CreateStringSetting("Setting 2", "")
+        Dim s3 = ssr1.CreateStringSetting("Setting 3", "")
+        Dim s4 = ssr1.CreateStringSetting("Setting 4", "")
+        ' ...and check theirs default values
+        Assert.AreEqual("Default", s1.Value)
+        Assert.AreEqual("", s2.Value)
+        Assert.AreEqual("", s3.Value)
+        Assert.AreEqual("", s4.Value)
+
+        ' Setting value set test
+        s1.Value = v1
+        s2.Value = v2
+        s3.Value = v3
+        s4.Value = v4
+        Assert.AreEqual(v1, s1.Value)
+        Assert.AreEqual(v2, s2.Value)
+        Assert.AreEqual(v3, s3.Value)
+        Assert.AreEqual(v4, s4.Value)
+
+        ' Finally save
+        ssr1.SaveSettings(False)
+        ssr1 = Nothing
+
+        ' Damage Test
+        Dim notDamagedData = IO.File.ReadAllText(filename)
+        Dim fullFileNameSet = {filename, filename + ".bak", filename + ".old.bak", String.Empty}
+        For Each mode In {"Damage", "Delete"}
+            For Each usedFile In fullFileNameSet
+                ' The list of damaged files
+                Dim damagedFileNameSet As New List(Of String)(fullFileNameSet.Except({usedFile})) ' usedFile will not be damaged
+
+                ' Writing normal data
+                If usedFile <> String.Empty Then
+                    IO.File.WriteAllText(usedFile, notDamagedData)
+                End If
+
+                ' If mode = "Damage" - writing damaged data, if not - not write at all ("Delete" mode)
+                If mode = "Damage" Then
+                    For Each damageFileName In damagedFileNameSet.Where(Function(item) item <> String.Empty)
+                        IO.File.WriteAllText(damageFileName, "<" + notDamagedData + ">")
+                    Next
+                End If
+
+                ' Read settings and compare it's values
+                Dim ssr2 = New SettingsStorageBufferedRoot(filename, "App") ' Always "filename", because *.bak and *.old.bak used automatically
+                Dim s1a = ssr2.CreateStringSetting("Setting 1", "Default")
+                Dim s2a = ssr2.CreateStringSetting("Setting 2", "")
+                Dim s3a = ssr2.CreateStringSetting("Setting 3", "")
+                Dim s4a = ssr2.CreateStringSetting("Setting 4", "")
+
+                ' Available valid *.ini file - stored values expected
+                If usedFile <> String.Empty Then
+                    Assert.AreEqual(v1, s1a.Value)
+                    Assert.AreEqual(v2, s2a.Value)
+                    Assert.AreEqual(v3, s3a.Value)
+                    Assert.AreEqual(v4, s4a.Value)
+                Else ' Not available valid files - default values expected
+                    Assert.AreEqual("Default", s1a.Value)
+                    Assert.AreEqual("", s2a.Value)
+                    Assert.AreEqual("", s3a.Value)
+                    Assert.AreEqual("", s4a.Value)
+                End If
+
+                ' Deleting all files after experiment
+                For Each f In fullFileNameSet.Where(Function(item) item <> String.Empty)
+                    If IO.File.Exists(f) Then IO.File.Delete(f)
+                Next
+            Next
+        Next
     End Sub
 End Class
