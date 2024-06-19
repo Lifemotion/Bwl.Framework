@@ -45,6 +45,7 @@ Public Class SettingsStorageRoot
     ''' </summary>
     ''' <param name="iniFileName">Имя ini-файла с настройками.</param>
     ''' <param name="rootCategoryName">Имя корневой категории настроек.</param>
+    ''' <param name="isReadOnly">Данные в хранилище только для чтения.</param>
     ''' <remarks></remarks>
     Sub New(iniFileName As String, rootCategoryName As String, isReadOnly As Boolean)
         If rootCategoryName Is Nothing OrElse rootCategoryName = "" Then Throw New Exception("RootName can't be empty")

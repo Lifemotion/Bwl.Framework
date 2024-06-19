@@ -4,6 +4,17 @@ Imports System.Text
 Public Class BufferedSettingsWriter
     Implements ISettingsReaderWriter
     Private Class BufferedSetting
+        Public Shared Operator =(a As BufferedSetting, b As BufferedSetting) As Boolean
+            Return Compare(a, b)
+        End Operator
+        Public Shared Operator <>(a As BufferedSetting, b As BufferedSetting) As Boolean
+            Return Not Compare(a, b)
+        End Operator
+        Private Shared Function Compare(a As BufferedSetting, b As BufferedSetting) As Boolean
+            Return String.Equals(a.Category.Trim().ToUpper(), b.Category.Trim().ToUpper()) AndAlso
+                   String.Equals(a.Name.Trim().ToUpper(), b.Name.Trim().ToUpper()) AndAlso
+                   String.Equals(a.Value, b.Value)
+        End Function
         Public Shared Function GetKey(category As String, name As String) As (Category As String, Name As String)
             Return (category.Trim().ToUpper(), name.Trim().ToUpper())
         End Function
@@ -20,13 +31,11 @@ Public Class BufferedSettingsWriter
 
     Private _settings As New Dictionary(Of (Category As String, Name As String), BufferedSetting)
     Private _filename As String
-    Private _logAllEvents As Boolean
 
     Public Event Logger(type As String, message As String)
 
-    Sub New(filename As String, Optional logAllEvents As Boolean = False)
+    Sub New(filename As String)
         _filename = filename
-        _logAllEvents = logAllEvents
         ReadSettingsFromFile()
     End Sub
 
@@ -86,13 +95,14 @@ Public Class BufferedSettingsWriter
                                       Optional allowSettingRepeats As Boolean = False)
         Try
             'Проверка хеша
+            Dim linesHashSignature = SHA512Base64(lines)
             Dim hashCheckResult As Boolean? = Nothing
             For Each line In lines
                 Try
                     line = line.Replace(" ", "")
-                    If line.StartsWith("#SHA-512:") OrElse line.StartsWith("#SHA512:") Then
+                    If {"#SHA-512:", "#SHA512:"}.Any(Function(marker) line.StartsWith(marker)) Then
                         If hashCheckResult Is Nothing Then hashCheckResult = False 'Зафиксировали наличи е сигнатуры
-                        If line.Contains(SHA512Base64(lines)) Then
+                        If line.Contains(linesHashSignature) Then
                             hashCheckResult = True 'Положительный флаг проверки...
                             Exit For '...и выход
                         End If
@@ -153,12 +163,15 @@ Public Class BufferedSettingsWriter
                 Dim lines As New Queue(Of String)()
                 WriteSettingsToLines(lines, settings)
                 'Проверка возможности корректной загрузки настроек из порожденного набора строк
-                Dim settings2Verify As New Dictionary(Of (Category As String, Name As String), BufferedSetting)()
-                ReadSettingsFromLines(lines, settings2Verify)
-                'Проверка на идентичную строковую сериализацию загруженных настроек
-                Dim lines2Verify As New Queue(Of String)()
-                WriteSettingsToLines(lines2Verify, settings2Verify)
-                CompareLines(lines.ToArray(), lines2Verify.ToArray())
+                Dim settingsVerify As New Dictionary(Of (Category As String, Name As String), BufferedSetting)()
+                ReadSettingsFromLines(lines, settingsVerify)
+                'Сравниваем наборы настроек: равенство кол-ва элементов...
+                If settings.Count <> settingsVerify.Count Then Throw New Exception($"settings.Count <> settingsVerify.Count")
+                For Each settingKVP In settings '... и равенство значений элементов
+                    If settingKVP.Value <> settingsVerify(settingKVP.Key) Then
+                        Throw New Exception($"settingKVP.Value <> settingsVerify(settingKVP.Key)")
+                    End If
+                Next
                 'Определение необходимости записи на диск (если массивы строк под запись и в файле не совпадают)
                 Dim needToWrite = False
                 Try
@@ -175,19 +188,19 @@ Public Class BufferedSettingsWriter
                     '...и верификация с имеющимся набором строк
                     Dim linesOnDisk = File.ReadAllLines(tmpFilename)
                     CompareLines(lines.ToArray(), linesOnDisk)
-                    'Если вызов главный - требуется вычитать старые настройки и перезаписать их
+                    'Если вызов главный - требуется вычитать старые настройки и поместить в иерархию копий
                     If masterCall Then
                         '№1: "*.bak" => "*.old.bak"
                         Try
-                            Dim settBak = ReadSettingsFromFile(filename + ".bak")
-                            WriteSettingsToFile(filename + ".old.bak", settBak, masterCall:=False) 'Это не мастер-вызов, а рекурсивный
-                        Catch ex As Exception
+                            Dim bakSett = ReadSettingsFromFile(filename + ".bak") 'Пытаемся вычитать архив основных настроек
+                            If bakSett IsNot Nothing Then WriteSettingsToFile(filename + ".old.bak", bakSett, masterCall:=False) 'Это не мастер-вызов, а рекурсивный!
+                        Catch
                         End Try
                         '№2: "*" => "*.bak"
                         Try
-                            Dim settPrev = ReadSettingsFromFile(filename)
-                            WriteSettingsToFile(filename + ".bak", settPrev, masterCall:=False) 'Это не мастер-вызов, а рекурсивный
-                        Catch ex As Exception
+                            Dim mainSett = ReadSettingsFromFile(filename) 'Пытаемся вычитать основные настройки
+                            If mainSett IsNot Nothing Then WriteSettingsToFile(filename + ".bak", mainSett, masterCall:=False) 'Это не мастер-вызов, а рекурсивный!
+                        Catch
                         End Try
                     End If
                     'Замещаем целевой файл временным (который уже был верифицирован)
