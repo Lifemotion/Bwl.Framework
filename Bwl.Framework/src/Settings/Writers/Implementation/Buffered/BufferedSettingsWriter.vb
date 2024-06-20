@@ -23,6 +23,7 @@ Public Class BufferedSettingsWriter
                 Return GetKey(Category, Name)
             End Get
         End Property
+        Public Property IsActive As Boolean
         Public Property Category As String
         Public Property Name As String
         Public Property FriendlyName As String
@@ -57,12 +58,12 @@ Public Class BufferedSettingsWriter
         End SyncLock
     End Sub
 
-    Public Sub WriteSettingsToFile()
-        WriteSettingsToFile(_filename, _settings)
+    Public Sub WriteSettingsToFile(Optional onlyActiveSettings As Boolean = False)
+        WriteSettingsToFile(_filename, _settings, onlyActiveSettings)
     End Sub
 
-    Public Sub WriteSettingsToFile(filename As String)
-        WriteSettingsToFile(filename, _settings)
+    Public Sub WriteSettingsToFile(filename As String, Optional onlyActiveSettings As Boolean = False)
+        WriteSettingsToFile(filename, _settings, onlyActiveSettings)
     End Sub
 
     Private Function ReadSettingsFromFile(filename As String) As Dictionary(Of (Category As String, Name As String), BufferedSetting)
@@ -94,7 +95,7 @@ Public Class BufferedSettingsWriter
                                       Optional allowEmptyLoad As Boolean = False,
                                       Optional allowSettingRepeats As Boolean = False)
         Try
-            'Проверка хеша
+            'Проверка хеша SHA512
             Dim linesHashSignature = SHA512Base64(lines)
             Dim hashCheckResult As Boolean? = Nothing
             For Each line In lines
@@ -114,11 +115,15 @@ Public Class BufferedSettingsWriter
             'Вычитывание настроек из строк после проверки хеша
             Dim settingsLoaded As New Dictionary(Of (Category As String, Name As String), BufferedSetting)()
             Dim currentCategory = String.Empty
+            Dim currentFriendlyName = String.Empty
             Dim i = 0
             For Each line In lines
                 Try
                     line = line.Trim()
-                    If line.Length = 0 OrElse line.StartsWith("#") Then Continue For 'Пустая строка или комментарий
+                    If line.Length = 0 OrElse line.StartsWith("#") Then 'Пустая строка или комментарий (обычно в комментариях)
+                        currentFriendlyName = line 'Как правило, дружественное имя находится в строке комментария, непоср. предш. настройке
+                        Continue For
+                    End If
                     If line.StartsWith("[") AndAlso line.EndsWith("]") Then 'Категория
                         currentCategory = line.Substring(1, line.Length - 2)
                     Else
@@ -129,11 +134,13 @@ Public Class BufferedSettingsWriter
                         With setting
                             .Category = currentCategory
                             .Name = keyvalue(0).Trim()
+                            .FriendlyName = currentFriendlyName
                             .Value = keyvalue(1)
                         End With
                         If Not allowSettingRepeats AndAlso settingsLoaded.ContainsKey(setting.Key) Then Throw New Exception($"setting key repeat:'{setting.Key}'")
                         settingsLoaded(setting.Key) = setting
                     End If
+                    currentFriendlyName = String.Empty 'Дружественное имя может лишь непосредственно предшествовать настройке
                 Catch ex As Exception
                     Throw New Exception($"ReadSettingsFromLines({name}): bad line №{i + 1}, ex:{ex.Message}")
                 End Try
@@ -156,12 +163,12 @@ Public Class BufferedSettingsWriter
     End Sub
 
     Private Sub WriteSettingsToFile(filename As String, settings As Dictionary(Of (Category As String, Name As String), BufferedSetting),
-                                    Optional masterCall As Boolean = True)
+                                    Optional onlyActiveSettings As Boolean = False, Optional masterCall As Boolean = True)
         SyncLock settings
             Try
                 'Запись настроек в массив строк
                 Dim lines As New Queue(Of String)()
-                WriteSettingsToLines(lines, settings)
+                WriteSettingsToLines(lines, settings, onlyActiveSettings)
                 'Проверка возможности корректной загрузки настроек из порожденного набора строк
                 Dim settingsVerify As New Dictionary(Of (Category As String, Name As String), BufferedSetting)()
                 ReadSettingsFromLines(lines, settingsVerify)
@@ -193,13 +200,13 @@ Public Class BufferedSettingsWriter
                         '№1: "*.bak" => "*.old.bak"
                         Try
                             Dim bakSett = ReadSettingsFromFile(filename + ".bak") 'Пытаемся вычитать архив основных настроек
-                            If bakSett IsNot Nothing Then WriteSettingsToFile(filename + ".old.bak", bakSett, masterCall:=False) 'Это не мастер-вызов, а рекурсивный!
+                            If bakSett IsNot Nothing Then WriteSettingsToFile(filename + ".old.bak", bakSett, onlyActiveSettings, masterCall:=False) 'Это не мастер-вызов, а рекурсивный!
                         Catch
                         End Try
                         '№2: "*" => "*.bak"
                         Try
                             Dim mainSett = ReadSettingsFromFile(filename) 'Пытаемся вычитать основные настройки
-                            If mainSett IsNot Nothing Then WriteSettingsToFile(filename + ".bak", mainSett, masterCall:=False) 'Это не мастер-вызов, а рекурсивный!
+                            If mainSett IsNot Nothing Then WriteSettingsToFile(filename + ".bak", mainSett, onlyActiveSettings, masterCall:=False) 'Это не мастер-вызов, а рекурсивный!
                         Catch
                         End Try
                     End If
@@ -236,7 +243,7 @@ Public Class BufferedSettingsWriter
     End Sub
 
     Private Sub WriteSettingsToLines(lines As Queue(Of String), settings As Dictionary(Of (Category As String, Name As String), BufferedSetting),
-                                     Optional name As String = Nothing, Optional sha512 As Boolean = True)
+                                     Optional onlyActiveSettings As Boolean = False, Optional sha512 As Boolean = True)
         SyncLock settings
             Try
                 'Заполнение массива строк
@@ -244,12 +251,16 @@ Public Class BufferedSettingsWriter
                 accum.Enqueue($"# Bwl.Framework BufferedSettingsWriter{If(sha512, ", SHA-512", String.Empty)}")
                 Dim categoriesRecorded As New HashSet(Of String)
                 For Each settingKVP In settings.OrderBy(Function(item) item.Key.Category) 'Равные категории при сортировке образуют группы
-                    If Not categoriesRecorded.Contains(settingKVP.Key.Category) Then
-                        categoriesRecorded.Add(settingKVP.Key.Category)
-                        accum.Enqueue($"[{settingKVP.Key.Category}]")
+                    'С настройкой работаем безусловно, если "не только активные" или "настройка активна" (используется)
+                    If Not onlyActiveSettings OrElse settingKVP.Value.IsActive Then
+                        If Not categoriesRecorded.Contains(settingKVP.Key.Category) Then
+                            categoriesRecorded.Add(settingKVP.Key.Category)
+                            accum.Enqueue($"[{settingKVP.Key.Category}]")
+                        End If
+                        If settingKVP.Value.FriendlyName > "" Then accum.Enqueue($"# {settingKVP.Value.FriendlyName}") 'Комментарий
+                        Dim activityMarker = If(settingKVP.Value.IsActive, String.Empty, " ") 'У активных настроек присв. - плотно примкнутое, у неактивных - с пробелом после имени (там Trim())
+                        accum.Enqueue($"{settingKVP.Value.Name}{activityMarker}={settingKVP.Value.Value}") 'Значение
                     End If
-                    If settingKVP.Value.FriendlyName > "" Then accum.Enqueue("# " + settingKVP.Value.FriendlyName) 'Комментарий
-                    accum.Enqueue($"{settingKVP.Value.Name}={settingKVP.Value.Value}") 'Значение
                 Next
                 'Рачет хеша по значимым строкам
                 If sha512 Then
@@ -265,7 +276,7 @@ Public Class BufferedSettingsWriter
                     Next
                 End If
             Catch ex As Exception
-                Throw New Exception($"WriteSettingsToLines({name}): ex:{ex.Message}")
+                Throw New Exception($"WriteSettingsToLines(): ex:{ex.Message}")
             End Try
         End SyncLock
     End Sub
@@ -274,6 +285,9 @@ Public Class BufferedSettingsWriter
         SyncLock _settings
             Dim result As BufferedSetting = Nothing
             _settings.TryGetValue(BufferedSetting.GetKey(SettingPathToCategory(path), name), result)
+            If result IsNot Nothing Then
+                result.IsActive = True 'Настройка считается активной, потому что было зафиксировано обращение
+            End If
             Return result
         End SyncLock
     End Function
@@ -348,6 +362,7 @@ Public Class BufferedSettingsWriter
                 With buffSetting
                     .Value = newSetting.ValueAsString
                     .FriendlyName = newSetting.FriendlyName
+                    .IsActive = True
                 End With
             Else
                 Dim newBuffSetting As New BufferedSetting()
@@ -356,6 +371,7 @@ Public Class BufferedSettingsWriter
                     .Name = newSetting.Name
                     .FriendlyName = newSetting.FriendlyName
                     .Value = newSetting.DefaultValueAsString
+                    .IsActive = True
                 End With
                 _settings(newBuffSetting.Key) = newBuffSetting
             End If

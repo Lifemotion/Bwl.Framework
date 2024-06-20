@@ -28,11 +28,12 @@ Public MustInherit Class SettingOnStorage
             _isLoaded = True
         End If
         storage.InsertSetting(Me)
+        _storage.LoadSetting(Me)
         RaiseSettingCreated()
     End Sub
 
     Public Function IsValueCorrect(value As String) As Boolean
-        Return _isValueCorrectFunction(value)
+        Return If(_isValueCorrectFunction IsNot Nothing, _isValueCorrectFunction(value), True)
     End Function
 
     Public ReadOnly Property FullName As String
@@ -49,7 +50,7 @@ Public MustInherit Class SettingOnStorage
             Return _value
         End Get
         Set(newValue As String)
-            If Not _isValueCorrectFunction(newValue) Then Throw New Exception($"Value {newValue} is not correct for this setting")
+            If Not IsValueCorrect(newValue) Then Throw New Exception($"Value {newValue} is not correct for this setting")
             If Not IsReadOnly AndAlso _value <> newValue Then
                 _value = newValue
                 RaiseValueChanged()
@@ -63,7 +64,7 @@ Public MustInherit Class SettingOnStorage
         If writer.IsSettingExist(storagePath, Name) Then
             _value = writer.ReadSettingValue(storagePath, Name)
             _isLoaded = True
-            If Not _isValueCorrectFunction(_value) Then
+            If Not IsValueCorrect(_value) Then
                 _value = _defaultValue
                 writer.WriteSetting(storagePath, Me)
             End If

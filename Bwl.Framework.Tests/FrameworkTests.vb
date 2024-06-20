@@ -79,7 +79,7 @@ Public Class FrameworkTests
                            Assert.AreEqual(v3, s3a.Value)
                            Assert.AreEqual(v4, s4a.Value)
                        End Sub},
-                      $"StringSettingsReadWrite(changed-{changedOnly})")
+                      $"StringSettingsReadWriteMultiTest1(changed-{changedOnly})")
         Next
     End Sub
 
@@ -171,7 +171,7 @@ Public Class FrameworkTests
                       Assert.AreEqual(v4, s4c.Value)
                       Assert.AreEqual("", s5c.Value)
                       Assert.AreEqual("NoSetting", s6c.Value)
-                  End Sub}, "StringSettingsReadWrite")
+                  End Sub}, "StringSettingsReadWriteMultiTest2")
     End Sub
 
     <Test> <Parallelizable(ParallelScope.Self)>
@@ -319,10 +319,10 @@ Public Class FrameworkTests
 
         ' To create settings...
         Dim ssr1 = New SettingsStorageBufferedRoot(iniFileName, "App")
-        Dim s1 = ssr1.CreateStringSetting("Setting 1", "Default")
-        Dim s2 = ssr1.CreateStringSetting("Setting 2", "")
-        Dim s3 = ssr1.CreateStringSetting("Setting 3", "")
-        Dim s4 = ssr1.CreateStringSetting("Setting 4", "")
+        Dim s1 = ssr1.CreateStringSetting("Setting 1", "Default", "Setting 1")
+        Dim s2 = ssr1.CreateStringSetting("Setting 2", "", "Setting 2")
+        Dim s3 = ssr1.CreateStringSetting("Setting 3", "", "Setting 3")
+        Dim s4 = ssr1.CreateStringSetting("Setting 4", "", "Setting 4")
         ' ...and check theirs default values
         Assert.AreEqual("Default", s1.Value)
         Assert.AreEqual("", s2.Value)
@@ -365,10 +365,10 @@ Public Class FrameworkTests
 
                 ' Read settings and compare it's values
                 Dim ssr2 = New SettingsStorageBufferedRoot(iniFileName, "App") ' Always "filename", because *.bak and *.old.bak used automatically
-                Dim s1a = ssr2.CreateStringSetting("Setting 1", "Default")
-                Dim s2a = ssr2.CreateStringSetting("Setting 2", "")
-                Dim s3a = ssr2.CreateStringSetting("Setting 3", "")
-                Dim s4a = ssr2.CreateStringSetting("Setting 4", "")
+                Dim s1a = ssr2.CreateStringSetting("Setting 1", "Default", "Setting 1")
+                Dim s2a = ssr2.CreateStringSetting("Setting 2", "", "Setting 2")
+                Dim s3a = ssr2.CreateStringSetting("Setting 3", "", "Setting 3")
+                Dim s4a = ssr2.CreateStringSetting("Setting 4", "", "Setting 4")
 
                 ' Available valid *.ini file - stored values expected
                 If usedFile <> String.Empty Then

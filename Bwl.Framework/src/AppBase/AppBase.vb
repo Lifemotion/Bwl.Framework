@@ -77,7 +77,8 @@ Public Class AppBase
 
     Public Sub Init(Optional maxFilesCount As Integer = 5,
                     Optional maxLogFileLength As Long = 10 * 1024 * 1024,
-                    Optional logAllBufferedIniEvents As Boolean = False)
+                    Optional isReadOnly As Boolean = False,
+                    Optional onlyActiveSettings As Boolean = False)
         TryCreateFolder(_SettingsFolder)
         TryCreateFolder(_DataFolder)
         TryCreateFolder(_LogsFolder)
@@ -85,7 +86,7 @@ Public Class AppBase
         _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile,,,,, maxLogFileLength, maxFilesCount))
         _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors,,, maxLogFileLength, maxFilesCount))
         If UseBufferedStorage Then
-            _RootStorage = New SettingsStorageBufferedRoot(Path.Combine(_SettingsFolder, "settings.ini"), _AppName, logAllBufferedIniEvents)
+            _RootStorage = New SettingsStorageBufferedRoot(Path.Combine(_SettingsFolder, "settings.ini"), _AppName, isReadOnly, onlyActiveSettings)
         Else
 #If Not NETSTANDARD Then
             _RootStorage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_SettingsFolder, "settings.ini")), _AppName, False)
