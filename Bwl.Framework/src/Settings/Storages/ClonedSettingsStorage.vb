@@ -33,7 +33,7 @@
         Next
 
         For Each childName In mrw.ReadChildStorageNames(path)
-            _childStorages.Add(New ClonedSettingsStorage(mrw, path, childName, mrw.ReadCategoryFriendlyName(path, childName), Me))
+            _childStorages.Add(childName, New ClonedSettingsStorage(mrw, path, childName, mrw.ReadCategoryFriendlyName(path, childName), Me))
         Next
     End Sub
 

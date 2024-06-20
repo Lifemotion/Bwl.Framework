@@ -9,7 +9,7 @@ Public MustInherit Class SettingsStorageBase
     Protected _settingsForm As SettingsDialog
 #End If
     Protected _settings As New Dictionary(Of String, SettingOnStorage)
-    Protected _childStorages As New List(Of SettingsStorageBase)
+    Protected _childStorages As New Dictionary(Of String, SettingsStorageBase)
 
     Protected _defaultWriter As ISettingsReaderWriter
     Protected _parentStorage As SettingsStorageBase
@@ -87,7 +87,7 @@ Public MustInherit Class SettingsStorageBase
 
     Public ReadOnly Property ChildStorages() As ISettingsStorage() Implements ISettingsStorage.ChildStorages
         Get
-            Return _childStorages.ToArray
+            Return _childStorages.Values.ToArray()
         End Get
     End Property
 
@@ -163,58 +163,20 @@ Public MustInherit Class SettingsStorageBase
     Friend MustOverride Sub LoadSetting(setting As SettingOnStorage)
 
     Public Function FindSetting(name As String) As SettingOnStorage
-        Dim part0 = ""
-        Dim parts = ""
-
-        If name.ToUpper().StartsWith((_name + ".").ToUpper()) Then
-            If Not name.ToUpper() = _name.ToUpper() Then
-                part0 = _name
-                parts = name.Remove(0, _name.Count() + 1)
-            Else
-                part0 = name
-            End If
-        Else
-            parts = name
+        Dim nameParts = name.Split("."c).ToList() 'Разбиваем путь к настройке на фрагменты
+        If _parentStorage Is Nothing AndAlso nameParts.First().ToUpper() = _name.ToUpper() Then 'Если в корне и имя начинается с корня...
+            nameParts.RemoveAt(0) '...убираем корневой префикс
         End If
-
-        Dim settingParts = parts.Split("."c)
-
-        Dim nameParts As String()
-
-        If Not String.IsNullOrEmpty(part0) Then
-            Dim tempPartsList = New List(Of String)
-            tempPartsList.Add(part0)
-            tempPartsList.AddRange(settingParts)
-            nameParts = tempPartsList.ToArray()
-        Else
-            nameParts = settingParts.ToArray()
-        End If
-
-        If _parentStorage Is Nothing Then
-            If nameParts(0).ToUpper() = _name.ToUpper() Then
-                Dim newName = nameParts(1)
-                For i = 2 To nameParts.Length - 1
-                    newName = newName + "." + nameParts(i)
-                Next
-                nameParts = newName.Split("."c)
-            End If
-        End If
-
-        If nameParts.Length = 1 Then
+        If nameParts.Count = 1 Then 'Если дошли до уровня конечного хранилища...
             Dim result As SettingOnStorage = Nothing
-            _settings.TryGetValue(nameParts(0).ToUpper(), result)
+            _settings.TryGetValue(nameParts.First().ToUpper(), result)
             Return result
-        Else
-            For Each child In _childStorages
-                If child.Name.ToUpper() = nameParts(0).ToUpper() Then
-                    Dim newName = nameParts(1)
-                    For i = 2 To nameParts.Length - 1
-                        newName = newName + "." + nameParts(i)
-                    Next
-                    Return child.FindSetting(newName)
-                End If
-            Next
-            Return Nothing
+        ElseIf nameParts.Count > 1 Then
+            Dim childStorage As SettingsStorageBase = Nothing
+            If _childStorages.TryGetValue(nameParts.First().ToUpper(), childStorage) Then
+                Return childStorage.FindSetting(String.Join(".", nameParts.Skip(1)))
+            End If
         End If
+        Return Nothing
     End Function
 End Class

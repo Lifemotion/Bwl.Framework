@@ -81,7 +81,7 @@ Public Class SettingsStorage
         If friendlyName Is Nothing Then friendlyName = ""
         Dim childStorage As New SettingsStorage(Me, name, friendlyName, _readOnly)
         SyncLock _syncRoot
-            _childStorages.Add(childStorage)
+            _childStorages.Add(name, childStorage)
         End SyncLock
         Return childStorage
     End Function
@@ -94,14 +94,9 @@ Public Class SettingsStorage
     Public Sub DeleteChildStorage(name As String)
         SyncLock _syncRoot
             Dim forDelete As SettingsStorage = Nothing
-            For Each storage In _childStorages
-                If storage.Name = name Then
-                    forDelete = DirectCast(storage, SettingsStorage)
-                End If
-            Next
-            If forDelete IsNot Nothing Then
+            If _childStorages.TryGetValue(name, forDelete) Then
                 forDelete._parentStorage = Nothing
-                _childStorages.Remove(forDelete)
+                _childStorages.Remove(name)
             Else
                 Throw New Exception("Child storage not found: " + name)
             End If
@@ -123,7 +118,7 @@ Public Class SettingsStorage
             For Each setting In _settings.Values
                 setting.LoadSettingFromStorage(writer, path)
             Next
-            For Each child As SettingsStorage In _childStorages
+            For Each child As SettingsStorage In _childStorages.Values
                 child.ReloadSettings(writer)
             Next
         End SyncLock
@@ -139,7 +134,7 @@ Public Class SettingsStorage
                     setting.Changed = False
                 End If
             Next
-            For Each child As SettingsStorage In _childStorages
+            For Each child As SettingsStorage In _childStorages.Values
                 writer.WriteCategory(path, child.Name, child.FriendlyName)
                 child.SaveSettings(writer, changedOnly)
             Next

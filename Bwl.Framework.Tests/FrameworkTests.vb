@@ -5,6 +5,58 @@ Imports NUnit.Framework
 Public Class FrameworkTests
 
     <Test> <Parallelizable(ParallelScope.Self)>
+    Public Sub FindSettingTest()
+        Dim iniFileName = "FindSettingTest.ini"
+
+        RemoveIniFiles(iniFileName)
+
+        MultiTest(Sub(factory As (IniFileName As String, SettingsFactory As Func(Of Boolean, SettingsStorage)))
+                      RemoveIniFiles(factory.IniFileName)
+
+                      'Создание настроек и сохранение корней (в каждом корне - N-настроек)
+                      Dim N = 5
+                      Dim createSettings = Sub(root As SettingsStorage)
+                                               For i = 0 To N - 1
+                                                   root.CreateStringSetting(i, i)
+                                               Next
+                                           End Sub
+                      Dim roots As New Queue(Of SettingsStorage)
+                      Dim root0 = factory.SettingsFactory(False) ' New instance 1, ReadOnly=False
+                      createSettings(root0) : roots.Enqueue(root0)
+                      For i = 0 To N - 1
+                          Dim root1 = root0.CreateChildStorage(i, i)
+                          createSettings(root1) : roots.Enqueue(root1)
+                          For j = 0 To N - 1
+                              Dim root2 = root1.CreateChildStorage(j, j)
+                              createSettings(root2) : roots.Enqueue(root2)
+                          Next
+                      Next
+
+                      'Тест настроек (ищем в корне, и по всему набору путей вплоть до корня дерева)
+                      For Each root In roots
+                          FindSettingsUpToRoot(root, String.Empty, N)
+                      Next
+                  End Sub, "FindSettingTest")
+    End Sub
+
+    Private Sub FindSettingsUpToRoot(root As SettingsStorage, treePath As String, n As Integer)
+        For i = 0 To n - 1
+            Dim settPath = i.ToString()
+            If Not String.IsNullOrEmpty(treePath) Then settPath = treePath + "." + settPath
+            If root.FindSetting(settPath) Is Nothing Then
+                Throw New Exception($"{settPath} not found")
+            End If
+            If root.Parent IsNot Nothing Then
+                'Поиск этих же настроек от родителя
+                FindSettingsUpToRoot(root.Parent, If(treePath <> String.Empty, root.Parent.Name + "." + treePath, root.Parent.Name), n)
+                If root.Parent.Parent Is Nothing Then 'Если родитель - корень дерева настроек...
+                    FindSettingsUpToRoot(root.Parent, treePath, n) '...пробуем постучаться от него без префикса
+                End If
+            End If
+        Next
+    End Sub
+
+    <Test> <Parallelizable(ParallelScope.Self)>
     Public Sub IniFileReadWriteTest()
         Dim iniFileName = "IniFileReadWriteTest.ini"
 
