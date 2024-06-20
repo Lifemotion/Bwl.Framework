@@ -120,7 +120,7 @@ Public Class SettingsStorage
     Public Sub ReloadSettings(writer As ISettingsReaderWriter)
         SyncLock _syncRoot
             Dim path = GetStoragePath()
-            For Each setting In _settings
+            For Each setting In _settings.Values
                 setting.LoadSettingFromStorage(writer, path)
             Next
             For Each child As SettingsStorage In _childStorages
@@ -133,7 +133,7 @@ Public Class SettingsStorage
         SyncLock _syncRoot
             Dim path = GetStoragePath()
             If _parentStorage Is Nothing Then writer.WriteRoot(_name, _friendlyName)
-            For Each setting In _settings
+            For Each setting In _settings.Values
                 If setting.Changed Or Not changedOnly Then
                     writer.WriteSetting(path, setting)
                     setting.Changed = False

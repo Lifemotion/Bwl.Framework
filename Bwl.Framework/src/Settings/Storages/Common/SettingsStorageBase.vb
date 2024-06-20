@@ -1,6 +1,4 @@
-﻿Imports System.Timers
-
-''' <summary>
+﻿''' <summary>
 ''' Базовый класс хранилища настроек.
 ''' </summary>
 ''' <remarks></remarks>
@@ -10,7 +8,7 @@ Public MustInherit Class SettingsStorageBase
     Implements ISettingsStorageForm
     Protected _settingsForm As SettingsDialog
 #End If
-    Protected _settings As New List(Of SettingOnStorage)
+    Protected _settings As New Dictionary(Of String, SettingOnStorage)
     Protected _childStorages As New List(Of SettingsStorageBase)
 
     Protected _defaultWriter As ISettingsReaderWriter
@@ -46,16 +44,13 @@ Public MustInherit Class SettingsStorageBase
     End Property
 
     Public Function GetStoragePath() As String()
-
-        Dim list As New List(Of String)
-        list.Add(Me.Name)
+        Dim list As New List(Of String)({Me.Name})
         Dim currentParent = Me.Parent
         Do While currentParent IsNot Nothing
             list.Add(currentParent.Name)
             currentParent = currentParent.Parent
         Loop
-        Return list.ToArray
-
+        Return list.ToArray()
     End Function
 
     Public Property DefaultWriter As ISettingsReaderWriter
@@ -98,9 +93,9 @@ Public MustInherit Class SettingsStorageBase
 
     Public Function GetSettings(Optional userGroups As String() = Nothing, Optional showAllSettings As Boolean = True) As SettingOnStorage() Implements ISettingsStorage.GetSettings
         ' No need to check, just return everything
-        If showAllSettings Then Return _settings.ToArray()
+        If showAllSettings Then Return _settings.Values.ToArray()
         ' Otherwise we should check every setting to make sure it's allowed for any of the specified users
-        Return _settings.Where(Function(setting) userGroups IsNot Nothing AndAlso userGroups.Any() AndAlso setting.UserGroups.Any(Function(f) userGroups.Contains(f))).ToArray()
+        Return _settings.Values.Where(Function(setting) userGroups IsNot Nothing AndAlso userGroups.Any() AndAlso setting.UserGroups.Any(Function(f) userGroups.Contains(f))).ToArray()
     End Function
 
 #If Not NETSTANDARD Then
@@ -128,28 +123,27 @@ Public MustInherit Class SettingsStorageBase
 #End If
 
     Public Sub RemoveSetting(settingName As String, Optional silentMode As Boolean = False)
-        If settingName.Trim = "" Then Throw New Exception("Не указано имя настройки в хранилище.")
-        Dim setting = _settings.FirstOrDefault(Function(item) item.Name.ToUpper = settingName.ToUpper)
-        If setting IsNot Nothing Then
-            _settings.Remove(setting)
+        If settingName.Trim() = "" Then Throw New Exception("Не указано имя настройки в хранилище.")
+        If _settings.ContainsKey(settingName.ToUpper()) Then
+            _settings.Remove(settingName.ToUpper())
         Else
             If Not silentMode Then
-                Throw New Exception("Не найдено такое имя настройки в хранилище.")
+                Throw New Exception($"Настройка с именем '{settingName}' не найдена в хранилище.")
             End If
         End If
     End Sub
 
     Friend Sub InsertSetting(setting As SettingOnStorage)
-        _name = _name.Trim
+        _name = _name.Trim()
         If setting Is Nothing Then Throw New Exception("Объект настройки не был создан.")
-        If setting.Name.Trim = "" Then Throw New Exception("Не указано имя настройки в хранилище.")
+        If setting.Name.Trim() = "" Then Throw New Exception("Не указано имя настройки в хранилище.")
         If _name = "" Then Throw New Exception("Не указана категория настройки в хранилище.")
-        For Each oldSetting In _settings
-            If oldSetting.Name.ToUpper = setting.Name.ToUpper Then
-                Throw New Exception("Уже существует объект настройки, обозначенный тем же именем в этом хранилище.")
-            End If
-        Next
-        _settings.Add(setting)
+        Dim settingName = setting.Name
+        If _settings.ContainsKey(settingName.ToUpper()) Then
+            Throw New Exception($"В храналище уже существует настройка с именем {settingName}.")
+        Else
+            _settings.Add(settingName.ToUpper(), setting)
+        End If
     End Sub
 
     Friend Overridable Sub SetSettingChanged(setting As SettingOnStorage)
@@ -169,12 +163,11 @@ Public MustInherit Class SettingsStorageBase
     Friend MustOverride Sub LoadSetting(setting As SettingOnStorage)
 
     Public Function FindSetting(name As String) As SettingOnStorage
-
         Dim part0 = ""
         Dim parts = ""
 
-        If name.ToLower().StartsWith((_name + ".").ToLower()) Then
-            If Not name.ToLower() = _name.ToLower() Then
+        If name.ToUpper().StartsWith((_name + ".").ToUpper()) Then
+            If Not name.ToUpper() = _name.ToUpper() Then
                 part0 = _name
                 parts = name.Remove(0, _name.Count() + 1)
             Else
@@ -198,7 +191,7 @@ Public MustInherit Class SettingsStorageBase
         End If
 
         If _parentStorage Is Nothing Then
-            If nameParts(0).ToLower = _name.ToLower Then
+            If nameParts(0).ToUpper() = _name.ToUpper() Then
                 Dim newName = nameParts(1)
                 For i = 2 To nameParts.Length - 1
                     newName = newName + "." + nameParts(i)
@@ -208,15 +201,12 @@ Public MustInherit Class SettingsStorageBase
         End If
 
         If nameParts.Length = 1 Then
-            For Each setting In _settings
-                If setting.Name.ToLower = nameParts(0).ToLower Then
-                    Return setting
-                End If
-            Next
-            Return Nothing
+            Dim result As SettingOnStorage = Nothing
+            _settings.TryGetValue(nameParts(0).ToUpper(), result)
+            Return result
         Else
             For Each child In _childStorages
-                If child.Name.ToLower = nameParts(0).ToLower Then
+                If child.Name.ToUpper() = nameParts(0).ToUpper() Then
                     Dim newName = nameParts(1)
                     For i = 2 To nameParts.Length - 1
                         newName = newName + "." + nameParts(i)
@@ -227,5 +217,4 @@ Public MustInherit Class SettingsStorageBase
             Return Nothing
         End If
     End Function
-
 End Class
