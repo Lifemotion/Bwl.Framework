@@ -33,7 +33,8 @@ Public Class AppBase
                    baseFolderOverride As String,
                    Optional maxFilesCount As Integer = 5,
                    Optional maxLogFileLength As Long = 10 * 1024 * 1024,
-                   Optional logAllBufferedIniEvents As Boolean = False)
+                   Optional isReadOnly As Boolean = False,
+                   Optional onlyActiveSettings As Boolean = False)
         Me.UseBufferedStorage = useBufferedStorage
         _AppName = appName
         If baseFolderOverride > "" Then _BaseFolder = baseFolderOverride
@@ -41,7 +42,7 @@ Public Class AppBase
         _SettingsFolder = IO.Path.Combine(_BaseFolder, "conf")
         _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
         _DataFolder = IO.Path.Combine(_BaseFolder, "data")
-        If initFolders Then Init(maxFilesCount, maxLogFileLength, logAllBufferedIniEvents)
+        If initFolders Then Init(maxFilesCount, maxLogFileLength, isReadOnly, onlyActiveSettings)
     End Sub
 
     Public Sub New(initFolders As Boolean,
@@ -52,7 +53,8 @@ Public Class AppBase
                    dataFolderOverride As String,
                    Optional maxFilesCount As Integer = 5,
                    Optional maxLogFileLength As Long = 10 * 1024 * 1024,
-                   Optional logAllBufferedIniEvents As Boolean = False)
+                   Optional isReadOnly As Boolean = False,
+                   Optional onlyActiveSettings As Boolean = False)
         Me.UseBufferedStorage = useBufferedStorage
         _AppName = appName
         _BaseFolder = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..")
@@ -66,7 +68,7 @@ Public Class AppBase
         _SettingsFolder = CheckPath(_SettingsFolder)
         _LogsFolder = CheckPath(_LogsFolder)
         _DataFolder = CheckPath(_DataFolder)
-        If initFolders Then Init(maxFilesCount, maxLogFileLength, logAllBufferedIniEvents)
+        If initFolders Then Init(maxFilesCount, maxLogFileLength, isReadOnly, onlyActiveSettings)
     End Sub
 
     Private Function CheckPath(source As String) As String

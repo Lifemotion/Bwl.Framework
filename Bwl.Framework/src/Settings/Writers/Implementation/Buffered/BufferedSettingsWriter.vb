@@ -121,7 +121,9 @@ Public Class BufferedSettingsWriter
                 Try
                     line = line.Trim()
                     If line.Length = 0 OrElse line.StartsWith("#") Then 'Пустая строка или комментарий (обычно в комментариях)
-                        currentFriendlyName = line 'Как правило, дружественное имя находится в строке комментария, непоср. предш. настройке
+                        If line.StartsWith("# ") Then 'Как правило, дружественное имя находится в строке комментария, непоср. предш. настройке
+                            currentFriendlyName = line.Substring(2, line.Length - 2)
+                        End If
                         Continue For
                     End If
                     If line.StartsWith("[") AndAlso line.EndsWith("]") Then 'Категория
@@ -187,31 +189,31 @@ Public Class BufferedSettingsWriter
                 Catch ex As Exception
                     needToWrite = True 'Любая ошибка при чтении из файла конфига или при сравнении строк означает необходимость записи
                 End Try
-                'Запись на диск при необходимости
+                'Запись на диск при необходимости (если содержимое под запись и на диске не совпадают)
                 If needToWrite Then
                     'Запись в tmp...
                     Dim tmpFilename = Path.Combine(Path.GetDirectoryName(filename), GetTempFileName("WriteSettingsToFile"))
-                    File.WriteAllLines(tmpFilename, lines)
+                    File.WriteAllLines(tmpFilename, lines, Encoding.UTF8)
                     '...и верификация с имеющимся набором строк
-                    Dim linesOnDisk = File.ReadAllLines(tmpFilename)
+                    Dim linesOnDisk = File.ReadAllLines(tmpFilename, Encoding.UTF8)
                     CompareLines(lines.ToArray(), linesOnDisk)
-                    'Если вызов главный - требуется вычитать старые настройки и поместить в иерархию копий
-                    If masterCall Then
-                        '№1: "*.bak" => "*.old.bak"
-                        Try
-                            Dim bakSett = ReadSettingsFromFile(filename + ".bak") 'Пытаемся вычитать архив основных настроек
-                            If bakSett IsNot Nothing Then WriteSettingsToFile(filename + ".old.bak", bakSett, onlyActiveSettings, masterCall:=False) 'Это не мастер-вызов, а рекурсивный!
-                        Catch
-                        End Try
-                        '№2: "*" => "*.bak"
-                        Try
-                            Dim mainSett = ReadSettingsFromFile(filename) 'Пытаемся вычитать основные настройки
-                            If mainSett IsNot Nothing Then WriteSettingsToFile(filename + ".bak", mainSett, onlyActiveSettings, masterCall:=False) 'Это не мастер-вызов, а рекурсивный!
-                        Catch
-                        End Try
-                    End If
                     'Замещаем целевой файл временным (который уже был верифицирован)
                     ReplaceFiles(tmpFilename, filename)
+                End If
+                'Если вызов главный - требуется вычитать старые настройки и поместить их в иерархию копий * => *.bak => *.old.bak
+                If masterCall Then
+                    '№1: "*.bak" => "*.old.bak"
+                    Try
+                        Dim bakSett = ReadSettingsFromFile(filename + ".bak") 'Пытаемся вычитать архив основных настроек
+                        If bakSett IsNot Nothing Then WriteSettingsToFile(filename + ".old.bak", bakSett, onlyActiveSettings, masterCall:=False) 'Это не мастер-вызов, а рекурсивный!
+                    Catch
+                    End Try
+                    '№2: "*" => "*.bak"
+                    Try
+                        Dim mainSett = ReadSettingsFromFile(filename) 'Пытаемся вычитать основные настройки
+                        If mainSett IsNot Nothing Then WriteSettingsToFile(filename + ".bak", mainSett, onlyActiveSettings, masterCall:=False) 'Это не мастер-вызов, а рекурсивный!
+                    Catch
+                    End Try
                 End If
             Catch ex As Exception
                 Throw New Exception($"WriteSettingsToFile({filename}): ex:{ex.Message}")
@@ -258,8 +260,7 @@ Public Class BufferedSettingsWriter
                             accum.Enqueue($"[{settingKVP.Key.Category}]")
                         End If
                         If settingKVP.Value.FriendlyName > "" Then accum.Enqueue($"# {settingKVP.Value.FriendlyName}") 'Комментарий
-                        Dim activityMarker = If(settingKVP.Value.IsActive, String.Empty, " ") 'У активных настроек присв. - плотно примкнутое, у неактивных - с пробелом после имени (там Trim())
-                        accum.Enqueue($"{settingKVP.Value.Name}{activityMarker}={settingKVP.Value.Value}") 'Значение
+                        accum.Enqueue($"{settingKVP.Value.Name}={settingKVP.Value.Value}") 'Значение 'TODO: Запись маркера неактивности настройки settingKVP.Value.IsActive?
                     End If
                 Next
                 'Рачет хеша по значимым строкам
