@@ -1,15 +1,58 @@
-﻿''' <summary>
+﻿Imports Bwl.Framework.SettingsStorageBase
+
+''' <summary>
 ''' Базовый класс хранилища настроек.
 ''' </summary>
-''' <remarks></remarks>
 Public MustInherit Class SettingsStorageBase
     Implements ISettingsStorage
 #If Not NETSTANDARD Then
     Implements ISettingsStorageForm
     Protected _settingsForm As SettingsDialog
 #End If
-    Protected _settings As New Dictionary(Of String, SettingOnStorage)
-    Protected _childStorages As New Dictionary(Of String, SettingsStorageBase)
+
+    ''' <summary>
+    ''' Обвязка словаря с фильтром на ключ.
+    ''' </summary>
+    Public Class DictionaryWithKeyFlt(Of T)
+        Private _data As New Dictionary(Of String, T)
+
+        Public Property KeyFilter As Func(Of String, String) = Function(s) s.ToUpper()
+
+        Public Function GetEnumerator() As Dictionary(Of String, T).Enumerator
+            Return _data.GetEnumerator()
+        End Function
+
+        Public ReadOnly Property Keys As Dictionary(Of String, T).KeyCollection
+            Get
+                Return _data.Keys
+            End Get
+        End Property
+
+        Public ReadOnly Property Values As Dictionary(Of String, T).ValueCollection
+            Get
+                Return _data.Values
+            End Get
+        End Property
+
+        Public Function ContainsKey(key As String) As Boolean
+            Return _data.ContainsKey(KeyFilter(key))
+        End Function
+
+        Public Function TryGetValue(key As String, ByRef value As T) As Boolean
+            Return _data.TryGetValue(KeyFilter(key), value)
+        End Function
+
+        Public Sub Add(key As String, value As T)
+            _data.Add(KeyFilter(key), value)
+        End Sub
+
+        Public Sub Remove(key As String)
+            _data.Remove(KeyFilter(key))
+        End Sub
+    End Class
+
+    Protected _settings As New DictionaryWithKeyFlt(Of SettingOnStorage)
+    Protected _childStorages As New DictionaryWithKeyFlt(Of SettingsStorageBase)
 
     Protected _defaultWriter As ISettingsReaderWriter
     Protected _parentStorage As SettingsStorageBase
