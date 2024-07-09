@@ -167,8 +167,8 @@ Public MustInherit Class SettingsStorageBase
 
     Public Sub RemoveSetting(settingName As String, Optional silentMode As Boolean = False)
         If settingName.Trim() = "" Then Throw New Exception("Не указано имя настройки в хранилище.")
-        If _settings.ContainsKey(settingName.ToUpper()) Then
-            _settings.Remove(settingName.ToUpper())
+        If _settings.ContainsKey(settingName) Then
+            _settings.Remove(settingName)
         Else
             If Not silentMode Then
                 Throw New Exception($"Настройка с именем '{settingName}' не найдена в хранилище.")
@@ -182,10 +182,10 @@ Public MustInherit Class SettingsStorageBase
         If setting.Name.Trim() = "" Then Throw New Exception("Не указано имя настройки в хранилище.")
         If _name = "" Then Throw New Exception("Не указана категория настройки в хранилище.")
         Dim settingName = setting.Name
-        If _settings.ContainsKey(settingName.ToUpper()) Then
+        If _settings.ContainsKey(settingName) Then
             Throw New Exception($"В храналище уже существует настройка с именем {settingName}.")
         Else
-            _settings.Add(settingName.ToUpper(), setting)
+            _settings.Add(settingName, setting)
         End If
     End Sub
 
@@ -212,11 +212,11 @@ Public MustInherit Class SettingsStorageBase
         End If
         If nameParts.Count = 1 Then 'Если дошли до уровня конечного хранилища...
             Dim result As SettingOnStorage = Nothing
-            _settings.TryGetValue(nameParts.First().ToUpper(), result)
+            _settings.TryGetValue(nameParts.First(), result)
             Return result
         ElseIf nameParts.Count > 1 Then
             Dim childStorage As SettingsStorageBase = Nothing
-            If _childStorages.TryGetValue(nameParts.First().ToUpper(), childStorage) Then
+            If _childStorages.TryGetValue(nameParts.First(), childStorage) Then
                 Return childStorage.FindSetting(String.Join(".", nameParts.Skip(1)))
             End If
         End If
