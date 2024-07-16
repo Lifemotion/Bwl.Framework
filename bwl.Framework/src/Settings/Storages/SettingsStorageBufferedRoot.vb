@@ -19,12 +19,13 @@
     ''' </summary>
     ''' <param name="iniFileName">Имя ini-файла с настройками.</param>
     ''' <param name="rootName">Имя.</param>
+    ''' <param name="checkHash">Проверять хэш настроек.</param>
     ''' <param name="isReadOnly">Данные в хранилище только для чтения.</param>
     ''' <param name="onlyActiveSettings">Пишем только активные (используемые) настройки.</param>
     Sub New(iniFileName As String, rootName As String,
-            Optional isReadOnly As Boolean = False, Optional onlyActiveSettings As Boolean = False)
+            Optional isReadOnly As Boolean = False, Optional onlyActiveSettings As Boolean = False, Optional checkHash As Boolean = True)
         If rootName Is Nothing OrElse rootName = "" Then Throw New Exception("RootName can't be empty")
-        _defaultWriter = New BufferedSettingsWriter(iniFileName)
+        _defaultWriter = New BufferedSettingsWriter(iniFileName, checkHash)
         _readOnly = isReadOnly
         _name = rootName
         Me.OnlyActiveSettings = onlyActiveSettings

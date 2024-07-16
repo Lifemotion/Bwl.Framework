@@ -32,11 +32,13 @@ Public Class BufferedSettingsWriter
 
     Private _settings As New Dictionary(Of (Category As String, Name As String), BufferedSetting)
     Private _filename As String
+    Private _checkHash As Boolean
 
     Public Event Logger(type As String, message As String)
 
-    Sub New(filename As String)
+    Sub New(filename As String, checkHash As Boolean)
         _filename = filename
+        _checkHash = checkHash
         ReadSettingsFromFile()
     End Sub
 
@@ -95,23 +97,26 @@ Public Class BufferedSettingsWriter
                                       Optional allowEmptyLoad As Boolean = False,
                                       Optional allowSettingRepeats As Boolean = False)
         Try
-            'Проверка хеша SHA512
-            Dim linesHashSignature = SHA512Base64(lines)
-            Dim hashCheckResult As Boolean? = Nothing
-            For Each line In lines
-                Try
-                    line = line.Replace(" ", "")
-                    If {"#SHA-512:", "#SHA512:"}.Any(Function(marker) line.StartsWith(marker)) Then
-                        If hashCheckResult Is Nothing Then hashCheckResult = False 'Зафиксировали наличи е сигнатуры
-                        If line.Contains(linesHashSignature) Then
-                            hashCheckResult = True 'Положительный флаг проверки...
-                            Exit For '...и выход
+            Dim needToCheckHash = _checkHash AndAlso lines.Any(Function(f) f = "# REMOVE THIS LINE TO EDIT SETTINGS MANUALLY")
+            If needToCheckHash Then
+                'Проверка хеша SHA512
+                Dim linesHashSignature = SHA512Base64(lines)
+                Dim hashCheckResult As Boolean? = Nothing
+                For Each line In lines
+                    Try
+                        line = line.Replace(" ", "")
+                        If {"# SHA-512:", "#SHA-512:", "#SHA512:"}.Any(Function(marker) line.StartsWith(marker)) Then
+                            If hashCheckResult Is Nothing Then hashCheckResult = False 'Зафиксировали наличие сигнатуры
+                            If line.Contains(linesHashSignature) Then
+                                hashCheckResult = True 'Положительный флаг проверки...
+                                Exit For '...и выход
+                            End If
                         End If
-                    End If
-                Catch
-                End Try
-            Next
-            If hashCheckResult IsNot Nothing AndAlso Not hashCheckResult Then Throw New Exception("SHA-512 check failed")
+                    Catch
+                    End Try
+                Next
+                If hashCheckResult IsNot Nothing AndAlso Not hashCheckResult Then Throw New Exception("SHA-512 check failed")
+            End If
             'Вычитывание настроек из строк после проверки хеша
             Dim settingsLoaded As New Dictionary(Of (Category As String, Name As String), BufferedSetting)()
             Dim currentCategory = String.Empty
@@ -266,6 +271,7 @@ Public Class BufferedSettingsWriter
                 'Рачет хеша по значимым строкам
                 If sha512 Then
                     Dim hashStr = $"# SHA-512:{SHA512Base64(accum)}"
+                    lines.Enqueue("# REMOVE THIS LINE TO EDIT SETTINGS MANUALLY")
                     lines.Enqueue(hashStr) 'Начало файла
                     For Each line In accum
                         lines.Enqueue(line)

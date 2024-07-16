@@ -8,21 +8,22 @@ Public Class ConsoleAppBase
     Private Shared _consoleColor As VariantSetting
     Private Shared _consoleBack As VariantSetting
 
-    Sub New(useBufferedStorage As Boolean)
-        MyBase.New(True, "Application", useBufferedStorage)
+    Sub New(useBufferedStorage As Boolean, Optional checkHash As Boolean = True)
+        MyBase.New(True, "Application", useBufferedStorage, checkHash)
         InitInternal()
     End Sub
 
-    Sub New(useBufferedStorage As Boolean, baseFolderOverride As String)
-        MyBase.New(True, "Application", useBufferedStorage, baseFolderOverride)
+    Sub New(useBufferedStorage As Boolean, baseFolderOverride As String, Optional checkHash As Boolean = True)
+        MyBase.New(True, "Application", useBufferedStorage, baseFolderOverride, checkHash:=checkHash)
         InitInternal()
     End Sub
 
     Sub New(useBufferedStorage As Boolean,
             settingsFolderOverride As String,
             logsFolderOverride As String,
-            dataFolderOverride As String)
-        MyBase.New(True, "Application", useBufferedStorage, settingsFolderOverride, logsFolderOverride, dataFolderOverride)
+            dataFolderOverride As String,
+            Optional checkHash As Boolean = True)
+        MyBase.New(True, "Application", useBufferedStorage, settingsFolderOverride, logsFolderOverride, dataFolderOverride, checkHash:=checkHash)
         InitInternal()
     End Sub
 
