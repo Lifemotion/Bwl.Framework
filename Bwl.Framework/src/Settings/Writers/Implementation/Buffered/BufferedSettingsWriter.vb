@@ -97,7 +97,8 @@ Public Class BufferedSettingsWriter
                                       Optional allowEmptyLoad As Boolean = False,
                                       Optional allowSettingRepeats As Boolean = False)
         Try
-            Dim needToCheckHash = _checkHash AndAlso lines.Any(Function(f) f = "# REMOVE THIS LINE TO EDIT SETTINGS MANUALLY")
+            Dim needToCheckHash = _checkHash
+            Dim manualEditEnabled = Not lines.Any(Function(f) f = "# REMOVE THIS LINE TO EDIT SETTINGS MANUALLY")
             If needToCheckHash Then
                 'Проверка хеша SHA512
                 Dim linesHashSignature = SHA512Base64(lines)
@@ -105,9 +106,9 @@ Public Class BufferedSettingsWriter
                 For Each line In lines
                     Try
                         line = line.Replace(" ", "")
-                        If {"# SHA-512:", "#SHA-512:", "#SHA512:"}.Any(Function(marker) line.StartsWith(marker)) Then
+                        If {"#SHA-512:", "#SHA512:"}.Any(Function(marker) line.StartsWith(marker)) Then
                             If hashCheckResult Is Nothing Then hashCheckResult = False 'Зафиксировали наличие сигнатуры
-                            If line.Contains(linesHashSignature) Then
+                            If line.Contains(linesHashSignature) OrElse manualEditEnabled Then
                                 hashCheckResult = True 'Положительный флаг проверки...
                                 Exit For '...и выход
                             End If
