@@ -8,22 +8,27 @@ Public Class ConsoleAppBase
     Private Shared _consoleColor As VariantSetting
     Private Shared _consoleBack As VariantSetting
 
-    Sub New(useBufferedStorage As Boolean, Optional checkHash As Boolean = True)
-        MyBase.New(True, "Application", useBufferedStorage, checkHash)
+    Sub New(useBufferedStorage As Boolean,
+            Optional settingsFileName As String = "settings.ini",
+            Optional checkSettingsHash As Boolean = True)
+        MyBase.New(True, "Application", useBufferedStorage,
+                   settingsFileName:=settingsFileName, checkSettingsHash:=checkSettingsHash)
         InitInternal()
     End Sub
 
-    Sub New(useBufferedStorage As Boolean, baseFolderOverride As String, Optional checkHash As Boolean = True)
-        MyBase.New(True, "Application", useBufferedStorage, baseFolderOverride, checkHash:=checkHash)
+    Sub New(useBufferedStorage As Boolean, baseFolderOverride As String,
+            Optional settingsFileName As String = "settings.ini", Optional checkSettingsHash As Boolean = True)
+        MyBase.New(True, "Application", useBufferedStorage, baseFolderOverride,
+                   settingsFileName:=settingsFileName, checkSettingsHash:=checkSettingsHash)
         InitInternal()
     End Sub
 
     Sub New(useBufferedStorage As Boolean,
-            settingsFolderOverride As String,
-            logsFolderOverride As String,
-            dataFolderOverride As String,
-            Optional checkHash As Boolean = True)
-        MyBase.New(True, "Application", useBufferedStorage, settingsFolderOverride, logsFolderOverride, dataFolderOverride, checkHash:=checkHash)
+            settingsFolderOverride As String, logsFolderOverride As String, dataFolderOverride As String,
+            Optional settingsFileName As String = "settings.ini", Optional checkSettingsHash As Boolean = True)
+        MyBase.New(True, "Application", useBufferedStorage,
+                   settingsFolderOverride:=settingsFolderOverride, logsFolderOverride:=logsFolderOverride, dataFolderOverride:=dataFolderOverride,
+                   settingsFileName:=settingsFileName, checkSettingsHash:=checkSettingsHash)
         InitInternal()
     End Sub
 

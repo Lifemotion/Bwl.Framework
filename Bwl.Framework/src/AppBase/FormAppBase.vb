@@ -19,13 +19,13 @@ Public Class FormAppBase
         Me.New(useBufferedStorage, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."))
     End Sub
 
-    Sub New(useBufferedStorage As Boolean, overrideBaseFolder As String)
-        Me.New("Application", useBufferedStorage, overrideBaseFolder)
+    Sub New(useBufferedStorage As Boolean, baseFolderOverride As String)
+        Me.New("Application", useBufferedStorage, baseFolderOverride)
     End Sub
 
-    Sub New(appName As String, useBufferedStorage As Boolean, overrideBaseFolder As String)
+    Sub New(appName As String, useBufferedStorage As Boolean, baseFolderOverride As String)
         MyBase.New()
-        AppBase = New AppBase(True, appName, useBufferedStorage, overrideBaseFolder)
+        AppBase = New AppBase(initFolders:=True, appName:=appName, useBufferedStorage:=useBufferedStorage, baseFolderOverride:=baseFolderOverride)
         MyBase.Init(AppBase.RootStorage, AppBase.RootLogger)
         _storage = AppBase.RootStorage
         _logger = AppBase.RootLogger

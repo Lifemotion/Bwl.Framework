@@ -24,19 +24,22 @@ Public Class AppBase
     Public Sub New(initFolders As Boolean,
                    appName As String,
                    useBufferedStorage As Boolean,
-                   Optional checkHash As Boolean = True)
-        Me.New(initFolders, appName, useBufferedStorage, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."), checkHash:=checkHash)
+                   Optional settingsFileName As String = "settings.ini",
+                   Optional checkSettingsHash As Boolean = True)
+        Me.New(initFolders, appName, useBufferedStorage, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."),
+               settingsFileName:=settingsFileName, checkSettingsHash:=checkSettingsHash)
     End Sub
 
     Public Sub New(initFolders As Boolean,
                    appName As String,
                    useBufferedStorage As Boolean,
                    baseFolderOverride As String,
-                   Optional maxFilesCount As Integer = 5,
+                   Optional settingsFileName As String = "settings.ini",
+                   Optional maxLogFilesCount As Integer = 5,
                    Optional maxLogFileLength As Long = 10 * 1024 * 1024,
-                   Optional isReadOnly As Boolean = False,
+                   Optional isReadOnlySettings As Boolean = False,
                    Optional onlyActiveSettings As Boolean = False,
-                   Optional checkHash As Boolean = True)
+                   Optional checkSettingsHash As Boolean = True)
         Me.UseBufferedStorage = useBufferedStorage
         _AppName = appName
         If baseFolderOverride > "" Then _BaseFolder = baseFolderOverride
@@ -44,7 +47,7 @@ Public Class AppBase
         _SettingsFolder = IO.Path.Combine(_BaseFolder, "conf")
         _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
         _DataFolder = IO.Path.Combine(_BaseFolder, "data")
-        If initFolders Then Init(maxFilesCount, maxLogFileLength, isReadOnly, onlyActiveSettings, checkHash)
+        If initFolders Then Init(settingsFileName, maxLogFilesCount, maxLogFileLength, isReadOnlySettings, onlyActiveSettings, checkSettingsHash)
     End Sub
 
     Public Sub New(initFolders As Boolean,
@@ -53,11 +56,12 @@ Public Class AppBase
                    settingsFolderOverride As String,
                    logsFolderOverride As String,
                    dataFolderOverride As String,
-                   Optional maxFilesCount As Integer = 5,
+                   Optional settingsFileName As String = "settings.ini",
+                   Optional maxLogFilesCount As Integer = 5,
                    Optional maxLogFileLength As Long = 10 * 1024 * 1024,
-                   Optional isReadOnly As Boolean = False,
+                   Optional isReadOnlySettings As Boolean = False,
                    Optional onlyActiveSettings As Boolean = False,
-                   Optional checkHash As Boolean = True)
+                   Optional checkSettingsHash As Boolean = True)
         Me.UseBufferedStorage = useBufferedStorage
         _AppName = appName
         _BaseFolder = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..")
@@ -71,7 +75,7 @@ Public Class AppBase
         _SettingsFolder = CheckPath(_SettingsFolder)
         _LogsFolder = CheckPath(_LogsFolder)
         _DataFolder = CheckPath(_DataFolder)
-        If initFolders Then Init(maxFilesCount, maxLogFileLength, isReadOnly, onlyActiveSettings, checkHash)
+        If initFolders Then Init(settingsFileName, maxLogFilesCount, maxLogFileLength, isReadOnlySettings, onlyActiveSettings, checkSettingsHash)
     End Sub
 
     Private Function CheckPath(source As String) As String
@@ -80,22 +84,23 @@ Public Class AppBase
         Return result
     End Function
 
-    Public Sub Init(Optional maxFilesCount As Integer = 5,
+    Public Sub Init(Optional settingsFileName As String = "settings.ini",
+                    Optional maxLogFilesCount As Integer = 5,
                     Optional maxLogFileLength As Long = 10 * 1024 * 1024,
-                    Optional isReadOnly As Boolean = False,
+                    Optional isReadOnlySettings As Boolean = False,
                     Optional onlyActiveSettings As Boolean = False,
-                    Optional checkHash As Boolean = True)
+                    Optional checkSettingsHash As Boolean = True)
         TryCreateFolder(_SettingsFolder)
         TryCreateFolder(_DataFolder)
         TryCreateFolder(_LogsFolder)
         _RootLogger = New Logger
-        _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile,,,,, maxLogFileLength, maxFilesCount))
-        _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors,,, maxLogFileLength, maxFilesCount))
+        _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile,,,,, maxLogFileLength, maxLogFilesCount))
+        _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors,,, maxLogFileLength, maxLogFilesCount))
         If UseBufferedStorage Then
-            _RootStorage = New SettingsStorageBufferedRoot(Path.Combine(_SettingsFolder, "settings.ini"), _AppName, isReadOnly, onlyActiveSettings, checkHash)
+            _RootStorage = New SettingsStorageBufferedRoot(Path.Combine(_SettingsFolder, settingsFileName), _AppName, isReadOnlySettings, onlyActiveSettings, checkSettingsHash)
         Else
 #If Not NETSTANDARD Then
-            _RootStorage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_SettingsFolder, "settings.ini")), _AppName, False)
+            _RootStorage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_SettingsFolder, settingsFileName)), _AppName, False)
 #Else
             Throw New Exception("Legacy SettingsStorageRoot not supported on Net Standard, use buffered")
 #End If
