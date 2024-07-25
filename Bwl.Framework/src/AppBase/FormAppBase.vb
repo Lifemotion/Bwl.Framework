@@ -16,16 +16,17 @@ Public Class FormAppBase
     End Sub
 
     Sub New(useBufferedStorage As Boolean)
-        Me.New(useBufferedStorage, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."))
+        Me.New(useBufferedStorage:=useBufferedStorage, baseFolderOverride:=Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."))
     End Sub
 
     Sub New(useBufferedStorage As Boolean, baseFolderOverride As String)
-        Me.New("Application", useBufferedStorage, baseFolderOverride)
+        Me.New(appName:="Application", useBufferedStorage:=useBufferedStorage, baseFolderOverride:=baseFolderOverride)
     End Sub
 
     Sub New(appName As String, useBufferedStorage As Boolean, baseFolderOverride As String)
         MyBase.New()
-        AppBase = New AppBase(initFolders:=True, appName:=appName, useBufferedStorage:=useBufferedStorage, baseFolderOverride:=baseFolderOverride)
+        AppBase = New AppBase(initFolders:=True, appName:=appName, useBufferedStorage:=useBufferedStorage, baseFolderOverride:=baseFolderOverride,
+                              checkSettingsHash:=True, settingsFileName:="settings.ini")
         MyBase.Init(AppBase.RootStorage, AppBase.RootLogger)
         _storage = AppBase.RootStorage
         _logger = AppBase.RootLogger

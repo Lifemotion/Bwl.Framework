@@ -9,26 +9,25 @@ Public Class ConsoleAppBase
     Private Shared _consoleBack As VariantSetting
 
     Sub New(useBufferedStorage As Boolean,
-            Optional settingsFileName As String = "settings.ini",
-            Optional checkSettingsHash As Boolean = True)
-        MyBase.New(True, "Application", useBufferedStorage,
-                   settingsFileName:=settingsFileName, checkSettingsHash:=checkSettingsHash)
+            Optional checkSettingsHash As Boolean = True, Optional settingsFileName As String = "settings.ini")
+        MyBase.New(initFolders:=True, appName:="Application", useBufferedStorage:=useBufferedStorage,
+                   checkSettingsHash:=checkSettingsHash, settingsFileName:=settingsFileName)
         InitInternal()
     End Sub
 
     Sub New(useBufferedStorage As Boolean, baseFolderOverride As String,
-            Optional settingsFileName As String = "settings.ini", Optional checkSettingsHash As Boolean = True)
-        MyBase.New(True, "Application", useBufferedStorage, baseFolderOverride,
-                   settingsFileName:=settingsFileName, checkSettingsHash:=checkSettingsHash)
+            Optional checkSettingsHash As Boolean = True, Optional settingsFileName As String = "settings.ini")
+        MyBase.New(initFolders:=True, appName:="Application", useBufferedStorage:=useBufferedStorage, baseFolderOverride:=baseFolderOverride,
+                   checkSettingsHash:=checkSettingsHash, settingsFileName:=settingsFileName)
         InitInternal()
     End Sub
 
     Sub New(useBufferedStorage As Boolean,
             settingsFolderOverride As String, logsFolderOverride As String, dataFolderOverride As String,
-            Optional settingsFileName As String = "settings.ini", Optional checkSettingsHash As Boolean = True)
-        MyBase.New(True, "Application", useBufferedStorage,
+            Optional checkSettingsHash As Boolean = True, Optional settingsFileName As String = "settings.ini")
+        MyBase.New(initFolders:=True, appName:="Application", useBufferedStorage:=useBufferedStorage,
                    settingsFolderOverride:=settingsFolderOverride, logsFolderOverride:=logsFolderOverride, dataFolderOverride:=dataFolderOverride,
-                   settingsFileName:=settingsFileName, checkSettingsHash:=checkSettingsHash)
+                   checkSettingsHash:=checkSettingsHash, settingsFileName:=settingsFileName)
         InitInternal()
     End Sub
 
