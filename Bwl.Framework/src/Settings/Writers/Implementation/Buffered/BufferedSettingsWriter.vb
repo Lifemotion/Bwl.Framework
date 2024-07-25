@@ -79,8 +79,7 @@ Public Class BufferedSettingsWriter
     End Function
 
     Private Sub ReadSettingsFromFile(filename As String, settings As Dictionary(Of (Category As String, Name As String), BufferedSetting),
-                                     Optional allowEmptyLoad As Boolean = False,
-                                     Optional allowSettingRepeats As Boolean = False)
+                                     Optional allowEmptyLoad As Boolean = False)
         SyncLock settings
             Dim lines As IEnumerable(Of String) = Nothing
             Try
@@ -88,14 +87,13 @@ Public Class BufferedSettingsWriter
             Catch ex As Exception
                 Throw New Exception($"ReadSettingsFromFile({filename}): File.ReadAllLines({filename}, Encoding.UTF8), ex:{ex.Message}")
             End Try
-            ReadSettingsFromLines(lines, settings, filename, allowEmptyLoad, allowSettingRepeats)
+            ReadSettingsFromLines(lines, settings, filename, allowEmptyLoad)
         End SyncLock
     End Sub
 
     Private Sub ReadSettingsFromLines(lines As IEnumerable(Of String), settings As Dictionary(Of (Category As String, Name As String), BufferedSetting),
                                       Optional name As String = Nothing,
-                                      Optional allowEmptyLoad As Boolean = False,
-                                      Optional allowSettingRepeats As Boolean = False)
+                                      Optional allowEmptyLoad As Boolean = False)
         Try
             Dim needToCheckHash = _checkHash
             Dim manualEditEnabled = Not lines.Any(Function(f) f = "# REMOVE THIS LINE TO EDIT SETTINGS MANUALLY")
@@ -145,8 +143,7 @@ Public Class BufferedSettingsWriter
                             .FriendlyName = currentFriendlyName
                             .Value = keyvalue(1)
                         End With
-                        If Not allowSettingRepeats AndAlso settingsLoaded.ContainsKey(setting.Key) Then Throw New Exception($"setting key repeat:'{setting.Key}'")
-                        settingsLoaded(setting.Key) = setting
+                        If Not settingsLoaded.ContainsKey(setting.Key) Then settingsLoaded(setting.Key) = setting
                     End If
                     currentFriendlyName = String.Empty 'Дружественное имя может лишь непосредственно предшествовать настройке
                 Catch ex As Exception
