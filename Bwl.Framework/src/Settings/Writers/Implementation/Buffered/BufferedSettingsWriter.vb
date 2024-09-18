@@ -37,18 +37,22 @@ Public Class BufferedSettingsWriter
 
     Public Event Logger(type As String, message As String)
 
-    Sub New(filename As String, checkHash As Boolean)
+    Sub New(filename As String, checkHash As Boolean, Optional logger As Boolean = False)
         _filename = filename
         _checkHash = checkHash
-        _logger = New MicroLogger(Path.GetDirectoryName(filename), Path.GetFileName(filename))
+        _logger = New MicroLogger(Path.GetDirectoryName(filename), $"{Path.GetFileName(filename)}.log")
+        If logger Then _logger.Start()
         ReadSettingsFromFile()
     End Sub
 
     Public Sub ReadSettingsFromFile()
+        _logger.AddMessage($"ReadSettingsFromFile(): BEGIN", "inf")
         ReadSettingsFromFileSet(_filename)
+        _logger.AddMessage($"ReadSettingsFromFile(): END", "inf")
     End Sub
 
     Public Sub ReadSettingsFromFileSet(filename As String)
+        _logger.AddMessage($"ReadSettingsFromFileSet(filename:{filename}): BEGIN", "inf")
         SyncLock _settings
             Dim fileList = {filename, filename + ".bak", filename + ".old.bak"}
             For Each file In fileList
@@ -60,14 +64,19 @@ Public Class BufferedSettingsWriter
                 End Try
             Next
         End SyncLock
+        _logger.AddMessage($"ReadSettingsFromFileSet(filename:{filename}): END", "inf")
     End Sub
 
     Public Sub WriteSettingsToFile(Optional onlyActiveSettings As Boolean = False)
+        _logger.AddMessage($"WriteSettingsToFile(onlyActiveSettings:{onlyActiveSettings}): BEGIN", "inf")
         WriteSettingsToFile(_filename, _settings, onlyActiveSettings)
+        _logger.AddMessage($"WriteSettingsToFile(onlyActiveSettings:{onlyActiveSettings}): END", "inf")
     End Sub
 
     Public Sub WriteSettingsToFile(filename As String, Optional onlyActiveSettings As Boolean = False)
+        _logger.AddMessage($"WriteSettingsToFile(filename:{filename}, onlyActiveSettings:{onlyActiveSettings}): BEGIN", "inf")
         WriteSettingsToFile(filename, _settings, onlyActiveSettings)
+        _logger.AddMessage($"WriteSettingsToFile(filename:{filename}, onlyActiveSettings:{onlyActiveSettings}): END", "inf")
     End Sub
 
     Private Function ReadSettingsFromFile(filename As String) As Dictionary(Of (Category As String, Name As String), BufferedSetting)
@@ -86,7 +95,7 @@ Public Class BufferedSettingsWriter
             Dim lines As IEnumerable(Of String) = Nothing
             Try
                 lines = File.ReadAllLines(filename, Encoding.UTF8)
-                SetLoggerState(lines) 'Установка состояния логгера
+                SetLoggerStateFromParamInLines(lines) 'Установка состояния логгера
             Catch ex As Exception
                 Throw New Exception($"ReadSettingsFromFile({filename}): File.ReadAllLines({filename}, Encoding.UTF8), ex:{ex.Message}")
             End Try
@@ -94,7 +103,7 @@ Public Class BufferedSettingsWriter
         End SyncLock
     End Sub
 
-    Private Sub SetLoggerState(lines As IEnumerable(Of String))
+    Private Sub SetLoggerStateFromParamInLines(lines As IEnumerable(Of String))
         _logger.Stop()
         For Each line In lines
             If line.StartsWith("# SETTINGS LOGGER:") Then
@@ -313,14 +322,18 @@ Public Class BufferedSettingsWriter
                 _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}) (1/2)", "inf")
                 Dim tmp = Path.Combine(Path.GetDirectoryName(target), GetTempFileName($"ReplaceFile({Path.GetFileName(source)}, {Path.GetFileName(target)})"))
                 _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}), tmp={tmp}, (1/1)", "inf")
-                'Шаг 1 - целевой файл помещается во временный буфер
-                MoveFile(target, tmp, $"<ReplaceFile(source:{source}, target:{target}), tmp={tmp}> [STEP1(target->tmp)]")
+                'Шаг 1 - целевой файл помещается во временный буфер (если он существует)
+                If File.Exists(target) Then
+                    MoveFile(target, tmp, $"<ReplaceFile(source:{source}, target:{target}), tmp={tmp}> [STEP1(target->tmp)]")
+                End If
                 'Шаг 2 - исходный файл занимает место целевого
                 Try
                     MoveFile(source, target, $"<ReplaceFile(source:{source}, target:{target}), tmp={tmp}> [STEP2(source->target)]")
                 Catch ex As Exception 'Откат потенциально имеющегося шага 1
                     'Откат шага 1
-                    MoveFile(tmp, target, $"<ReplaceFile(source:{source}, target:{target}), tmp={tmp})> [Rollback STEP1(tmp->target)]")
+                    If File.Exists(tmp) Then
+                        MoveFile(tmp, target, $"<ReplaceFile(source:{source}, target:{target}), tmp={tmp})> [Rollback STEP1(tmp->target)]")
+                    End If
                 End Try
                 _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}) (2/2)", "inf")
             Else
@@ -367,13 +380,13 @@ Public Class BufferedSettingsWriter
                                      Optional onlyActiveSettings As Boolean = False, Optional sha512 As Boolean = True)
         SyncLock settings
             Try
-                _logger.AddMessage($"WriteSettingsToLines(lines:{lines}, onlyActiveSettings:{onlyActiveSettings}, sha512:{sha512}) (1/4)", "inf")
+                _logger.AddMessage($"WriteSettingsToLines(lines:{lines.Count}, onlyActiveSettings:{onlyActiveSettings}, sha512:{sha512}) (1/4)", "inf")
                 'Заполнение массива строк
                 Dim accum As New Queue(Of String)
                 accum.Enqueue($"# Bwl.Framework BufferedSettingsWriter{If(sha512, ", SHA-512", String.Empty)}")
                 accum.Enqueue($"# REMOVE THIS LINE TO EDIT SETTINGS MANUALLY") 'Маркер обычного алгоритма проверки хеша
                 accum.Enqueue($"# SETTINGS LOGGER:OFF (CHANGE 'OFF'->'ON' TO ENABLE LOGGER)") 'Маркер отключенного состояния логгера
-                _logger.AddMessage($"WriteSettingsToLines(lines:{lines}, onlyActiveSettings:{onlyActiveSettings}, sha512:{sha512}) (2/4)", "inf")
+                _logger.AddMessage($"WriteSettingsToLines(lines:{lines.Count}, onlyActiveSettings:{onlyActiveSettings}, sha512:{sha512}) (2/4)", "inf")
                 Dim categoriesRecorded As New HashSet(Of String)
                 For Each settingKVP In settings.OrderBy(Function(item) item.Key.Category) 'Равные категории при сортировке образуют группы
                     'С настройкой работаем безусловно, если "не только активные" или "настройка активна" (используется)
@@ -386,23 +399,23 @@ Public Class BufferedSettingsWriter
                         accum.Enqueue($"{settingKVP.Value.Name}={settingKVP.Value.Value}") 'Значение 'TODO: Запись маркера неактивности настройки settingKVP.Value.IsActive?
                     End If
                 Next
-                _logger.AddMessage($"WriteSettingsToLines(lines:{lines}, onlyActiveSettings:{onlyActiveSettings}, sha512:{sha512}) (3/4)", "inf")
+                _logger.AddMessage($"WriteSettingsToLines(lines:{lines.Count}, onlyActiveSettings:{onlyActiveSettings}, sha512:{sha512}) (3/4)", "inf")
                 'Рачет хеша по значимым строкам (исключая комментарии)
                 If sha512 Then
-                    _logger.AddMessage($"WriteSettingsToLines(lines:{lines}, onlyActiveSettings:{onlyActiveSettings}, sha512:{sha512}): SHA512Base64(accum:{accum}) (1/2)", "inf")
+                    _logger.AddMessage($"WriteSettingsToLines(lines:{lines.Count}, onlyActiveSettings:{onlyActiveSettings}, sha512:{sha512}): SHA512Base64(accum:{accum}) (1/2)", "inf")
                     Dim hashStr = $"# SHA-512:{SHA512Base64(accum)}"
                     lines.Enqueue(hashStr) 'Начало файла
                     For Each line In accum
                         lines.Enqueue(line)
                     Next
                     lines.Enqueue(hashStr) 'Конец файла
-                    _logger.AddMessage($"WriteSettingsToLines(lines:{lines}, onlyActiveSettings:{onlyActiveSettings}, sha512:{sha512}): SHA512Base64(accum:{accum})={hashStr} (2/2)", "inf")
+                    _logger.AddMessage($"WriteSettingsToLines(lines:{lines.Count}, onlyActiveSettings:{onlyActiveSettings}, sha512:{sha512}): SHA512Base64(accum:{accum})={hashStr} (2/2)", "inf")
                 Else
                     For Each line In accum
                         lines.Enqueue(line)
                     Next
                 End If
-                _logger.AddMessage($"WriteSettingsToLines(lines:{lines}, onlyActiveSettings:{onlyActiveSettings}, sha512:{sha512}) (4/4)", "inf")
+                _logger.AddMessage($"WriteSettingsToLines(lines:{lines.Count}, onlyActiveSettings:{onlyActiveSettings}, sha512:{sha512}) (4/4)", "inf")
             Catch ex As Exception
                 Dim msg = $"WriteSettingsToLines(): ex:{ex.Message}"
                 _logger.AddMessage(msg, "exc")
