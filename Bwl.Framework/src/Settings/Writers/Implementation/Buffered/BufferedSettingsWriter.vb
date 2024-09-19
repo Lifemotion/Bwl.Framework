@@ -33,15 +33,19 @@ Public Class BufferedSettingsWriter
     Private _settings As New Dictionary(Of (Category As String, Name As String), BufferedSetting)
     Private _filename As String
     Private _checkHash As Boolean
+    Private _forcedLoggerStart As Boolean
     Private _logger As MicroLogger
 
     Public Event Logger(type As String, message As String)
 
-    Sub New(filename As String, checkHash As Boolean, Optional logger As Boolean = False)
+    Sub New(filename As String, checkHash As Boolean, Optional forcedLoggerStart As Boolean = False)
         _filename = filename
         _checkHash = checkHash
         _logger = New MicroLogger(Path.GetDirectoryName(filename), $"{Path.GetFileName(filename)}.log")
-        If logger Then _logger.Start()
+        If forcedLoggerStart Then
+            _forcedLoggerStart = True
+            _logger.Start()
+        End If
         ReadSettingsFromFile()
     End Sub
 
@@ -104,15 +108,17 @@ Public Class BufferedSettingsWriter
     End Sub
 
     Private Sub SetLoggerStateFromParamInLines(lines As IEnumerable(Of String))
-        _logger.Stop()
-        For Each line In lines
-            If line.StartsWith("# SETTINGS LOGGER:") Then
-                If line.EndsWith("ON") Then
-                    _logger.Start()
+        If Not _forcedLoggerStart Then
+            _logger.Stop()
+            For Each line In lines
+                If line.StartsWith("# SETTINGS LOGGER:") Then
+                    If line.EndsWith("ON") Then
+                        _logger.Start()
+                    End If
+                    Exit For
                 End If
-                Exit For
-            End If
-        Next
+            Next
+        End If
     End Sub
 
     Private Sub ReadSettingsFromLines(lines As IEnumerable(Of String), settings As Dictionary(Of (Category As String, Name As String), BufferedSetting),
