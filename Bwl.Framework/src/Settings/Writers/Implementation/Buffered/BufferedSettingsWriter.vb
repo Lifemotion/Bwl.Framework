@@ -252,14 +252,18 @@ Public Class BufferedSettingsWriter
                 If Not needToWrite AndAlso linesOnDiskBeforeWrite IsNot Nothing Then 'Сравниваем строки, если успешно их вычитали
                     Try
                         _logger.AddMessage($"WriteSettingsToFile({filename}): CompareLines (1/2), CompareLines(lines:{lines.Count}, linesOnDiskBeforeWrite:{linesOnDiskBeforeWrite}), needToWrite={needToWrite}", "inf")
-                        CompareLines(lines.ToArray(), linesOnDiskBeforeWrite) 'При сравнении строк в памяти и на диске учитываются также строки комментариев
+                        CompareLines(lines.ToArray(), linesOnDiskBeforeWrite, $"LinesOnDisk.BeforeWrite({filename})") 'При сравнении строк в памяти и на диске учитываются также строки комментариев
                     Catch ex As Exception
                         needToWrite = True 'Ошибка при сравнении строк означает необходимость записи
                     Finally
                         _logger.AddMessage($"WriteSettingsToFile({filename}): CompareLines (2/2), CompareLines(lines:{lines.Count}, linesOnDiskBeforeWrite:{linesOnDiskBeforeWrite}), needToWrite={needToWrite}", "inf")
                     End Try
                 End If
-                'Запись на диск при необходимости (если содержимое под запись и на диске не совпадают)                
+                'Запись на диск при неполном наборе *.bak
+                If Not needToWrite AndAlso (Not File.Exists(filename + ".bak") OrElse Not File.Exists(filename + ".old.bak")) Then
+                    needToWrite = True
+                End If
+                'Запись на диск при необходимости (если содержимое под запись и на диске не совпадают)
                 If needToWrite Then
                     'ШАГ 1 - Запись конфига в tmp
                     tmp = Path.Combine(Path.GetDirectoryName(filename), GetTempFileName("WriteSettingsToFile"))
@@ -268,7 +272,7 @@ Public Class BufferedSettingsWriter
                     '...и верификация с имеющимся набором строк
                     Dim linesOnDisk = File.ReadAllLines(tmp, Encoding.UTF8)
                     _logger.AddMessage($"WriteSettingsToFile({filename}): File.ReadAllLines(tmp:{tmp}) = {linesOnDisk.Count} (2/3)", "inf")
-                    CompareLines(lines.ToArray(), linesOnDisk)
+                    CompareLines(lines.ToArray(), linesOnDisk, $"LinesOnDisk.AfterWrite({filename})")
                     _logger.AddMessage($"WriteSettingsToFile({filename}): CompareLines(lines:{lines.Count}, linesOnDisk:{linesOnDisk.Count}) (3/3)", "inf")
                     'ШАГ 2 - Перенос настроек по bak-иерархии перед тем, как основные настройки будут перемещены по схеме tmp->*
                     'Если вызов главный - требуется вычитать старые настройки и поместить их в иерархию копий * => *.bak => *.old.bak
@@ -464,7 +468,7 @@ Public Class BufferedSettingsWriter
             Dim block As Byte() = Nothing
             For Each line In lines
                 line = line.Trim()
-                If line.Length = 0 OrElse line.StartsWith("#") Then Continue For 'Пустая строка или комментарий не входят в расчет хеша
+                If line.Length = 0 OrElse line.StartsWith(commentSymbol) Then Continue For 'Пустая строка или комментарий не входят в расчет хеша
                 block = Encoding.UTF8.GetBytes(line)
                 sha512.TransformBlock(block, 0, block.Length, Nothing, 0)
             Next
@@ -481,10 +485,10 @@ Public Class BufferedSettingsWriter
         Return $"{DateTime.Now.Ticks}.{actionName}.{Guid.NewGuid().ToString("N")}" 'Временные файлы упорядочены по времени и имени действия
     End Function
 
-    Private Sub CompareLines(a As String(), b As String())
-        If a.Length <> b.Length Then Throw New Exception("CompareLines: a.Length <> b.Length")
+    Private Sub CompareLines(a As String(), b As String(), actionName As String)
+        If a.Length <> b.Length Then Throw New Exception($"{actionName}::CompareLines: a.Length <> b.Length")
         For i = 0 To a.Length - 1
-            If a(i) <> b(i) Then Throw New Exception($"CompareLines: a({i}) <> b({i})")
+            If a(i) <> b(i) Then Throw New Exception($"{actionName}::CompareLines: a({i}) <> b({i}), ""{a(i)}"" <> ""{b(i)}""")
         Next
     End Sub
 
