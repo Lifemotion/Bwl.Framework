@@ -1,4 +1,18 @@
-﻿Imports System.IO
+﻿'   Copyright 2024 Artem Drobanov (artem.drobanov@gmail.com)
+
+'   Licensed under the Apache License, Version 2.0 (the "License");
+'   you may Not use this file except In compliance With the License.
+'   You may obtain a copy Of the License at
+
+'     http://www.apache.org/licenses/LICENSE-2.0
+
+'   Unless required by applicable law Or agreed To In writing, software
+'   distributed under the License Is distributed On an "AS IS" BASIS,
+'   WITHOUT WARRANTIES Or CONDITIONS Of ANY KIND, either express Or implied.
+'   See the License For the specific language governing permissions And
+'   limitations under the License.
+
+Imports System.IO
 Imports System.Threading
 Imports System.Threading.Tasks
 Imports System.Collections.Concurrent
@@ -63,7 +77,7 @@ Public Class MicroLogger
     End Function
 
     Private Sub LoggerTask()
-        While WasStopped() = 0 OrElse LoggingIsActual()
+        While StopRequested() = 0 OrElse LoggingIsActual()
             Try
                 If LoggingIsActual() Then
                     Dim pf = (Me.Path, Me.FileName)
@@ -93,15 +107,16 @@ Public Class MicroLogger
     End Sub
 
     Private Function LoggingIsActual() As Boolean
-        Return _linesToWrite.Any() AndAlso WasStopped() <= UnsavedAwaitMs
+        Return _linesToWrite.Any() AndAlso StopRequested() <= UnsavedAwaitMs
     End Function
 
-    Private Function WasStopped() As Double
+    Private Function StopRequested() As Double
         Dim stopRequestTicks = Interlocked.Read(_stopRequestTicks)
         Return If(stopRequestTicks < 0, 0, TimeSpan.FromTicks(DateTime.UtcNow.Ticks - stopRequestTicks).TotalMilliseconds)
     End Function
 
     Private Sub DropLines()
+        '_linesToWrite.Clear()
         While _linesToWrite.TryDequeue(Nothing)
         End While
     End Sub

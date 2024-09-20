@@ -41,7 +41,9 @@ Public Class BufferedSettingsWriter
         _filename = filename
         _checkHash = checkHash
         _logger = New MicroLogger(Path.GetDirectoryName(filename), $"{Path.GetFileName(filename)}.log")
-        If forcedLoggerStart Then _logger.Start()
+        If forcedLoggerStart Then
+            _logger.Start()
+        End If
         ReadSettingsFromFile()
     End Sub
 
@@ -95,10 +97,10 @@ Public Class BufferedSettingsWriter
             Dim lines As IEnumerable(Of String) = Nothing
             Try
                 lines = File.ReadAllLines(filename, Encoding.UTF8)
-                SetLoggerStateFromParamInLines(lines) 'Установка состояния логгера
             Catch ex As Exception
                 Throw New Exception($"ReadSettingsFromFile({filename}): File.ReadAllLines({filename}, Encoding.UTF8), ex:{ex.Message}")
             End Try
+            SetLoggerStateFromParamInLines(lines) 'Установка состояния логгера
             ReadSettingsFromLines(lines, settings, filename, allowEmptyLoad)
         End SyncLock
     End Sub
@@ -106,13 +108,11 @@ Public Class BufferedSettingsWriter
     Private Sub SetLoggerStateFromParamInLines(lines As IEnumerable(Of String))
         _logger.AddMessage($"SetLoggerStateFromParamInLines(lines:{lines.Count}): (1/2)", "inf")
         For Each line In lines
-            If line.StartsWith("# SETTINGS LOGGER:") Then
-                If line.EndsWith("ON") Then
-                    _logger.AddMessage($"SetLoggerStateFromParamInLines(line:{line}): _logger.Start(); (1/2)", "inf")
-                    _logger.Start()
-                    _logger.AddMessage($"SetLoggerStateFromParamInLines(line:{line}): _logger.Start(); (2/2)", "inf")
-                    Exit For
-                End If
+            If line.StartsWith("# SETTINGS LOGGER:ON") Then
+                _logger.AddMessage($"SetLoggerStateFromParamInLines(line:{line}): _logger.Start(); (1/2)", "inf")
+                _logger.Start()
+                _logger.AddMessage($"SetLoggerStateFromParamInLines(line:{line}): _logger.Start(); (2/2)", "inf")
+                Exit For
             End If
         Next
         _logger.AddMessage($"SetLoggerStateFromParamInLines(lines:{lines.Count}): (2/2)", "inf")
