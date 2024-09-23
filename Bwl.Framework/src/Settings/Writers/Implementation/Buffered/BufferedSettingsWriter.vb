@@ -106,16 +106,16 @@ Public Class BufferedSettingsWriter
     End Sub
 
     Private Sub SetLoggerStateFromParamInLines(lines As IEnumerable(Of String))
-        _logger.AddMessage($"SetLoggerStateFromParamInLines(lines:{lines.Count}): (1/2)", "inf")
+        _logger.AddMessage($"SetLoggerStateFromParamInLines(lines:{lines.Count}): (1/4)", "inf")
         For Each line In lines
             If line.StartsWith("# SETTINGS LOGGER:ON") Then
-                _logger.AddMessage($"SetLoggerStateFromParamInLines(line:{line}): _logger.Start(); (1/2)", "inf")
+                _logger.AddMessage($"SetLoggerStateFromParamInLines(line:[{line}]): _logger.Start(); (2/4)", "inf")
                 _logger.Start()
-                _logger.AddMessage($"SetLoggerStateFromParamInLines(line:{line}): _logger.Start(); (2/2)", "inf")
+                _logger.AddMessage($"SetLoggerStateFromParamInLines(line:[{line}]): _logger.Start(); (3/4)", "inf")
                 Exit For
             End If
         Next
-        _logger.AddMessage($"SetLoggerStateFromParamInLines(lines:{lines.Count}): (2/2)", "inf")
+        _logger.AddMessage($"SetLoggerStateFromParamInLines(lines:{lines.Count}): (4/4)", "inf")
     End Sub
 
     Private Sub ReadSettingsFromLines(lines As IEnumerable(Of String), settings As Dictionary(Of (Category As String, Name As String), BufferedSetting),
@@ -124,23 +124,23 @@ Public Class BufferedSettingsWriter
         Try
             Dim checkHash = _checkHash
             Dim manualEditEnabled = Not lines.Any(Function(f) f = "# REMOVE THIS LINE TO EDIT SETTINGS MANUALLY")
-            _logger.AddMessage($"ReadSettingsFromLines(): Input lines={lines.Count}; Settings before loading (in target)={settings.Count}; Name={name}; AllowEmptyLoad={allowEmptyLoad}; CheckHash={checkHash}; ManualEditEnabled={manualEditEnabled}", "inf")
+            _logger.AddMessage($"ReadSettingsFromLines(): Input lines={lines.Count}; Settings before loading (in target)={settings.Count}; Name={name}; AllowEmptyLoad={allowEmptyLoad}; CheckHash={checkHash}; ManualEditEnabled={manualEditEnabled} (1/18)", "inf")
             If manualEditEnabled Then
-                _logger.AddMessage($"ReadSettingsFromLines(): Manual edit enabled, SHA512 will not be calculated", "inf")
+                _logger.AddMessage($"ReadSettingsFromLines(): Manual edit enabled, SHA512 will not be calculated (2/18)", "inf")
             ElseIf checkHash Then
-                _logger.AddMessage($"ReadSettingsFromLines(): SHA512 calculation and check (1/2)", "inf")
+                _logger.AddMessage($"ReadSettingsFromLines(): SHA512 calculation and check (3/18)", "inf")
                 'Проверка хеша SHA512
                 Dim linesHashSignature = SHA512Base64(lines)
-                _logger.AddMessage($"ReadSettingsFromLines(): SHA512Base64()={linesHashSignature};", "inf")
+                _logger.AddMessage($"ReadSettingsFromLines(): SHA512Base64()={linesHashSignature}; (4/18)", "inf")
                 Dim hashCheckResult As Boolean? = Nothing
                 For Each line In lines
                     Try
                         line = line.Replace(" ", "")
                         If {"#SHA-512:", "#SHA512:"}.Any(Function(marker) line.StartsWith(marker)) Then
-                            _logger.AddMessage($"ReadSettingsFromLines(): #SHA-512 marker detected", "inf")
+                            _logger.AddMessage($"ReadSettingsFromLines(): #SHA-512 marker detected (5/18)", "inf")
                             If hashCheckResult Is Nothing Then hashCheckResult = False 'Т.к. зафиксировали наличие сигнатуры - нужно установить действительный флаг (не Nothing)
                             If line.Contains(linesHashSignature) Then
-                                _logger.AddMessage($"ReadSettingsFromLines(): #SHA-512 CHECK OK, in line [{line}]", "inf")
+                                _logger.AddMessage($"ReadSettingsFromLines(): #SHA-512 CHECK OK, in line [{line}], (6/18)", "inf")
                                 hashCheckResult = True 'Положительный флаг проверки...
                                 Exit For '...и выход
                             End If
@@ -149,13 +149,14 @@ Public Class BufferedSettingsWriter
                     End Try
                 Next
                 If hashCheckResult IsNot Nothing AndAlso Not hashCheckResult Then
-                    _logger.AddMessage($"ReadSettingsFromLines(): #SHA-512 CHECK FAILED", "exc")
-                    Throw New Exception("SHA-512 check failed")
+                    Dim msg = $"#SHA-512 CHECK FAILED (7/18)"
+                    _logger.AddMessage(msg, "exc")
+                    Throw New Exception(msg)
                 End If
-                _logger.AddMessage($"ReadSettingsFromLines(): SHA512 calculation and check (2/2)", "inf")
+                _logger.AddMessage($"ReadSettingsFromLines(): SHA512 calculation and check (8/18)", "inf")
             End If
             'Вычитывание настроек из строк после проверки хеша
-            _logger.AddMessage($"ReadSettingsFromLines(): Read settings from lines:{lines.Count} (1/3)", "inf")
+            _logger.AddMessage($"ReadSettingsFromLines(): Read settings from lines:{lines.Count} (9/18)", "inf")
             Dim settingsLoaded As New Dictionary(Of (Category As String, Name As String), BufferedSetting)()
             Dim currentCategory = String.Empty
             Dim currentFriendlyName = String.Empty
@@ -173,8 +174,8 @@ Public Class BufferedSettingsWriter
                         currentCategory = line.Substring(1, line.Length - 2)
                     Else
                         Dim keyvalue = line.Split({"="c}, 2) 'Второе и последующее присваивания игнорируются (символ присваивания может быть в строке значения)
-                        If keyvalue.Length <> 2 Then Throw New Exception($"keyvalue.Length <> 2, line = '{line}'")
-                        If currentCategory = String.Empty Then Throw New Exception($"currentCategory = String.Empty")
+                        If keyvalue.Length <> 2 Then Throw New Exception($"keyvalue.Length <> 2, line = [{line}] (10/18)")
+                        If currentCategory = String.Empty Then Throw New Exception($"currentCategory = String.Empty (11/18)")
                         Dim setting As New BufferedSetting()
                         With setting
                             .Category = currentCategory
@@ -186,14 +187,14 @@ Public Class BufferedSettingsWriter
                     End If
                     currentFriendlyName = String.Empty 'Дружественное имя может лишь непосредственно предшествовать настройке
                 Catch ex As Exception
-                    Throw New Exception($"Error in settings line №{lineNum}, line:'{line}', ex:{ex.Message}")
+                    Throw New Exception($"Error in settings line №{lineNum}, line:[{line}], ex:{ex.Message} (12/18)")
                 End Try
                 lineNum += 1
             Next
-            _logger.AddMessage($"ReadSettingsFromLines(): Read settings from lines:{lines.Count} = {settingsLoaded.Count} (2/3)", "inf")
+            _logger.AddMessage($"ReadSettingsFromLines(): Read settings from lines:{lines.Count} = {settingsLoaded.Count} (13/18)", "inf")
             'Если не разрешена "пустая загрузка" - в ini-файле должна быть хотя бы одна настройка
             If Not allowEmptyLoad AndAlso settingsLoaded.Count = 0 Then
-                Throw New Exception($"Empty load not allowed")
+                Throw New Exception($"Empty load not allowed (14/18)")
             End If
             'Проверка на допустимость записи в целевые настройки
             If settingsLoaded.Any() Then
@@ -203,13 +204,15 @@ Public Class BufferedSettingsWriter
                         settings.Add(settingKVP.Key, settingKVP.Value)
                     Next
                 End SyncLock
-                _logger.AddMessage($"ReadSettingsFromLines({name}): Loaded settings:{settingsLoaded.Count}, Inserted settings:{settings.Count} (3/3)", "inf")
+                _logger.AddMessage($"ReadSettingsFromLines({name}): Loaded settings:{settingsLoaded.Count}, Inserted settings:{settings.Count} (15/18)", "inf")
             Else
-                _logger.AddMessage($"ReadSettingsFromLines({name}): No settings was loaded from lines({lines.Count}), current settings not cleared (3/3)", "inf")
+                _logger.AddMessage($"ReadSettingsFromLines({name}): No settings was loaded from lines({lines.Count}), current settings not cleared (16/18)", "inf")
             End If
-            _logger.AddMessage($"ReadSettingsFromLines(): Read settings from lines:{lines.Count} = {settingsLoaded.Count} (3/3)", "inf")
+            _logger.AddMessage($"ReadSettingsFromLines(): Read settings from lines:{lines.Count} = {settingsLoaded.Count} (17/18)", "inf")
         Catch ex As Exception
-            Throw New Exception($"ReadSettingsFromLines({name}): ex:{ex.Message}")
+            Dim msg = $"ReadSettingsFromLines({name}): ex:{ex.Message} (18/18)"
+            _logger.AddMessage(msg, "exc")
+            Throw New Exception(msg)
         End Try
     End Sub
 
@@ -218,7 +221,7 @@ Public Class BufferedSettingsWriter
         SyncLock settings
             Dim tmp = String.Empty 'Временный файл
             Try
-                _logger.AddMessage($"WriteSettingsToFile(filename:{filename}, onlyActiveSettings:{onlyActiveSettings}) (1/2)", "inf")
+                _logger.AddMessage($"WriteSettingsToFile(filename:{filename}, onlyActiveSettings:{onlyActiveSettings}) (1/23)", "inf")
                 'Запись настроек в массив строк
                 Dim lines As New Queue(Of String)()
                 WriteSettingsToLines(lines, settings, onlyActiveSettings)
@@ -229,34 +232,34 @@ Public Class BufferedSettingsWriter
                 If settings.Count <> settingsVerify.Count Then
                     Throw New Exception($"settings.Count <> settingsVerify.Count")
                 Else
-                    _logger.AddMessage($"WriteSettingsToFile({filename}): Verifyed (1/2): OK, by count; ReadSettingsFromLines(), count = {settings.Count}", "inf")
+                    _logger.AddMessage($"WriteSettingsToFile({filename}): Verifyed (1/2): OK, by count; ReadSettingsFromLines(), count = {settings.Count} (2/23)", "inf")
                 End If
                 For Each settingKVP In settings '... и равенство значений элементов
                     If settingKVP.Value <> settingsVerify(settingKVP.Key) Then
                         Throw New Exception($"Value verication failed in chain 'settings->lines->settingsVerify', 'settings({settingKVP.Value})'<>'settingsVerify({settingsVerify(settingKVP.Key)})'")
                     End If
                 Next
-                _logger.AddMessage($"WriteSettingsToFile({filename}): Verifyed (2/2): OK, by values; ReadSettingsFromLines(), count = {settings.Count}", "inf")
+                _logger.AddMessage($"WriteSettingsToFile({filename}): Verifyed (2/2): OK, by values; ReadSettingsFromLines(), count = {settings.Count} (3/23)", "inf")
                 'Определение необходимости записи на диск (если массивы строк под запись и в файле не совпадают)
                 Dim needToWrite = False
                 Dim linesOnDiskBeforeWrite As String() = Nothing
                 Try
-                    _logger.AddMessage($"WriteSettingsToFile({filename}): Lines on disk (1/2), File.ReadAllLines({filename}), needToWrite={needToWrite}", "inf")
+                    _logger.AddMessage($"WriteSettingsToFile({filename}): Lines on disk (1/2), File.ReadAllLines({filename}), needToWrite={needToWrite} (4/23)", "inf")
                     linesOnDiskBeforeWrite = File.ReadAllLines(filename, Encoding.UTF8)
                 Catch ex As Exception
                     needToWrite = True 'Любая ошибка при чтении из файла конфига или при сравнении строк означает необходимость записи
                 Finally
-                    _logger.AddMessage($"WriteSettingsToFile({filename}): Lines on disk (2/2), File.ReadAllLines({filename}), needToWrite={needToWrite}", "inf")
+                    _logger.AddMessage($"WriteSettingsToFile({filename}): Lines on disk (2/2), File.ReadAllLines({filename}), needToWrite={needToWrite} (5/23)", "inf")
                 End Try
                 'Сравнение строк "под запись" и уже имеющихся на диске
                 If Not needToWrite AndAlso linesOnDiskBeforeWrite IsNot Nothing Then 'Сравниваем строки, если успешно их вычитали
                     Try
-                        _logger.AddMessage($"WriteSettingsToFile({filename}): CompareLines (1/2), CompareLines(lines:{lines.Count}, linesOnDiskBeforeWrite:{linesOnDiskBeforeWrite}), needToWrite={needToWrite}", "inf")
+                        _logger.AddMessage($"WriteSettingsToFile({filename}): CompareLines (1/2), CompareLines(lines:{lines.Count}, linesOnDiskBeforeWrite:{linesOnDiskBeforeWrite}), needToWrite={needToWrite} (6/23)", "inf")
                         CompareLines(lines.ToArray(), linesOnDiskBeforeWrite, $"LinesOnDisk.BeforeWrite({filename})") 'При сравнении строк в памяти и на диске учитываются также строки комментариев
                     Catch ex As Exception
                         needToWrite = True 'Ошибка при сравнении строк означает необходимость записи
                     Finally
-                        _logger.AddMessage($"WriteSettingsToFile({filename}): CompareLines (2/2), CompareLines(lines:{lines.Count}, linesOnDiskBeforeWrite:{linesOnDiskBeforeWrite}), needToWrite={needToWrite}", "inf")
+                        _logger.AddMessage($"WriteSettingsToFile({filename}): CompareLines (2/2), CompareLines(lines:{lines.Count}, linesOnDiskBeforeWrite:{linesOnDiskBeforeWrite}), needToWrite={needToWrite} (7/23)", "inf")
                     End Try
                 End If
                 'Запись на диск при неполном наборе *.bak
@@ -268,34 +271,34 @@ Public Class BufferedSettingsWriter
                     'ШАГ 1 - Запись конфига в tmp
                     tmp = Path.Combine(Path.GetDirectoryName(filename), GetTempFileName("WriteSettingsToFile"))
                     File.WriteAllLines(tmp, lines, Encoding.UTF8)
-                    _logger.AddMessage($"WriteSettingsToFile({filename}): File.WriteAllLines(tmp:{tmp}, lines:{lines.Count}) (1/3)", "inf")
+                    _logger.AddMessage($"WriteSettingsToFile({filename}): File.WriteAllLines(tmp:{tmp}, lines:{lines.Count}) (8/23)", "inf")
                     '...и верификация с имеющимся набором строк
                     Dim linesOnDisk = File.ReadAllLines(tmp, Encoding.UTF8)
-                    _logger.AddMessage($"WriteSettingsToFile({filename}): File.ReadAllLines(tmp:{tmp}) = {linesOnDisk.Count} (2/3)", "inf")
+                    _logger.AddMessage($"WriteSettingsToFile({filename}): File.ReadAllLines(tmp:{tmp}) = {linesOnDisk.Count} (9/23)", "inf")
                     CompareLines(lines.ToArray(), linesOnDisk, $"LinesOnDisk.AfterWrite({filename})")
-                    _logger.AddMessage($"WriteSettingsToFile({filename}): CompareLines(lines:{lines.Count}, linesOnDisk:{linesOnDisk.Count}) (3/3)", "inf")
+                    _logger.AddMessage($"WriteSettingsToFile({filename}): CompareLines(lines:{lines.Count}, linesOnDisk:{linesOnDisk.Count}) (10/23)", "inf")
                     'ШАГ 2 - Перенос настроек по bak-иерархии перед тем, как основные настройки будут перемещены по схеме tmp->*
                     'Если вызов главный - требуется вычитать старые настройки и поместить их в иерархию копий * => *.bak => *.old.bak
                     If Not filename.EndsWith(".bak") Then 'В главном вызове имя файла не завершается на *.bak
                         'Перенос настроек из src->tgt с вычитыванием и проверкой (замещение происходит, если исходные настройки корректны)
                         Dim moveSettings = Sub(src As String, tgt As String)
                                                Try
-                                                   _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->WriteSettingsToFile({tgt}) (1/6)", "inf")
+                                                   _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->WriteSettingsToFile({tgt}) (11/23)", "inf")
                                                    If File.Exists(src) Then
                                                        Dim bakSett = ReadSettingsFromFile(src)
-                                                       _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->WriteSettingsToFile({tgt})(2/6)", "inf")
+                                                       _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->WriteSettingsToFile({tgt})(12/23)", "inf")
                                                        If bakSett IsNot Nothing Then
                                                            WriteSettingsToFile(tgt, bakSett, False) 'False - это "копирование", так что переносим все настройки
-                                                           _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->WriteSettingsToFile({tgt}) (3/6)", "inf")
+                                                           _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->WriteSettingsToFile({tgt}) (13/23)", "inf")
                                                        Else
-                                                           _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->...Nothing to write (no data from source) (4/6)", "inf")
+                                                           _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->...Nothing to write (no data from source) (14/23)", "inf")
                                                        End If
                                                    Else
-                                                       _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->...Nothing to read (source file not exists) (5/6)", "inf")
+                                                       _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->...Nothing to read (source file not exists) (15/23)", "inf")
                                                    End If
-                                                   _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->WriteSettingsToFile({tgt}) (6/6)", "inf")
+                                                   _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->WriteSettingsToFile({tgt}) (16/23)", "inf")
                                                Catch ex As Exception
-                                                   _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->WriteSettingsToFile({tgt}): ex:{ex.Message}", "exc")
+                                                   _logger.AddMessage($"WriteSettingsToFile({filename}): ReadSettingsFromFile({src})->WriteSettingsToFile({tgt}): ex:{ex.Message} (17/23)", "exc")
                                                End Try
                                            End Sub
                         '№1: *.bak => *.old.bak
@@ -308,21 +311,22 @@ Public Class BufferedSettingsWriter
                         End If
                     End If
                     'ШАГ 3 - Замещаем целевой файл временным (временный уже был верифицирован)
-                    _logger.AddMessage($"WriteSettingsToFile({filename}): ReplaceFiles(tmp:{tmp}, filename:{filename}) (1/2)", "inf")
+                    _logger.AddMessage($"WriteSettingsToFile({filename}): ReplaceFiles(tmp:{tmp}, filename:{filename}) (18/23)", "inf")
                     ReplaceFile(tmp, filename)
-                    _logger.AddMessage($"WriteSettingsToFile({filename}): ReplaceFiles(tmp:{tmp}, filename:{filename}) (2/2)", "inf")
+                    _logger.AddMessage($"WriteSettingsToFile({filename}): ReplaceFiles(tmp:{tmp}, filename:{filename}) (19/23)", "inf")
                 End If
-                _logger.AddMessage($"WriteSettingsToFile(filename:{filename}, onlyActiveSettings:{onlyActiveSettings}) (2/2)", "inf")
+                _logger.AddMessage($"WriteSettingsToFile(filename:{filename}, onlyActiveSettings:{onlyActiveSettings}) (20/23)", "inf")
             Catch ex As Exception
-                Dim msg = $"WriteSettingsToFile({filename}): ex:{ex.Message}"
+                Dim msg = $"WriteSettingsToFile({filename}): ex:{ex.Message} (21/23)"
                 _logger.AddMessage(msg, "exc")
                 Throw New Exception(msg)
             Finally
                 'Шаг 4 - Удаление временного файла
                 If File.Exists(tmp) Then
                     Try
-                        DeleteFile(tmp, $"WriteSettingsToFile(filename:{filename}, onlyActiveSettings:{onlyActiveSettings})")
-                    Catch
+                        DeleteFile(tmp, $"WriteSettingsToFile(filename:{filename}, onlyActiveSettings:{onlyActiveSettings}) (22/23)")
+                    Catch ex As Exception
+                        _logger.AddMessage($"WriteSettingsToFile({filename}): ReplaceFiles(tmp:{tmp}, filename:{filename}, ex:{ex.Message}) (23/23)", "exc")
                     End Try
                 End If
             End Try
@@ -332,40 +336,47 @@ Public Class BufferedSettingsWriter
     Private Sub ReplaceFile(source As String, target As String)
         Dim tmp = String.Empty 'Временный файл
         Try
+            _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}) (1/15)", "inf")
             If File.Exists(source) Then
-                _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}) (1/9)", "inf")
+                _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}) (2/15)", "inf")
                 tmp = Path.Combine(Path.GetDirectoryName(target), GetTempFileName($"ReplaceFile({Path.GetFileName(source)}, {Path.GetFileName(target)})"))
-                _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}), tmp={tmp}, (2/9)", "inf")
+                _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}), tmp={tmp}, (3/15)", "inf")
                 'Шаг 1 - целевой файл помещается во временный буфер (если он существует)
                 If File.Exists(target) Then
-                    MoveFile(target, tmp, $"<ReplaceFile(source:{source}, target:{target}), tmp={tmp}> [STEP1(target->tmp)] (3/9)")
+                    MoveFile(target, tmp, $"<ReplaceFile(source:{source}, target:{target}), tmp={tmp}> [STEP1(target->tmp)] (4/15)")
                 End If
-                _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}), tmp={tmp}, (4/9)", "inf")
+                _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}), tmp={tmp}, (5/15)", "inf")
                 'Шаг 2 - исходный файл занимает место целевого
                 Try
-                    MoveFile(source, target, $"<ReplaceFile(source:{source}, target:{target}), tmp={tmp}> [STEP2(source->target)] (5/9)")
+                    MoveFile(source, target, $"<ReplaceFile(source:{source}, target:{target}), tmp={tmp}> [STEP2(source->target)] (6/15)")
                 Catch ex As Exception 'Откат потенциально имеющегося шага 1
                     'Откат шага 1
                     If File.Exists(tmp) Then
-                        MoveFile(tmp, target, $"<ReplaceFile(source:{source}, target:{target}), tmp={tmp})> [Rollback STEP1(tmp->target)] (6/9)")
+                        MoveFile(tmp, target, $"<ReplaceFile(source:{source}, target:{target}), tmp={tmp})> [Rollback STEP1(tmp->target)] (7/15)")
                     End If
                 End Try
-                _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}) (7/9)", "inf")
+                _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}) (8/15)", "inf")
             Else
-                _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}), Source file does not exists, nothing to do (8/9)", "inf")
+                _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}), Source file '{source}' does not exists, nothing to do (9/15)", "inf")
             End If
         Catch ex As Exception
-            Dim msg = $"ReplaceFile(source:{source}, target:{target}): ex:{ex.Message}"
+            Dim msg = $"ReplaceFile(source:{source}, target:{target}): ex:{ex.Message} (10/15)"
             _logger.AddMessage(msg, "exc")
             Throw New Exception(msg)
         Finally
             'Шаг 3 - Удаление временного файла
             If File.Exists(tmp) Then
                 Try
+                    _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}), Delete tmp-file: '{tmp}' (11/15)", "inf")
                     DeleteFile(tmp, $"ReplaceFile(source:{source}, target:{target})")
-                Catch
+                    _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}), Delete tmp-file: '{tmp}' (12/15)", "inf")
+                Catch ex As Exception
+                    _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}), Delete tmp-file: '{tmp}', ex:{ex.Message} (13/15)", "exc")
                 End Try
+            Else
+                _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}), Temporary file '{tmp}' does not exists, nothing to delete (14/15)", "inf")
             End If
+            _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}) (15/15)", "inf")
         End Try
     End Sub
 
@@ -386,17 +397,17 @@ Public Class BufferedSettingsWriter
     End Sub
 
     Private Sub DeleteFile(filename As String, actionName As String)
-        _logger.AddMessage($"{actionName}::DeleteFile({filename}) (1/2)", "inf")
+        _logger.AddMessage($"{actionName}::DeleteFile({filename}) (1/6)", "inf")
         If File.Exists(filename) Then
-            _logger.AddMessage($"{actionName}::DeleteFile({filename}): File exists, set normal file attributes and delete (1/3)", "inf")
+            _logger.AddMessage($"{actionName}::DeleteFile({filename}): File exists, set normal file attributes and delete (2/6)", "inf")
             File.SetAttributes(filename, FileAttributes.Normal)
-            _logger.AddMessage($"{actionName}::DeleteFile({filename}): File exists, set normal file attributes and delete (2/3)", "inf")
+            _logger.AddMessage($"{actionName}::DeleteFile({filename}): File exists, set normal file attributes and delete (3/6)", "inf")
             File.Delete(filename)
-            _logger.AddMessage($"{actionName}::DeleteFile({filename}): File exists, set normal file attributes and delete (3/3)", "inf")
+            _logger.AddMessage($"{actionName}::DeleteFile({filename}): File exists, set normal file attributes and delete (4/6)", "inf")
         Else
-            _logger.AddMessage($"{actionName}::DeleteFile({filename}): File does not not exists, nothing to do", "inf")
+            _logger.AddMessage($"{actionName}::DeleteFile({filename}): File does not not exists, nothing to do (5/6)", "inf")
         End If
-        _logger.AddMessage($"{actionName}::DeleteFile({filename}) (2/2)", "inf")
+        _logger.AddMessage($"{actionName}::DeleteFile({filename}) (6/6)", "inf")
     End Sub
 
     Private Sub WriteSettingsToLines(lines As Queue(Of String), settings As Dictionary(Of (Category As String, Name As String), BufferedSetting),
