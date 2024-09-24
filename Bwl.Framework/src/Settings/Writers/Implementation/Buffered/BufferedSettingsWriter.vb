@@ -35,6 +35,12 @@ Public Class BufferedSettingsWriter
     Private _checkHash As Boolean
     Private _logger As MicroLogger
 
+    Public ReadOnly Property FileName As String
+        Get
+            Return _filename
+        End Get
+    End Property
+
     Public Event Logger(type As String, message As String)
 
     Sub New(filename As String, checkHash As Boolean, Optional forcedLoggerStart As Boolean = False)
