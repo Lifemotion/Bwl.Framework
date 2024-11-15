@@ -1,4 +1,5 @@
-﻿Imports System.Timers
+﻿Imports System.Text
+Imports System.Timers
 
 ''' <summary>
 ''' Хранилище настроек.
@@ -7,7 +8,7 @@
 Public Class SettingsStorage
     Inherits SettingsStorageBase
 
-    Private _syncRoot As New Object
+    Private ReadOnly _syncRoot As New Object
 
     Public Event OnSaveSettings(changedOnly As Boolean)
 
@@ -45,6 +46,12 @@ Public Class SettingsStorage
     Public Function CreateStringSetting(name As String, defaultValue As String, Optional friendlyName As String = "", Optional description As String = "",
                                             Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False) As StringSetting
         Return New StringSetting(Me, name, defaultValue, friendlyName, description, userGroups, readOnlyField)
+    End Function
+    Public Function CreateTextFileContentSeting(name As String, Optional defaultValue As String() = Nothing,
+                                               Optional overrideFilename As String = "", Optional filenameExtension As String = "txt", Optional fileEncoding As Encoding = Nothing,
+                                               Optional friendlyName As String = "", Optional description As String = "",
+                                               Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False) As TextFileContentSetting
+        Return New TextFileContentSetting(Me, name, defaultValue, overrideFilename, filenameExtension, fileEncoding, friendlyName, description, userGroups, readOnlyField)
     End Function
     Public Function CreateBooleanSetting(name As String, defaultValue As Boolean, Optional friendlyName As String = "", Optional description As String = "",
                                             Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False) As BooleanSetting
@@ -101,6 +108,10 @@ Public Class SettingsStorage
                 Throw New Exception("Child storage not found: " + name)
             End If
         End SyncLock
+    End Sub
+
+    Public Sub DeleteChildStorage(storage As SettingsStorage)
+        DeleteChildStorage(storage.Name)
     End Sub
 
     Friend Overrides Sub LoadSetting(setting As SettingOnStorage)
@@ -162,8 +173,6 @@ Public Class SettingsStorage
     Friend Overrides Sub SetSettingChanged(setting As SettingOnStorage)
         MyBase.SetSettingChanged(setting)
         setting.Changed = True
-        If _parentStorage IsNot Nothing Then
-            _parentStorage.SetSettingChanged(setting)
-        End If
+        _parentStorage?.SetSettingChanged(setting)
     End Sub
 End Class

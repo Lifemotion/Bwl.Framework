@@ -53,7 +53,7 @@ Public Class TestFormAppBase
 
     End Sub
 
-    Private Sub _btnSholLogForm_Click(sender As Object, e As EventArgs) Handles _btnShowLogForm.Click
+    Private Sub ShowLogForm_Click(sender As Object, e As EventArgs) Handles _btnShowLogForm.Click
         Dim form = New LoggerForm(_logger)
         form.Show()
     End Sub

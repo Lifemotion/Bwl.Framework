@@ -11,6 +11,7 @@
     Protected _type As String = ""
 
     Public Event ParametersChanged(setting As Setting)
+    Public Event ValueWillChange(setting As Setting)
     Public Event ValueChanged(setting As Setting)
     Public Shared Event SettingCreated(setting As Setting)
 
@@ -116,6 +117,10 @@
 
     Public Sub RaiseValueChanged()
         RaiseEvent ValueChanged(Me)
+    End Sub
+
+    Public Sub RaiseValueWillChange()
+        RaiseEvent ValueWillChange(Me)
     End Sub
 
     Protected Sub RaiseParametersChanged()

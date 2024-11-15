@@ -40,7 +40,7 @@ Public Class SettingsDialog
             If childSetting.FriendlyName.Length > 0 Then
                 nameText = childSetting.FriendlyName
             End If
-			Dim val = childSetting.ValueAsString
+            Dim val = childSetting.ValueAsString
             If (val.Length > 30) Then
                 'val = val.Substring(0, 30)
             End If
@@ -62,24 +62,41 @@ Public Class SettingsDialog
 
     End Sub
 
-	Private Sub settingView_Load(sender As System.Object, e As System.EventArgs) Handles settingView.Load
+    Private Sub settingView_Load(sender As System.Object, e As System.EventArgs) Handles settingView.Load
 
-	End Sub
+    End Sub
 
-	Private Sub settingView_SettingValueChanged() Handles settingView.SettingValueChanged
-		If Not Me.IsDisposed Then
-			If list.SelectedNode.Tag IsNot Nothing Then
-				Dim setting As SettingOnStorage = DirectCast(list.SelectedNode.Tag, SettingOnStorage)
-				Dim nameText As String = setting.Name
-				If setting.FriendlyName.Length > 0 Then
-					nameText = setting.FriendlyName
-				End If
-				Dim val = setting.ValueAsString
-				If (val.Length > 30) Then
+    Private Sub settingView_SettingValueChanged() Handles settingView.SettingValueChanged
+        If Not Me.IsDisposed Then
+            If list.SelectedNode.Tag IsNot Nothing Then
+                Dim setting As SettingOnStorage = DirectCast(list.SelectedNode.Tag, SettingOnStorage)
+                Dim nameText As String = setting.Name
+                If setting.FriendlyName.Length > 0 Then
+                    nameText = setting.FriendlyName
+                End If
+                Dim val = setting.ValueAsString
+                If (val.Length > 30) Then
                     'val = val.Substring(0, 30)
                 End If
-				list.SelectedNode.Text = nameText + ": " + val + " [*]"
-			End If
-		End If
-	End Sub
+                list.SelectedNode.Text = nameText + ": " + val + " [*]"
+            End If
+        End If
+    End Sub
+
+    Private _bigFieldEnabled As Boolean = False
+
+    Private Sub settingView_setBiggerField(value As Boolean) Handles settingView.SetBiggerField
+        If _bigFieldEnabled = value Then Return
+        Dim sizeChange = 60
+        If value Then
+            list.Height -= sizeChange
+            settingView.Top -= sizeChange
+            settingView.Height += sizeChange
+        Else
+            list.Height += sizeChange
+            settingView.Top += sizeChange
+            settingView.Height -= sizeChange
+        End If
+        _bigFieldEnabled = value
+    End Sub
 End Class

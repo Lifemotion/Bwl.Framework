@@ -4,8 +4,6 @@ Public MustInherit Class SettingOnStorage
 
     Protected _isLoaded As Boolean
     Protected _storage As SettingsStorageBase
-    Protected _isValueCorrectFunction As IsValueCorrectDelegate
-    Protected Delegate Function IsValueCorrectDelegate(value As String) As Boolean
 
     Public Property Changed As Boolean
 
@@ -32,9 +30,7 @@ Public MustInherit Class SettingOnStorage
         RaiseSettingCreated()
     End Sub
 
-    Public Function IsValueCorrect(value As String) As Boolean
-        Return If(_isValueCorrectFunction IsNot Nothing, _isValueCorrectFunction(value), True)
-    End Function
+    Protected MustOverride Function IsValueCorrect(value As String) As Boolean
 
     Public ReadOnly Property FullName As String
         Get
@@ -52,6 +48,7 @@ Public MustInherit Class SettingOnStorage
         Set(newValue As String)
             If Not IsValueCorrect(newValue) Then Throw New Exception($"Value {newValue} is not correct for this setting")
             If Not IsReadOnly AndAlso _value <> newValue Then
+                RaiseValueWillChange()
                 _value = newValue
                 RaiseValueChanged()
                 _storage.SetSettingChanged(Me)

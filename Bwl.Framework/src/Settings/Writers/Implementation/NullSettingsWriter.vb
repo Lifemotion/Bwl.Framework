@@ -1,6 +1,12 @@
 ﻿Public Class NullSettingsWriter
     Implements ISettingsReaderWriter
 
+    Public ReadOnly Property IniFlieName As String Implements ISettingsReaderWriter.IniFileName
+        Get
+            Return Nothing
+        End Get
+    End Property
+
     Public Function IsSettingExist(path() As String, name As String) As Boolean Implements ISettingsReaderWriter.IsSettingExist
         Return False
     End Function

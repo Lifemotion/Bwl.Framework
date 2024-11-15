@@ -1,4 +1,7 @@
-﻿Public Class SettingField
+﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+Imports Microsoft.VisualBasic.FileIO
+
+Public Class SettingField
 
     Private WithEvents setting As SettingOnStorage
     Private settingReady As Boolean
@@ -42,6 +45,12 @@
             tbValue.Enabled = True
             lKey.Hide()
             tbKey.Hide()
+
+            RaiseEvent SetBiggerField(False)
+            tbValue.Multiline = False
+            tbValue.Height = 20
+            tbValue.ScrollBars = ScrollBars.None
+
             If TypeOf setting Is BooleanSetting Then
                 Dim tmp = DirectCast(setting, BooleanSetting)
                 cValue.Checked = tmp.Value
@@ -70,6 +79,16 @@
                 'tbKey.PasswordChar = "*"c
                 tbKey.Show()
                 lKey.Show()
+            ElseIf TypeOf setting Is TextFileContentSetting Then
+                Dim settingValue = CType(setting, TextFileContentSetting)
+                RaiseEvent SetBiggerField(True)
+                tbValue.Height = 80 ' Default is 20
+                tbValue.ScrollBars = ScrollBars.Both
+                tbValue.Multiline = True
+                tbValue.Lines = settingValue.Value
+                tbValue.Show()
+                tbValue.SelectionStart = tbValue.Text.Length
+                tbValue.ScrollToCaret()
             Else
                 tbValue.Text = setting.ValueAsString
                 tbValue.Show()
@@ -109,6 +128,7 @@
     End Property
 
     Public Event SettingValueChanged()
+    Public Event SetBiggerField(value As Boolean)
 
     Private Sub tbValue_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbValue.TextChanged
         If settingReady AndAlso (Not Me.IsDisposed) Then
@@ -123,6 +143,13 @@
                     Catch ex As Exception
                     End Try
                 End If
+            ElseIf TypeOf setting Is TextFileContentSetting Then
+                Try
+                    Dim origSetting = CType(setting, TextFileContentSetting)
+                    origSetting.Value = tbValue.Lines
+                    RaiseEvent SettingValueChanged()
+                Catch ex As Exception
+                End Try
             Else
                 Try
                     If tbValue.Text <> setting.ValueAsString Then

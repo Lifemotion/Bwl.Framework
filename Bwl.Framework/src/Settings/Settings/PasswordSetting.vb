@@ -14,8 +14,6 @@ Public Class PasswordSetting
                    Optional friendlyName As String = "", Optional description As String = "",
                    Optional userGroups As String() = Nothing)
         MyBase.New(storage, name, "", friendlyName, description,, userGroups)
-        _isValueCorrectFunction = AddressOf CheckValueIsCorrect
-
     End Sub
 
     Shared Narrowing Operator CType(value As PasswordSetting) As String
@@ -100,7 +98,7 @@ Public Class PasswordSetting
         End If
     End Sub
 
-    Private Function CheckValueIsCorrect(str As String) As Boolean
+    Protected Overrides Function IsValueCorrect(str As String) As Boolean
         If str Is Nothing Then Return False
         Return True
     End Function

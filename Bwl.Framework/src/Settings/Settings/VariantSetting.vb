@@ -7,14 +7,12 @@
                    Optional friendlyName As String = "", Optional description As String = "",
                    Optional userGroups As String() = Nothing)
         MyBase.New(storage, name, defaultValue, friendlyName, description,, userGroups)
-        _isValueCorrectFunction = AddressOf CheckValueIsCorrect
         SetVariants(variants, defaultValue)
     End Sub
 
     Friend Sub New(storage As SettingsStorageBase, name As String, defaultValue As String, variants() As String, friendlyName As String, description As String, value As String,
                    Optional userGroups As String() = Nothing)
         MyBase.New(storage, name, defaultValue, friendlyName, description, value, userGroups)
-        _isValueCorrectFunction = AddressOf CheckValueIsCorrect
         SetVariants(variants, defaultValue)
     End Sub
 
@@ -28,7 +26,7 @@
         _variants = variants
     End Sub
 
-    Private Function CheckValueIsCorrect(str As String) As Boolean
+    Protected Overrides Function IsValueCorrect(str As String) As Boolean
         If str Is Nothing Then Return False
         Return True
     End Function

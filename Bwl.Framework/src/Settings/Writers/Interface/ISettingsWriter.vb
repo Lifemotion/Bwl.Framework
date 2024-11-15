@@ -1,4 +1,5 @@
 ﻿Public Interface ISettingsReaderWriter
+    ReadOnly Property IniFileName As String
     Sub WriteCategory(storagePath As String(), Name As String, FriendlyName As String)
     Sub WriteRoot(Name As String, FriendlyName As String)
     Sub WriteSetting(storagePath As String(), setting As Setting)

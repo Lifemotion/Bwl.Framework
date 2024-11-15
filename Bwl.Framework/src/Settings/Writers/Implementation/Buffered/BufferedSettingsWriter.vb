@@ -35,7 +35,14 @@ Public Class BufferedSettingsWriter
     Private _checkHash As Boolean
     Private _logger As MicroLogger
 
+    ' Probably should remove it, but I'll let it stay for compatibility
     Public ReadOnly Property FileName As String
+        Get
+            Return _filename
+        End Get
+    End Property
+
+    Public ReadOnly Property IniFlieName As String Implements ISettingsReaderWriter.IniFileName
         Get
             Return _filename
         End Get

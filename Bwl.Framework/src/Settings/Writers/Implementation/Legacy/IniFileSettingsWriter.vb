@@ -1,10 +1,17 @@
 ﻿Public Class IniFileSettingsWriter
     Implements ISettingsReaderWriter
 
+    Private iniFilePath As String
     Private iniFile As IniFile
     Private lock As New Object
+    Public ReadOnly Property IniFlieName As String Implements ISettingsReaderWriter.IniFileName
+        Get
+            Return iniFilePath
+        End Get
+    End Property
     Sub New(filename As String)
-        iniFile = New IniFile(filename)
+        iniFilePath = filename
+        iniFile = New IniFile(iniFilePath)
     End Sub
     Public Function IsSettingExist(path() As String, name As String) As Boolean Implements ISettingsReaderWriter.IsSettingExist
         SyncLock lock

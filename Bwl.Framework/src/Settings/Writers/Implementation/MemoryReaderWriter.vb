@@ -8,6 +8,11 @@
             Return _list
         End Get
     End Property
+    Public ReadOnly Property IniFlieName As String Implements ISettingsReaderWriter.IniFileName
+        Get
+            Return Nothing
+        End Get
+    End Property
 
     Public Function MakeString() As String
         Dim sb As New Text.StringBuilder

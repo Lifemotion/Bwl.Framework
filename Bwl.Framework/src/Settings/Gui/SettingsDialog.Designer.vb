@@ -57,9 +57,10 @@ Partial Class SettingsDialog
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.settingView.AssignedSetting = Nothing
         Me.settingView.DesignText = Nothing
-        Me.settingView.Location = New System.Drawing.Point(1, 328)
+        Me.settingView.Location = New System.Drawing.Point(0, 332)
+        Me.settingView.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.settingView.Name = "settingView"
-        Me.settingView.Size = New System.Drawing.Size(575, 75)
+        Me.settingView.Size = New System.Drawing.Size(577, 77)
         Me.settingView.TabIndex = 1
         '
         'SettingsDialog

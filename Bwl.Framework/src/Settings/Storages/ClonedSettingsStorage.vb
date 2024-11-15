@@ -22,13 +22,16 @@
                 Case GetType(IntegerSetting).ToString
                     childSetting = New IntegerSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString, setting.UserGroups, setting.IsReadOnly)
                 Case GetType(BooleanSetting).ToString
-                    childSetting = New BooleanSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
+                    childSetting = New BooleanSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString, setting.UserGroups, setting.IsReadOnly)
                 Case GetType(StringSetting).ToString
-                    childSetting = New StringSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
+                    childSetting = New StringSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString, setting.UserGroups, setting.IsReadOnly)
+                Case GetType(TextFileContentSetting).ToString
+                    Dim origSetting = CType(setting, TextFileContentSetting)
+                    childSetting = New TextFileContentSetting(Me, setting.Name, Nothing, origSetting.FileName, origSetting.FileExtension, origSetting.FileEncoding, setting.FriendlyName, setting.Description, setting.UserGroups, setting.IsReadOnly) With {.FileName = origSetting.FileName}
                 Case GetType(DoubleSetting).ToString
-                    childSetting = New DoubleSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString)
+                    childSetting = New DoubleSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString, setting.UserGroups, setting.IsReadOnly)
                 Case GetType(VariantSetting).ToString
-                    childSetting = New VariantSetting(Me, setting.Name, setting.DefaultValueAsString, setting.VariantsAsString.Split(","c), setting.FriendlyName, setting.Description, setting.ValueAsString)
+                    childSetting = New VariantSetting(Me, setting.Name, setting.DefaultValueAsString, setting.VariantsAsString.Split(","c), setting.FriendlyName, setting.Description, setting.ValueAsString, setting.UserGroups)
             End Select
         Next
 
@@ -39,9 +42,7 @@
 
     Friend Overrides Sub SetSettingChanged(setting As SettingOnStorage)
         MyBase.SetSettingChanged(setting)
-        If _parentStorage IsNot Nothing Then
-            _parentStorage.SetSettingChanged(setting)
-        End If
+        _parentStorage?.SetSettingChanged(setting)
     End Sub
 
     Friend Overrides Sub LoadSetting(setting As SettingOnStorage)

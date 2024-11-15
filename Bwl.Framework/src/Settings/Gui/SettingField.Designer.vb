@@ -42,18 +42,20 @@ Partial Class SettingField
         '
         Me.tbValue.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.tbValue.Location = New System.Drawing.Point(6, 18)
+        Me.tbValue.Location = New System.Drawing.Point(9, 28)
+        Me.tbValue.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.tbValue.Name = "tbValue"
-        Me.tbValue.Size = New System.Drawing.Size(206, 20)
+        Me.tbValue.Size = New System.Drawing.Size(307, 26)
         Me.tbValue.TabIndex = 0
         Me.tbValue.Visible = False
         '
         'cValue
         '
         Me.cValue.AutoSize = True
-        Me.cValue.Location = New System.Drawing.Point(6, 21)
+        Me.cValue.Location = New System.Drawing.Point(9, 32)
+        Me.cValue.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.cValue.Name = "cValue"
-        Me.cValue.Size = New System.Drawing.Size(15, 14)
+        Me.cValue.Size = New System.Drawing.Size(22, 21)
         Me.cValue.TabIndex = 1
         Me.cValue.UseVisualStyleBackColor = True
         Me.cValue.Visible = False
@@ -63,30 +65,32 @@ Partial Class SettingField
         Me.cbValue.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cbValue.FormattingEnabled = True
-        Me.cbValue.Location = New System.Drawing.Point(6, 18)
+        Me.cbValue.Location = New System.Drawing.Point(9, 28)
+        Me.cbValue.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.cbValue.Name = "cbValue"
-        Me.cbValue.Size = New System.Drawing.Size(206, 21)
+        Me.cbValue.Size = New System.Drawing.Size(307, 28)
         Me.cbValue.TabIndex = 3
         Me.cbValue.Visible = False
         '
         'lCaption
         '
         Me.lCaption.AutoSize = True
-        Me.lCaption.Location = New System.Drawing.Point(5, 1)
+        Me.lCaption.Location = New System.Drawing.Point(8, 2)
+        Me.lCaption.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lCaption.Name = "lCaption"
-        Me.lCaption.Size = New System.Drawing.Size(43, 13)
+        Me.lCaption.Size = New System.Drawing.Size(64, 20)
         Me.lCaption.TabIndex = 4
         Me.lCaption.Text = "Caption"
         '
         'lDesc
         '
-        Me.lDesc.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.lDesc.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lDesc.AutoEllipsis = True
-        Me.lDesc.Location = New System.Drawing.Point(5, 41)
+        Me.lDesc.Location = New System.Drawing.Point(8, 63)
+        Me.lDesc.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lDesc.Name = "lDesc"
-        Me.lDesc.Size = New System.Drawing.Size(208, 31)
+        Me.lDesc.Size = New System.Drawing.Size(312, 48)
         Me.lDesc.TabIndex = 5
         Me.lDesc.Text = "Description"
         '
@@ -94,29 +98,31 @@ Partial Class SettingField
         '
         Me.bMenu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.bMenu.AutoSize = True
-        Me.bMenu.Location = New System.Drawing.Point(163, 1)
+        Me.bMenu.Location = New System.Drawing.Point(244, 2)
+        Me.bMenu.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.bMenu.Name = "bMenu"
-        Me.bMenu.Size = New System.Drawing.Size(54, 13)
+        Me.bMenu.Size = New System.Drawing.Size(81, 20)
         Me.bMenu.TabIndex = 6
         Me.bMenu.TabStop = True
         Me.bMenu.Text = "средства"
         '
         'menu
         '
+        Me.menu.ImageScalingSize = New System.Drawing.Size(24, 24)
         Me.menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menuDefault, Me.menuFile})
         Me.menu.Name = "menu"
-        Me.menu.Size = New System.Drawing.Size(163, 70)
+        Me.menu.Size = New System.Drawing.Size(211, 68)
         '
         'menuDefault
         '
         Me.menuDefault.Name = "menuDefault"
-        Me.menuDefault.Size = New System.Drawing.Size(162, 22)
+        Me.menuDefault.Size = New System.Drawing.Size(210, 32)
         Me.menuDefault.Text = "По умолчанию"
         '
         'menuFile
         '
         Me.menuFile.Name = "menuFile"
-        Me.menuFile.Size = New System.Drawing.Size(162, 22)
+        Me.menuFile.Size = New System.Drawing.Size(210, 32)
         Me.menuFile.Text = "Выбрать файл..."
         '
         'lKey
@@ -126,27 +132,29 @@ Partial Class SettingField
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lKey.AutoEllipsis = True
         Me.lKey.AutoSize = True
-        Me.lKey.Location = New System.Drawing.Point(5, 46)
+        Me.lKey.Location = New System.Drawing.Point(8, 71)
+        Me.lKey.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lKey.Name = "lKey"
-        Me.lKey.Size = New System.Drawing.Size(33, 13)
+        Me.lKey.Size = New System.Drawing.Size(50, 20)
         Me.lKey.TabIndex = 8
         Me.lKey.Text = "Ключ"
         Me.lKey.Visible = False
         '
         'tbKey
         '
-        Me.tbKey.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.tbKey.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.tbKey.Location = New System.Drawing.Point(48, 43)
+        Me.tbKey.Location = New System.Drawing.Point(72, 66)
+        Me.tbKey.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.tbKey.Name = "tbKey"
-        Me.tbKey.Size = New System.Drawing.Size(164, 20)
+        Me.tbKey.Size = New System.Drawing.Size(244, 26)
         Me.tbKey.TabIndex = 7
         Me.tbKey.Text = "0,25,80,238,150,13,200,37,124,237,177,1,74,190,0,239"
         Me.tbKey.Visible = False
         '
         'SettingField
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(9.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.lKey)
         Me.Controls.Add(Me.tbKey)
@@ -156,8 +164,9 @@ Partial Class SettingField
         Me.Controls.Add(Me.cValue)
         Me.Controls.Add(Me.tbValue)
         Me.Controls.Add(Me.lDesc)
+        Me.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.Name = "SettingField"
-        Me.Size = New System.Drawing.Size(218, 72)
+        Me.Size = New System.Drawing.Size(327, 111)
         Me.menu.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
