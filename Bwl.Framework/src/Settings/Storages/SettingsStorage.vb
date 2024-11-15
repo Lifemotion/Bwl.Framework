@@ -48,10 +48,11 @@ Public Class SettingsStorage
         Return New StringSetting(Me, name, defaultValue, friendlyName, description, userGroups, readOnlyField)
     End Function
     Public Function CreateTextFileContentSeting(name As String, Optional defaultValue As String() = Nothing,
-                                               Optional overrideFilename As String = "", Optional filenameExtension As String = "txt", Optional fileEncoding As Encoding = Nothing,
+                                               Optional overrideFilename As String = "", Optional filenameExtension As String = "txt",
+                                               Optional overrideDirectory As String = "", Optional fileEncoding As Encoding = Nothing,
                                                Optional friendlyName As String = "", Optional description As String = "",
                                                Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False) As TextFileContentSetting
-        Return New TextFileContentSetting(Me, name, defaultValue, overrideFilename, filenameExtension, fileEncoding, friendlyName, description, userGroups, readOnlyField)
+        Return New TextFileContentSetting(Me, name, defaultValue, overrideFilename, filenameExtension, overrideDirectory, fileEncoding, friendlyName, description, userGroups, readOnlyField)
     End Function
     Public Function CreateBooleanSetting(name As String, defaultValue As Boolean, Optional friendlyName As String = "", Optional description As String = "",
                                             Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False) As BooleanSetting

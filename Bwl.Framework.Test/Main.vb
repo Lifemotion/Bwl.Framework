@@ -111,6 +111,7 @@ Module Main
 
             ' Test 1 - create file with no content
             testSetting1 = tempSettingsStorage.CreateTextFileContentSeting("TextFileSetting1")
+            _appBase.RootStorage.SaveSettings()
             logger.AddMessage($"TestFileSetting1 filename is {testSetting1.FileName}, filepath is {testSetting1.FilePath}")
             logger.AddMessage($"TestFileSetting1 Value is nothing = {testSetting1.Value Is Nothing OrElse Not testSetting1.Value.Any()}")
             testSetting1.Value = fileContent1
@@ -120,10 +121,12 @@ Module Main
             Dim filename1 = testSetting1.FileName
             tempSettingsStorage.RemoveSetting(testSetting1.Name)
             testSetting1 = tempSettingsStorage.CreateTextFileContentSeting("TextFileSetting1")
+            _appBase.RootStorage.SaveSettings()
             logger.AddMessage($"TestFileSetting1 filename was NOT changed as setting was recreated = {testSetting1.FileName = filename1}")
 
             ' Test 2 - create file with content
             testSetting2 = tempSettingsStorage.CreateTextFileContentSeting("TextFileSetting2", fileContent1, "newFile1.cfg", "cfg")
+            _appBase.RootStorage.SaveSettings()
             logger.AddMessage($"TestFileSetting2 filename is {testSetting2.FileName}, filepath is {testSetting2.FilePath}")
             logger.AddMessage($"TestFileSetting2 Value has the content = {testSetting2.Value.Length = 3}")
 
@@ -143,6 +146,7 @@ Module Main
             Dim filename2 = testSetting2.FileName
             tempSettingsStorage.RemoveSetting(testSetting2.Name)
             testSetting2 = tempSettingsStorage.CreateTextFileContentSeting("TextFileSetting2")
+            _appBase.RootStorage.SaveSettings()
             logger.AddMessage($"TestFileSetting2 filename was NOT changed as setting was recreated = {testSetting2.FileName = filename2}")
             logger.AddMessage($"TestFileSetting2 content was NOT changed as setting was recreated = {testSetting2.Value.SequenceEqual(fileContent2)}")
         Catch ex As Exception

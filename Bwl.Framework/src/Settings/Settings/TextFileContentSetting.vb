@@ -7,29 +7,41 @@ Public Class TextFileContentSetting
 
     Private ReadOnly _fileExtension As String = "txt"
     Private ReadOnly _fileEncoding As Encoding = Encoding.UTF8
+    Private _directoryPath As String
 
     ''' <summary>
-    ''' Get the path to directory out of SettingsStorage's DefaultWriter (assuming it's file)
+    ''' Get the path to the directory out of SettingsStorage's DefaultWriter (assuming it's a file)
     ''' </summary>
-    ''' <returns>Path to directory</returns>
-    Private ReadOnly Property DirectoryPath As String
+    ''' <returns>Path to the directory</returns>
+    Public Property DirectoryPath As String
         Get
-            Dim pathToDir = Path.GetFullPath(Path.Combine(_storage.DefaultWriter.IniFileName, "..", "files"))
-            If Not Directory.Exists(pathToDir) Then Directory.CreateDirectory(pathToDir)
-            Return pathToDir
+            If String.IsNullOrWhiteSpace(_directoryPath) Then _directoryPath = Path.GetFullPath(Path.Combine(_storage.DefaultWriter.IniFileName, "..", "files"))
+            If Not Directory.Exists(_directoryPath) Then Directory.CreateDirectory(_directoryPath)
+            Return _directoryPath
         End Get
+        Set(value As String)
+            ' If the file already exists - we move it as we change the directory
+            Dim originalFilePath = FilePath
+            If Not Directory.Exists(value) Then Directory.CreateDirectory(value)
+            _directoryPath = value
+            If File.Exists(originalFilePath) Then
+                If File.Exists(FilePath) Then File.Delete(FilePath)
+                File.Move(originalFilePath, FilePath)
+            End If
+        End Set
     End Property
 
     ''' <summary>
     ''' Get the name of the file
     ''' </summary>
-    ''' <returns>File name</returns>
+    ''' <returns>Filename</returns>
     Public Property FileName As String
         Get
             If String.IsNullOrWhiteSpace(MyBase.ValueAsString) Then
                 ' If we don't have a filename we need to generate it first, with some random too
                 Dim rand = New Random()
-                MyBase.ValueAsString = $"{Me.Name}_{rand.Next(1, 999):D3}.{_fileExtension}"
+                MyBase.ValueAsString = $"{Me.Name}_{rand.Next(1, 999):D3}{If(Not String.IsNullOrWhiteSpace(_fileExtension), $".{_fileExtension}", "")}"
+                MyBase._defaultValue = MyBase.ValueAsString
             End If
             ' If we already have a filename - just use it!
             Return MyBase.ValueAsString
@@ -53,22 +65,22 @@ Public Class TextFileContentSetting
     End Property
 
     ''' <summary>
-    ''' Get full path to the file
-    ''' </summary>
-    ''' <returns></returns>
-    Public ReadOnly Property FilePath As String
-        Get
-            Return Path.GetFullPath(Path.Combine(Me.DirectoryPath, Me.FileName))
-        End Get
-    End Property
-
-    ''' <summary>
     ''' File extension
     ''' </summary>
     ''' <returns>File extension</returns>
     Public ReadOnly Property FileExtension As String
         Get
             Return _fileExtension
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Get a full path to the file
+    ''' </summary>
+    ''' <returns>Full path to the file</returns>
+    Public ReadOnly Property FilePath As String
+        Get
+            Return Path.GetFullPath(Path.Combine(Me.DirectoryPath, Me.FileName))
         End Get
     End Property
 
@@ -83,21 +95,23 @@ Public Class TextFileContentSetting
     End Property
 
     ''' <summary>
-    ''' Setting that allows writing to file (for example, configuration files for external software)
+    ''' Setting that allows writing to the file (for example, configuration files for external software)
     ''' </summary>
     ''' <param name="storage">Settings storage</param>
     ''' <param name="name">Setting name</param>
-    ''' <param name="defaultValue">Default content of file</param>
+    ''' <param name="defaultValue">Default content of the file</param>
     ''' <param name="overrideFilename">Custom file name (with extension)</param>
     ''' <param name="filenameExtension">Extension for the file (in case file name is generated)</param>
-    ''' <param name="fileEncoding">File encoding, UTF-8 if not specified</param>
-    ''' <param name="friendlyName">Setting name to show to user</param>
-    ''' <param name="description">Description of a setting to show to user</param>
+    ''' <param name="overrideDirectory">Directory where the file should be saved (if not specified - next to the settings file)</param>
+    ''' <param name="fileEncoding">File encoding (UTF-8 if not specified)</param>
+    ''' <param name="friendlyName">Setting the name to show to the user</param>
+    ''' <param name="description">Description of a setting to show to the user</param>
     ''' <param name="userGroups">User groups who have access to the setting</param>
     ''' <param name="readOnlyField">Value cannot be changed</param>
     ''' 
     Friend Sub New(storage As SettingsStorageBase, name As String, Optional defaultValue As String() = Nothing,
-                   Optional overrideFilename As String = "", Optional filenameExtension As String = "txt", Optional fileEncoding As Encoding = Nothing,
+                   Optional overrideFilename As String = "", Optional filenameExtension As String = "txt",
+                   Optional overrideDirectory As String = "", Optional fileEncoding As Encoding = Nothing,
                    Optional friendlyName As String = "", Optional description As String = "",
                    Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False)
 
@@ -107,8 +121,9 @@ Public Class TextFileContentSetting
         _fileExtension = filenameExtension
         If fileEncoding IsNot Nothing Then _fileEncoding = fileEncoding
         If Not String.IsNullOrWhiteSpace(overrideFilename) Then FileName = overrideFilename
+        If Not String.IsNullOrWhiteSpace(overrideDirectory) Then DirectoryPath = overrideDirectory
 
-        ' If default value is specified beforehand - write it into the file if 
+        ' If default value is specified beforehand - write it into the file
         If (Not IsValueCorrect("") OrElse Value.Length = 0) _
             AndAlso defaultValue IsNot Nothing AndAlso defaultValue.Length > 0 Then
             Me.Value = defaultValue
@@ -129,7 +144,7 @@ Public Class TextFileContentSetting
             ' Tries to read text from file, if file does not exist throws an exception
             Try
                 If Not File.Exists(FilePath) Then Me.Value = New String() {}
-                Return File.ReadAllLines(FilePath)
+                Return File.ReadAllLines(FilePath, _fileEncoding)
             Catch ex As Exception
                 Return Nothing
             End Try
@@ -145,28 +160,33 @@ Public Class TextFileContentSetting
     End Property
 
     ''' <summary>
-    ''' Default value as string - not working!
+    ''' Default filename
     ''' </summary>
-    ''' <returns>Throws an exception</returns>
+    ''' <returns>Default filename</returns>
     Public Shadows Property DefaultValueAsString() As String
         Get
-            Throw New NotSupportedException("Only multiline value is supported")
+            If String.IsNullOrWhiteSpace(MyBase._defaultValue) Then
+                ' If we don't have a filename we need to generate it first, with some random too
+                Dim rand = New Random()
+                MyBase._defaultValue = $"{Me.Name}_{rand.Next(1, 999):D3}{If(Not String.IsNullOrWhiteSpace(_fileExtension), $".{_fileExtension}", "")}"
+            End If
+            Return MyBase._defaultValue
         End Get
         Set(value As String)
-            Throw New NotSupportedException("Only multiline value is supported")
+            MyBase._defaultValue = value
         End Set
     End Property
 
     ''' <summary>
-    ''' Default value as string - not working!
+    ''' Filename, does not change the content of a file
     ''' </summary>
-    ''' <returns>Throws an exception</returns>
+    ''' <returns>Filename</returns>
     Public Shadows Property ValueAsString() As String
         Get
-            Throw New NotSupportedException("Only multiline value is supported")
+            Return FileName
         End Get
         Set(value As String)
-            Throw New NotSupportedException("Only multiline value is supported")
+            FileName = value
         End Set
     End Property
 
