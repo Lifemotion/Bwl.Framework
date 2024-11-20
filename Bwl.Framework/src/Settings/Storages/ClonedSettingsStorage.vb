@@ -27,8 +27,9 @@
                     childSetting = New StringSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString, setting.UserGroups, setting.IsReadOnly)
                 Case GetType(TextFileContentSetting).ToString
                     Dim origSetting = CType(setting, TextFileContentSetting)
-                    childSetting = New TextFileContentSetting(Me, setting.Name, Nothing, origSetting.FileName, origSetting.FileExtension, origSetting.DirectoryPath, origSetting.FileEncoding,
-                                                              setting.FriendlyName, setting.Description, setting.UserGroups, setting.IsReadOnly) With {.FileName = origSetting.FileName}
+                    childSetting = New TextFileContentSetting(Me, setting.Name, Nothing, origSetting.FileName, origSetting.DirectoryPath, origSetting.FileExtension, origSetting.FileEncoding,
+                                                              origSetting.OverwriteExistingFileOnFilePathChange, setting.FriendlyName, setting.Description, setting.UserGroups,
+                                                              setting.IsReadOnly) With {.FileName = origSetting.FileName}
                 Case GetType(DoubleSetting).ToString
                     childSetting = New DoubleSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString, setting.UserGroups, setting.IsReadOnly)
                 Case GetType(VariantSetting).ToString

@@ -112,6 +112,8 @@ Module Main
             ' Test 1 - create file with no content
             testSetting1 = tempSettingsStorage.CreateTextFileContentSeting("TextFileSetting1")
             _appBase.RootStorage.SaveSettings()
+            testSetting1.ValueAsString = testSetting1.DefaultValueAsString
+            _appBase.RootStorage.SaveSettings()
             logger.AddMessage($"TestFileSetting1 filename is {testSetting1.FileName}, filepath is {testSetting1.FilePath}")
             logger.AddMessage($"TestFileSetting1 Value is nothing = {testSetting1.Value Is Nothing OrElse Not testSetting1.Value.Any()}")
             testSetting1.Value = fileContent1
@@ -127,6 +129,8 @@ Module Main
             ' Test 2 - create file with content
             testSetting2 = tempSettingsStorage.CreateTextFileContentSeting("TextFileSetting2", fileContent1, "newFile1.cfg", "cfg")
             _appBase.RootStorage.SaveSettings()
+            testSetting2.ValueAsString = testSetting2.DefaultValueAsString
+            _appBase.RootStorage.SaveSettings()
             logger.AddMessage($"TestFileSetting2 filename is {testSetting2.FileName}, filepath is {testSetting2.FilePath}")
             logger.AddMessage($"TestFileSetting2 Value has the content = {testSetting2.Value.Length = 3}")
 
@@ -141,21 +145,28 @@ Module Main
             _appBase.RootStorage.SaveSettings()
             logger.AddMessage($"TestFileSetting2 new filename is {testSetting2.FileName}, new path is {testSetting2.FilePath}, new path is different = {Not testSetting2.FilePath = origFilePath}")
 
-
             ' Test 5 - recreated setting still has new file name
             Dim filename2 = testSetting2.FileName
             tempSettingsStorage.RemoveSetting(testSetting2.Name)
-            testSetting2 = tempSettingsStorage.CreateTextFileContentSeting("TextFileSetting2")
+            testSetting2 = tempSettingsStorage.CreateTextFileContentSeting("TextFileSetting2",,,,,, False)
             _appBase.RootStorage.SaveSettings()
             logger.AddMessage($"TestFileSetting2 filename was NOT changed as setting was recreated = {testSetting2.FileName = filename2}")
             logger.AddMessage($"TestFileSetting2 content was NOT changed as setting was recreated = {testSetting2.Value.SequenceEqual(fileContent2)}")
+
+            ' Test 6 - testSetting2 after changing filename to the one of testSetting1 will return value of testSetting1
+            Dim testSetting1Value = testSetting1.Value ' Original value should be saved before the change, in case the file will be overwritten
+            testSetting2.FileName = testSetting1.FileName
+            _appBase.RootStorage.SaveSettings()
+            logger.AddMessage($"TestFileSetting2 content was changed to the one of TestFileSetting1 = {testSetting2.Value.SequenceEqual(testSetting1Value)}")
+
         Catch ex As Exception
             _appBase.RootLogger.AddError(ex.ToString())
         Finally
             ' Cleanup
-            Directory.Delete(Path.GetFullPath(Path.Combine(testSetting1.FilePath, "..")), True)
-            If testSetting1 IsNot Nothing Then testSetting1.FileName = ""
-            If testSetting2 IsNot Nothing Then testSetting2.FileName = ""
+            If File.Exists(testSetting1.FilePath) Then File.Delete(testSetting1.FilePath)
+            If File.Exists(testSetting2.FilePath) Then File.Delete(testSetting2.FilePath)
+            If Directory.Exists(testSetting1.DirectoryPath) AndAlso Not Directory.EnumerateFileSystemEntries(testSetting1.DirectoryPath).Any() Then Directory.Delete(Path.GetFullPath(Path.Combine(testSetting1.FilePath, "..")), True)
+            If Directory.Exists(testSetting2.DirectoryPath) AndAlso Not Directory.EnumerateFileSystemEntries(testSetting2.DirectoryPath).Any() Then Directory.Delete(Path.GetFullPath(Path.Combine(testSetting2.FilePath, "..")), True)
             _appBase.RootStorage.SaveSettings()
             settings.DeleteChildStorage(tempSettingsStorage)
         End Try
