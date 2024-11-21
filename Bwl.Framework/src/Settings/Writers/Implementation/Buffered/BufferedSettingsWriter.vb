@@ -30,6 +30,8 @@ Public Class BufferedSettingsWriter
         Public Property Value As String
     End Class
 
+    Private ReadOnly _unixDateTimeUtc As DateTime = New DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+
     Private _settings As New Dictionary(Of (Category As String, Name As String), BufferedSetting)
     Private _filename As String
     Private _checkHash As Boolean
@@ -229,6 +231,10 @@ Public Class BufferedSettingsWriter
         End Try
     End Sub
 
+    Private Function GetFileExtensionFromName(filename As String) As String
+        Return String.Join(".", filename.Split("."c).Skip(1))
+    End Function
+
     Private Sub WriteSettingsToFile(filename As String, settings As Dictionary(Of (Category As String, Name As String), BufferedSetting),
                                     Optional onlyActiveSettings As Boolean = False)
         SyncLock settings
@@ -282,7 +288,7 @@ Public Class BufferedSettingsWriter
                 'Запись на диск при необходимости (если содержимое под запись и на диске не совпадают)
                 If needToWrite Then
                     'ШАГ 1 - Запись конфига в tmp
-                    tmp = Path.Combine(Path.GetDirectoryName(filename), GetTempFileName("WriteSettingsToFile"))
+                    tmp = Path.Combine(Path.GetDirectoryName(filename), GetTempFileName($"WriteSettingsToFile.{GetFileExtensionFromName(New FileInfo(filename).Name)}"))
                     File.WriteAllLines(tmp, lines, Encoding.UTF8)
                     _logger.AddMessage($"WriteSettingsToFile({filename}): File.WriteAllLines(tmp:{tmp}, lines:{lines.Count}) (8/23)", "inf")
                     '...и верификация с имеющимся набором строк
@@ -352,7 +358,7 @@ Public Class BufferedSettingsWriter
             _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}) (1/15)", "inf")
             If File.Exists(source) Then
                 _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}) (2/15)", "inf")
-                tmp = Path.Combine(Path.GetDirectoryName(target), GetTempFileName($"ReplaceFile({Path.GetFileName(source)}, {Path.GetFileName(target)})"))
+                tmp = Path.Combine(Path.GetDirectoryName(target), GetTempFileName($"ReplaceFile.{GetFileExtensionFromName(New FileInfo(target).Name)}"))
                 _logger.AddMessage($"ReplaceFile(source:{source}, target:{target}), tmp={tmp}, (3/15)", "inf")
                 'Шаг 1 - целевой файл помещается во временный буфер (если он существует)
                 If File.Exists(target) Then
@@ -506,7 +512,7 @@ Public Class BufferedSettingsWriter
     End Function
 
     Private Function GetTempFileName(actionName As String) As String
-        Return $"{DateTime.Now.Ticks}.{actionName}.{Guid.NewGuid().ToString("N")}" 'Временные файлы упорядочены по времени и имени действия
+        Return $"{(DateTime.UtcNow - _unixDateTimeUtc).Ticks:x}.{actionName}" 'Временные файлы упорядочены по времени и имени действия
     End Function
 
     Private Sub CompareLines(a As String(), b As String(), actionName As String)
