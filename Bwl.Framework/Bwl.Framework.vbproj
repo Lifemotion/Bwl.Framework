@@ -254,7 +254,9 @@
     <Compile Include="src\Settings\Writers\Implementation\Legacy\IniFileSettingsWriter.vb" />
     <Compile Include="src\Settings\Writers\Implementation\NullSettingsWriter.vb" />
     <Compile Include="src\MailSender\MailSender.vb" />
+    <Compile Include="src\Tools\ThisProcessId.vb" />
     <Compile Include="src\Tools\RunMonitorHelper.vb" />
+    <Compile Include="src\Tools\NameSourceUtsPid.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="src\AppBase\FormAppBase.resx">

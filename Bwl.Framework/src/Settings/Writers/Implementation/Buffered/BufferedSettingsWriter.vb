@@ -30,8 +30,6 @@ Public Class BufferedSettingsWriter
         Public Property Value As String
     End Class
 
-    Private ReadOnly _unixDateTimeUtc As DateTime = New DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-
     Private _settings As New Dictionary(Of (Category As String, Name As String), BufferedSetting)
     Private _filename As String
     Private _checkHash As Boolean
@@ -512,7 +510,7 @@ Public Class BufferedSettingsWriter
     End Function
 
     Private Function GetTempFileName(actionName As String) As String
-        Return $"{(DateTime.UtcNow - _unixDateTimeUtc).Ticks:x}.{actionName}" 'Временные файлы упорядочены по времени и имени действия
+        Return $"{NameSourceUtsPid.GetNewValue()}.{actionName}" 'Временные файлы упорядочены по ID процесса, временному штампу и имени действия
     End Function
 
     Private Sub CompareLines(a As String(), b As String(), actionName As String)
