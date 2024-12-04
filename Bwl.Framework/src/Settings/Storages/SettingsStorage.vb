@@ -52,7 +52,7 @@ Public Class SettingsStorage
                                                    Optional filenameExtension As String = "txt", Optional fileEncoding As Encoding = Nothing,
                                                    Optional overwriteExistingFileOnFilePathChange As Boolean = True,
                                                    Optional friendlyName As String = "", Optional description As String = "",
-                                                   Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False)
+                                                   Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False) As TextFileContentSetting
         Return New TextFileContentSetting(Me, name, defaultValue, defaultFilename, defaultDirectory, filenameExtension, fileEncoding, overwriteExistingFileOnFilePathChange,
                                           friendlyName, description, userGroups, readOnlyField)
     End Function
