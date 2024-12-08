@@ -1,13 +1,14 @@
 ﻿Imports System.IO
+Imports Bwl.Framework.Windows
 
 Public Class TestFormAppBase
-    Inherits FormAppBase
+    Inherits AppBaseWinForms
 
+    Private _intSetting As IntegerSetting = AppBase.RootStorage.CreateIntegerSetting("Integer", 1, "Целое", "Описание целого")
+    Private _boolSetting As BooleanSetting = AppBase.RootStorage.CreateBooleanSetting("Boolean", True, "Булево", "Описание булевого")
     Private _child_1 As SettingsStorage = AppBase.RootStorage.CreateChildStorage("Child-1", "Ребенок 1")
     Private _child_2 As SettingsStorage = AppBase.RootStorage.CreateChildStorage("Child-2", "Child 2")
     Private _child_1_1 As SettingsStorage = _child_1.CreateChildStorage("Child-1-1", "Child 1-1")
-    Private _intSetting As IntegerSetting = AppBase.RootStorage.CreateIntegerSetting("Integer", 1, "Целое", "Описание целого")
-    Private _boolSetting As BooleanSetting = AppBase.RootStorage.CreateBooleanSetting("Boolean", True, "Булево", "Описание булевого")
     Private _strSetting As StringSetting = _child_1.CreateStringSetting("String", "Cat", "Строка", "Описание строки")
     Private _dblSetting As DoubleSetting = _child_2.CreateDoubleSetting("Double", 1.6, "Двойное", "Описание двойного")
     Private _varSetting As VariantSetting = _child_1_1.CreateVariantSetting("Variant", "Cat", {"Cat", "Dog"}, "Описание варианта")
@@ -45,6 +46,7 @@ Public Class TestFormAppBase
         AppBase.RootStorage.SaveSettings(mrw, False)
         Dim b = mrw.MakeString
         Dim storage2 = New ClonedSettingsStorage(New MemoryReaderWriter(b))
+        storage2.SetSettingsFormUiHandler(AppBase.RootStorage.SettingsFormUiHandler) ' Without this line, the settings form will not be displayed
         storage2.ShowSettingsForm(Me)
     End Sub
 

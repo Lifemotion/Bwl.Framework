@@ -12,125 +12,83 @@
 '   See the License For the specific language governing permissions And
 '   limitations under the License.
 
+Imports System.IO
+Imports System.Text
+
 ''' <summary>
-''' Класс, представляющий ini-файл. Выполняет чтение и запись параметров.
+''' Class representing an INI file. Performs reading and writing of parameters.
 ''' </summary>
-''' <remarks></remarks>
 Public Class IniFile
-    Private _iniFile As String
-    Private _syncRoot As New Object
+    Private ReadOnly _iniFile As String
+    Private ReadOnly _syncRoot As New Object()
 
     ''' <summary>
-    ''' Создает iniReader, настроенный на работу с заданным файлом.
+    ''' Creates an IniFile instance configured to work with the specified file.
     ''' </summary>
-    ''' <param name="filename">
-    ''' Имя файла с расширением и путем.
-    ''' </param>
-    ''' <remarks></remarks>
-    Sub New(filename As String)
+    ''' <param name="filename">The file name with extension and path.</param>
+    Public Sub New(filename As String)
         _iniFile = filename
     End Sub
 
     ''' <summary>
-    ''' Читает значение параметра. Если параметр не найден, возвращает заданную строку. Только чтение, ничего не пишет.
+    ''' Reads the value of a parameter. If the parameter is not found, returns the specified string. Read-only, does not write anything.
     ''' </summary>
-    ''' <param name="groupName">Имя группы параметров в ini-файле.</param>
-    ''' <param name="paramName">Имя параметра.</param>
-    ''' <param name="returnIsNotExist">Что возвращает, если параметр не найден.</param>
-    ''' <returns>Значение параметра.</returns>
-    ''' <remarks></remarks>
-    Function GetSettingNoWrite(groupName As String, paramName As String, returnIsNotExist As String) As String
+    ''' <param name="groupName">The name of the parameter group in the INI file.</param>
+    ''' <param name="paramName">The name of the parameter.</param>
+    ''' <param name="returnIfNotExist">What to return if the parameter is not found.</param>
+    ''' <returns>The value of the parameter.</returns>
+    Public Function GetSettingNoWrite(groupName As String, paramName As String, returnIfNotExist As String) As String
         SyncLock _syncRoot
-            Dim sr As IO.StreamReader = Nothing
-            Try
-                sr = New IO.StreamReader(New IO.FileStream(_iniFile, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read), Text.Encoding.Default)
-            Catch ex As Exception
-                Return returnIsNotExist
-            End Try
+            If Not File.Exists(_iniFile) Then
+                Return returnIfNotExist
+            End If
 
-            Dim currentString As String
-            Dim currentGroup As String = ""
-            Do While Not sr.EndOfStream
-                currentString = sr.ReadLine
-                If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
-                    If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
-                        currentGroup = Mid(currentString, 2, currentString.Length - 2)
-                    End If
-                    If currentGroup.ToUpper = groupName.ToUpper Or groupName = "" Then
-                        Dim i As Integer = InStr(currentString, "=")
-                        If i > 0 Then
-                            Dim param, value As String
-                            param = Trim(Mid(currentString, 1, i - 1))
-                            value = Trim(Mid(currentString, i + 1, currentString.Length))
-                            If param.ToUpper = paramName.ToUpper Then
-                                sr.Close()
-                                Return value
+            Try
+                Using sr As New StreamReader(_iniFile, Encoding.UTF8)
+                    Dim currentString As String
+                    Dim currentGroup As String = String.Empty
+
+                    While Not sr.EndOfStream
+                        currentString = sr.ReadLine().Trim()
+                        If Not currentString.StartsWith(";") AndAlso Not currentString.StartsWith("'") Then
+                            If currentString.StartsWith("[") AndAlso currentString.EndsWith("]") Then
+                                currentGroup = currentString.Substring(1, currentString.Length - 2)
+                            ElseIf String.Equals(currentGroup, groupName, StringComparison.OrdinalIgnoreCase) OrElse String.IsNullOrEmpty(groupName) Then
+                                Dim index As Integer = currentString.IndexOf("=")
+                                If index > 0 Then
+                                    Dim param As String = currentString.Substring(0, index).Trim()
+                                    Dim value As String = currentString.Substring(index + 1).Trim()
+                                    If String.Equals(param, paramName, StringComparison.OrdinalIgnoreCase) Then
+                                        Return value
+                                    End If
+                                End If
                             End If
                         End If
-                    End If
-                End If
-            Loop
+                    End While
+                End Using
+            Catch ex As Exception
+                ' Do nothing
+            End Try
 
-            sr.Close()
-            Return returnIsNotExist
+            Return returnIfNotExist
         End SyncLock
     End Function
 
     ''' <summary>
-    ''' Читает значение параметра. Если параметр не найден, возвращает заданную строку.
+    ''' Reads the value of a parameter. If the parameter is not found, returns the specified default value.
     ''' </summary>
-    ''' <param name="groupName">Имя группы параметров в ini-файле.</param>
-    ''' <param name="paramName">Имя параметра.</param>
-    ''' <param name="returnIsNotExist">Что возвращает, если параметр не найден.</param>
-    ''' <returns>Значение параметра.</returns>
-    ''' <remarks></remarks>
-    Function GetSetting(groupName As String, paramName As String, Optional defaultValue As String = Nothing, Optional returnIsNotExist As String = "") As String
+    ''' <param name="groupName">The name of the parameter group in the INI file.</param>
+    ''' <param name="paramName">The name of the parameter.</param>
+    ''' <param name="defaultValue">The default value to return if the parameter is not found.</param>
+    ''' <returns>The value of the parameter.</returns>
+    Public Function GetSetting(groupName As String, paramName As String, Optional defaultValue As String = Nothing, Optional returnIsNotExist As String = "") As String
         SyncLock _syncRoot
-            Dim fileID As Integer = FreeFile()
-            If Not System.IO.File.Exists(_iniFile) Then
-                Dim bakName = _iniFile + ".bak"
-                If System.IO.File.Exists(bakName) Then
-                    System.IO.File.Copy(bakName, _iniFile)
-                End If
+            Dim value As String = GetSettingNoWrite(groupName, paramName, Nothing)
+            If value IsNot Nothing Then
+                Return value
             End If
 
-            Try
-                FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
-            Catch ex As Exception
-                Try
-                    FileOpen(fileID, _iniFile, OpenMode.Output)
-                    FileClose(fileID)
-                    FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
-                Catch ex2 As Exception
-                    Return returnIsNotExist
-                End Try
-            End Try
-
-
-            Dim currentString As String
-            Dim currentGroup As String = ""
-            Do While Not EOF(fileID)
-                currentString = LineInput(fileID)
-                If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
-                    If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
-                        currentGroup = Mid(currentString, 2, currentString.Length - 2)
-                    End If
-                    If currentGroup.ToUpper = groupName.ToUpper Or groupName = "" Then
-                        Dim i As Integer = InStr(currentString, "=")
-                        If i > 0 Then
-                            Dim param, value As String
-                            param = Trim(Mid(currentString, 1, i - 1))
-                            value = Trim(Mid(currentString, i + 1, currentString.Length))
-                            If param.ToUpper = paramName.ToUpper Then
-                                FileClose(fileID)
-                                Return value
-                            End If
-                        End If
-                    End If
-                End If
-            Loop
-            FileClose(fileID)
-            If Not defaultValue Is Nothing Then
+            If defaultValue IsNot Nothing Then
                 SetSetting(groupName, paramName, defaultValue)
                 Return defaultValue
             Else
@@ -140,162 +98,124 @@ Public Class IniFile
     End Function
 
     ''' <summary>
-    ''' Записывает значение параметра. Создает файл, группу, параметр, если они не найдены.
+    ''' Writes the value of a parameter. Creates the file, group, and parameter if they are not found.
     ''' </summary>
-    ''' <param name="groupName">Имя группы параметров в ini-файле.</param>
-    ''' <param name="paramName">Имя параметра.</param>
-    ''' <param name="value">Значение параметра.</param>
-    ''' <remarks></remarks>
-    Sub SetSetting(groupName As String, paramName As String, value As String)
+    ''' <param name="groupName">The name of the parameter group in the INI file.</param>
+    ''' <param name="paramName">The name of the parameter.</param>
+    ''' <param name="value">The value of the parameter.</param>
+    Public Sub SetSetting(groupName As String, paramName As String, value As String)
         SyncLock _syncRoot
-            Dim fileID As Integer = FreeFile()
-            Dim fileBuff() As String
-            Dim flagGroup, flagParam As Boolean
-            ReDim fileBuff(0)
-            Dim currentString As String
-            Try
-                FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
-                Do While Not EOF(fileID)
-                    fileBuff(fileBuff.Length - 1) = LineInput(fileID)
-                    ReDim Preserve fileBuff(fileBuff.Length)
-                Loop
-                FileClose(fileID)
-            Catch ex As Exception
+            Dim tempFile As String = Path.GetTempFileName()
+            Dim currentGroup As String = String.Empty
+            Dim groupFound As Boolean = False
+            Dim paramWritten As Boolean = False
 
-            End Try
-            fileID = FreeFile()
+            If Not File.Exists(_iniFile) Then File.Create(_iniFile).Close()
 
-            Dim tmpFName = _iniFile + ".tmp"
-            If System.IO.File.Exists(tmpFName) Then
-                System.IO.File.SetAttributes(tmpFName, IO.FileAttributes.Normal)
-                System.IO.File.Delete(tmpFName)
-            End If
-
-            FileOpen(fileID, tmpFName, OpenMode.Output, OpenAccess.Write)
-            Dim currentGroup As String = ""
-            Dim i As Integer
-            For i = 0 To fileBuff.Length - 2
-                currentString = fileBuff(i)
-                If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
-                    If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
-                        currentGroup = Mid(currentString, 2, currentString.Length - 2)
-                        If flagGroup = True And flagParam = False Then
-                            Print(fileID, paramName + "=" + value + vbCrLf)
-                            flagParam = True
+            Using sr As New StreamReader(_iniFile, Encoding.UTF8)
+                Using sw As New StreamWriter(tempFile, False, Encoding.UTF8)
+                    While Not sr.EndOfStream
+                        Dim line As String = sr.ReadLine().Trim()
+                        If line.StartsWith(";") OrElse line.StartsWith("'") Then
+                            sw.WriteLine(line)
+                            Continue While
                         End If
-                    End If
-                    If currentGroup.ToUpper = groupName.ToUpper Then
-                        flagGroup = True
-                        Dim j As Integer = InStr(currentString, "=")
-                        If j > 0 Then
-                            Dim param As String
-                            param = Trim(Mid(currentString, 1, j - 1))
-                            If param.ToUpper = paramName.ToUpper Then
-                                flagParam = True
-                                fileBuff(i) = param + "=" + value
+                        If line.StartsWith("[") AndAlso line.EndsWith("]") Then
+                            If groupFound AndAlso Not paramWritten Then
+                                sw.WriteLine($"{paramName}={value}")
+                                paramWritten = True
+                            End If
+                            currentGroup = line.Substring(1, line.Length - 2)
+                            groupFound = String.Equals(currentGroup, groupName, StringComparison.OrdinalIgnoreCase)
+                        End If
+                        If groupFound Then
+                            Dim index As Integer = line.IndexOf("=")
+                            If index > 0 Then
+                                Dim param As String = line.Substring(0, index).Trim()
+                                If String.Equals(param, paramName, StringComparison.OrdinalIgnoreCase) Then
+                                    sw.WriteLine($"{paramName}={value}")
+                                    paramWritten = True
+                                    Continue While
+                                End If
                             End If
                         End If
+                        sw.WriteLine(line)
+                    End While
+
+                    If Not paramWritten Then
+                        If Not groupFound Then
+                            sw.WriteLine($"[{groupName}]")
+                        End If
+                        sw.WriteLine($"{paramName}={value}")
                     End If
-                End If
-                Print(fileID, fileBuff(i) + vbCrLf)
-            Next
-            If flagParam = False Then
-                If flagGroup = False Then
-                    Print(fileID, "[" + groupName + "]" + vbCrLf)
-                    Print(fileID, paramName + "=" + value + vbCrLf)
-                Else
-                    Print(fileID, paramName + "=" + value + vbCrLf)
-                End If
-            End If
-            FileClose(fileID)
+                End Using
+            End Using
 
-            If System.IO.File.Exists(_iniFile) Then
-                Dim bakFName = _iniFile + ".bak"
-                If System.IO.File.Exists(bakFName) Then
-                    System.IO.File.SetAttributes(bakFName, IO.FileAttributes.Normal)
-                    System.IO.File.Delete(bakFName)
-                End If
-                'System.IO.File.SetAttributes(_iniFile, IO.FileAttributes.Normal)
-                System.IO.File.Move(_iniFile, bakFName)
-            End If
-
-            System.IO.File.Move(tmpFName, _iniFile)
+            File.Delete(_iniFile)
+            File.Move(tempFile, _iniFile)
         End SyncLock
     End Sub
 
     ''' <summary>
-    ''' Проверяет, присутсвует ли указанный файл.
+    ''' Returns a list of groups from the file.
     ''' </summary>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Function IsFileExist() As Boolean
-        Try
-            Dim fileID As Integer = FreeFile()
-            FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
-        Catch ex As Exception
-            Return False
-        End Try
-        Return True
+    ''' <returns>An array of group names.</returns>
+    Public Function GetGroupList() As String()
+        SyncLock _syncRoot
+            Dim groups As New List(Of String)
+            If Not File.Exists(_iniFile) Then Return groups.ToArray()
+
+            Try
+                Using sr As New StreamReader(_iniFile, Encoding.UTF8)
+                    Dim currentString As String
+                    While Not sr.EndOfStream
+                        currentString = sr.ReadLine().Trim()
+                        If currentString.StartsWith("[") AndAlso currentString.EndsWith("]") Then
+                            Dim groupName As String = currentString.Substring(1, currentString.Length - 2)
+                            groups.Add(groupName)
+                        End If
+                    End While
+                End Using
+            Catch ex As Exception
+                ' Do nothing
+            End Try
+
+            Return groups.ToArray()
+        End SyncLock
     End Function
 
     ''' <summary>
-    ''' Возвращает список групп из файла.
+    ''' Returns a list of parameters in the specified group from the file.
     ''' </summary>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Function GetGroupList() As String()
+    ''' <param name="groupName">Group name. If not specified, returns a list of all parameters.</param>
+    ''' <returns>An array of parameter names.</returns>
+    Public Function GetParamList(groupName As String) As String()
         SyncLock _syncRoot
-            Dim groups() As String
-            ReDim groups(0)
-            Dim fileID As Integer = FreeFile()
-            FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
-            Dim currentString As String
-            Do While Not EOF(fileID)
-                currentString = LineInput(fileID)
-                If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
-                    groups(groups.Length - 1) = Mid(currentString, 2, currentString.Length - 2)
-                    ReDim Preserve groups(groups.Length)
-                End If
-            Loop
-            ReDim Preserve groups(groups.Length - 2)
-            FileClose(fileID)
-            Return groups
-        End SyncLock
-    End Function
-    ''' <summary>
-    ''' Возвращает список параметров в указанной группе из файла.
-    ''' </summary>
-    ''' <param name="groupName">Имя группы. Если не указано, возвращает список всех параметров.</param>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Function GetParamList(groupName As String) As String()
-        SyncLock _syncRoot
-            Dim params() As String
-            ReDim params(0)
-            Dim fileID As Integer = FreeFile()
-            FileOpen(fileID, _iniFile, OpenMode.Input, OpenAccess.Read)
-            Dim currentString As String
-            Dim currentGroup As String = ""
-            Do While Not EOF(fileID)
-                currentString = LineInput(fileID)
-                If Left(currentString, 1) <> ";" And Left(currentString, 1) <> "'" Then
-                    If Left(currentString, 1) = "[" And Right(currentString, 1) = "]" Then
-                        currentGroup = Mid(currentString, 2, currentString.Length - 2)
-                    End If
-                    If currentGroup.ToUpper = groupName.ToUpper Or groupName = "" Then
-                        Dim i As Integer = InStr(currentString, "=")
-                        If i > 0 Then
-                            Dim param As String
-                            param = Trim(Mid(currentString, 1, i - 1))
-                            params(params.Length - 1) = param
-                            ReDim Preserve params(params.Length)
+            Dim parameters As New List(Of String)
+            If Not File.Exists(_iniFile) Then Return parameters.ToArray()
+
+            Try
+                Using sr As New StreamReader(_iniFile, Encoding.UTF8)
+                    Dim currentString As String
+                    Dim currentGroup As String = String.Empty
+                    While Not sr.EndOfStream
+                        currentString = sr.ReadLine().Trim()
+                        If currentString.StartsWith("[") AndAlso currentString.EndsWith("]") Then
+                            currentGroup = currentString.Substring(1, currentString.Length - 2)
+                        ElseIf String.Equals(currentGroup, groupName, StringComparison.OrdinalIgnoreCase) OrElse String.IsNullOrEmpty(groupName) Then
+                            Dim index As Integer = currentString.IndexOf("=")
+                            If index > 0 Then
+                                Dim param As String = currentString.Substring(0, index).Trim()
+                                parameters.Add(param)
+                            End If
                         End If
-                    End If
-                End If
-            Loop
-            ReDim Preserve params(params.Length - 2)
-            FileClose(fileID)
-            Return params
+                    End While
+                End Using
+            Catch ex As Exception
+                ' Do nothing
+            End Try
+
+            Return parameters.ToArray()
         End SyncLock
     End Function
 End Class

@@ -5,10 +5,6 @@
 ''' </summary>
 Public MustInherit Class SettingsStorageBase
     Implements ISettingsStorage
-#If Not NETSTANDARD Then
-    Implements ISettingsStorageForm
-    Protected _settingsForm As SettingsDialog
-#End If
 
     ''' <summary>
     ''' Обвязка словаря с фильтром на ключ.
@@ -64,9 +60,13 @@ Public MustInherit Class SettingsStorageBase
     Public Event SettingChanged(storage As SettingsStorageBase, setting As Setting)
     Public Event SettingsFormClosed()
 
-    Public Sub New()
+    Protected WithEvents _settingsFormUiHandler As ISettingsFormUiHandler
 
-    End Sub
+    Public ReadOnly Property SettingsFormUiHandler As ISettingsFormUiHandler
+        Get
+            Return _settingsFormUiHandler
+        End Get
+    End Property
 
     ''' <summary>
     ''' Можно ли изменять данные в хранилище.
@@ -86,6 +86,22 @@ Public MustInherit Class SettingsStorageBase
         End Get
     End Property
 
+    Public Sub New()
+
+    End Sub
+
+    ''' <summary>
+    ''' Установка формы настроек
+    ''' </summary>
+    ''' <param name="ISettingsFormUiHandler"></param>
+    Public Sub SetSettingsFormUiHandler(ISettingsFormUiHandler As ISettingsFormUiHandler)
+        _settingsFormUiHandler = ISettingsFormUiHandler
+    End Sub
+
+    Private Sub SettignsFormClosedHandler() Handles _settingsFormUiHandler.SettingsFormClosed
+        RaiseEvent SettingsFormClosed()
+    End Sub
+
     Public Function GetStoragePath() As String()
         Dim list As New List(Of String)({Me.Name})
         Dim currentParent = Me.Parent
@@ -104,7 +120,6 @@ Public MustInherit Class SettingsStorageBase
             Return _defaultWriter
         End Get
     End Property
-
 
     Private Function IsInChildList(storage As SettingsStorage) As Boolean
         For Each child In _childStorages
@@ -141,29 +156,19 @@ Public MustInherit Class SettingsStorageBase
         Return _settings.Values.Where(Function(setting) userGroups IsNot Nothing AndAlso userGroups.Any() AndAlso setting.UserGroups.Any(Function(f) userGroups.Contains(f))).ToArray()
     End Function
 
-#If Not NETSTANDARD Then
-    Public Function ShowSettingsForm(invokeForm As Form) As SettingsDialog Implements ISettingsStorageForm.ShowSettingsForm
-        If invokeForm IsNot Nothing AndAlso invokeForm.InvokeRequired Then
-            Return DirectCast(invokeForm.Invoke(Function() ShowSettingsForm(invokeForm)), SettingsDialog)
-        Else
-            _settingsForm = New SettingsDialog
-            _settingsForm.ShowSettings(Me)
-            _settingsForm.Show()
-            AddHandler _settingsForm.FormClosed, Sub() RaiseEvent SettingsFormClosed()
-            Return _settingsForm
+    Public Function CreateSettingsForm(invokeForm As Object) As Object
+        If _settingsFormUiHandler IsNot Nothing Then
+            Return _settingsFormUiHandler.CreateSettingsForm(Me, invokeForm)
         End If
+        Return Nothing
     End Function
 
-    Public Function CreateSettingsForm(invokeForm As Form) As SettingsDialog Implements ISettingsStorageForm.CreateSettingsForm
-        If invokeForm IsNot Nothing AndAlso invokeForm.InvokeRequired Then
-            Return DirectCast(invokeForm.Invoke(Function() CreateSettingsForm(invokeForm)), SettingsDialog)
-        Else
-            Dim form As SettingsDialog = New SettingsDialog
-            form.ShowSettings(Me)
-            Return form
+    Public Function ShowSettingsForm(invokeForm As Object) As Object
+        If _settingsFormUiHandler IsNot Nothing Then
+            Return _settingsFormUiHandler.ShowSettingsForm(Me, invokeForm)
         End If
+        Return Nothing
     End Function
-#End If
 
     Public Sub RemoveSetting(settingName As String, Optional silentMode As Boolean = False)
         If settingName.Trim() = "" Then Throw New Exception("Не указано имя настройки в хранилище.")

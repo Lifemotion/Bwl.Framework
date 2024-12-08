@@ -8,7 +8,7 @@ Public Class StateItem
     Public Property Value As String = ""
     Public Property ValueType As String = ""
     Public Property Time As DateTime
-    Public Property ValidUntil As DateTime = Now.AddSeconds(30)
+    Public Property ValidUntil As DateTime = DateTime.Now.AddSeconds(30)
 
     Public Property MaxValue As TimeSpan = TimeSpan.MinValue
     Public Property MaxValueLastTimeStamp As DateTime = DateTime.MinValue

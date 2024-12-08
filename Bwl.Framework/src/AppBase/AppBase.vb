@@ -85,26 +85,28 @@ Public Class AppBase
         Return result
     End Function
 
-    Public Sub Init(Optional maxLogFilesCount As Integer = 5,
+    Public Overridable Sub Init(Optional maxLogFilesCount As Integer = 5,
                     Optional maxLogFileLength As Long = 10 * 1024 * 1024,
                     Optional isReadOnlySettings As Boolean = False,
                     Optional onlyActiveSettings As Boolean = False,
                     Optional checkSettingsHash As Boolean = True,
                     Optional settingsFileName As String = "settings.ini")
+
+        Dim isNetStandard As Boolean = False
+#If NETSTANDARD Then
+        isNetStandard = True
+#End If
+
         TryCreateFolder(_SettingsFolder)
         TryCreateFolder(_DataFolder)
         TryCreateFolder(_LogsFolder)
         _RootLogger = New Logger
         _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile,,,,, maxLogFileLength, maxLogFilesCount))
         _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors,,, maxLogFileLength, maxLogFilesCount))
-        If UseBufferedStorage Then
+        If UseBufferedStorage OrElse isNetStandard Then
             _RootStorage = New SettingsStorageBufferedRoot(Path.Combine(_SettingsFolder, settingsFileName), _AppName, isReadOnlySettings, onlyActiveSettings, checkSettingsHash)
         Else
-#If Not NETSTANDARD Then
             _RootStorage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_SettingsFolder, settingsFileName)), _AppName, False)
-#Else
-            Throw New Exception("Legacy SettingsStorageRoot not supported on Net Standard, use buffered")
-#End If
         End If
         _Services = New ServiceLocator(RootLogger)
         _AutoUI = New AutoUI

@@ -57,21 +57,22 @@ Public Class ConsoleAppBase
         Me.New(False)
     End Sub
 
-    Public Sub ShowSettings()
-#If Not NETSTANDARD Then
-        Application.Run(RootStorage.ShowSettingsForm(Nothing))
-        RootStorage.SaveSettings(False)
-#End If
-    End Sub
+    ' TODO: Maybe it's better to remade ConsoleAppBase from scratch - and it should NOT use WinForms!
+    '    Public Sub ShowSettings()
+    '#If Not NETSTANDARD Then
+    '        Application.Run(RootStorage.ShowSettingsForm(Nothing))
+    '        RootStorage.SaveSettings(False)
+    '#End If
+    '    End Sub
 
-    Public Sub Start()
-#If Not NETSTANDARD Then
-        For Each arg In System.Environment.GetCommandLineArgs
-            If arg.ToLower = "showsetup" Then ShowSettings()
-        Next
-        If My.Computer.Keyboard.ShiftKeyDown AndAlso My.Computer.Keyboard.CtrlKeyDown Then ShowSettings()
-#End If
-    End Sub
+    '    Public Sub Start()
+    '#If Not NETSTANDARD Then
+    '        For Each arg In System.Environment.GetCommandLineArgs
+    '            If arg.ToLower = "showsetup" Then ShowSettings()
+    '        Next
+    '        If My.Computer.Keyboard.ShiftKeyDown AndAlso My.Computer.Keyboard.CtrlKeyDown Then ShowSettings()
+    '#End If
+    '    End Sub
 
     Public Sub Wait()
         System.Console.WriteLine("Press any key...")

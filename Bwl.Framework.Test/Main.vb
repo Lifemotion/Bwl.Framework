@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports Bwl.Framework
+Imports Bwl.Framework.Windows
 
 Public Class InternalTestClass
     Public Property IntSetting1 As String = "test"
@@ -27,13 +28,14 @@ Public Class TestClass
 End Class
 
 Module Main
-    Private ReadOnly _appBase As New AppBase
+    Private WithEvents _appBase As New AppBaseWin
+    Private WithEvents _settings As SettingsStorage = _appBase.RootStorage
     Private WithEvents _button1 As New AutoButton(_appBase.AutoUI, "button1")
     Private WithEvents _button2 As New AutoButton(_appBase.AutoUI, "button2")
     Private WithEvents _button3 As New AutoButton(_appBase.AutoUI, "button3")
     Private WithEvents _button4 As New AutoButton(_appBase.AutoUI, "button4")
     Private WithEvents _button5 As New AutoButton(_appBase.AutoUI, "TestFileSettingButton")
-    Private WithEvents _image As New AutoBitmap(_appBase.AutoUI, "image")
+    Private WithEvents _image As New AutoBitmapWin(_appBase.AutoUI, "image")
     Private WithEvents _textbox1 As New AutoTextbox(_appBase.AutoUI, "textbox1")
     Private WithEvents _textbox2 As New AutoTextbox(_appBase.AutoUI, "textbox2")
     Private WithEvents _listbox1 As New AutoListbox(_appBase.AutoUI, "listbox1")
@@ -48,7 +50,6 @@ Module Main
         AddHandler asm.FieldChanged, AddressOf _test1.SettingsChanged
 
         _appBase.RootLogger.CollectLogs(_test1)
-        AddHandler _appBase.RootStorage.SettingsFormClosed, AddressOf OnSettingsFormClosed
 
         Dim fileContent1 = New String() {"This is the content for the test file", "This content is just for testing purposes", ""}
         Dim testTextSetting = _appBase.RootStorage.CreateTextFileContentSeting("TextFile1", fileContent1,, "cfg")
@@ -59,14 +60,15 @@ Module Main
         Application.Run(appForm)
     End Sub
 
-    Private Sub OnSettingsFormClosed()
+    Private Sub OnSettingsFormClosed() Handles _settings.SettingsFormClosed
         _appBase.RootLogger.AddInformation("Форма настройки закрыта")
     End Sub
 
     Private Sub Button1_Click(source As AutoButton) Handles _button1.Click
         Dim bitmap As New Bitmap(100, 100)
-        Dim g = Graphics.FromImage(bitmap)
-        g.Clear(Color.Red)
+        Using g = Graphics.FromImage(bitmap)
+            g.Clear(Color.Red)
+        End Using
         _image.Image = bitmap
         _test1.Fire()
         MsgBox(_test1.Setting1)
@@ -74,8 +76,9 @@ Module Main
 
     Private Sub Button2_Click(source As AutoButton) Handles _button2.Click
         Dim bitmap As New Bitmap(100, 100)
-        Dim g = Graphics.FromImage(bitmap)
-        g.Clear(Color.Blue)
+        Using g = Graphics.FromImage(bitmap)
+            g.Clear(Color.Blue)
+        End Using
         _image.Image = bitmap
         _listbox1.AutoHeight = True
         _test1.Setting1 = "cat"

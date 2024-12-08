@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Threading
 Imports NUnit.Framework
+Imports NUnit.Framework.Legacy
 
 <TestFixture> <Parallelizable(ParallelScope.Fixtures)>
 Public Class FrameworkTests
@@ -70,21 +71,21 @@ Public Class FrameworkTests
         Dim v4 = """Нет сигнала на мониторе, на клавиатуру не реагирует. Повторная перезагрузка не помогла, сервер не загружается."""
 
         Dim fileRW = New IniFile(iniFileName)
-        Assert.AreEqual(fileRW.GetSetting("Test1.Test2.Test3", "Param 1",, "!NoSetting"), "!NoSetting")
+        ClassicAssert.AreEqual(fileRW.GetSetting("Test1.Test2.Test3", "Param 1",, "!NoSetting"), "!NoSetting")
         fileRW.SetSetting("Test1.Test2.Test3", "Param 1", v1)
         fileRW.SetSetting("Test1.Test2.Test3", "Param 2", v2)
         fileRW.SetSetting("Test1.Test2.Test3", "Param 3", v3)
         fileRW.SetSetting("Test1.Test2.Test3", "Param 4", v4)
 
-        Assert.AreEqual(fileRW.GetSetting("Test1.Test2.Test3", "Param 2",, "!NoSetting"), v2)
-        Assert.AreEqual(fileRW.GetSetting("Test1.Test2.Test3", "Param 3",, "!NoSetting"), v3)
-        Assert.AreEqual(fileRW.GetSetting("Test1.Test2.Test3", "Param 4",, "!NoSetting"), v4)
-        Assert.AreEqual(fileRW.GetSetting("Test1.Test2.Test3", "Param 1",, "!NoSetting"), v1)
+        ClassicAssert.AreEqual(fileRW.GetSetting("Test1.Test2.Test3", "Param 2",, "!NoSetting"), v2)
+        ClassicAssert.AreEqual(fileRW.GetSetting("Test1.Test2.Test3", "Param 3",, "!NoSetting"), v3)
+        ClassicAssert.AreEqual(fileRW.GetSetting("Test1.Test2.Test3", "Param 4",, "!NoSetting"), v4)
+        ClassicAssert.AreEqual(fileRW.GetSetting("Test1.Test2.Test3", "Param 1",, "!NoSetting"), v1)
 
-        Assert.AreEqual(fileRW.GetSettingNoWrite("Test1.Test2.Test3", "Param 2", "!NoSetting"), v2)
-        Assert.AreEqual(fileRW.GetSettingNoWrite("Test1.Test2.Test3", "Param 3", "!NoSetting"), v3)
-        Assert.AreEqual(fileRW.GetSettingNoWrite("Test1.Test2.Test3", "Param 4", "!NoSetting"), v4)
-        Assert.AreEqual(fileRW.GetSettingNoWrite("Test1.Test2.Test3", "Param 1", "!NoSetting"), v1)
+        ClassicAssert.AreEqual(fileRW.GetSettingNoWrite("Test1.Test2.Test3", "Param 2", "!NoSetting"), v2)
+        ClassicAssert.AreEqual(fileRW.GetSettingNoWrite("Test1.Test2.Test3", "Param 3", "!NoSetting"), v3)
+        ClassicAssert.AreEqual(fileRW.GetSettingNoWrite("Test1.Test2.Test3", "Param 4", "!NoSetting"), v4)
+        ClassicAssert.AreEqual(fileRW.GetSettingNoWrite("Test1.Test2.Test3", "Param 1", "!NoSetting"), v1)
     End Sub
 
     <Test> <Parallelizable(ParallelScope.Self)>
@@ -104,19 +105,19 @@ Public Class FrameworkTests
                            Dim s3 = ssr1.CreateStringSetting("Setting 3", "")
                            Dim s4 = ssr1.CreateStringSetting("Setting 4", "")
 
-                           Assert.AreEqual("Default", s1.Value)
-                           Assert.AreEqual("", s2.Value)
-                           Assert.AreEqual("", s3.Value)
+                           ClassicAssert.AreEqual("Default", s1.Value)
+                           ClassicAssert.AreEqual("", s2.Value)
+                           ClassicAssert.AreEqual("", s3.Value)
 
                            s1.Value = v1
                            s2.Value = v2
                            s3.Value = v3
                            s4.Value = v4
 
-                           Assert.AreEqual(v1, s1.Value)
-                           Assert.AreEqual(v2, s2.Value)
-                           Assert.AreEqual(v3, s3.Value)
-                           Assert.AreEqual(v4, s4.Value)
+                           ClassicAssert.AreEqual(v1, s1.Value)
+                           ClassicAssert.AreEqual(v2, s2.Value)
+                           ClassicAssert.AreEqual(v3, s3.Value)
+                           ClassicAssert.AreEqual(v4, s4.Value)
 
                            ssr1.SaveSettings(changedOnly)
                        End Sub,
@@ -128,10 +129,10 @@ Public Class FrameworkTests
                            Dim s3a = ssr2.CreateStringSetting("Setting 3", "")
                            Dim s4a = ssr2.CreateStringSetting("Setting 4", "")
 
-                           Assert.AreEqual(v1, s1a.Value)
-                           Assert.AreEqual(v2, s2a.Value)
-                           Assert.AreEqual(v3, s3a.Value)
-                           Assert.AreEqual(v4, s4a.Value)
+                           ClassicAssert.AreEqual(v1, s1a.Value)
+                           ClassicAssert.AreEqual(v2, s2a.Value)
+                           ClassicAssert.AreEqual(v3, s3a.Value)
+                           ClassicAssert.AreEqual(v4, s4a.Value)
                        End Sub},
                       $"StringSettingsReadWriteMultiTest1(changed-{changedOnly})")
         Next
@@ -154,19 +155,19 @@ Public Class FrameworkTests
                        Dim s3 = settings1.CreateStringSetting("Setting 3", "")
                        Dim s4 = settings1.CreateStringSetting("Setting 4", "")
 
-                       Assert.AreEqual("Default", s1.Value)
-                       Assert.AreEqual("", s2.Value)
-                       Assert.AreEqual("", s3.Value)
+                       ClassicAssert.AreEqual("Default", s1.Value)
+                       ClassicAssert.AreEqual("", s2.Value)
+                       ClassicAssert.AreEqual("", s3.Value)
 
                        s1.Value = v1
                        s2.Value = v2
                        s3.Value = v3
                        s4.Value = v4
 
-                       Assert.AreEqual(v1, s1.Value)
-                       Assert.AreEqual(v2, s2.Value)
-                       Assert.AreEqual(v3, s3.Value)
-                       Assert.AreEqual(v4, s4.Value)
+                       ClassicAssert.AreEqual(v1, s1.Value)
+                       ClassicAssert.AreEqual(v2, s2.Value)
+                       ClassicAssert.AreEqual(v3, s3.Value)
+                       ClassicAssert.AreEqual(v4, s4.Value)
 
                        settings1.SaveSettings()
                    End Sub,
@@ -178,10 +179,10 @@ Public Class FrameworkTests
                       Dim s3a = settings2.CreateStringSetting("Setting 3", "")
                       Dim s4a = settings2.CreateStringSetting("Setting 4", "")
 
-                      Assert.AreEqual(v1, s1a.Value)
-                      Assert.AreEqual(v2, s2a.Value)
-                      Assert.AreEqual(v3, s3a.Value)
-                      Assert.AreEqual(v4, s4a.Value)
+                      ClassicAssert.AreEqual(v1, s1a.Value)
+                      ClassicAssert.AreEqual(v2, s2a.Value)
+                      ClassicAssert.AreEqual(v3, s3a.Value)
+                      ClassicAssert.AreEqual(v4, s4a.Value)
                   End Sub,
                   Sub(factory As (IniFileName As String, SettingsFactory As Func(Of Boolean, SettingsStorage)))
                       Dim settings3 = factory.SettingsFactory(True) ' New instance, ReadOnly=True
@@ -193,12 +194,12 @@ Public Class FrameworkTests
                       Dim s5b = settings3.CreateStringSetting("Setting 5", "")
                       Dim s6b = settings3.CreateStringSetting("Setting 6", "NoSetting")
 
-                      Assert.AreEqual(v1, s1b.Value)
-                      Assert.AreEqual(v2, s2b.Value)
-                      Assert.AreEqual(v3, s3b.Value)
-                      Assert.AreEqual(v4, s4b.Value)
-                      Assert.AreEqual("", s5b.Value)
-                      Assert.AreEqual("NoSetting", s6b.Value)
+                      ClassicAssert.AreEqual(v1, s1b.Value)
+                      ClassicAssert.AreEqual(v2, s2b.Value)
+                      ClassicAssert.AreEqual(v3, s3b.Value)
+                      ClassicAssert.AreEqual(v4, s4b.Value)
+                      ClassicAssert.AreEqual("", s5b.Value)
+                      ClassicAssert.AreEqual("NoSetting", s6b.Value)
 
                       s1b.Value = "124"
                       s2b.Value = "12445"
@@ -219,12 +220,12 @@ Public Class FrameworkTests
                       Dim s5c = settings4.CreateStringSetting("Setting 5", "")
                       Dim s6c = settings4.CreateStringSetting("Setting 6", "NoSetting")
 
-                      Assert.AreEqual(v1, s1c.Value)
-                      Assert.AreEqual(v2, s2c.Value)
-                      Assert.AreEqual(v3, s3c.Value)
-                      Assert.AreEqual(v4, s4c.Value)
-                      Assert.AreEqual("", s5c.Value)
-                      Assert.AreEqual("NoSetting", s6c.Value)
+                      ClassicAssert.AreEqual(v1, s1c.Value)
+                      ClassicAssert.AreEqual(v2, s2c.Value)
+                      ClassicAssert.AreEqual(v3, s3c.Value)
+                      ClassicAssert.AreEqual(v4, s4c.Value)
+                      ClassicAssert.AreEqual("", s5c.Value)
+                      ClassicAssert.AreEqual("NoSetting", s6c.Value)
                   End Sub}, "StringSettingsReadWriteMultiTest2")
     End Sub
 
@@ -286,37 +287,37 @@ Public Class FrameworkTests
 
                           ' This should return all settings without checking anything (usage (almost) as it was before adding limited access to settings)
                           Dim allSettings = settings.GetSettings()
-                          Assert.AreEqual(28, allSettings.Count())
+                          ClassicAssert.AreEqual(28, allSettings.Count())
 
                           ' This should return no settings since we did not specify access
                           Dim noSettings = settings.GetSettings(, False)
-                          Assert.AreEqual(0, noSettings.Count())
+                          ClassicAssert.AreEqual(0, noSettings.Count())
 
                           ' An empty group array should also get no settings since settings access limitation is still enabled
                           Dim emptyGroupArraySettings = settings.GetSettings(New String() {}, False)
-                          Assert.AreEqual(0, emptyGroupArraySettings.Count())
+                          ClassicAssert.AreEqual(0, emptyGroupArraySettings.Count())
 
                           ' This should return all settings allowed to admin. We check that there are 12 settings and 6 of them also contain user
                           Dim adminSettings = settings.GetSettings({"admin"}, False)
-                          Assert.AreEqual(12, adminSettings.Count())
-                          Assert.AreEqual(6, adminSettings.Count(Function(f) f.UserGroups?.Contains("user")))
+                          ClassicAssert.AreEqual(12, adminSettings.Count())
+                          ClassicAssert.AreEqual(6, adminSettings.Count(Function(f) f.UserGroups?.Contains("user")))
 
                           ' Same as before, but replace admin with user and vice versa
                           Dim userSettings = settings.GetSettings({"user"}, False)
-                          Assert.AreEqual(12, userSettings.Count())
-                          Assert.AreEqual(6, userSettings.Count(Function(f) f.UserGroups?.Contains("admin")))
+                          ClassicAssert.AreEqual(12, userSettings.Count())
+                          ClassicAssert.AreEqual(6, userSettings.Count(Function(f) f.UserGroups?.Contains("admin")))
 
                           ' A group that has no settings should get none
                           Dim catSettings = settings.GetSettings({"cat"}, False)
-                          Assert.AreEqual(0, catSettings.Count()) ' Poor cat :(
+                          ClassicAssert.AreEqual(0, catSettings.Count()) ' Poor cat :(
 
                           ' Here we should get settings for both admin and user (6 for admin, 6 for user, 6 for both - should be 18)
                           Dim userAndAdminSettings = settings.GetSettings({"user", "admin"}, False)
-                          Assert.AreEqual(18, userAndAdminSettings.Count())
+                          ClassicAssert.AreEqual(18, userAndAdminSettings.Count())
 
                           ' We should get all settings here because we disabled access limitation, user group shouldn't matter
                           Dim userAndAdminSettingsNoLimit = settings.GetSettings({"user", "admin"})
-                          Assert.AreEqual(28, userAndAdminSettingsNoLimit.Count())
+                          ClassicAssert.AreEqual(28, userAndAdminSettingsNoLimit.Count())
 
                           ' Checking that these fields are read only. There should be no exception, but values should not change
                           Dim i5origValue = i5.Value
@@ -331,10 +332,10 @@ Public Class FrameworkTests
                           d5.Value = d5newValue
                           s5.Value = s5newValue
                           b5.Value = b5newValue
-                          Assert.AreEqual(i5origValue, i5.Value)
-                          Assert.AreEqual(d5origValue, d5.Value)
-                          Assert.AreEqual(s5origValue, s5.Value)
-                          Assert.AreEqual(b5origValue, b5.Value)
+                          ClassicAssert.AreEqual(i5origValue, i5.Value)
+                          ClassicAssert.AreEqual(d5origValue, d5.Value)
+                          ClassicAssert.AreEqual(s5origValue, s5.Value)
+                          ClassicAssert.AreEqual(b5origValue, b5.Value)
 
                           ' Same as before, but now these values SHOULD change
                           Dim i1origValue = i1.Value
@@ -351,10 +352,10 @@ Public Class FrameworkTests
                           d1.Value = d1newValue
                           s1.Value = s1newValue
                           b1.Value = b1newValue
-                          Assert.AreNotEqual(i1origValue, i1.Value)
-                          Assert.AreNotEqual(d1origValue, d1.Value)
-                          Assert.AreNotEqual(s1origValue, s1.Value)
-                          Assert.AreNotEqual(b1origValue, b1.Value)
+                          ClassicAssert.AreNotEqual(i1origValue, i1.Value)
+                          ClassicAssert.AreNotEqual(d1origValue, d1.Value)
+                          ClassicAssert.AreNotEqual(s1origValue, s1.Value)
+                          ClassicAssert.AreNotEqual(b1origValue, b1.Value)
                       End With
                   End Sub, "SettingsAccess")
     End Sub
@@ -378,20 +379,20 @@ Public Class FrameworkTests
         Dim s3 = ssr1.CreateStringSetting("Setting 3", "", "Setting 3")
         Dim s4 = ssr1.CreateStringSetting("Setting 4", "", "Setting 4")
         ' ...and check theirs default values
-        Assert.AreEqual("Default", s1.Value)
-        Assert.AreEqual("", s2.Value)
-        Assert.AreEqual("", s3.Value)
-        Assert.AreEqual("", s4.Value)
+        ClassicAssert.AreEqual("Default", s1.Value)
+        ClassicAssert.AreEqual("", s2.Value)
+        ClassicAssert.AreEqual("", s3.Value)
+        ClassicAssert.AreEqual("", s4.Value)
 
         ' Setting value set test
         s1.Value = v1
         s2.Value = v2
         s3.Value = v3
         s4.Value = v4
-        Assert.AreEqual(v1, s1.Value)
-        Assert.AreEqual(v2, s2.Value)
-        Assert.AreEqual(v3, s3.Value)
-        Assert.AreEqual(v4, s4.Value)
+        ClassicAssert.AreEqual(v1, s1.Value)
+        ClassicAssert.AreEqual(v2, s2.Value)
+        ClassicAssert.AreEqual(v3, s3.Value)
+        ClassicAssert.AreEqual(v4, s4.Value)
 
         ' Finally save
         ssr1.SaveSettings(False)
@@ -426,15 +427,15 @@ Public Class FrameworkTests
 
                 ' Available valid *.ini file - stored values expected
                 If usedFile <> String.Empty Then
-                    Assert.AreEqual(v1, s1a.Value)
-                    Assert.AreEqual(v2, s2a.Value)
-                    Assert.AreEqual(v3, s3a.Value)
-                    Assert.AreEqual(v4, s4a.Value)
+                    ClassicAssert.AreEqual(v1, s1a.Value)
+                    ClassicAssert.AreEqual(v2, s2a.Value)
+                    ClassicAssert.AreEqual(v3, s3a.Value)
+                    ClassicAssert.AreEqual(v4, s4a.Value)
                 Else ' Not available valid files - default values expected
-                    Assert.AreEqual("Default", s1a.Value)
-                    Assert.AreEqual("", s2a.Value)
-                    Assert.AreEqual("", s3a.Value)
-                    Assert.AreEqual("", s4a.Value)
+                    ClassicAssert.AreEqual("Default", s1a.Value)
+                    ClassicAssert.AreEqual("", s2a.Value)
+                    ClassicAssert.AreEqual("", s3a.Value)
+                    ClassicAssert.AreEqual("", s4a.Value)
                 End If
 
                 ' Deleting all files after experiment

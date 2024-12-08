@@ -85,11 +85,12 @@ Public Class MicroLogger
                         Directory.CreateDirectory(pf.Path)
                     End If
                     Using sw = File.AppendText(IO.Path.Combine(pf.Path, pf.FileName))
+                        Dim line As String = Nothing
                         While LoggingIsActual()
-                            Dim line = _linesToWrite.FirstOrDefault()
-                            If line IsNot Nothing Then
-                                sw.WriteLine(line)
+                            If Not _linesToWrite.TryPeek(line) Then
+                                line = Nothing
                             End If
+                            If line IsNot Nothing Then sw.WriteLine(line)
                             _linesToWrite.TryDequeue(Nothing)
                         End While
                     End Using

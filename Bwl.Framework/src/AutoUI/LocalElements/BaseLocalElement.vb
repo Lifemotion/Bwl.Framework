@@ -1,7 +1,4 @@
-﻿Imports System.Text
-Imports Bwl.Framework
-
-Public MustInherit Class BaseLocalElement
+﻿Public MustInherit Class BaseLocalElement
     Implements IUIElementLocal
     Implements IDisposable
 

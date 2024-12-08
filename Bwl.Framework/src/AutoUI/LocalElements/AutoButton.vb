@@ -1,6 +1,4 @@
-﻿Imports Bwl.Framework
-
-Public Class AutoButton
+﻿Public Class AutoButton
     Inherits BaseLocalElement
 
     Public Event Click(source As AutoButton)
