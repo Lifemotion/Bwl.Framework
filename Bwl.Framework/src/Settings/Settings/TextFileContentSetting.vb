@@ -178,7 +178,7 @@ Public Class TextFileContentSetting
         Set(value() As String)
             ' Creates directory if it doesn't exist, then deletes file if it exists and creates file
             RaiseValueWillChange() ' To stop anything that might use the app
-            EnsureDirectoryAndFileExist(DirectoryPath)
+            EnsureDirectoryAndFileExist(FilePath)
             If File.Exists(FilePath) Then File.Delete(FilePath)
             File.WriteAllLines(FilePath, value, _fileEncoding)
             RaiseValueChanged()
