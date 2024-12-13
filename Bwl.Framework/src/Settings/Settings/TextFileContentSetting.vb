@@ -56,7 +56,7 @@ Public Class TextFileContentSetting
     Public Property FilePath As String
         Get
             ' Generating default file path and file name if they are not specified or if the path is incorrect
-            If String.IsNullOrWhiteSpace(MyBase.ValueAsString) OrElse Not File.Exists(MyBase.ValueAsString) OrElse Not Path.IsPathRooted(MyBase.ValueAsString) Then
+            If String.IsNullOrWhiteSpace(MyBase.ValueAsString) OrElse Not Path.IsPathRooted(MyBase.ValueAsString) Then
                 MyBase.ValueAsString = Path.Combine(DefaultDirectoryPath, GenerateRandomFileName())
             End If
 

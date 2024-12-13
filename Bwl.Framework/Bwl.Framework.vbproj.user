@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="src\AppBase\FormAppBase.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="src\AppBase\FormBase.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="src\AutoUI\AutoUIForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="src\Logger\LogWriters\Realizations\FormLogInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="src\Logger\UI\LoggerForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="src\Settings\Gui\SettingsDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>
