@@ -295,7 +295,7 @@ Public Class DatagridLogWriter
             Dim LogInfo = New FormLogInfo()
             Dim infoList As New List(Of String)()
             For i = 0 To grid.ColumnCount - 1
-                infoList.Add(grid.Item(i, e.RowIndex).Value.ToString())
+                infoList.Add(grid.Item(i, e.RowIndex).Value?.ToString())
             Next
             LogInfo.LogInfoText = infoList
             LogInfo.Show()

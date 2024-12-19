@@ -6,6 +6,7 @@ Public Class LoggerForm
 
     Public Sub New(logger As ILoggerDispatcher)
         InitializeComponent()
+        Application.EnableVisualStyles()
 
         _logger = logger
         _logger.ConnectWriter(_datagridLogWriter1)

@@ -9,6 +9,7 @@ Public Class AutoUIDisplay
 
     Public Sub New()
         InitializeComponent()
+        Application.EnableVisualStyles()
     End Sub
 
     Public Property ConnectedUI As IAutoUI

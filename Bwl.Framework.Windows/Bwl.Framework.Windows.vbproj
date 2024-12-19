@@ -8,12 +8,12 @@
 		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<OutputPath>..\debug\lib\Bwl.Framework.Windows\</OutputPath>
+		<OutputPath>..\debug\lib\Bwl.Framework.Windows\$(TargetFramework)\$(RuntimeIdentifier)\</OutputPath>
 		<DocumentationFile>Bwl.Framework.Windows.xml</DocumentationFile>
 		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<OutputPath>..\debug\lib\Bwl.Framework.Windows\</OutputPath>
+		<OutputPath>..\debug\lib\Bwl.Framework.Windows\$(TargetFramework)\$(RuntimeIdentifier)\</OutputPath>
 		<DefineDebug>false</DefineDebug>
 		<DocumentationFile>Bwl.Framework.Windows.xml</DocumentationFile>
 		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
@@ -141,7 +141,6 @@
 	<PropertyGroup>
 		<NrtRevisionFormat>{c:ymd.} {c:hms:} {chash:6}</NrtRevisionFormat>
 		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

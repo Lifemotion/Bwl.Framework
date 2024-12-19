@@ -56,7 +56,7 @@ Public Class TextFileContentSetting
     Public Property FilePath As String
         Get
             ' Generating default file path and file name if they are not specified or if the path is incorrect
-            If String.IsNullOrWhiteSpace(MyBase.ValueAsString) OrElse Not File.Exists(MyBase.ValueAsString) OrElse Not Path.IsPathRooted(MyBase.ValueAsString) Then
+            If String.IsNullOrWhiteSpace(MyBase.ValueAsString) OrElse Not Path.IsPathRooted(MyBase.ValueAsString) Then
                 MyBase.ValueAsString = Path.Combine(DefaultDirectoryPath, GenerateRandomFileName())
             End If
 
@@ -178,7 +178,7 @@ Public Class TextFileContentSetting
         Set(value() As String)
             ' Creates directory if it doesn't exist, then deletes file if it exists and creates file
             RaiseValueWillChange() ' To stop anything that might use the app
-            EnsureDirectoryAndFileExist(DirectoryPath)
+            EnsureDirectoryAndFileExist(FilePath)
             If File.Exists(FilePath) Then File.Delete(FilePath)
             File.WriteAllLines(FilePath, value, _fileEncoding)
             RaiseValueChanged()

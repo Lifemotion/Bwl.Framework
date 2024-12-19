@@ -4,16 +4,19 @@
 
     Public Sub New()
         InitializeComponent()
+        Application.EnableVisualStyles()
     End Sub
 
     Public Sub New(storage As SettingsStorage, logger As ILoggerDispatcher)
         Init(storage, logger)
         InitializeComponent()
+        Application.EnableVisualStyles()
     End Sub
 
     Public Sub New(appbase As AppBase)
         Me.New(appbase.RootStorage, appbase.RootLogger)
         InitializeComponent()
+        Application.EnableVisualStyles()
     End Sub
 
     Public Sub Init(storage As SettingsStorage, logger As ILoggerDispatcher)

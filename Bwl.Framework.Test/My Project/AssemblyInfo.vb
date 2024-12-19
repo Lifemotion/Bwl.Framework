@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 ' Проверьте значения атрибутов сборки
 
-<Assembly: AssemblyTitle("Bwl.Framework.TestApp")> 
+<Assembly: AssemblyTitle("Bwl.Framework.Test.WinForms")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("Bwl.Framework.TestApp")> 
+<Assembly: AssemblyProduct("Bwl.Framework.Test.WinForms")> 
 <Assembly: AssemblyCopyright("Copyright ©  2013")> 
 <Assembly: AssemblyTrademark("")> 
 

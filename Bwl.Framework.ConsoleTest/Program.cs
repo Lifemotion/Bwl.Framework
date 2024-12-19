@@ -1,16 +1,19 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Bwl.Framework.Test.Console
 {
     internal class Program
     {
-        private readonly static AppBase _app = new(true, "Bwl.Framework.ConsoleTest", true, false, "settings.conf");
+        private readonly static AppBase _app = new AppBase(true, "Bwl.Framework.ConsoleTest", true, false, "settings.conf");
         private readonly static SettingsStorage _settings = _app.RootStorage;
         private readonly static Logger _logger = _app.RootLogger;
-        private readonly static BwlConsoleTestLoggerWriter _logWriter = new(true);
+        private readonly static BwlConsoleTestLoggerWriter _logWriter = new BwlConsoleTestLoggerWriter(true);
 
         private static Task _logTask;
-        private static CancellationTokenSource _cancellationTokenSource = new();
+        private static readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private static BooleanSetting _valBool;
         private static IntegerSetting _valInt;
         private static DoubleSetting _valDbl;
@@ -47,6 +50,7 @@ namespace Bwl.Framework.Test.Console
             finally
             {
                 _logTask.Wait();
+                _cancellationTokenSource.Dispose();
             }
         }
 

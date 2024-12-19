@@ -6,6 +6,7 @@
     Public Sub New()
         MyBase.New
         InitializeComponent()
+        Application.EnableVisualStyles()
     End Sub
 
     Public Sub New(storage As SettingsStorage, logger As Logger, ui As IAutoUI)
@@ -13,6 +14,7 @@
         _loggerServer = logger
         _ui = ui
         InitializeComponent()
+        Application.EnableVisualStyles()
         AddHandler AutoUIDisplay1.AutoFormDescriptorUpdated, AddressOf FormDescriptorUpdated
     End Sub
 

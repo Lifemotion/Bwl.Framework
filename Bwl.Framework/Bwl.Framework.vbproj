@@ -5,14 +5,14 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<OutputPath>..\debug\lib\Bwl.Framework\</OutputPath>
+		<OutputPath>..\debug\lib\Bwl.Framework\$(TargetFramework)\$(RuntimeIdentifier)\</OutputPath>
 		<DocumentationFile>Bwl.Framework.xml</DocumentationFile>
 		<NoWarn></NoWarn>
 		<RunCodeAnalysis>false</RunCodeAnalysis>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DefineDebug>false</DefineDebug>
-		<OutputPath>..\release\lib\Bwl.Framework\</OutputPath>
+		<OutputPath>..\release\lib\Bwl.Framework\$(TargetFramework)\$(RuntimeIdentifier)\</OutputPath>
 		<DocumentationFile>Bwl.Framework.xml</DocumentationFile>
 		<NoWarn></NoWarn>
 	</PropertyGroup>
@@ -79,7 +79,6 @@
 	<PropertyGroup>
 		<NrtRevisionFormat>{c:ymd.} {c:hms:} {chash:6}</NrtRevisionFormat>
 		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

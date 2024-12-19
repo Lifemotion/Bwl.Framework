@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.Bwl.Framework.TestApp.My.MySettings
+        Friend ReadOnly Property Settings() As Global.Bwl.Framework.Test.WinForms.My.MySettings
             Get
-                Return Global.Bwl.Framework.TestApp.My.MySettings.Default
+                Return Global.Bwl.Framework.Test.WinForms.My.MySettings.Default
             End Get
         End Property
     End Module
