@@ -1,75 +1,89 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <OutputType>Library</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\debug\Bwl.Framework\</OutputPath>
-    <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
-    <NoWarn></NoWarn>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DefineDebug>false</DefineDebug>
-    <OutputPath>..\release\Bwl.Framework\</OutputPath>
-    <DocumentationFile>Bwl.Framework.xml</DocumentationFile>
-    <NoWarn></NoWarn>
-  </PropertyGroup>
-  <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\refs-src\MicroLogger.vb">
-      <Link>src\MicroLogger\MicroLogger.vb</Link>
-    </Compile>
-    <Compile Include="..\refs-src\Serializer.vb">
-      <Link>refs\Serializer.vb</Link>
-    </Compile>
-    <Compile Include="..\refs-src\CryptoTools.vb">
-      <Link>refs\CryptoTools.vb</Link>
-    </Compile>
-    <Compile Include="..\refs-src\IniFile.vb">
-      <Link>refs\IniFile.vb</Link>
-    </Compile>
-    <Compile Include="..\refs-src\RunLimiter.vb">
-      <Link>refs\RunLimiter.vb</Link>
-    </Compile>
-    <Compile Include="..\refs-src\SharedTools.vb">
-      <Link>refs\SharedTools.vb</Link>
-    </Compile>
-    <Compile Include="..\refs-src\StringTools.vb">
-      <Link>refs\StringTools.vb</Link>
-    </Compile>
-    <Compile Update="My Project\Application.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Application.myapp</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Update="My Project\Resources.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="My Project\Settings.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="My Project\Application.myapp">
-      <Generator>MyApplicationCodeGenerator</Generator>
-      <LastGenOutput>Application.Designer.vb</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="src\Settings\Settings\Common\ObjectSetting.vb" />
-  </ItemGroup>
-  <PropertyGroup />
-  <PropertyGroup />
-  
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0</TargetFrameworks>
+		<OutputType>Library</OutputType>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<OutputPath>..\debug\lib\Bwl.Framework\</OutputPath>
+		<DocumentationFile>Bwl.Framework.xml</DocumentationFile>
+		<NoWarn></NoWarn>
+		<RunCodeAnalysis>false</RunCodeAnalysis>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineDebug>false</DefineDebug>
+		<OutputPath>..\release\lib\Bwl.Framework\</OutputPath>
+		<DocumentationFile>Bwl.Framework.xml</DocumentationFile>
+		<NoWarn></NoWarn>
+	</PropertyGroup>
+	<PropertyGroup>
+		<RunPostBuildEvent>Always</RunPostBuildEvent>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="..\refs-src\MicroLogger.vb">
+			<Link>src\MicroLogger\MicroLogger.vb</Link>
+		</Compile>
+		<Compile Include="..\refs-src\Serializer.vb">
+			<Link>refs\Serializer.vb</Link>
+		</Compile>
+		<Compile Include="..\refs-src\CryptoTools.vb">
+			<Link>refs\CryptoTools.vb</Link>
+		</Compile>
+		<Compile Include="..\refs-src\IniFile.vb">
+			<Link>refs\IniFile.vb</Link>
+		</Compile>
+		<Compile Include="..\refs-src\RunLimiter.vb">
+			<Link>refs\RunLimiter.vb</Link>
+		</Compile>
+		<Compile Include="..\refs-src\SharedTools.vb">
+			<Link>refs\SharedTools.vb</Link>
+		</Compile>
+		<Compile Include="..\refs-src\StringTools.vb">
+			<Link>refs\StringTools.vb</Link>
+		</Compile>
+		<Compile Update="My Project\Application.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Application.myapp</DependentUpon>
+			<DesignTime>True</DesignTime>
+		</Compile>
+		<Compile Update="My Project\Resources.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DesignTime>True</DesignTime>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+		<Compile Update="My Project\Settings.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="My Project\Application.myapp">
+			<Generator>MyApplicationCodeGenerator</Generator>
+			<LastGenOutput>Application.Designer.vb</LastGenOutput>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="src\Settings\Settings\Common\ObjectSetting.vb" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+	<PropertyGroup />
+	<PropertyGroup>
+		<NrtRevisionFormat>{c:ymd.} {c:hms:} {chash:6}</NrtRevisionFormat>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
+
 </Project>

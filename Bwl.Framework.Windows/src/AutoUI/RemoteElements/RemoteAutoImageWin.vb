@@ -45,7 +45,7 @@ Public Class RemoteAutoImageWin
     End Sub
 
     Public Overrides Sub ProcessData(dataname As String, data As Byte())
-        If dataname.ToLower = "bitmap" Then
+        If dataname.ToLower = "imagebytes" Then
             If _bitmap IsNot Nothing Then
                 _bitmap.Dispose()
             End If

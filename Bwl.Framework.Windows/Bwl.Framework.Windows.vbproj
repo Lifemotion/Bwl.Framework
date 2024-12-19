@@ -1,135 +1,150 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
-    <OutputType>Library</OutputType>
-    <StartupObject>Bwl.Framework.Windows.My.MyApplication</StartupObject>
-    <MyType>WindowsForms</MyType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile>Bwl.Framework.Windows.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DefineDebug>false</DefineDebug>
-    <DocumentationFile>Bwl.Framework.Windows.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-  </PropertyGroup>
-  <ItemGroup>
-	  <Compile Include="..\refs-src\JpegSaver.vb">
-		  <Link>refs\JpegSaver.vb</Link>
-	  </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Import Include="System.Drawing" />
-    <Import Include="System.Windows.Forms" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="My Project\Application.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Application.myapp</DependentUpon>
-    </Compile>
-    <Compile Update="My Project\Resources.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="My Project\Settings.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <Compile Update="src\AppBase\AppBaseWinForms.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="src\AppBase\FormBaseWin.Designer.vb">
-      <DependentUpon>FormBaseWin.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\AppBase\FormBaseWin.vb" />
-    <Compile Update="src\AutoUI\AutoUIForm.Designer.vb">
-      <DependentUpon>AutoUIForm.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\AutoUI\AutoUI\AutoUIDisplay.Designer.vb">
-      <DependentUpon>AutoUIDisplay.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\AutoUI\AutoUI\AutoUIDisplay.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="src\AutoUI\RemoteElements\BaseRemoteElementWin.Designer.vb">
-      <DependentUpon>BaseRemoteElementWin.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\AutoUI\RemoteElements\BaseRemoteElementWin.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="src\AutoUI\RemoteElements\RemoteAutoImageWin.Designer.vb">
-      <DependentUpon>RemoteAutoImageWin.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\AutoUI\RemoteElements\RemoteAutoImageWin.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="src\AutoUI\RemoteElements\RemoteAutoButtonWin.Designer.vb">
-      <DependentUpon>RemoteAutoButtonWin.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\AutoUI\RemoteElements\RemoteAutoButtonWin.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="src\AutoUI\RemoteElements\RemoteAutoListboxWin.Designer.vb">
-      <DependentUpon>RemoteAutoListboxWin.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\AutoUI\RemoteElements\RemoteAutoListboxWin.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="src\AutoUI\RemoteElements\RemoteAutoTextboxWin.Designer.vb">
-      <DependentUpon>RemoteAutoTextboxWin.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\AutoUI\RemoteElements\RemoteAutoTextboxWin.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="src\Logger\LogWriters\Realizations\DatagridLogWriter.Designer.vb">
-      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\Logger\LogWriters\Realizations\DatagridLogWriter.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="src\Logger\LogWriters\Realizations\FormLogInfo.Designer.vb">
-      <DependentUpon>FormLogInfo.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\Logger\LogWriters\Realizations\FormLogInfo.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="src\Logger\UI\LoggerForm.designer.vb">
-      <DependentUpon>LoggerForm.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\Logger\UI\LoggerForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="src\Settings\Gui\SettingField.Designer.vb">
-      <DependentUpon>SettingField.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\Settings\Gui\SettingField.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="src\Settings\Gui\SettingsDialog.Designer.vb">
-      <DependentUpon>SettingsDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Update="src\Settings\Gui\SettingsDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="My Project\Application.myapp">
-      <Generator>MyApplicationCodeGenerator</Generator>
-      <LastGenOutput>Application.Designer.vb</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Bwl.Framework\Bwl.Framework.vbproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="6.0.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
+		<OutputType>Library</OutputType>
+		<MyType>WindowsForms</MyType>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<OutputPath>..\debug\lib\Bwl.Framework.Windows\</OutputPath>
+		<DocumentationFile>Bwl.Framework.Windows.xml</DocumentationFile>
+		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<OutputPath>..\debug\lib\Bwl.Framework.Windows\</OutputPath>
+		<DefineDebug>false</DefineDebug>
+		<DocumentationFile>Bwl.Framework.Windows.xml</DocumentationFile>
+		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="..\refs-src\JpegSaver.vb">
+			<Link>refs\JpegSaver.vb</Link>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<Import Include="System.Drawing" />
+		<Import Include="System.Windows.Forms" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="My Project\Application.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Application.myapp</DependentUpon>
+		</Compile>
+		<Compile Update="My Project\Resources.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DesignTime>True</DesignTime>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+		<Compile Update="My Project\Settings.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+		</Compile>
+		<Compile Update="src\AppBase\AppBaseWinForms.vb">
+			<SubType>Form</SubType>
+		</Compile>
+		<Compile Update="src\AppBase\FormBaseWin.Designer.vb">
+			<DependentUpon>FormBaseWin.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AppBase\FormBaseWin.vb" />
+		<Compile Update="src\AutoUI\AutoUIForm.Designer.vb">
+			<DependentUpon>AutoUIForm.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\AutoUI\AutoUIDisplay.Designer.vb">
+			<DependentUpon>AutoUIDisplay.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\AutoUI\AutoUIDisplay.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\BaseRemoteElementWin.Designer.vb">
+			<DependentUpon>BaseRemoteElementWin.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\BaseRemoteElementWin.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoImageWin.Designer.vb">
+			<DependentUpon>RemoteAutoImageWin.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoImageWin.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoButtonWin.Designer.vb">
+			<DependentUpon>RemoteAutoButtonWin.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoButtonWin.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoListboxWin.Designer.vb">
+			<DependentUpon>RemoteAutoListboxWin.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoListboxWin.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoTextboxWin.Designer.vb">
+			<DependentUpon>RemoteAutoTextboxWin.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoTextboxWin.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\Logger\LogWriters\Realizations\DatagridLogWriter.Designer.vb">
+			<DependentUpon>DatagridLogWriter.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\Logger\LogWriters\Realizations\DatagridLogWriter.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\Logger\LogWriters\Realizations\FormLogInfo.Designer.vb">
+			<DependentUpon>FormLogInfo.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\Logger\LogWriters\Realizations\FormLogInfo.vb">
+			<SubType>Form</SubType>
+		</Compile>
+		<Compile Update="src\Logger\UI\LoggerForm.designer.vb">
+			<DependentUpon>LoggerForm.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\Logger\UI\LoggerForm.vb">
+			<SubType>Form</SubType>
+		</Compile>
+		<Compile Update="src\Settings\Gui\SettingField.Designer.vb">
+			<DependentUpon>SettingField.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\Settings\Gui\SettingField.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\Settings\Gui\SettingsDialog.Designer.vb">
+			<DependentUpon>SettingsDialog.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\Settings\Gui\SettingsDialog.vb">
+			<SubType>Form</SubType>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="My Project\Application.myapp">
+			<Generator>MyApplicationCodeGenerator</Generator>
+			<LastGenOutput>Application.Designer.vb</LastGenOutput>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Bwl.Framework\Bwl.Framework.vbproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="6.0.0" />
+		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+		<PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
+		<PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+	<PropertyGroup>
+		<NrtRevisionFormat>{c:ymd.} {c:hms:} {chash:6}</NrtRevisionFormat>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
 </Project>

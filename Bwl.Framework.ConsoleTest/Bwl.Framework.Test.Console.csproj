@@ -9,14 +9,14 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<OutputPath>..\debug\Bwl.Framework.Test.Console\$(RuntimeIdentifier)\bin\</OutputPath>
+		<OutputPath>..\debug\app\Bwl.Framework.Test.Console\bin\</OutputPath>
 		<DocumentationFile>Bwl.Framework.Test.Console.xml</DocumentationFile>
 		<NoWarn></NoWarn>
 		<RunCodeAnalysis>false</RunCodeAnalysis>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DefineDebug>false</DefineDebug>
-		<OutputPath>..\release\Bwl.Framework.Test.Console\$(RuntimeIdentifier)\bin\</OutputPath>
+		<OutputPath>..\release\app\Bwl.Framework.Test.Console\bin\</OutputPath>
 		<DocumentationFile>Bwl.Framework.Test.Console.xml</DocumentationFile>
 		<NoWarn></NoWarn>
 	</PropertyGroup>
@@ -28,7 +28,24 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\Bwl.Framework\Bwl.Framework.vbproj" />
 	</ItemGroup>
+
+	<PropertyGroup>
+		<NrtRevisionFormat>{c:ymd.} {c:hms:} {chash:6}</NrtRevisionFormat>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
 
 </Project>

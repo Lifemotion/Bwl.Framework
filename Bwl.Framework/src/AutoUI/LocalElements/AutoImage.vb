@@ -31,9 +31,9 @@
 
     Public Overrides Sub SendUpdate()
         If _imageBytes IsNot Nothing AndAlso _imageBytes.Any() Then
-            Send("bitmap", _imageBytes)
+            Send("imagebytes", _imageBytes)
         Else
-            Send("bitmap", {})
+            Send("imagebytes", {})
         End If
 
     End Sub
