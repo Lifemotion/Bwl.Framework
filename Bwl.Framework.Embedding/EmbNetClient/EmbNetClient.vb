@@ -63,7 +63,7 @@ Friend Class EmbNetClient
                 RaiseEvent Connected()
             End If
         Catch ex As Exception
-            Throw New NoConnectException(ex, "Не удалось подключиться к " + host + ":" + port.ToString)
+            Throw New NoConnectException(ex, "Не удалось подключиться к " & host & ":" & port.ToString)
         End Try
     End Sub
     ''' <summary>
@@ -214,7 +214,7 @@ Friend Class EmbNetClient
                     tcpSocket.Send(bytes)
                     pingsLost += 1
                 Catch ex As Exception
-                    'log.Add("Не удалось отправить пинг. " + ex.Message)
+                    'log.Add("Не удалось отправить пинг. " & ex.Message)
                     Disconnect()
                 End Try
             End If
@@ -237,7 +237,7 @@ Friend Class EmbNetClient
                 tcpSocket.Send(bytes)
                 RaiseEvent SentMessage(message)
             Catch ex As Exception
-                'log.Add("Не удалось отправить сообщение в порт!" + ex.Message)
+                'log.Add("Не удалось отправить сообщение в порт!" & ex.Message)
             End Try
         End If
     End Sub

@@ -69,8 +69,8 @@ Public Class AutoUIDisplay
                 Dim info = UIElementInfo.CreateFromBytes(infoBytes)
                 Dim ctl As BaseRemoteElementWin = Nothing
                 Select Case info.Type
-                    Case GetType(AutoBitmapWin).Name
-                        ctl = New RemoteAutoBitmapWin(info)
+                    Case GetType(AutoImage).Name
+                        ctl = New RemoteAutoImageWin(info)
                     Case GetType(AutoButton).Name
                         ctl = New RemoteAutoButtonWin(info)
                     Case GetType(AutoTextbox).Name

@@ -17,10 +17,10 @@ Public Class RunMonitorHelper
 
 	Private Sub OnTimerTick()
 		Try
-			Dim path = AppDomain.CurrentDomain.BaseDirectory + IO.Path.DirectorySeparatorChar + ".." + IO.Path.DirectorySeparatorChar + "monitor.txt"
+			Dim path = AppDomain.CurrentDomain.BaseDirectory + IO.Path.DirectorySeparatorChar & ".." & IO.Path.DirectorySeparatorChar & "monitor.txt"
 			File.WriteAllText(path, DateTime.Now.ToString)
 		Catch ex As Exception
-			_logger.AddError("RunMonitorHelper " + ex.ToString)
+			_logger.AddError("RunMonitorHelper " & ex.ToString)
 		End Try
 
 		Try

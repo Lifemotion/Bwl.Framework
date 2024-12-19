@@ -115,8 +115,8 @@ Public Class AppBase
         _Services.AddService(Me)
         _RootLogger.Add(LogEventType.message, "Application startup")
         Try
-            _RootLogger.Add(LogEventType.information, "Application executable path: " + ApplicationExecutablePath())
-            _RootLogger.Add(LogEventType.information, "Application info: " + ApplicationProductName(True, True, True))
+            _RootLogger.Add(LogEventType.information, "Application executable path: " & ApplicationExecutablePath())
+            _RootLogger.Add(LogEventType.information, "Application info: " & ApplicationProductName(True, True, True))
         Catch ex As Exception
             _RootLogger.Add(LogEventType.warning, ex.Message)
         End Try

@@ -117,7 +117,7 @@ Public Class MailSender
         If res Then
             _logger.AddMessage("Тестовое письмо успешно отправлено")
         Else
-            _logger.AddError("Ошибка отправки тестового письма:" + vbCrLf + err)
+            _logger.AddError("Ошибка отправки тестового письма:" & vbCrLf + err)
         End If
     End Sub
 
@@ -129,7 +129,7 @@ Public Class MailSender
         Catch expr_19 As Exception
             ProjectData.SetProjectError(expr_19)
             Dim ex As Exception = expr_19
-            _logger.AddError("MailSender.CheckConnect " + ex.ToString())
+            _logger.AddError("MailSender.CheckConnect " & ex.ToString())
             err = ex.ToString()
             CheckConnect = False
             ProjectData.ClearProjectError()
@@ -180,7 +180,7 @@ Public Class MailSender
             ProjectData.SetProjectError(expr_125)
             Dim exc As Exception = expr_125
             If logger IsNot Nothing Then
-                logger.AddError("EmailReportPlugin: ошибка отправки письма . " + exc.ToString())
+                logger.AddError("EmailReportPlugin: ошибка отправки письма . " & exc.ToString())
             End If
             Throw
         End Try

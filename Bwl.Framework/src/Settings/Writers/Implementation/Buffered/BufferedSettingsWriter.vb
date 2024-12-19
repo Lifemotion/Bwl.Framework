@@ -69,7 +69,7 @@ Public Class BufferedSettingsWriter
     Public Sub ReadSettingsFromFileSet(filename As String)
         _logger.AddMessage($"ReadSettingsFromFileSet(filename:{filename}): BEGIN", "inf")
         SyncLock _settings
-            Dim fileList = {filename, filename + ".bak", filename + ".old.bak"}
+            Dim fileList = {filename, filename & ".bak", filename & ".old.bak"}
             For Each file In fileList
                 Try
                     ReadSettingsFromFile(file, _settings) 'Загрузили...
@@ -280,7 +280,7 @@ Public Class BufferedSettingsWriter
                     End Try
                 End If
                 'Запись на диск при неполном наборе *.bak
-                If Not needToWrite AndAlso (Not File.Exists(filename + ".bak") OrElse Not File.Exists(filename + ".old.bak")) Then
+                If Not needToWrite AndAlso (Not File.Exists(filename & ".bak") OrElse Not File.Exists(filename & ".old.bak")) Then
                     needToWrite = True
                 End If
                 'Запись на диск при необходимости (если содержимое под запись и на диске не совпадают)
@@ -319,12 +319,12 @@ Public Class BufferedSettingsWriter
                                                End Try
                                            End Sub
                         '№1: *.bak => *.old.bak
-                        If File.Exists(filename + ".bak") Then
-                            moveSettings(filename + ".bak", filename + ".old.bak")
+                        If File.Exists(filename & ".bak") Then
+                            moveSettings(filename & ".bak", filename & ".old.bak")
                         End If
                         '№2: * => *.bak
                         If File.Exists(filename) Then
-                            moveSettings(filename, filename + ".bak")
+                            moveSettings(filename, filename & ".bak")
                         End If
                     End If
                     'ШАГ 3 - Замещаем целевой файл временным (временный уже был верифицирован)

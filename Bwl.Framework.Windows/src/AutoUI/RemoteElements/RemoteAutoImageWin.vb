@@ -1,7 +1,10 @@
 ﻿Imports System.Drawing
+Imports System.IO
 
-Public Class RemoteAutoBitmapWin
+Public Class RemoteAutoImageWin
     Inherits BaseRemoteElementWin
+
+    Private _bitmap As Bitmap
 
     Public Sub New()
         Me.New(New UIElementInfo("", ""))
@@ -24,17 +27,35 @@ Public Class RemoteAutoBitmapWin
             If Info.Width > 0 Then Me.Width = Info.Width
             If Info.Height > 0 Then Me.Height = Info.Height
             Try
-                If Info.ElemValue IsNot Nothing Then Me.PictureBox1.Image = CType(Info.ElemValue, Bitmap)
+                ' Info.ElemValue is a byte array
+                If Info.ElemValue IsNot Nothing Then
+                    Dim imageBytes As Byte() = Info.ElemValue
+                    If _bitmap IsNot Nothing Then
+                        _bitmap.Dispose()
+                    End If
+                    Using ms = New MemoryStream(imageBytes)
+                        _bitmap = _bitmap.FromStream(ms)
+                    End Using
+                    Me.PictureBox1.Image = _bitmap
+                    Me.PictureBox1.Invalidate()
+                End If
             Catch ex As Exception
             End Try
         End If
     End Sub
 
-    Public Overrides Sub ProcessData(dataname As String, data() As Byte)
+    Public Overrides Sub ProcessData(dataname As String, data As Byte())
         If dataname.ToLower = "bitmap" Then
-            Dim ms As New IO.MemoryStream(data)
-            Dim bmp = New Bitmap(ms)
-            Me.Invoke(Sub() Me.PictureBox1.Image = bmp)
+            If _bitmap IsNot Nothing Then
+                _bitmap.Dispose()
+            End If
+            Using ms = New MemoryStream(data)
+                _bitmap = _bitmap.FromStream(ms)
+            End Using
+            Me.Invoke(Sub()
+                          Me.PictureBox1.Image = _bitmap
+                          Me.PictureBox1.Invalidate()
+                      End Sub)
         End If
     End Sub
 

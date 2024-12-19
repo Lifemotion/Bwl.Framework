@@ -18,9 +18,9 @@
 	Private Sub FormLogInfo_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
 		_rtb_LogInfo.Text = "["
 		For i = 0 To LogInfoText.Count - 2
-			_rtb_LogInfo.Text += " " + LogInfoText(i)
+			_rtb_LogInfo.Text += " " & LogInfoText(i)
 		Next
-		_rtb_LogInfo.Text += "]" + vbCrLf
+		_rtb_LogInfo.Text += "]" & vbCrLf
 		_rtb_LogInfo.Text += LogInfoText(LogInfoText.Count - 1)
 	End Sub
 End Class

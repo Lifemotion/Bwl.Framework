@@ -117,10 +117,7 @@ Friend Class EmbDatagridLogWriter
             Else
                 textFilter = True
                 Dim parts = Split(tbFilter.Text, ",")
-                Dim path = ""
-                For i = 0 To .path.Length - 1
-                    path += "." + .path(i)
-                Next
+                Dim path = .path.Aggregate(Function(f, t) $"{f}.{t}")
                 For Each part In parts
                     Dim found As Boolean = False
                     part = Trim(part)
@@ -144,7 +141,7 @@ Friend Class EmbDatagridLogWriter
             If .path.GetUpperBound(0) >= 0 Then
                 pathString = .path(0)
                 For i As Integer = 1 To .path.Length - 1
-                    pathString = .path(i) + "." + pathString
+                    pathString = .path(i) & "." & pathString
                 Next
             Else
                 pathString = rootName

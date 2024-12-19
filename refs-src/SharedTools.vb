@@ -34,7 +34,7 @@ Public Module SharedTools
         If time Then
             Try
                 If result > "" Then result += " "
-                result += "(" + IO.File.GetLastWriteTime(asm.Location).ToString + ")"
+                result += "(" & IO.File.GetLastWriteTime(asm.Location).ToString & ")"
             Catch ex As Exception
             End Try
         End If

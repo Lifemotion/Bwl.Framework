@@ -156,14 +156,14 @@ Public MustInherit Class SettingsStorageBase
         Return _settings.Values.Where(Function(setting) userGroups IsNot Nothing AndAlso userGroups.Any() AndAlso setting.UserGroups.Any(Function(f) userGroups.Contains(f))).ToArray()
     End Function
 
-    Public Function CreateSettingsForm(invokeForm As Object) As Object
+    Public Function CreateSettingsForm(invokeForm As Object) As ISettingsForm
         If _settingsFormUiHandler IsNot Nothing Then
             Return _settingsFormUiHandler.CreateSettingsForm(Me, invokeForm)
         End If
         Return Nothing
     End Function
 
-    Public Function ShowSettingsForm(invokeForm As Object) As Object
+    Public Function ShowSettingsForm(invokeForm As Object) As ISettingsForm
         If _settingsFormUiHandler IsNot Nothing Then
             Return _settingsFormUiHandler.ShowSettingsForm(Me, invokeForm)
         End If
@@ -202,7 +202,7 @@ Public MustInherit Class SettingsStorageBase
         Dim result As String = ""
         Dim path = GetStoragePath()
         For i = path.GetUpperBound(0) To 1 Step -1
-            result += path(i) + "."
+            result += path(i) & "."
         Next
         result += path(0)
         Return result

@@ -31,7 +31,7 @@ Public Class SettingsStorage
         _defaultWriter = _parentStorage.DefaultWriter
 
         For Each child In _parentStorage.ChildStorages
-            If child.CategoryName.ToLower = name.ToLower Then Throw New Exception("Category already exists " + child.CategoryName.ToLower)
+            If child.CategoryName.ToLower = name.ToLower Then Throw New Exception("Category already exists " & child.CategoryName.ToLower)
         Next
     End Sub
 
@@ -108,7 +108,7 @@ Public Class SettingsStorage
                 forDelete._parentStorage = Nothing
                 _childStorages.Remove(name)
             Else
-                Throw New Exception("Child storage not found: " + name)
+                Throw New Exception("Child storage not found: " & name)
             End If
         End SyncLock
     End Sub

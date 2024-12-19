@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class RemoteAutoBitmapWin
+Partial Class RemoteAutoImageWin
 
     'Пользовательский элемент управления (UserControl) переопределяет метод Dispose для очистки списка компонентов.
     <System.Diagnostics.DebuggerNonUserCode()>
@@ -49,14 +49,14 @@ Partial Class RemoteAutoBitmapWin
         Me.ElementCaption.TabIndex = 1
         Me.ElementCaption.Text = "Caption"
         '
-        'RemoteAutoBitmap
+        'RemoteAutoImage
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.ElementCaption)
         Me.Controls.Add(Me.PictureBox1)
         Me.MinimumSize = New System.Drawing.Size(0, 30)
-        Me.Name = "RemoteAutoBitmap"
+        Me.Name = "RemoteAutoImage"
         Me.Size = New System.Drawing.Size(220, 237)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

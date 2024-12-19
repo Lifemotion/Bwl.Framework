@@ -20,7 +20,7 @@
         If Me.IsDisposed Then Return
         Me.Invoke(Sub()
                       Dim desc = AutoUIDisplay1.AutoFormDescriptor
-                      Me.Text = desc.Text + " " + desc.ApplicationDescription
+                      Me.Text = desc.Text & " " & desc.ApplicationDescription
                       Me.logWriter.Visible = desc.ShowLogger
                       If logWriter.Visible = False Then
                           Me.AutoUIDisplay1.Height += logWriter.Height

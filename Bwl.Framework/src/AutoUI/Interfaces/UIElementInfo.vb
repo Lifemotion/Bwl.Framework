@@ -98,8 +98,8 @@ Public Class UIElementInfo
             list.Add(.Category)
             list.Add(.Width.ToString)
             list.Add(.Height.ToString)
-            list.Add(.BackColor.A.ToString + ";" + .BackColor.R.ToString + ";" + .BackColor.G.ToString + ";" + .BackColor.B.ToString)
-            list.Add(.ForeColor.A.ToString + ";" + .ForeColor.R.ToString + ";" + .ForeColor.G.ToString + ";" + .ForeColor.B.ToString)
+            list.Add(.BackColor.A.ToString & ";" & .BackColor.R.ToString & ";" & .BackColor.G.ToString & ";" & .BackColor.B.ToString)
+            list.Add(.ForeColor.A.ToString & ";" & .ForeColor.R.ToString & ";" & .ForeColor.G.ToString & ";" & .ForeColor.B.ToString)
             list.Add(ObjectToString(.ElemValue))
         End With
         Dim str = AutoUIByteCoding.GetString(list.ToArray)

@@ -34,7 +34,7 @@ Public Class SettingField
             tbValue.Enabled = False
         Else
             If setting.FriendlyName.Length > 0 Then
-                Me.lCaption.Text = setting.FriendlyName + " (" + setting.Name + ")"
+                Me.lCaption.Text = setting.FriendlyName & " (" & setting.Name & ")"
             Else
                 Me.lCaption.Text = setting.Name
             End If
@@ -203,7 +203,7 @@ Public Class SettingField
 
     Private Sub bMenu_LinkClicked(sender As System.Object, e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles bMenu.LinkClicked
         Dim text As String = setting.DefaultValueAsString.ToString
-        menuDefault.Text = "По умолчанию (" + text + ")"
+        menuDefault.Text = "По умолчанию (" & text & ")"
         menu.Show(MousePosition.X, MousePosition.Y)
     End Sub
 

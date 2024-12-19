@@ -25,7 +25,7 @@
             Case LogEventType.message
                 System.Console.ForegroundColor = ConsoleColor.Green
         End Select
-        If LogEnabled Then System.Console.WriteLine("[{0}] {1}", datetime.ToLongTimeString, text + " ")
+        If LogEnabled Then System.Console.WriteLine("[{0}] {1}", datetime.ToLongTimeString, text & " ")
         System.Console.ForegroundColor = lastclr
     End Sub
 End Class

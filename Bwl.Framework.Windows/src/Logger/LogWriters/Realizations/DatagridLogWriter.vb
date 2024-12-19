@@ -100,7 +100,7 @@ Public Class DatagridLogWriter
                 If item.path.GetUpperBound(0) >= 0 Then
                     pathString = item.path(0)
                     For i As Integer = 1 To item.path.Length - 1
-                        pathString = item.path(i) + "." + pathString
+                        pathString = item.path(i) & "." & pathString
                     Next
                 Else
                     pathString = rootName
@@ -336,7 +336,7 @@ Public Class DatagridLogWriter
         Array.Sort(arr)
         cbCats.Items.Clear()
         For Each place In arr
-            cbCats.Items.Add("#" + place.ToString)
+            cbCats.Items.Add("#" & place.ToString)
         Next
         RedrawItems()
     End Sub
@@ -366,7 +366,7 @@ Public Class DatagridLogWriter
         Array.Sort(arr)
         cbCats.Items.Clear()
         For Each place In arr
-            cbCats.Items.Add("*" + place.ToString)
+            cbCats.Items.Add("*" & place.ToString)
         Next
         RedrawItems()
     End Sub

@@ -1,15 +1,29 @@
 ﻿Imports System.Windows.Forms
 
 Public Class SettingsDialog
-    Private storage As ISettingsStorage
-    Private Sub frmSettingsTest_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+    Implements ISettingsForm
 
-    End Sub
-    Public Sub ShowSettings(newStorage As ISettingsStorage)
+    Private storage As ISettingsStorage
+    Private Event SettingsFormClosed() Implements ISettingsForm.SettingsFormClosed
+
+    Public Sub ShowSettings(newStorage As ISettingsStorage) Implements ISettingsForm.ShowSettings
         storage = newStorage
         FillTree(storage)
-        Me.Text = "Настройки " + storage.CategoryName
+        Me.Text = "Настройки " & storage.CategoryName
     End Sub
+
+    Public Shadows Sub ShowDialog() Implements ISettingsForm.ShowDialog
+        MyBase.ShowDialog()
+    End Sub
+
+    Public Shadows Sub Show() Implements ISettingsForm.Show
+        MyBase.Show()
+    End Sub
+
+    Private Sub SettingsDialog_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
+        RaiseEvent SettingsFormClosed()
+    End Sub
+
     Private Sub FillTree(storage As ISettingsStorage)
         list.Nodes.Clear()
         Dim nodeList As New TreeNode
@@ -44,7 +58,7 @@ Public Class SettingsDialog
             If (val.Length > 30) Then
                 'val = val.Substring(0, 30)
             End If
-            newNode.Text = nameText + ": " + val
+            newNode.Text = nameText & ": " & val
 
             newNode.ToolTipText = childSetting.Description
             newNode.Tag = childSetting
@@ -56,14 +70,6 @@ Public Class SettingsDialog
         If list.SelectedNode.Tag IsNot Nothing Then
             settingView.AssignedSetting = DirectCast(list.SelectedNode.Tag, SettingOnStorage)
         End If
-    End Sub
-
-    Private Sub list_Click(sender As Object, e As System.EventArgs) Handles list.Click
-
-    End Sub
-
-    Private Sub settingView_Load(sender As System.Object, e As System.EventArgs) Handles settingView.Load
-
     End Sub
 
     Private Sub settingView_SettingValueChanged() Handles settingView.SettingValueChanged
@@ -78,7 +84,7 @@ Public Class SettingsDialog
                 If (val.Length > 30) Then
                     'val = val.Substring(0, 30)
                 End If
-                list.SelectedNode.Text = nameText + ": " + val + " [*]"
+                list.SelectedNode.Text = nameText & ": " & val & " [*]"
             End If
         End If
     End Sub

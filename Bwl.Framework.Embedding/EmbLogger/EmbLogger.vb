@@ -68,7 +68,7 @@ Friend Class EmbLogger
 
     Public Sub Add(type As LogEventType, text As String, ParamArray additional() As Object)
         Dim list As New List(Of Object)
-        list.Add("CallFrom: " + ExtractCallingMethodInfo())
+        list.Add("CallFrom: " & ExtractCallingMethodInfo())
         list.AddRange(additional)
         SyncLock (_writers)
             For Each writer In _writers
@@ -103,7 +103,7 @@ Friend Class EmbLogger
         If method Is Nothing Then
             Return ""
         Else
-            Return method.DeclaringType.ToString + ". " + method.Name
+            Return method.DeclaringType.ToString & ". " & method.Name
         End If
     End Function
 

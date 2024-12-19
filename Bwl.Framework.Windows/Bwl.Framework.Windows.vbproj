@@ -63,10 +63,10 @@
     <Compile Update="src\AutoUI\RemoteElements\BaseRemoteElementWin.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="src\AutoUI\RemoteElements\RemoteAutoBitmapWin.Designer.vb">
-      <DependentUpon>RemoteAutoBitmapWin.vb</DependentUpon>
+    <Compile Update="src\AutoUI\RemoteElements\RemoteAutoImageWin.Designer.vb">
+      <DependentUpon>RemoteAutoImageWin.vb</DependentUpon>
     </Compile>
-    <Compile Update="src\AutoUI\RemoteElements\RemoteAutoBitmapWin.vb">
+    <Compile Update="src\AutoUI\RemoteElements\RemoteAutoImageWin.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="src\AutoUI\RemoteElements\RemoteAutoButtonWin.Designer.vb">

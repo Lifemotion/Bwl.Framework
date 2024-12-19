@@ -145,8 +145,8 @@ Public Class SimpleFileLogWriter
         If _modePlace = PlaceLoggingMode.allInOneFile Then result += _filename
         If _modePlace = PlaceLoggingMode.onePlaceAndLowerInOneFile Then result += _filename
         If _modePlace = PlaceLoggingMode.onePlaceInOneFile Then result += _filename
-        If _modePlace = PlaceLoggingMode.eachPlaceInSelfFile Then result += PathToString(message.path) + ".txt"
-        If _modePlace = PlaceLoggingMode.eachPlaceInSelfFileAndHigher Then result += PathToString(message.path) + ".txt"
+        If _modePlace = PlaceLoggingMode.eachPlaceInSelfFile Then result += PathToString(message.path) & ".txt"
+        If _modePlace = PlaceLoggingMode.eachPlaceInSelfFileAndHigher Then result += PathToString(message.path) & ".txt"
         Return _folder + IO.Path.DirectorySeparatorChar + result
     End Function
 
@@ -175,7 +175,7 @@ Public Class SimpleFileLogWriter
                        Dim path = IO.Path.GetDirectoryName(fName)
                        Dim name = IO.Path.GetFileNameWithoutExtension(fName)
                        Dim ext = IO.Path.GetExtension(fName)
-                       Dim files = IO.Directory.GetFiles(path, name + "*.txt")
+                       Dim files = IO.Directory.GetFiles(path, name & "*.txt")
                        Dim filesTimes = New List(Of KeyValuePair(Of DateTime, String))
                        For Each f In files
                            Try
@@ -252,13 +252,13 @@ Public Class SimpleFileLogWriter
     Private Function GetMessageText(message As ListItem) As String
         Dim result As String = ""
         With message
-            result += .dateTime.ToShortDateString + " "
-            result += .dateTime.ToLongTimeString + " "
+            result += .dateTime.ToShortDateString & " "
+            result += .dateTime.ToLongTimeString & " "
             result += PathToString(.path).ToUpper
-            result += " [" + GetCategoryName(.type) + "] "
+            result += " [" & GetCategoryName(.type) & "] "
             result += .message
             If WriteAdditionalInfo AndAlso Not String.IsNullOrEmpty(.additional) Then
-                result += vbCrLf + "#" + .additional
+                result += vbCrLf & "#" & .additional
             End If
         End With
         Return result

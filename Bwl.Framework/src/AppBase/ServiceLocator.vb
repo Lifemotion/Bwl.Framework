@@ -47,7 +47,7 @@
 				Try
 					CType(s, IDisposable).Dispose()
 				Catch ex As Exception
-                    _logger.AddError("Dispose " + ex.ToString)
+                    _logger.AddError("Dispose " & ex.ToString)
                 End Try
             End If
 		Next

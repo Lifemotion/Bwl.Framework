@@ -35,7 +35,7 @@ Module Main
     Private WithEvents _button3 As New AutoButton(_appBase.AutoUI, "button3")
     Private WithEvents _button4 As New AutoButton(_appBase.AutoUI, "button4")
     Private WithEvents _button5 As New AutoButton(_appBase.AutoUI, "TestFileSettingButton")
-    Private WithEvents _image As New AutoBitmapWin(_appBase.AutoUI, "image")
+    Private WithEvents _image As New AutoImage(_appBase.AutoUI, "image")
     Private WithEvents _textbox1 As New AutoTextbox(_appBase.AutoUI, "textbox1")
     Private WithEvents _textbox2 As New AutoTextbox(_appBase.AutoUI, "textbox2")
     Private WithEvents _listbox1 As New AutoListbox(_appBase.AutoUI, "listbox1")
@@ -44,6 +44,8 @@ Module Main
     Private ReadOnly _childLogger As Logger = _appBase.RootLogger.CreateChildLogger("Child")
     Private ReadOnly _test1 As New TestClass
     Dim asm As AutoSettings
+
+    Private _jpegSave As New JpegSaver()
 
     Public Sub Main()
         asm = New AutoSettings(_appBase.RootStorage, _test1,, True)
@@ -69,7 +71,7 @@ Module Main
         Using g = Graphics.FromImage(bitmap)
             g.Clear(Color.Red)
         End Using
-        _image.Image = bitmap
+        _image.ImageBytes = _jpegSave.SaveToBytes(bitmap)
         _test1.Fire()
         MsgBox(_test1.Setting1)
     End Sub
@@ -79,7 +81,7 @@ Module Main
         Using g = Graphics.FromImage(bitmap)
             g.Clear(Color.Blue)
         End Using
-        _image.Image = bitmap
+        _image.ImageBytes = _jpegSave.SaveToBytes(bitmap)
         _listbox1.AutoHeight = True
         _test1.Setting1 = "cat"
     End Sub

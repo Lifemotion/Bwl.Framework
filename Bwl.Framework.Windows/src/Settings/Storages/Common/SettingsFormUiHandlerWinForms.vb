@@ -1,9 +1,9 @@
 ﻿Public Class SettingsFormUiHandlerWinForms
     Implements ISettingsFormUiHandler
 
-    Private WithEvents _settingsForm As SettingsDialog
+    Private WithEvents _settingsForm As ISettingsForm
 
-    Public ReadOnly Property SettingsForm As Object Implements ISettingsFormUiHandler.SettingsForm
+    Public ReadOnly Property SettingsForm As ISettingsForm Implements ISettingsFormUiHandler.SettingsForm
         Get
             Return _settingsForm
         End Get
@@ -11,7 +11,7 @@
 
     Public Event SettingsFormClosed As ISettingsFormUiHandler.SettingsFormClosedEventHandler Implements ISettingsFormUiHandler.SettingsFormClosed
 
-    Public Function CreateSettingsForm(settingsStorage As SettingsStorageBase, invokeForm As Object) As Object Implements ISettingsFormUiHandler.CreateSettingsForm
+    Public Function CreateSettingsForm(settingsStorage As SettingsStorageBase, invokeForm As Object) As ISettingsForm Implements ISettingsFormUiHandler.CreateSettingsForm
         Return CreateSettingsForm(settingsStorage, CType(invokeForm, Form))
     End Function
 
@@ -25,7 +25,7 @@
         End If
     End Function
 
-    Public Function ShowSettingsForm(settingsStorage As SettingsStorageBase, invokeForm As Object) As Object Implements ISettingsFormUiHandler.ShowSettingsForm
+    Public Function ShowSettingsForm(settingsStorage As SettingsStorageBase, invokeForm As Object) As ISettingsForm Implements ISettingsFormUiHandler.ShowSettingsForm
         Return ShowSettingsForm(settingsStorage, CType(invokeForm, Form))
     End Function
 
@@ -40,7 +40,7 @@
         End If
     End Function
 
-    Private Sub RaiseSettingsFormClosed() Handles _settingsForm.FormClosed
+    Private Sub RaiseSettingsFormClosed() Handles _settingsForm.SettingsFormClosed
         RaiseEvent SettingsFormClosed()
     End Sub
 

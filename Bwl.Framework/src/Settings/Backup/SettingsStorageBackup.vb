@@ -32,7 +32,7 @@ Public Class SettingsStorageBackup
         _settingsPath = settingsFolder
         _rootPath = Path.GetDirectoryName(settingsFolder)
         _backupName = Path.GetFileName(Path.GetDirectoryName(_rootPath))
-        _backupFolderName = Path.GetFileName(settingsFolder) + "-backup"
+        _backupFolderName = Path.GetFileName(settingsFolder) & "-backup"
         _settingsBackupPath = Path.Combine(_rootPath, _backupFolderName)
         _settingsStorage = settings
         _backupDepthInDays = New DoubleSetting(_settingsStorage, "BackupDepthInDays", 30, "Глубина хранения бэкапа", "В днях")

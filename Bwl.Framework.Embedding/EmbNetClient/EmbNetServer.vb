@@ -112,12 +112,12 @@ Friend Class EmbNetServer
             tcpListener.ExclusiveAddressUse = True
             tcpListener.Start()
             tcpListener.BeginAcceptSocket(AddressOf AcceptSocket, Nothing)
-            ' log.Add("Сервер запущен на порту " + incomingPort.ToString)
+            ' log.Add("Сервер запущен на порту " & incomingPort.ToString)
             working = True
         Catch ex As Exception
             tcpListener = Nothing
             working = False
-            '  log.Add("Не удалось запустить слушатель на порту " + incomingPort.ToString)
+            '  log.Add("Не удалось запустить слушатель на порту " & incomingPort.ToString)
             If Not noException Then Throw New Exception("Не удалось запустить слушатель на указанном порту.", ex)
         End Try
         Return working
@@ -182,7 +182,7 @@ Friend Class EmbNetServer
             Try
                 newSocket.BeginReceive(newClient.receiveBuffer, 0, bufferStepSize, 0, AddressOf SocketReceived, newClient)
             Catch ex As Exception
-                '  log.Add("Не удалось началь подключение с клиентом." + ex.ToString)
+                '  log.Add("Не удалось началь подключение с клиентом." & ex.ToString)
                 newClient.userInfo.Disconnect()
             End Try
         End If
@@ -327,7 +327,7 @@ Friend Class EmbNetServer
                         client.tcpSocket.Send(bytes)
                         client.pingsLost += 1
                     Catch ex As Exception
-                        '   log.Add("Не удалось отправить пинг. " + ex.ToString)
+                        '   log.Add("Не удалось отправить пинг. " & ex.ToString)
                         client.userInfo.Disconnect()
                     End Try
                 End If
@@ -344,7 +344,7 @@ Friend Class EmbNetServer
             client.tcpSocket.Send(bytes, SocketFlags.Partial)
             RaiseEvent SentMessage(message, client.userInfo)
         Catch ex As Exception
-            '  log.Add("Не удалось отправить сообщение в порт!" + ex.ToString)
+            '  log.Add("Не удалось отправить сообщение в порт!" & ex.ToString)
         End Try
     End Sub
     ''' <summary>

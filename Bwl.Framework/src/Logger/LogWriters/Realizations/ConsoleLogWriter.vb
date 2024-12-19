@@ -27,7 +27,7 @@
                 System.Console.ForegroundColor = ConsoleColor.Green
         End Select
         If LogEnabled Then
-            System.Console.WriteLine("[{0}] {1}", datetime.ToLongTimeString, text + " ")
+            System.Console.WriteLine("[{0}] {1}", datetime.ToLongTimeString, text & " ")
             If WriteExtended Then
                 For Each param In params
                     System.Console.Write(param.ToString())

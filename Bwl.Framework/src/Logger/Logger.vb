@@ -103,7 +103,7 @@ Public Class Logger
             Case "debug", "deb", "dbg"
                 AddDebug(message.ToString)
             Case Else
-                AddInformation("(Log Type Not recognized) " + message.ToString)
+                AddInformation("(Log Type Not recognized) " & message.ToString)
         End Select
     End Sub
 
@@ -142,7 +142,7 @@ Public Class Logger
         End If
 
         Dim list As New List(Of Object)
-        list.Add("CallFrom: " + ExtractCallingMethodInfo())
+        list.Add("CallFrom: " & ExtractCallingMethodInfo())
         list.AddRange(additional)
 
         SyncLock (_writers)
@@ -177,7 +177,7 @@ Public Class Logger
         If method Is Nothing Then
             Return ""
         Else
-            Return "ClassName=" + method.DeclaringType.Name + ", FullName=" + method.DeclaringType.ToString + ", Method=" + method.Name
+            Return "ClassName=" & method.DeclaringType.Name & ", FullName=" & method.DeclaringType.ToString & ", Method=" & method.Name
         End If
     End Function
 

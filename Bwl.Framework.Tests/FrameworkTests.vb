@@ -45,13 +45,13 @@ Public Class FrameworkTests
     Private Sub FindSettingsUpToRoot(root As SettingsStorage, treePath As String, n As Integer)
         For i = 0 To n - 1
             Dim settPath = i.ToString()
-            If Not String.IsNullOrEmpty(treePath) Then settPath = treePath + "." + settPath
+            If Not String.IsNullOrEmpty(treePath) Then settPath = treePath & "." & settPath
             If root.FindSetting(settPath) Is Nothing Then
                 Throw New Exception($"{settPath} not found")
             End If
             If root.Parent IsNot Nothing Then
                 'Поиск этих же настроек от родителя
-                FindSettingsUpToRoot(root.Parent, If(treePath <> String.Empty, root.Parent.Name + "." + treePath, root.Parent.Name), n)
+                FindSettingsUpToRoot(root.Parent, If(treePath <> String.Empty, root.Parent.Name & "." & treePath, root.Parent.Name), n)
                 If root.Parent.Parent Is Nothing Then 'Если родитель - корень дерева настроек...
                     FindSettingsUpToRoot(root.Parent, treePath, n) '...пробуем постучаться от него без префикса
                 End If
@@ -400,7 +400,7 @@ Public Class FrameworkTests
 
         ' Damage Test
         Dim notDamagedData = File.ReadAllText(iniFileName)
-        Dim fullFileNameSet = {iniFileName, iniFileName + ".bak", iniFileName + ".old.bak", String.Empty}
+        Dim fullFileNameSet = {iniFileName, iniFileName & ".bak", iniFileName & ".old.bak", String.Empty}
         For Each mode In {"Damage", "Delete"}
             For Each usedFile In fullFileNameSet
                 ' The list of damaged files
@@ -414,7 +414,7 @@ Public Class FrameworkTests
                 ' If mode = "Damage" - writing damaged data, if not - not write at all ("Delete" mode)
                 If mode = "Damage" Then
                     For Each damageFileName In damagedFileNameSet.Where(Function(item) item <> String.Empty)
-                        File.WriteAllText(damageFileName, "<" + notDamagedData + ">")
+                        File.WriteAllText(damageFileName, "<" & notDamagedData & ">")
                     Next
                 End If
 
@@ -466,8 +466,8 @@ Public Class FrameworkTests
 
     Private Sub RemoveIniFiles(fileName As String)
         If File.Exists(fileName) Then File.Delete(fileName)
-        If File.Exists(fileName + ".bak") Then File.Delete(fileName + ".bak")
-        If File.Exists(fileName + ".old.bak") Then File.Delete(fileName + ".old.bak")
+        If File.Exists(fileName & ".bak") Then File.Delete(fileName & ".bak")
+        If File.Exists(fileName & ".old.bak") Then File.Delete(fileName & ".old.bak")
     End Sub
 
     <Test> <Parallelizable(ParallelScope.Self)>
