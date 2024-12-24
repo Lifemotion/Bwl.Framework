@@ -8,6 +8,8 @@
 		<MyType>WindowsFormsWithCustomSubMain</MyType>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<UseWindowsForms>true</UseWindowsForms>
+		<ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+		<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
 		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	</PropertyGroup>

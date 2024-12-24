@@ -64,7 +64,7 @@ Partial Class EmbFormLogInfo
 		'FormLogInfo
 		'
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.inherit
 		Me.ClientSize = New System.Drawing.Size(520, 266)
 		Me.Controls.Add(Me._rtb_LogInfo)
 		Me.Controls.Add(Me._btn_CopyText)

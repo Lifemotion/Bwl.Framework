@@ -93,7 +93,7 @@ Public Class SettingsDialog
 
     Private Sub settingView_setBiggerField(value As Boolean) Handles settingView.SetBiggerField
         If _bigFieldEnabled = value Then Return
-        Dim sizeChange = 60
+        Dim sizeChange = 65
         If value Then
             list.Height -= sizeChange
             settingView.Top -= sizeChange

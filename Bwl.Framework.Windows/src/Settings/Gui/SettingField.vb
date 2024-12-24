@@ -66,6 +66,7 @@ Public Class SettingField
                 cbValue.Show()
             ElseIf TypeOf setting Is PasswordSetting Then
                 Dim passSet = CType(setting, PasswordSetting)
+                RaiseEvent SetBiggerField(True)
                 tbValue.Text = passSet.Password
                 tbValue.PasswordChar = "*"c
                 tbValue.Show()
@@ -76,13 +77,14 @@ Public Class SettingField
                     tbKey_TextChanged(Nothing, Nothing)
                     settingReady = False
                 End If
-                'tbKey.PasswordChar = "*"c
                 tbKey.Show()
                 lKey.Show()
+                ' Adjust the height of the control to accommodate the password field
+                Me.Height = 150 ' Adjust this value as needed
             ElseIf TypeOf setting Is TextFileContentSetting Then
                 Dim settingValue = CType(setting, TextFileContentSetting)
                 RaiseEvent SetBiggerField(True)
-                tbValue.Height = 80 ' Default is 20
+                tbValue.Height = 85 ' Default is 20
                 tbValue.ScrollBars = ScrollBars.Both
                 tbValue.Multiline = True
                 tbValue.Lines = settingValue.Value
@@ -103,18 +105,22 @@ Public Class SettingField
         End If
         settingReady = True
     End Sub
+
     Public Overloads Sub Refresh() Handles setting.ParametersChanged, setting.ValueChanged
         If settingReady Then
             ShowFields()
             MyBase.Refresh()
         End If
     End Sub
+
     Private Sub SettingField_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
 
     End Sub
+
     Private Sub cbValue_SelectionChangeCommitted(sender As System.Object, e As System.EventArgs) Handles cbValue.SelectionChangeCommitted
 
     End Sub
+
     Public Property DesignText() As String
         Get
             Return _designText
@@ -228,3 +234,4 @@ Public Class SettingField
     End Sub
 
 End Class
+

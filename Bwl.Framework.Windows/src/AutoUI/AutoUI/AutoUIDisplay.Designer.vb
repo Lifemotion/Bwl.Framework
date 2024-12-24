@@ -40,7 +40,7 @@ Partial Class AutoUIDisplay
         'AutoUIDisplay
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.inherit
         Me.Controls.Add(Me.panel)
         Me.Name = "AutoUIDisplay"
         Me.Size = New System.Drawing.Size(332, 428)

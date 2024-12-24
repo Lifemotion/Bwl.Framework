@@ -21,46 +21,62 @@ Partial Class RemoteAutoListboxWin
     'Не изменяйте ее в редакторе исходного кода.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.ElementCaption = New System.Windows.Forms.Label()
+        Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 1
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.ElementCaption, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.ListBox1, 0, 1)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 2
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(220, 237)
+        Me.TableLayoutPanel1.TabIndex = 0
         '
         'ListBox1
         '
-        Me.ListBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(2, 20)
-        Me.ListBox1.Margin = New System.Windows.Forms.Padding(2)
+        Me.ListBox1.Location = New System.Drawing.Point(3, 23)
         Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(216, 212)
+        Me.ListBox1.Size = New System.Drawing.Size(214, 211)
         Me.ListBox1.TabIndex = 0
         '
         'ElementCaption
         '
         Me.ElementCaption.AutoSize = True
-        Me.ElementCaption.Location = New System.Drawing.Point(4, 3)
-        Me.ElementCaption.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.ElementCaption.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ElementCaption.Location = New System.Drawing.Point(3, 0)
         Me.ElementCaption.Name = "ElementCaption"
-        Me.ElementCaption.Size = New System.Drawing.Size(43, 13)
-        Me.ElementCaption.TabIndex = 2
+        Me.ElementCaption.Size = New System.Drawing.Size(214, 20)
+        Me.ElementCaption.TabIndex = 1
         Me.ElementCaption.Text = "Caption"
+        Me.ElementCaption.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'RemoteAutoListbox
+        'RemoteAutoListboxWin
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.Controls.Add(Me.ElementCaption)
-        Me.Controls.Add(Me.ListBox1)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.inherit
+        Me.Controls.Add(Me.TableLayoutPanel1)
         Me.MinimumSize = New System.Drawing.Size(0, 30)
-        Me.Name = "RemoteAutoListbox"
+        Me.Name = "RemoteAutoListboxWin"
         Me.Size = New System.Drawing.Size(220, 237)
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.TableLayoutPanel1.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
+    Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents ListBox1 As ListBox
     Friend WithEvents ElementCaption As Label
 End Class

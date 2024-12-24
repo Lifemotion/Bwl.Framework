@@ -11,6 +11,7 @@ Public Class DatagridLogWriter
         Public pathCombined As String
         Public className As String
     End Class
+
     Private newMessages As New List(Of ListItem)
     Private oldMessages As New List(Of ListItem)
     Private working As Boolean = True
@@ -18,6 +19,7 @@ Public Class DatagridLogWriter
     Sub New()
         InitializeComponent()
     End Sub
+
     Private Function GetTypeName(type As LogEventType) As String
         If type = LogEventType.information Then Return "ИНФ"
         If type = LogEventType.errors Then Return "ОШБ"

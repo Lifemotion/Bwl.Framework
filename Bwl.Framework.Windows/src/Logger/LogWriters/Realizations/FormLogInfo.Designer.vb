@@ -49,7 +49,7 @@ Partial Class FormLogInfo
         'FormLogInfo
         '
         resources.ApplyResources(Me, "$this")
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.inherit
         Me.Controls.Add(Me._rtb_LogInfo)
         Me.Controls.Add(Me._btn_CopyText)
         Me.Controls.Add(Me._btn_CloseForm)

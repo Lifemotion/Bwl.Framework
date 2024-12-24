@@ -214,7 +214,7 @@ Partial Class DatagridLogWriter
         'DatagridLogWriter
         '
         resources.ApplyResources(Me, "$this")
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.inherit
         Me.Controls.Add(Me.bRefreshNone)
         Me.Controls.Add(Me.bRefreshClasses)
         Me.Controls.Add(Me.bRefreshPlaces)

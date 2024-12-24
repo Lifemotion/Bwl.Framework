@@ -45,7 +45,7 @@ Partial Class EmbLoggerForm
 		'LoggerForm
 		'
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.inherit
 		Me.ClientSize = New System.Drawing.Size(574, 272)
 		Me.Controls.Add(Me._datagridLogWriter1)
 		Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

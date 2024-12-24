@@ -12,13 +12,14 @@ Public Class TestFormAppBase
     Private _strSetting As StringSetting = _child_1.CreateStringSetting("String", "Cat", "Строка", "Описание строки")
     Private _dblSetting As DoubleSetting = _child_2.CreateDoubleSetting("Double", 1.6, "Двойное", "Описание двойного")
     Private _varSetting As VariantSetting = _child_1_1.CreateVariantSetting("Variant", "Cat", {"Cat", "Dog"}, "Описание варианта")
-    Private _passSetting As PasswordSetting = _child_1_1.CreatePasswordSetting("Pass", "")
+    Private _passSetting As PasswordSetting = _child_1_1.CreatePasswordSetting("Pass", "", "Пароль")
+    Private _textFileSetting As TextFileContentSetting = AppBase.RootStorage.CreateTextFileContentSeting("TextFile",, "TextFile.txt",,,,, "Текстовый файл", "Описание текстового файла")
 
     Private _mailSender As MailSender
     Private _backUper = New SettingsStorageBackup(AppBase.SettingsFolder, _logger, AppBase.RootStorage.CreateChildStorage("BackupSettings", "Резервное копирование настроек"))
 
     Public Sub New()
-        MyBase.New(False, "%TEMP\TestApp")
+        MyBase.New(False, "%TEMP%\TestApp")
         InitializeComponent()
     End Sub
 

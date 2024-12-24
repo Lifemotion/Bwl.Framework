@@ -66,7 +66,7 @@ Partial Class SettingsDialog
         'SettingsDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.inherit
         Me.ClientSize = New System.Drawing.Size(577, 409)
         Me.Controls.Add(Me.settingView)
         Me.Controls.Add(Me.list)

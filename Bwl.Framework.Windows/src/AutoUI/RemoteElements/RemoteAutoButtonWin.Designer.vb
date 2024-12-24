@@ -39,7 +39,7 @@ Partial Class RemoteAutoButtonWin
         'RemoteAutoButton
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.inherit
         Me.Controls.Add(Me.bButton)
         Me.MinimumSize = New System.Drawing.Size(0, 30)
         Me.Name = "RemoteAutoButton"

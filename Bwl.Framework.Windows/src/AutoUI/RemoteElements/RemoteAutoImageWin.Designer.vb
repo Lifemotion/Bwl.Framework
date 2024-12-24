@@ -21,20 +21,35 @@ Partial Class RemoteAutoImageWin
     'Не изменяйте ее в редакторе исходного кода.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.ElementCaption = New System.Windows.Forms.Label()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 1
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.ElementCaption, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.PictureBox1, 0, 1)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 2
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(220, 237)
+        Me.TableLayoutPanel1.TabIndex = 0
         '
         'PictureBox1
         '
-        Me.PictureBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PictureBox1.Location = New System.Drawing.Point(3, 23)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(214, 212)
+        Me.PictureBox1.Size = New System.Drawing.Size(214, 211)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
@@ -42,28 +57,30 @@ Partial Class RemoteAutoImageWin
         'ElementCaption
         '
         Me.ElementCaption.AutoSize = True
-        Me.ElementCaption.Location = New System.Drawing.Point(2, 5)
-        Me.ElementCaption.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.ElementCaption.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ElementCaption.Location = New System.Drawing.Point(3, 0)
         Me.ElementCaption.Name = "ElementCaption"
-        Me.ElementCaption.Size = New System.Drawing.Size(43, 13)
+        Me.ElementCaption.Size = New System.Drawing.Size(214, 20)
         Me.ElementCaption.TabIndex = 1
         Me.ElementCaption.Text = "Caption"
+        Me.ElementCaption.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'RemoteAutoImage
+        'RemoteAutoImageWin
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.Controls.Add(Me.ElementCaption)
-        Me.Controls.Add(Me.PictureBox1)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.inherit
+        Me.Controls.Add(Me.TableLayoutPanel1)
         Me.MinimumSize = New System.Drawing.Size(0, 30)
-        Me.Name = "RemoteAutoImage"
+        Me.Name = "RemoteAutoImageWin"
         Me.Size = New System.Drawing.Size(220, 237)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.TableLayoutPanel1.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
+    Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents ElementCaption As Label
 End Class

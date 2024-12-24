@@ -71,7 +71,7 @@ Partial Class TestFormAppBase
         'TestApp
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.inherit
         Me.ClientSize = New System.Drawing.Size(874, 566)
         Me.Controls.Add(Me.ShowSettingsFormButton)
         Me.Controls.Add(Me._btnShowLogForm)
