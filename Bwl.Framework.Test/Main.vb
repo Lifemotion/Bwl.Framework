@@ -54,7 +54,7 @@ Module Main
         _appBase.RootLogger.CollectLogs(_test1)
 
         Dim fileContent1 = New String() {"This is the content for the test file", "This content is just for testing purposes", ""}
-        Dim testTextSetting = _appBase.RootStorage.CreateTextFileContentSeting("TextFile1", fileContent1,, "cfg")
+        Dim testTextSetting = _appBase.RootStorage.CreateTextFileContentSetting("TextFile1", fileContent1,, "cfg")
 
         Dim appForm = AutoUIForm.Create(_appBase)
 
@@ -96,7 +96,7 @@ Module Main
         _listbox1.Items.Clear()
         _appBase.RootLogger.AddMessage("12434")
         _childLogger.AddMessage("88888")
-        _listbox1.Info.BackColor = Color.Red
+        _listbox1.Info.BackColor = New UIElementInfo.UIElementInfoColor(Color.Red.R, Color.Red.G, Color.Red.B, Color.Red.A)
         _listbox1.Info.Caption += "ff"
 
         _listbox1.Info.Height = 100
@@ -115,7 +115,7 @@ Module Main
         Try
 
             ' Test 1 - create file with no content
-            testSetting1 = tempSettingsStorage.CreateTextFileContentSeting("TextFileSetting1")
+            testSetting1 = tempSettingsStorage.CreateTextFileContentSetting("TextFileSetting1")
             _appBase.RootStorage.SaveSettings()
             testSetting1.ValueAsString = testSetting1.DefaultValueAsString
             _appBase.RootStorage.SaveSettings()
@@ -127,12 +127,12 @@ Module Main
             ' Test 2 - checking that name of the file is not changed
             Dim filename1 = testSetting1.FileName
             tempSettingsStorage.RemoveSetting(testSetting1.Name)
-            testSetting1 = tempSettingsStorage.CreateTextFileContentSeting("TextFileSetting1")
+            testSetting1 = tempSettingsStorage.CreateTextFileContentSetting("TextFileSetting1")
             _appBase.RootStorage.SaveSettings()
             logger.AddMessage($"TestFileSetting1 filename was NOT changed as setting was recreated = {testSetting1.FileName = filename1}")
 
             ' Test 2 - create file with content
-            testSetting2 = tempSettingsStorage.CreateTextFileContentSeting("TextFileSetting2", fileContent1, "newFile1.cfg", "cfg")
+            testSetting2 = tempSettingsStorage.CreateTextFileContentSetting("TextFileSetting2", fileContent1, "newFile1.cfg", "cfg")
             _appBase.RootStorage.SaveSettings()
             testSetting2.ValueAsString = testSetting2.DefaultValueAsString
             _appBase.RootStorage.SaveSettings()
@@ -153,7 +153,7 @@ Module Main
             ' Test 5 - recreated setting still has new file name
             Dim filename2 = testSetting2.FileName
             tempSettingsStorage.RemoveSetting(testSetting2.Name)
-            testSetting2 = tempSettingsStorage.CreateTextFileContentSeting("TextFileSetting2",,,,,, False)
+            testSetting2 = tempSettingsStorage.CreateTextFileContentSetting("TextFileSetting2",,,,,, False)
             _appBase.RootStorage.SaveSettings()
             logger.AddMessage($"TestFileSetting2 filename was NOT changed as setting was recreated = {testSetting2.FileName = filename2}")
             logger.AddMessage($"TestFileSetting2 content was NOT changed as setting was recreated = {testSetting2.Value.SequenceEqual(fileContent2)}")

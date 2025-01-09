@@ -1,5 +1,5 @@
 ﻿Public Class AutoUIForm
-    Inherits FormBaseWin
+    Inherits FormBase
     Protected _ui As IAutoUI
     Protected _lastUiAlive As DateTime = Now
 

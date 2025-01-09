@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
 		<OutputType>WinExe</OutputType>
-		<StartupObject>Sub Main</StartupObject>
+		<StartupObject>Bwl.Framework.Test.WinForms.TestFormAppBase</StartupObject>
 		<RootNamespace>Bwl.Framework.Test.WinForms</RootNamespace>
 		<AssemblyName>Bwl.Framework.Test.WinForms</AssemblyName>
 		<MyType>WindowsFormsWithCustomSubMain</MyType>

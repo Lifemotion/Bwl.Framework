@@ -69,8 +69,8 @@ Public Class AutoUI
         End SyncLock
     End Function
 
-    Private Sub RaiseRequestToSend(source As IUIElement, dataname As String, data As Byte())
-        RaiseEvent RequestToSend(source.Info.ID, dataname, data)
+    Private Sub RaiseRequestToSend(sender As Object, e As (source As IUIElement, dataname As String, data As Byte()))
+        RaiseEvent RequestToSend(e.source.Info.ID, e.dataname, e.data)
     End Sub
 
     Private Sub RaiseRequestToSendInfoChanged(elem As UIElementInfo)

@@ -5,7 +5,7 @@
 ''' </summary>
 Public Interface ISettingsFormUiHandler
 
-    Event SettingsFormClosed()
+    Event SettingsFormClosed As EventHandler
     ReadOnly Property SettingsForm As ISettingsForm
     Function CreateSettingsForm(settingsStorage As SettingsStorageBase, invokeForm As Object) As ISettingsForm
     Function ShowSettingsForm(settingsStorage As SettingsStorageBase, invokeForm As Object) As ISettingsForm

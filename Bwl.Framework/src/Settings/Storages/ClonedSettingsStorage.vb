@@ -1,4 +1,6 @@
-﻿Public Class ClonedSettingsStorage
+﻿Imports System.IO
+
+Public Class ClonedSettingsStorage
     Inherits SettingsStorageBase
 
     Public Sub New()
@@ -26,10 +28,8 @@
                 Case GetType(StringSetting).ToString
                     childSetting = New StringSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString, setting.UserGroups, setting.IsReadOnly)
                 Case GetType(TextFileContentSetting).ToString
-                    Dim origSetting = CType(setting, TextFileContentSetting)
-                    childSetting = New TextFileContentSetting(Me, setting.Name, Nothing, origSetting.FileName, origSetting.DirectoryPath, origSetting.FileExtension, origSetting.FileEncoding,
-                                                              origSetting.OverwriteExistingFileOnFilePathChange, setting.FriendlyName, setting.Description, setting.UserGroups,
-                                                              setting.IsReadOnly) With {.FileName = origSetting.FileName}
+                    Dim txtFile = New FileInfo(setting.ValueAsString)
+                    childSetting = New TextFileContentSetting(Me, setting.Name,, txtFile.Name, txtFile.DirectoryName, txtFile.Extension.Substring(1),,, setting.FriendlyName, setting.Description, setting.UserGroups, setting.IsReadOnly) With {.FileName = setting.ValueAsString}
                 Case GetType(DoubleSetting).ToString
                     childSetting = New DoubleSetting(Me, setting.Name, setting.DefaultValueAsString, setting.FriendlyName, setting.Description, setting.ValueAsString, setting.UserGroups, setting.IsReadOnly)
                 Case GetType(VariantSetting).ToString

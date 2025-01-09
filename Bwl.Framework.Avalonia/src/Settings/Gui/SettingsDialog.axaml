@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Bwl.Framework.Avalonia"
+             x:Class="Bwl.Framework.Avalonia.SettingsDialog"
+			 Width="600"
+			 Height="480">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<TreeView Name="list"
+				  Grid.Row="0"
+				  BorderBrush="Gray"
+				  BorderThickness="1"/>
+
+		<GridSplitter Grid.Row="1"
+					  Height="1"
+					  HorizontalAlignment="Stretch"
+					  Background="Gray"/>
+		
+		<local:SettingField Name="settingView"
+							Grid.Row="2"
+							Margin="0,5,0,0"/>
+	</Grid>
+</Window>

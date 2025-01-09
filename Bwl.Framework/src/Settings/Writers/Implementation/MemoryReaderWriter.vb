@@ -31,7 +31,7 @@
     End Sub
 
     Public Sub New(textString As String)
-        Dim lines = textString.Split({vbCrLf}, StringSplitOptions.None)
+        Dim lines = textString.Split({Environment.NewLine}, StringSplitOptions.None)
         For Each line In lines
             Dim parts = line.Split(";"c)
             For i = 0 To parts.Length - 1

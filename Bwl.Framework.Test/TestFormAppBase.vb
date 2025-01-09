@@ -2,7 +2,7 @@
 Imports Bwl.Framework.Windows
 
 Public Class TestFormAppBase
-    Inherits AppBaseWinForms
+    Inherits FormAppBase
 
     Private _intSetting As IntegerSetting = AppBase.RootStorage.CreateIntegerSetting("Integer", 1, "Целое", "Описание целого")
     Private _boolSetting As BooleanSetting = AppBase.RootStorage.CreateBooleanSetting("Boolean", True, "Булево", "Описание булевого")
@@ -13,13 +13,13 @@ Public Class TestFormAppBase
     Private _dblSetting As DoubleSetting = _child_2.CreateDoubleSetting("Double", 1.6, "Двойное", "Описание двойного")
     Private _varSetting As VariantSetting = _child_1_1.CreateVariantSetting("Variant", "Cat", {"Cat", "Dog"}, "Описание варианта")
     Private _passSetting As PasswordSetting = _child_1_1.CreatePasswordSetting("Pass", "", "Пароль")
-    Private _textFileSetting As TextFileContentSetting = AppBase.RootStorage.CreateTextFileContentSeting("TextFile",, "TextFile.txt",,,,, "Текстовый файл", "Описание текстового файла")
+    Private _textFileSetting As TextFileContentSetting = AppBase.RootStorage.CreateTextFileContentSetting("TextFile",, "TextFile.txt",,,,, "Текстовый файл", "Описание текстового файла")
 
     Private _mailSender As MailSender
     Private _backUper = New SettingsStorageBackup(AppBase.SettingsFolder, _logger, AppBase.RootStorage.CreateChildStorage("BackupSettings", "Резервное копирование настроек"))
 
     Public Sub New()
-        MyBase.New(False, "%TEMP%\TestApp")
+        MyBase.New(False, Path.Combine(Path.GetTempPath(), "TestApp"))
         InitializeComponent()
     End Sub
 
@@ -43,9 +43,9 @@ Public Class TestFormAppBase
     End Sub
 
     Private Sub ClonedSettingsStorageButton_Click(sender As Object, e As EventArgs) Handles ClonedSettingsStorageButton.Click
-        Dim mrw As New MemoryReaderWriter
+        Dim mrw As New MemoryReaderWriter()
         AppBase.RootStorage.SaveSettings(mrw, False)
-        Dim b = mrw.MakeString
+        Dim b = mrw.MakeString()
         Dim storage2 = New ClonedSettingsStorage(New MemoryReaderWriter(b))
         storage2.SetSettingsFormUiHandler(AppBase.RootStorage.SettingsFormUiHandler) ' Without this line, the settings form will not be displayed
         storage2.ShowSettingsForm(Me)

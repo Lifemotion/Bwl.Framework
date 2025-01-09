@@ -117,7 +117,7 @@ Public Class MailSender
         If res Then
             _logger.AddMessage("Тестовое письмо успешно отправлено")
         Else
-            _logger.AddError("Ошибка отправки тестового письма:" & vbCrLf + err)
+            _logger.AddError("Ошибка отправки тестового письма:" & Environment.NewLine + err)
         End If
     End Sub
 

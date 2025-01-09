@@ -9,7 +9,7 @@
         End Get
     End Property
 
-    Public Event SettingsFormClosed As ISettingsFormUiHandler.SettingsFormClosedEventHandler Implements ISettingsFormUiHandler.SettingsFormClosed
+    Public Event SettingsFormClosed As EventHandler Implements ISettingsFormUiHandler.SettingsFormClosed
 
     Public Function CreateSettingsForm(settingsStorage As SettingsStorageBase, invokeForm As Object) As ISettingsForm Implements ISettingsFormUiHandler.CreateSettingsForm
         Return CreateSettingsForm(settingsStorage, CType(invokeForm, Form))
@@ -35,13 +35,13 @@
         Else
             _settingsForm = New SettingsDialog
             _settingsForm.ShowSettings(settingsStorage)
-            _settingsForm.Show()
+            _settingsForm.ShowForm()
             Return _settingsForm
         End If
     End Function
 
     Private Sub RaiseSettingsFormClosed() Handles _settingsForm.SettingsFormClosed
-        RaiseEvent SettingsFormClosed()
+        RaiseEvent SettingsFormClosed(Me, EventArgs.Empty)
     End Sub
 
 End Class

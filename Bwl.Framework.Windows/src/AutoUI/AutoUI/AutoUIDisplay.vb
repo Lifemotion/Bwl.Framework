@@ -48,7 +48,7 @@ Public Class AutoUIDisplay
             End If
 
             For i = 0 To panel.Controls.Count - 1
-                Dim ctl = DirectCast(panel.Controls.Item(i), BaseRemoteElementWin)
+                Dim ctl = DirectCast(panel.Controls.Item(i), BaseRemoteElement)
                 If ctl.Info.ID.ToLower = id.ToLower Then
                     If dataname = "base-info-change" Then
                         ctl.Info.SetFromBytes(data)
@@ -68,29 +68,29 @@ Public Class AutoUIDisplay
             RemoveControls()
             For Each infoBytes In infos
                 Dim info = UIElementInfo.CreateFromBytes(infoBytes)
-                Dim ctl As BaseRemoteElementWin = Nothing
+                Dim ctl As BaseRemoteElement = Nothing
                 Select Case info.Type
                     Case GetType(AutoImage).Name
-                        ctl = New RemoteAutoImageWin(info)
+                        ctl = New RemoteAutoImage(info)
                     Case GetType(AutoButton).Name
-                        ctl = New RemoteAutoButtonWin(info)
+                        ctl = New RemoteAutoButton(info)
                     Case GetType(AutoTextbox).Name
-                        ctl = New RemoteAutoTextboxWin(info)
+                        ctl = New RemoteAutoTextbox(info)
                     Case GetType(AutoListbox).Name
-                        ctl = New RemoteAutoListboxWin(info)
+                        ctl = New RemoteAutoListbox(info)
                     Case GetType(AutoFormDescriptor).Name
                         _AutoFormDescriptor = New RemoteAutoFormDescriptor(info)
                         AddHandler _AutoFormDescriptor.Updated, Sub()
                                                                     RaiseEvent AutoFormDescriptorUpdated(Me)
                                                                 End Sub
-                        AddHandler _AutoFormDescriptor.RequestToSend, Sub(source As IUIElement, dataname As String, data As Byte())
-                                                                          _ui.ProcessData(source.Info.ID, dataname, data)
+                        AddHandler _AutoFormDescriptor.RequestToSend, Sub(sender As Object, e As (source As IUIElement, dataname As String, data As Byte()))
+                                                                          _ui.ProcessData(e.source.Info.ID, e.dataname, e.data)
                                                                       End Sub
                         _AutoFormDescriptor.Update()
                 End Select
                 If ctl IsNot Nothing Then
-                    AddHandler ctl.RequestToSend, Sub(source As IUIElement, dataname As String, data As Byte())
-                                                      _ui.ProcessData(source.Info.ID, dataname, data)
+                    AddHandler ctl.RequestToSend, Sub(sender As Object, e As (source As IUIElement, dataname As String, data As Byte()))
+                                                      _ui.ProcessData(e.source.Info.ID, e.dataname, e.data)
                                                   End Sub
                     Me.Invoke(Sub() panel.Controls.Add(ctl))
                 End If

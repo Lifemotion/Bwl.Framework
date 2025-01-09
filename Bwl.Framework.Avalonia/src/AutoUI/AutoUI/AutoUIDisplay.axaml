@@ -1,0 +1,12 @@
+<!-- AutoUIDisplay.axaml -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Bwl.Framework.Avalonia;assembly=Bwl.Framework.Avalonia"
+             x:Class="Bwl.Framework.Avalonia.AutoUIDisplay">
+	<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+		<WrapPanel
+			x:Name="panel"
+			Orientation="Vertical" />
+	</ScrollViewer>
+
+</UserControl>

@@ -1,7 +1,7 @@
 ﻿Public Class RemoteAutoFormDescriptor
     Inherits BaseRemoteClass
 
-    Public Event Updated(sender As RemoteAutoFormDescriptor)
+    Public Event Updated As EventHandler(Of RemoteAutoFormDescriptor)
     Public ReadOnly Property Text As String
     Public ReadOnly Property ApplicationDescription As String
     Public ReadOnly Property ShowLogger As Boolean
@@ -26,7 +26,7 @@
             _LoggerVertical = (parts(5).ToLower = "true")
             _LoggerExtended = (parts(6).ToLower = "true")
             _LoggerSize = Integer.Parse(parts(7))
-            RaiseEvent Updated(Me)
+            RaiseEvent Updated(Me, Me)
         End If
     End Sub
 

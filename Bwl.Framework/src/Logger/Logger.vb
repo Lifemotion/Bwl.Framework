@@ -177,7 +177,13 @@ Public Class Logger
         If method Is Nothing Then
             Return ""
         Else
-            Return "ClassName=" & method.DeclaringType.Name & ", FullName=" & method.DeclaringType.ToString & ", Method=" & method.Name
+            Dim typeName = ""
+            Dim typeNameFull = ""
+            If method.DeclaringType IsNot Nothing Then
+                typeName = method.DeclaringType.Name
+                typeNameFull = method.DeclaringType.ToString
+            End If
+            Return "ClassName=" & typeName & ", FullName=" & typeNameFull & ", Method=" & method.Name
         End If
     End Function
 

@@ -1,8 +1,8 @@
 ﻿Public Interface ISettingsForm
 
-    Event SettingsFormClosed()
+    Event SettingsFormClosed As EventHandler
     Sub ShowSettings(settingsStorage As ISettingsStorage)
-    Sub ShowDialog()
-    Sub Show()
+    Sub ShowDialogForm(invokeForm As Object)
+    Sub ShowForm()
 
 End Interface

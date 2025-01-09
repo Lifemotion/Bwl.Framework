@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Bwl.Framework.Avalonia.CheckedListBox">
+	<ListBox x:Name="CheckedListBoxControl">
+		<ListBox.ItemTemplate>
+			<DataTemplate>
+				<StackPanel Orientation="Horizontal">
+					<CheckBox IsChecked="{Binding IsChecked}" />
+					<TextBlock Text="{Binding Text}" Margin="5,0,0,0" />
+				</StackPanel>
+			</DataTemplate>
+		</ListBox.ItemTemplate>
+	</ListBox>
+</UserControl>

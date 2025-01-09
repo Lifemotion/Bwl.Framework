@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Bwl.Framework.Avalonia;assembly=Bwl.Framework.Avalonia"
+        x:Class="Bwl.Framework.Avalonia.FormBase">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<Menu Grid.Row="0">
+			<MenuItem Header="Управление">
+				<MenuItem Header="Open App Directory" Click="OpenExplorer"/>
+				<MenuItem Header="Settings" Click="OpenSettings"/>
+				<MenuItem Header="Log" Click="OpenLogger"/>
+				<MenuItem Header="Exit" Click="ExitApp"/>
+			</MenuItem>
+		</Menu>
+
+		<!-- Actual content goes here-->
+		<ContentPresenter Grid.Row="1" Content="{Binding FormContent, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
+		<GridSplitter Background="Gray" Grid.Row="2" Height="1" HorizontalAlignment="Stretch"/>
+
+		<local:DatagridLogWriter x:Name="logWriter"
+         ExtendedView="True"
+         FilterText=""
+         LogEnabled="True"
+         ShowDebug="False"
+         ShowErrors="True"
+         ShowInformation="True"
+         ShowMessages="True"
+         ShowWarnings="True"
+         Grid.Row="3"/>
+	</Grid>
+</UserControl>

@@ -27,7 +27,7 @@ namespace Bwl.Framework.Test.Console
             _valBool = _settings.CreateBooleanSetting("ValBool", true);
             _valInt = _settings.CreateIntegerSetting("ValInt", 321);
             _valDbl = _settings.CreateDoubleSetting("ValDouble", 325.3);
-            _settings.CreateTextFileContentSeting("TestTextFile");
+            _settings.CreateTextFileContentSetting("TestTextFile");
             var ch1 = _settings.CreateChildStorage("ChildStorage1");
             _valStr = ch1.CreateStringSetting("ValString", "DefaultValue", "Настройка с текстом");
             var ch2 = _settings.CreateChildStorage("ChildStorage2");

@@ -47,7 +47,7 @@ Public Class SettingsStorage
                                             Optional userGroups As String() = Nothing, Optional readOnlyField As Boolean = False) As StringSetting
         Return New StringSetting(Me, name, defaultValue, friendlyName, description, userGroups, readOnlyField)
     End Function
-    Public Function CreateTextFileContentSeting(name As String, Optional defaultValue As String() = Nothing,
+    Public Function CreateTextFileContentSetting(name As String, Optional defaultValue As String() = Nothing,
                                                    Optional defaultFilename As String = "", Optional defaultDirectory As String = "",
                                                    Optional filenameExtension As String = "txt", Optional fileEncoding As Encoding = Nothing,
                                                    Optional overwriteExistingFileOnFilePathChange As Boolean = True,

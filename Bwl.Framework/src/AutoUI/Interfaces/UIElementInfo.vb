@@ -1,14 +1,35 @@
-﻿Imports System.Drawing
-Imports System.IO
+﻿Imports System.IO
 Imports System.Runtime.Serialization.Formatters.Binary
 
 Public Class UIElementInfo
+
+    Public Class UIElementInfoColor
+        Public Property R As Byte
+        Public Property G As Byte
+        Public Property B As Byte
+        Public Property A As Byte
+
+        Public Sub New()
+        End Sub
+
+        Public Sub New(red As Byte, green As Byte, blue As Byte)
+            Me.New(red, green, blue, 255)
+        End Sub
+
+        Public Sub New(red As Byte, green As Byte, blue As Byte, alpha As Byte)
+            Me.R = red
+            Me.G = green
+            Me.B = blue
+            Me.A = alpha
+        End Sub
+    End Class
+
     Private _category As String = ""
     Private _caption As String = ""
     Private _width As Integer = 0
     Private _height As Integer = 0
-    Private _backColor As Color = Color.FromArgb(0, 0, 0, 0)
-    Private _foreColor As Color = Color.FromArgb(0, 0, 0, 0)
+    Private _backColor As UIElementInfoColor = New UIElementInfoColor(0, 0, 0, 0)
+    Private _foreColor As UIElementInfoColor = New UIElementInfoColor(0, 0, 0, 0)
     Private _elemValue As Object = Nothing
 
     Public Event Changed(source As UIElementInfo)
@@ -61,20 +82,20 @@ Public Class UIElementInfo
         End Set
     End Property
 
-    Property BackColor As Color
+    Property BackColor As UIElementInfoColor
         Get
             Return _backColor
         End Get
-        Set(value As Color)
+        Set(value As UIElementInfoColor)
             _backColor = value
             RaiseEvent Changed(Me)
         End Set
     End Property
-    Property ForeColor As Color
+    Property ForeColor As UIElementInfoColor
         Get
             Return _foreColor
         End Get
-        Set(value As Color)
+        Set(value As UIElementInfoColor)
             _foreColor = value
             RaiseEvent Changed(Me)
         End Set
@@ -128,9 +149,9 @@ Public Class UIElementInfo
         info.Height = CInt(parts(5))
         Try
             Dim cols = parts(6).Split(";"c)
-            info.BackColor = Color.FromArgb(CInt(cols(0)), CInt(cols(1)), CInt(cols(2)), CInt(cols(3)))
+            info.BackColor = New UIElementInfoColor(CByte(cols(0)), CByte(cols(1)), CByte(cols(2)), CByte(cols(3)))
             Dim forecols = parts(7).Split(";"c)
-            info.ForeColor = Color.FromArgb(CInt(forecols(0)), CInt(forecols(1)), CInt(forecols(2)), CInt(forecols(3)))
+            info.ForeColor = New UIElementInfoColor(CByte(forecols(0)), CByte(forecols(1)), CByte(forecols(2)), CByte(forecols(3)))
         Catch ex As Exception
         End Try
         info.ElemValue = StringToObject(parts(7))

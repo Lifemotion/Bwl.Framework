@@ -4,7 +4,7 @@ Public Class SettingsDialog
     Implements ISettingsForm
 
     Private storage As ISettingsStorage
-    Private Event SettingsFormClosed() Implements ISettingsForm.SettingsFormClosed
+    Private Event SettingsFormClosed As EventHandler Implements ISettingsForm.SettingsFormClosed
 
     Public Sub ShowSettings(newStorage As ISettingsStorage) Implements ISettingsForm.ShowSettings
         storage = newStorage
@@ -12,16 +12,16 @@ Public Class SettingsDialog
         Me.Text = "Настройки " & storage.CategoryName
     End Sub
 
-    Public Shadows Sub ShowDialog() Implements ISettingsForm.ShowDialog
-        MyBase.ShowDialog()
+    Public Shadows Sub ShowDialogForm(invokeForm As Object) Implements ISettingsForm.ShowDialogForm
+        ShowDialog(CType(invokeForm, Form))
     End Sub
 
-    Public Shadows Sub Show() Implements ISettingsForm.Show
-        MyBase.Show()
+    Public Shadows Sub ShowForm() Implements ISettingsForm.ShowForm
+        Show()
     End Sub
 
     Private Sub SettingsDialog_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
-        RaiseEvent SettingsFormClosed()
+        RaiseEvent SettingsFormClosed(sender, e)
     End Sub
 
     Private Sub FillTree(storage As ISettingsStorage)

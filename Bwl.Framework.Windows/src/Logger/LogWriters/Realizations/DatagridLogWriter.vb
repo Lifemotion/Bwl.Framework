@@ -2,6 +2,7 @@
 Public Class DatagridLogWriter
     Implements ILogWriter
     Const messagesLimit As Integer = 1024 * 8
+
     Private Class ListItem
         Public message As String
         Public additional As String

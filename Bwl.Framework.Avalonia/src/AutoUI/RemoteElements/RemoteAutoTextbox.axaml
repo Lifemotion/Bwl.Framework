@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" Width="220"
+             x:Class="Bwl.Framework.Avalonia.RemoteAutoTextbox">
+		<Grid Margin="4">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+			<TextBlock x:Name="ElementCaption"
+					   Text="Caption"
+					   VerticalAlignment="Center"
+					   Grid.Row="0"/>
+			<TextBox x:Name="TextBox1"
+					 AcceptsReturn="True"
+					 TextWrapping="Wrap"
+					 Grid.Row="1"
+					 KeyUp="TextBox1_KeyUp"
+					 PointerPressed="TextBox1_Click"
+					 DoubleTapped="TextBox1_DoubleClick"/>
+		</Grid>
+</UserControl>

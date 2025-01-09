@@ -5,7 +5,7 @@ Public Class BaseRemoteClass
 
     Public ReadOnly Property Info As UIElementInfo Implements IUIElement.Info
 
-    Public Event RequestToSend(source As IUIElement, dataname As String, data() As Byte) Implements IUIElementRemote.RequestToSend
+    Public Event RequestToSend As EventHandler(Of (source As IUIElement, dataname As String, data As Byte())) Implements IUIElement.RequestToSend
 
     Protected Sub Send(dataname As String, parts As Object())
         Dim sb As New StringBuilder
@@ -24,7 +24,7 @@ Public Class BaseRemoteClass
     End Sub
 
     Protected Sub Send(dataname As String, bytes As Byte())
-        RaiseEvent RequestToSend(Me, dataname, bytes)
+        RaiseEvent RequestToSend(Me, (Me, dataname, bytes))
     End Sub
 
     Protected Function GetString(bytes As Byte()) As String

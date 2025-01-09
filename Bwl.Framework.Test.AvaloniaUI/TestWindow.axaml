@@ -1,0 +1,45 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bwl.Framework.Avalonia;assembly=Bwl.Framework.Avalonia"
+        mc:Ignorable="d"
+		Width="750"
+		Height="440"
+        x:Class="Bwl.Framework.Avalonia.TestWindow"
+        Title="TestWindow">
+	<local:FormAppBase x:Name="FormAppBase">
+		<local:FormAppBase.FormContent>
+			<WrapPanel Orientation="Vertical">
+				<Button 
+					Content="RootStorage.ShowSettingsForm"
+					Margin="4"
+					HorizontalAlignment="Stretch"
+					HorizontalContentAlignment="Center"
+					Name="ShowSettingsFormButton"
+					Click="ShowSettingsForm_Click"/>
+				<Button 
+					Content="ClonedSettingsStorage.ShowSettingsForm"
+					Margin="4"
+					HorizontalAlignment="Stretch"
+					HorizontalContentAlignment="Center"
+					Name="ClonedSettingsStorageButton"
+					Click="ClonedSettingsStorageButton_Click"/>
+				<Button 
+					Content="LoggerForm.Show"
+					Margin="4"
+					HorizontalAlignment="Stretch"
+					HorizontalContentAlignment="Center"
+					Name="_btnShowLogForm"
+					Click="ShowLogForm_Click"/>
+				<Button 
+					Content="Logger.AddMessage"
+					Margin="4"
+					HorizontalAlignment="Stretch"
+					HorizontalContentAlignment="Center"
+					Name="AddMessageButton"
+					Click="AddMessageButton_Click"/>
+			</WrapPanel>
+		</local:FormAppBase.FormContent>
+	</local:FormAppBase>
+</Window>

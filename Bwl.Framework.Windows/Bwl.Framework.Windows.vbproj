@@ -44,13 +44,13 @@
 			<DependentUpon>Settings.settings</DependentUpon>
 			<DesignTimeSharedInput>True</DesignTimeSharedInput>
 		</Compile>
-		<Compile Update="src\AppBase\AppBaseWinForms.vb">
+		<Compile Update="src\AppBase\FormAppBase.vb">
 			<SubType>Form</SubType>
 		</Compile>
-		<Compile Update="src\AppBase\FormBaseWin.Designer.vb">
-			<DependentUpon>FormBaseWin.vb</DependentUpon>
+		<Compile Update="src\AppBase\FormBase.Designer.vb">
+			<DependentUpon>FormBase.vb</DependentUpon>
 		</Compile>
-		<Compile Update="src\AppBase\FormBaseWin.vb" />
+		<Compile Update="src\AppBase\FormBase.vb" />
 		<Compile Update="src\AutoUI\AutoUIForm.Designer.vb">
 			<DependentUpon>AutoUIForm.vb</DependentUpon>
 		</Compile>
@@ -60,34 +60,34 @@
 		<Compile Update="src\AutoUI\AutoUI\AutoUIDisplay.vb">
 			<SubType>UserControl</SubType>
 		</Compile>
-		<Compile Update="src\AutoUI\RemoteElements\BaseRemoteElementWin.Designer.vb">
-			<DependentUpon>BaseRemoteElementWin.vb</DependentUpon>
+		<Compile Update="src\AutoUI\RemoteElements\BaseRemoteElement.Designer.vb">
+			<DependentUpon>BaseRemoteElement.vb</DependentUpon>
 		</Compile>
-		<Compile Update="src\AutoUI\RemoteElements\BaseRemoteElementWin.vb">
+		<Compile Update="src\AutoUI\RemoteElements\BaseRemoteElement.vb">
 			<SubType>UserControl</SubType>
 		</Compile>
-		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoImageWin.Designer.vb">
-			<DependentUpon>RemoteAutoImageWin.vb</DependentUpon>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoImage.Designer.vb">
+			<DependentUpon>RemoteAutoImage.vb</DependentUpon>
 		</Compile>
-		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoImageWin.vb">
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoImage.vb">
 			<SubType>UserControl</SubType>
 		</Compile>
-		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoButtonWin.Designer.vb">
-			<DependentUpon>RemoteAutoButtonWin.vb</DependentUpon>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoButton.Designer.vb">
+			<DependentUpon>RemoteAutoButton.vb</DependentUpon>
 		</Compile>
-		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoButtonWin.vb">
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoButton.vb">
 			<SubType>UserControl</SubType>
 		</Compile>
-		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoListboxWin.Designer.vb">
-			<DependentUpon>RemoteAutoListboxWin.vb</DependentUpon>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoListbox.Designer.vb">
+			<DependentUpon>RemoteAutoListbox.vb</DependentUpon>
 		</Compile>
-		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoListboxWin.vb">
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoListbox.vb">
 			<SubType>UserControl</SubType>
 		</Compile>
-		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoTextboxWin.Designer.vb">
-			<DependentUpon>RemoteAutoTextboxWin.vb</DependentUpon>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoTextbox.Designer.vb">
+			<DependentUpon>RemoteAutoTextbox.vb</DependentUpon>
 		</Compile>
-		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoTextboxWin.vb">
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoTextbox.vb">
 			<SubType>UserControl</SubType>
 		</Compile>
 		<Compile Update="src\Logger\LogWriters\Realizations\DatagridLogWriter.Designer.vb">

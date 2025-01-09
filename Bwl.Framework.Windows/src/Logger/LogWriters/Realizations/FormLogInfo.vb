@@ -5,9 +5,9 @@
 	Private Sub _btn_CopyText_Click(sender As Object, e As EventArgs) Handles _btn_CopyText.Click
 		Dim buff = String.Empty
 		For i = 0 To LogInfoText.Count - 2
-			buff += LogInfoText(i) + vbCrLf
+			buff += LogInfoText(i) + Environment.NewLine
 		Next
-		buff += vbCrLf + LogInfoText(LogInfoText.Count - 1)
+		buff += Environment.NewLine + LogInfoText(LogInfoText.Count - 1)
 		Clipboard.SetText(buff)
 	End Sub
 
@@ -20,7 +20,7 @@
 		For i = 0 To LogInfoText.Count - 2
 			_rtb_LogInfo.Text += " " & LogInfoText(i)
 		Next
-		_rtb_LogInfo.Text += "]" & vbCrLf
+		_rtb_LogInfo.Text += "]" & Environment.NewLine
 		_rtb_LogInfo.Text += LogInfoText(LogInfoText.Count - 1)
 	End Sub
 End Class

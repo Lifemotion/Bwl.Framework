@@ -258,7 +258,7 @@ Public Class SimpleFileLogWriter
             result += " [" & GetCategoryName(.type) & "] "
             result += .message
             If WriteAdditionalInfo AndAlso Not String.IsNullOrEmpty(.additional) Then
-                result += vbCrLf & "#" & .additional
+                result += Environment.NewLine & "#" & .additional
             End If
         End With
         Return result
