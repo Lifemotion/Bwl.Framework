@@ -62,7 +62,7 @@ namespace Bwl.Framework.Avalonia
 
             private string GetRowColor(LogEventType type)
             {
-                var isDarkTheme = Application.Current.ActualThemeVariant == ThemeVariant.Dark;
+                var isDarkTheme = Application.Current?.ActualThemeVariant == ThemeVariant.Dark;
                 if (type == LogEventType.debug)
                     return isDarkTheme ? "#3b3b3b" : "#C8C8C8";
                 if (type == LogEventType.errors)
@@ -73,6 +73,7 @@ namespace Bwl.Framework.Avalonia
                     return isDarkTheme ? "#454536" : "#FFFFDC";
                 return isDarkTheme ? "#000000" : "#FFFFFF";
             }
+
         }
 
         private string GetTypeName(LogEventType type)
