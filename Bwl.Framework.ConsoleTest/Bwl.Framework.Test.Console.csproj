@@ -11,14 +11,14 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<OutputPath>..\debug\app\Bwl.Framework.Test.Console\$(TargetFramework)\$(RuntimeIdentifier)\bin\</OutputPath>
+		<OutputPath>..\Debug\app\Bwl.Framework.Test.Console\bin\</OutputPath>
 		<DocumentationFile>Bwl.Framework.Test.Console.xml</DocumentationFile>
 		<NoWarn></NoWarn>
 		<RunCodeAnalysis>false</RunCodeAnalysis>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DefineDebug>false</DefineDebug>
-		<OutputPath>..\release\app\Bwl.Framework.Test.Console\$(TargetFramework)\$(RuntimeIdentifier)\bin\</OutputPath>
+		<OutputPath>..\Release\app\Bwl.Framework.Test.Console\bin\</OutputPath>
 		<DocumentationFile>Bwl.Framework.Test.Console.xml</DocumentationFile>
 		<NoWarn></NoWarn>
 	</PropertyGroup>

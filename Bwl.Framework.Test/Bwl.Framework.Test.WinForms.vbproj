@@ -13,17 +13,33 @@
 		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	</PropertyGroup>
+	
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<OutputPath>..\debug\app\Bwl.Framework.Test.WinForms\$(TargetFramework)\$(RuntimeIdentifier)\bin\</OutputPath>
+		<OutputPath>..\Debug\app\Bwl.Framework.Test.WinForms\bin\</OutputPath>
 		<DocumentationFile>Bwl.Framework.Test.WinForms.xml</DocumentationFile>
-		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DefineDebug>false</DefineDebug>
-		<OutputPath>..\release\app\Bwl.Framework.Test.WinForms\$(TargetFramework)\$(RuntimeIdentifier)\bin\</OutputPath>
+		<OutputPath>..\Release\app\Bwl.Framework.Test.WinForms\bin\</OutputPath>
 		<DocumentationFile>Bwl.Framework.Test.WinForms.xml</DocumentationFile>
-		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<NrtRevisionFormat>{c:ymd.}-{c:hms}-{chash:6}</NrtRevisionFormat>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<Import Include="System.Drawing" />
 		<Import Include="System.Windows.Forms" />
@@ -46,17 +62,5 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-		<PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 	</ItemGroup>
-	<PropertyGroup>
-		<NrtRevisionFormat>{c:ymd.} {c:hms:} {chash:6}</NrtRevisionFormat>
-		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-	</PropertyGroup>
 </Project>
