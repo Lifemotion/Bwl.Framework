@@ -9,8 +9,6 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework.Test.WinForms
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework.UnitTests", "Bwl.Framework.Tests\Bwl.Framework.UnitTests.vbproj", "{1C857714-6B3E-4D6A-8E44-8815C75F52F3}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework.Embedding", "Bwl.Framework.Embedding\Bwl.Framework.Embedding.vbproj", "{E01B4D4D-A2E5-4AC8-B914-161BE3E4CD16}"
-EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework.Windows", "Bwl.Framework.Windows\Bwl.Framework.Windows.vbproj", "{BD9E341D-613C-46AA-B774-AA09A7FE2D70}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Framework.Test.Console", "Bwl.Framework.ConsoleTest\Bwl.Framework.Test.Console.csproj", "{1E81D599-F2B5-4BD6-A679-C5C2884487A7}"
@@ -18,6 +16,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Framework.Avalonia", "Bwl.Framework.Avalonia\Bwl.Framework.Avalonia.csproj", "{876905D0-ECD6-47C4-84D4-8B0950865DF7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Framework.Test.AvaloniaUI", "Bwl.Framework.Test.AvaloniaUI\Bwl.Framework.Test.AvaloniaUI.csproj", "{B4730FDC-8B16-4AC2-A4B7-1FF3C2FF5E82}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{3FF9DDE3-D39A-438E-8CD8-8B3EA15481A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApps", "TestApps", "{B749850A-5886-432D-A3E1-420FBC44A9F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{F920A29F-4824-4464-AE93-6B53A46A8323}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +41,6 @@ Global
 		{1C857714-6B3E-4D6A-8E44-8815C75F52F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C857714-6B3E-4D6A-8E44-8815C75F52F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C857714-6B3E-4D6A-8E44-8815C75F52F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E01B4D4D-A2E5-4AC8-B914-161BE3E4CD16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E01B4D4D-A2E5-4AC8-B914-161BE3E4CD16}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E01B4D4D-A2E5-4AC8-B914-161BE3E4CD16}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E01B4D4D-A2E5-4AC8-B914-161BE3E4CD16}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BD9E341D-613C-46AA-B774-AA09A7FE2D70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BD9E341D-613C-46AA-B774-AA09A7FE2D70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD9E341D-613C-46AA-B774-AA09A7FE2D70}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -60,5 +60,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E18C7249-22C8-4147-91EF-8A2721F0F026} = {3FF9DDE3-D39A-438E-8CD8-8B3EA15481A1}
+		{67E94558-938E-4DDE-93F4-E5ABEECE626F} = {B749850A-5886-432D-A3E1-420FBC44A9F7}
+		{1C857714-6B3E-4D6A-8E44-8815C75F52F3} = {F920A29F-4824-4464-AE93-6B53A46A8323}
+		{BD9E341D-613C-46AA-B774-AA09A7FE2D70} = {3FF9DDE3-D39A-438E-8CD8-8B3EA15481A1}
+		{1E81D599-F2B5-4BD6-A679-C5C2884487A7} = {B749850A-5886-432D-A3E1-420FBC44A9F7}
+		{876905D0-ECD6-47C4-84D4-8B0950865DF7} = {3FF9DDE3-D39A-438E-8CD8-8B3EA15481A1}
+		{B4730FDC-8B16-4AC2-A4B7-1FF3C2FF5E82} = {B749850A-5886-432D-A3E1-420FBC44A9F7}
 	EndGlobalSection
 EndGlobal

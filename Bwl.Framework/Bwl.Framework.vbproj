@@ -4,43 +4,61 @@
 		<OutputType>Library</OutputType>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageProjectUrl>https://github.com/Lifemotion/Bwl.Framework</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Lifemotion/Bwl.Framework</RepositoryUrl>
+		<LicenseUrl>https://opensource.org/license/apache-2-0</LicenseUrl>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageReadmeFile/>
+		<Title>Bwl.Framework</Title>
+		<PackageIconUrl/>
+		<Description>
+Bwl.Framework - a set of .NET libraries that provide common functionality that is used in many projects. It is a part of Bwl libraries set.
+
+Bwl.Framework allows you to easily add configuration and logging to your project, as well as to use a set of common classes and methods.
+Among additional features - CryptoTools with AES support; JSON serialization; string tools; and more.
+Base Bwl.Framework library is a .NET Standard 2.0 library. To have access to Windows-specific features, use Bwl.Framework.Windows library. To use cross-platform GUI and features - use Bwl.Framework.Avalonia library.
+		</Description>
+		<PackageTags>bwl;configuration;logging</PackageTags>
+		<PackageReleaseNotes/>
+		<Authors>Alexandra Sovenko, Artem Drobanov, Pavel Cherkas, Ilya Kuryshev</Authors>
+		<Company />
+		<Copyright>Copyright © 2025</Copyright>
+		<PackAsTool>False</PackAsTool>
+	</PropertyGroup>
+	
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<OutputPath>..\debug\lib\Bwl.Framework\$(TargetFramework)\$(RuntimeIdentifier)\</OutputPath>
 		<DocumentationFile>Bwl.Framework.xml</DocumentationFile>
-		<NoWarn></NoWarn>
+		<OutputPath>..\Debug\lib\Bwl.Framework\</OutputPath>
 		<RunCodeAnalysis>false</RunCodeAnalysis>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DefineDebug>false</DefineDebug>
-		<OutputPath>..\release\lib\Bwl.Framework\$(TargetFramework)\$(RuntimeIdentifier)\</OutputPath>
 		<DocumentationFile>Bwl.Framework.xml</DocumentationFile>
-		<NoWarn></NoWarn>
+		<OutputPath>..\Release\lib\Bwl.Framework\</OutputPath>
+		<PackageOutputPath>..\Release\packages\</PackageOutputPath>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
-	<PropertyGroup>
-		<RunPostBuildEvent>Always</RunPostBuildEvent>
-	</PropertyGroup>
+
 	<ItemGroup>
-		<Compile Include="..\refs-src\MicroLogger.vb">
-			<Link>src\MicroLogger\MicroLogger.vb</Link>
-		</Compile>
-		<Compile Include="..\refs-src\Serializer.vb">
-			<Link>refs\Serializer.vb</Link>
-		</Compile>
-		<Compile Include="..\refs-src\CryptoTools.vb">
-			<Link>refs\CryptoTools.vb</Link>
-		</Compile>
-		<Compile Include="..\refs-src\IniFile.vb">
-			<Link>refs\IniFile.vb</Link>
-		</Compile>
-		<Compile Include="..\refs-src\RunLimiter.vb">
-			<Link>refs\RunLimiter.vb</Link>
-		</Compile>
-		<Compile Include="..\refs-src\SharedTools.vb">
-			<Link>refs\SharedTools.vb</Link>
-		</Compile>
-		<Compile Include="..\refs-src\StringTools.vb">
-			<Link>refs\StringTools.vb</Link>
-		</Compile>
+		<PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<NrtRevisionFormat>{c:ymd.}-{c:hms}-{chash:6}</NrtRevisionFormat>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
+	
+	<ItemGroup>
 		<Compile Update="My Project\Application.Designer.vb">
 			<AutoGen>True</AutoGen>
 			<DependentUpon>Application.myapp</DependentUpon>
@@ -64,25 +82,6 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-		<Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
+		<Compile Remove="Settings\Settings\Common\ObjectSetting.vb" />
 	</ItemGroup>
-	<ItemGroup>
-		<Compile Remove="src\Settings\Settings\Common\ObjectSetting.vb" />
-	</ItemGroup>
-	<ItemGroup>
-	  <PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
-	</ItemGroup>
-	<PropertyGroup />
-	<PropertyGroup>
-		<NrtRevisionFormat>{c:ymd.} {c:hms:} {chash:6}</NrtRevisionFormat>
-		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-	</PropertyGroup>
-
 </Project>

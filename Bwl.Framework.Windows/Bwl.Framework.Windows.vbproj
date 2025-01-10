@@ -9,22 +9,57 @@
 		<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
 		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
 	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageProjectUrl>https://github.com/Lifemotion/Bwl.Framework</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Lifemotion/Bwl.Framework</RepositoryUrl>
+		<LicenseUrl>https://opensource.org/license/apache-2-0</LicenseUrl>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageReadmeFile />
+		<Title>Bwl.Framework.Windows</Title>
+		<PackageIconUrl />
+		<Description>
+			Bwl.Framework.Windows - .NET library that provides common functionality for WinForms-based projects. It is a part of Bwl libraries set.
+			This library provides realization of WinForms elements (configuration, logging, AutoUI, etc.).
+			To use this library - create new WinForms project and add reference to Bwl.Framework.Windows.
+		</Description>
+		<PackageTags>bwl;configuration;logging</PackageTags>
+		<PackageReleaseNotes />
+		<Authors>Alexandra Sovenko, Artem Drobanov, Pavel Cherkas, Ilya Kuryshev</Authors>
+		<Company />
+		<Copyright>Copyright © 2025</Copyright>
+		<PackAsTool>False</PackAsTool>
+	</PropertyGroup>
+	
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<OutputPath>..\debug\lib\Bwl.Framework.Windows\$(TargetFramework)\$(RuntimeIdentifier)\</OutputPath>
+		<OutputPath>..\Debug\lib\Bwl.Framework.Windows\</OutputPath>
 		<DocumentationFile>Bwl.Framework.Windows.xml</DocumentationFile>
-		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<OutputPath>..\debug\lib\Bwl.Framework.Windows\$(TargetFramework)\$(RuntimeIdentifier)\</OutputPath>
 		<DefineDebug>false</DefineDebug>
+		<OutputPath>..\Release\lib\Bwl.Framework.Windows\</OutputPath>
 		<DocumentationFile>Bwl.Framework.Windows.xml</DocumentationFile>
-		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+		<PackageOutputPath>..\Release\packages\</PackageOutputPath>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
+
 	<ItemGroup>
-		<Compile Include="..\refs-src\JpegSaver.vb">
-			<Link>refs\JpegSaver.vb</Link>
-		</Compile>
+		<PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
+
+	<PropertyGroup>
+		<NrtRevisionFormat>{c:ymd.}-{c:hms}-{chash:6}</NrtRevisionFormat>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<Import Include="System.Drawing" />
 		<Import Include="System.Windows.Forms" />
@@ -131,21 +166,9 @@
 		<ProjectReference Include="..\Bwl.Framework\Bwl.Framework.vbproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="8.0.0" />
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-		<PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
-		<PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+		<PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+		<PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
 	</ItemGroup>
-	<PropertyGroup>
-		<NrtRevisionFormat>{c:ymd.} {c:hms:} {chash:6}</NrtRevisionFormat>
-		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-	</PropertyGroup>
 </Project>

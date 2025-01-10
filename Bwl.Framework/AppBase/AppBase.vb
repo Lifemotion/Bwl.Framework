@@ -1,0 +1,137 @@
+﻿Imports System.IO
+
+Public Class AppBase
+    Implements IDisposable
+
+    Public ReadOnly Property LogsFolder As String
+    Public ReadOnly Property SettingsFolder As String
+    Public ReadOnly Property DataFolder As String
+    Private ReadOnly Property BaseFolder As String
+
+    Public ReadOnly Property AppName As String
+
+    Public ReadOnly Property RootLogger As Logger
+    Public ReadOnly Property RootStorage As SettingsStorage
+    Public ReadOnly Property Services As ServiceLocator
+    Public ReadOnly Property AutoUI As AutoUI
+
+    Public ReadOnly Property UseBufferedStorage As Boolean
+
+    Public Sub New()
+        Me.New(initFolders:=True, appName:="Application", useBufferedStorage:=False, checkSettingsHash:=True)
+    End Sub
+
+    Public Sub New(initFolders As Boolean,
+                   appName As String,
+                   useBufferedStorage As Boolean,
+                   Optional checkSettingsHash As Boolean = True,
+                   Optional settingsFileName As String = "settings.ini")
+        Me.New(initFolders, appName, useBufferedStorage, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."),
+               checkSettingsHash:=checkSettingsHash, settingsFileName:=settingsFileName)
+    End Sub
+
+    Public Sub New(initFolders As Boolean,
+                   appName As String,
+                   useBufferedStorage As Boolean,
+                   baseFolderOverride As String,
+                   Optional maxLogFilesCount As Integer = 5,
+                   Optional maxLogFileLength As Long = 10 * 1024 * 1024,
+                   Optional isReadOnlySettings As Boolean = False,
+                   Optional onlyActiveSettings As Boolean = False,
+                   Optional checkSettingsHash As Boolean = True,
+                   Optional settingsFileName As String = "settings.ini")
+        Me.UseBufferedStorage = useBufferedStorage
+        _AppName = appName
+        If baseFolderOverride > "" Then _BaseFolder = baseFolderOverride
+        _BaseFolder = CheckPath(_BaseFolder)
+        _SettingsFolder = IO.Path.Combine(_BaseFolder, "conf")
+        _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
+        _DataFolder = IO.Path.Combine(_BaseFolder, "data")
+        If initFolders Then Init(maxLogFilesCount, maxLogFileLength, isReadOnlySettings, onlyActiveSettings, checkSettingsHash, settingsFileName)
+    End Sub
+
+    Public Sub New(initFolders As Boolean,
+                   appName As String,
+                   useBufferedStorage As Boolean,
+                   settingsFolderOverride As String,
+                   logsFolderOverride As String,
+                   dataFolderOverride As String,
+                   Optional maxLogFilesCount As Integer = 5,
+                   Optional maxLogFileLength As Long = 10 * 1024 * 1024,
+                   Optional isReadOnlySettings As Boolean = False,
+                   Optional onlyActiveSettings As Boolean = False,
+                   Optional checkSettingsHash As Boolean = True,
+                   Optional settingsFileName As String = "settings.ini")
+        Me.UseBufferedStorage = useBufferedStorage
+        _AppName = appName
+        _BaseFolder = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..")
+        _SettingsFolder = IO.Path.Combine(_BaseFolder, "conf")
+        _LogsFolder = IO.Path.Combine(_BaseFolder, "logs")
+        _DataFolder = IO.Path.Combine(_BaseFolder, "data")
+        If settingsFolderOverride > "" Then _SettingsFolder = settingsFolderOverride
+        If logsFolderOverride > "" Then _LogsFolder = logsFolderOverride
+        If dataFolderOverride > "" Then _DataFolder = dataFolderOverride
+        _BaseFolder = CheckPath(_BaseFolder)
+        _SettingsFolder = CheckPath(_SettingsFolder)
+        _LogsFolder = CheckPath(_LogsFolder)
+        _DataFolder = CheckPath(_DataFolder)
+        If initFolders Then Init(maxLogFilesCount:=maxLogFilesCount, maxLogFileLength:=maxLogFileLength, isReadOnlySettings:=isReadOnlySettings,
+                                 onlyActiveSettings:=onlyActiveSettings, checkSettingsHash:=checkSettingsHash, settingsFileName:=settingsFileName)
+    End Sub
+
+    Private Function CheckPath(source As String) As String
+        Dim result = source.Replace("\", Path.DirectorySeparatorChar).Replace("/", Path.DirectorySeparatorChar)
+        result = Environment.ExpandEnvironmentVariables(result)
+        Return result
+    End Function
+
+    Public Overridable Sub Init(Optional maxLogFilesCount As Integer = 5,
+                    Optional maxLogFileLength As Long = 10 * 1024 * 1024,
+                    Optional isReadOnlySettings As Boolean = False,
+                    Optional onlyActiveSettings As Boolean = False,
+                    Optional checkSettingsHash As Boolean = True,
+                    Optional settingsFileName As String = "settings.ini")
+
+        Dim isNetStandard As Boolean = False
+#If NETSTANDARD Then
+        isNetStandard = True
+#End If
+
+        TryCreateFolder(_SettingsFolder)
+        TryCreateFolder(_DataFolder)
+        TryCreateFolder(_LogsFolder)
+        _RootLogger = New Logger
+        _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.allInOneFile,,,,, maxLogFileLength, maxLogFilesCount))
+        _RootLogger.ConnectWriter(New SimpleFileLogWriter(_LogsFolder, , SimpleFileLogWriter.TypeLoggingMode.eachTypeInSelfFile, , LogEventType.errors,,, maxLogFileLength, maxLogFilesCount))
+        If UseBufferedStorage OrElse isNetStandard Then
+            _RootStorage = New SettingsStorageBufferedRoot(Path.Combine(_SettingsFolder, settingsFileName), _AppName, isReadOnlySettings, onlyActiveSettings, checkSettingsHash)
+        Else
+            _RootStorage = New SettingsStorageRoot(New IniFileSettingsWriter(Path.Combine(_SettingsFolder, settingsFileName)), _AppName, False)
+        End If
+        _Services = New ServiceLocator(RootLogger)
+        _AutoUI = New AutoUI
+
+        _Services.AddService(RootStorage)
+        _Services.AddService(Me)
+        _RootLogger.Add(LogEventType.message, "Application startup")
+        Try
+            _RootLogger.Add(LogEventType.information, "Application executable path: " & ApplicationExecutablePath())
+            _RootLogger.Add(LogEventType.information, "Application info: " & ApplicationProductName(True, True, True))
+        Catch ex As Exception
+            _RootLogger.Add(LogEventType.warning, ex.Message)
+        End Try
+    End Sub
+
+    Public Sub TryCreateFolder(path As String)
+        Try
+            If Not Directory.Exists(path) Then
+                IO.Directory.CreateDirectory(path)
+            End If
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Public Sub Dispose() Implements IDisposable.Dispose
+        _Services.Dispose()
+    End Sub
+End Class

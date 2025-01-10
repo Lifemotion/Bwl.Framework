@@ -5,8 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SkiaSharp;
-using MsBox.Avalonia.Enums;
-using MsBox.Avalonia;
+using Bwl.Framework.Avalonia;
 
 namespace Bwl.Framework.Avalonia
 {
@@ -118,7 +117,7 @@ namespace Bwl.Framework.Avalonia
             _appBase.RootLogger.AddInformation("Форма настройки закрыта");
         }
 
-        private async void Button1_Click(AutoButton source)
+        private void Button1_Click(AutoButton source)
         {
             var bitmap = new SKBitmap(100, 100);
             using (var canvas = new SKCanvas(bitmap))
@@ -127,17 +126,12 @@ namespace Bwl.Framework.Avalonia
             }
             _image.ImageBytes = bitmap.Encode(SKEncodedImageFormat.Jpeg, 100).ToArray();
             _test1.Fire();
-            await MsgBox(_test1.Setting1);
+            MsgBox(_test1.Setting1);
         }
 
-        private async Task MsgBox(string message)
+        private void MsgBox(string message)
         {
-            var box = MessageBoxManager
-                        .GetMessageBoxStandard("Message", message,
-                        ButtonEnum.Ok,
-                        Icon.Info);
-
-            _ = await box.ShowWindowDialogAsync(_appForm);
+            MessageBox.Show(_appForm, message);
         }
 
         private void Button2_Click(AutoButton source)

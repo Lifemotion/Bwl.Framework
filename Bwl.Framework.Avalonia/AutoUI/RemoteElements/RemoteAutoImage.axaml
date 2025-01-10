@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Bwl.Framework.Avalonia.RemoteAutoImage">
+
+	<ScrollViewer
+		HorizontalScrollBarVisibility="Auto"
+		VerticalScrollBarVisibility="Auto"
+		Margin="0"
+		Padding="0">
+		<Grid Margin="4" x:Name="ElemBaseGrid"
+			Width="220" Height="250">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<TextBlock x:Name="ElementCaption"
+				 Text="Caption"
+				 VerticalAlignment="Center"
+				 Grid.Row="0" />
+			<Border BorderBrush="DarkGray" BorderThickness="1" Grid.Row="1">
+				<Panel x:Name="ImageBackground">
+					<Image x:Name="ImageControl"
+							Stretch="Uniform"
+							PointerPressed="ImageControl_Click"
+							DoubleTapped="ImageControl_DoubleClick" />
+				</Panel>
+			</Border>
+		</Grid>
+	</ScrollViewer>
+</UserControl>

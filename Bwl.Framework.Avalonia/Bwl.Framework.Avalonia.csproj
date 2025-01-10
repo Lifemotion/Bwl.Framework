@@ -7,23 +7,69 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
 	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageProjectUrl>https://github.com/Lifemotion/Bwl.Framework</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Lifemotion/Bwl.Framework</RepositoryUrl>
+		<LicenseUrl>https://opensource.org/license/apache-2-0</LicenseUrl>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageReadmeFile />
+		<Title>Bwl.Framework.Avalonia</Title>
+		<PackageIconUrl />
+		<Description>
+Bwl.Framework.Avalonia - .NET library that provides common functionality for Avalonia-based projects. It is a part of Bwl libraries set.
+This library provides realization of cross-platform AppBase (configuration, logging, AutoUI, etc.).
+To use this library - create new Avalonia project and add reference to Bwl.Framework.Avalonia.
+To create AutoUI application - in App.axaml.cs you would need to create new AppBase, add description of UI elements in AppBase.AutoUI and then call AutoUIForm.Create(AppBase) to create Window with UI elements.
+To use FormBase or FormAppBase:
+- Create new Avalonia Window;
+- Add 'xmlns:local="clr-namespace:Bwl.Framework.Avalonia;assembly=Bwl.Framework.Avalonia"' in your Window tag;
+- Inside your Window tag, add '&lt;local:FormAppBase x:Name="FormAppBase"&gt;';
+- Inside FormAppBase tag, add '&lt;local:FormAppBase.FormContent&gt;' and describe your UI elements;
+- In axaml.cs file call 'FormAppBase.Init(this);' in constructor to initialize FormBase;
+- To access AppBase properties and methods, use 'FormAppBase.AppBase'.
+		</Description>
+		<PackageTags>bwl;configuration;logging</PackageTags>
+		<PackageReleaseNotes />
+		<Authors>Alexandra Sovenko, Artem Drobanov, Pavel Cherkas, Ilya Kuryshev</Authors>
+		<Company />
+		<Copyright>Copyright © 2025</Copyright>
+		<PackAsTool>False</PackAsTool>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DocumentationFile>Bwl.Framework.Avalonia.xml</DocumentationFile>
+		<OutputPath>..\Debug\lib\Bwl.Framework.Avalonia\</OutputPath>
+		<RunCodeAnalysis>false</RunCodeAnalysis>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineDebug>true</DefineDebug>
+		<DocumentationFile>Bwl.Framework.Avalonia.xml</DocumentationFile>
+		<OutputPath>..\Release\lib\Bwl.Framework.Avalonia\</OutputPath>
+		<PackageOutputPath>..\Release\packages\</PackageOutputPath>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	</PropertyGroup>
+
 	<ItemGroup>
-	  <AvaloniaXaml Remove="src\AppBase\FormAppBaseOld.axaml" />
+		<PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
-	<ItemGroup>
-	  <Compile Remove="src\AppBase\FormAppBaseOld.axaml.cs" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Content Include="icons\settings.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="icons\setting.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
+
+	<PropertyGroup>
+		<NrtRevisionFormat>{c:ymd.}-{c:hms}-{chash:6}</NrtRevisionFormat>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="11.2.3" />
+		<PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.3" />
 		<PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.3" />
 		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3" />
@@ -38,23 +84,30 @@
 		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" />
 	</ItemGroup>
 
-
 	<ItemGroup>
 		<ProjectReference Include="..\Bwl.Framework\Bwl.Framework.vbproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Content Include="icons\settings.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="icons\setting.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="src\AdditionalControls\Controls\CheckedListBox.axaml.cs">
+	  <Compile Update="AdditionalControls\Controls\CheckedListBox.axaml.cs">
 	    <DependentUpon>CheckedListBox.axaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="src\AutoUI\AutoUI\AutoUIDisplay.axaml.cs">
+	  <Compile Update="AutoUI\AutoUI\AutoUIDisplay.axaml.cs">
 	    <DependentUpon>AutoUIDisplay.axaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="src\Logger\LogWriters\Realizations\DatagridLogWriter.axaml.cs">
+	  <Compile Update="Logger\LogWriters\Realizations\DatagridLogWriter.axaml.cs">
 	    <DependentUpon>DatagridLogWriter.axaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="src\Logger\UI\LoggerForm.axaml.cs">
+	  <Compile Update="Logger\UI\LoggerForm.axaml.cs">
 	    <DependentUpon>LoggerForm.axaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
