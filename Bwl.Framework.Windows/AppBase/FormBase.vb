@@ -1,13 +1,14 @@
 ﻿Public Class FormBase
     Protected _loggerServer As ILoggerDispatcher
-    Protected _storageForm As SettingsStorage
+    Protected _storageForm As ISettingsFormUiHandler
+    Protected _settings As SettingsStorage
 
     Public Sub New()
         InitializeComponent()
         Application.EnableVisualStyles()
     End Sub
 
-    Public Sub New(storage As SettingsStorage, logger As ILoggerDispatcher)
+    Public Sub New(storage As ISettingsFormUiHandler, logger As ILoggerDispatcher)
         Init(storage, logger)
         InitializeComponent()
         Application.EnableVisualStyles()
@@ -19,7 +20,13 @@
         Application.EnableVisualStyles()
     End Sub
 
-    Public Sub Init(storage As SettingsStorage, logger As ILoggerDispatcher)
+    Public Sub Init(storage As ISettingsFormUiHandler, logger As ILoggerDispatcher)
+        _storageForm = storage
+        _loggerServer = logger
+    End Sub
+
+    Public Sub SetSettingsStorage(settings As SettingsStorage)
+        _settings = settings
     End Sub
 
     Private Sub FormAppBase_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -33,7 +40,11 @@
     End Sub
 
     Private Sub settingsMenuItem_Click(sender As Object, e As EventArgs) Handles settingsMenuItem.Click
-        _storageForm.ShowSettingsForm(Me)
+        Try
+            _storageForm.ShowSettingsForm(_settings, Me)
+        Catch ex As Exception
+            MessageBox.Show($"Ошибка открытия настроек: {ex.Message}")
+        End Try
     End Sub
 
     Private Sub openAppDirMenuItem_Click(sender As Object, e As EventArgs) Handles openAppDirMenuItem.Click

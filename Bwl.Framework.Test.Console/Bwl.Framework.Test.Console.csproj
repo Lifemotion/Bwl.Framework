@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net48;net6.0</TargetFrameworks>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+		<RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<OutputPath>..\Debug\app\Bwl.Framework.Test.Console\bin\</OutputPath>
+		<DocumentationFile>Bwl.Framework.Test.Console.xml</DocumentationFile>
+		<NoWarn></NoWarn>
+		<RunCodeAnalysis>false</RunCodeAnalysis>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineDebug>false</DefineDebug>
+		<OutputPath>..\Release\app\Bwl.Framework.Test.Console\bin\</OutputPath>
+		<DocumentationFile>Bwl.Framework.Test.Console.xml</DocumentationFile>
+		<NoWarn></NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Bwl.Framework\Bwl.Framework.vbproj" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<NrtRevisionFormat>{c:ymd.} {c:hms:} {chash:6}</NrtRevisionFormat>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
+
+</Project>

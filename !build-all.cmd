@@ -1,2 +1,3 @@
-tools\vs-build-all.exe -debug -release -m BuildAll.sln BuildAll.Fw4.sln
+dotnet restore BuildAll.sln
+dotnet build -c Release BuildAll.sln -m -interactive:False -v:q -nologo
 pause

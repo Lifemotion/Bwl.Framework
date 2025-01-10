@@ -16,7 +16,7 @@ public partial class AutoUIForm : Window
 
     private DatagridLogWriter logWriter;
 
-    internal AutoUIForm()
+    public AutoUIForm()
     {
         InitializeComponent();
 
@@ -38,10 +38,10 @@ public partial class AutoUIForm : Window
 
     }
 
-    public AutoUIForm(SettingsStorage storage, Logger logger, IAutoUI ui) : this()
+    public AutoUIForm(ISettingsFormUiHandler storage, Logger logger, IAutoUI ui) : this()
     {
-        FormBase.Init(this, storage, logger);
-
+        //FormBase.Init(this, storage, logger);
+        InitializeComponent();
         _ui = ui;
         _loggerServer = logger;
 
@@ -53,6 +53,7 @@ public partial class AutoUIForm : Window
 
     public AutoUIForm(AppBase appBase) : this(appBase.RootStorage, appBase.RootLogger, appBase.AutoUI)
     {
+        InitializeComponent();
     }
 
     private void AutoUIDisplay1_AutoFormDescriptorUpdated(object sender, EventArgs e)
@@ -134,7 +135,7 @@ public partial class AutoUIForm : Window
         return new AutoUIForm(appBase);
     }
 
-    public static AutoUIForm Create(SettingsStorage storage, ILoggerDispatcher logger, IAutoUI ui)
+    public static AutoUIForm Create(ISettingsFormUiHandler storage, ILoggerDispatcher logger, IAutoUI ui)
     {
         return new AutoUIForm(storage, (Logger)logger, ui);
     }

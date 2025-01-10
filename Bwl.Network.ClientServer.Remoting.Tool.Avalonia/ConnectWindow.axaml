@@ -1,0 +1,42 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:Bwl.Framework.Avalonia;assembly=Bwl.Framework.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="623" d:DesignHeight="412"
+        x:Class="Bwl.Network.ClientServer.Remoting.Tool.Avalonia.ConnectWindow"
+        Title="ConnectWindow">
+	
+	<Viewbox Stretch="Uniform">
+			<TabControl Name="TabControl1">
+				<TabItem Name="TabPage1" Header="Direct Connect">
+					<Canvas Width="623" Height="412">
+						<Button Name="bConnect" Canvas.Left="499" Canvas.Top="342" Width="105" Content="Connect UI"/>
+						<ComboBox Name="cbAddress" Canvas.Left="7" Canvas.Top="9" Width="597" Height="23" />
+						<ComboBox Name="ComboBox2" Canvas.Left="7" Canvas.Top="45" Width="597" Height="23" />
+						<ListBox Name="lbBeacons" Canvas.Left="7" Canvas.Top="85" Width="597" Height="250" />
+						<Button Name="bFind" Canvas.Left="7" Canvas.Top="342" Width="105" Content="Find"/>
+						<Button Name="bSetNetwork" Canvas.Left="248" Canvas.Top="342" Width="122" Content="Set Network"/>
+						<Button Name="bConnectCmd" Canvas.Left="377" Canvas.Top="342" Width="115" Content="Connect CMD"/>
+					</Canvas>
+				</TabItem>
+				<TabItem Name="TabPage2" Header="MessageTransport Connect">
+					
+					<Canvas Width="623" Height="412">
+						<Button Name="bFindClients" Canvas.Left="15" Canvas.Top="308" Width="314" Height="27" Content="Find Clients" HorizontalContentAlignment="Center"/>
+						<ListBox Name="lbClients" Canvas.Left="336" Canvas.Top="17" Width="270" Height="349"/>
+						<Button Name="bConnectRemoteApp" Canvas.Left="15" Canvas.Top="342" Width="314" Height="27" Content="Connect Remote App" HorizontalContentAlignment="Center"/>
+						<CheckBox Name="cbIsConnected" Content="IsConnected" Canvas.Left="165" Canvas.Top="275" />
+						
+						<local:SettingField Name="SettingField5" Canvas.Left="9" Canvas.Top="220" Width="320" Height="50"/>
+						<local:SettingField Name="SettingField3" Canvas.Left="9" Canvas.Top="114" Width="320" Height="50"/>
+						<local:SettingField Name="SettingField4" Canvas.Left="9" Canvas.Top="167" Width="320" Height="50"/>
+						<local:SettingField Name="SettingField2" Canvas.Left="9" Canvas.Top="61" Width="320" Height="50"/>
+						<local:SettingField Name="SettingField1" Canvas.Left="9" Canvas.Top="8" Width="320" Height="50"/>
+
+						<Button Name="bClient" Content="Connect Transport" Canvas.Left="15" Canvas.Top="277"/>
+					</Canvas>
+				</TabItem>
+			</TabControl>
+	</Viewbox>
+</Window>

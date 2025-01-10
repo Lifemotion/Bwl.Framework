@@ -9,7 +9,7 @@
         Application.EnableVisualStyles()
     End Sub
 
-    Public Sub New(storage As SettingsStorage, logger As Logger, ui As IAutoUI)
+    Public Sub New(storage As ISettingsFormUiHandler, logger As Logger, ui As IAutoUI)
         _storageForm = storage
         _loggerServer = logger
         _ui = ui
@@ -35,6 +35,7 @@
 
     Public Sub New(appbase As AppBase)
         Me.New(appbase.RootStorage, appbase.RootLogger, appbase.AutoUI)
+        SetSettingsStorage(appbase.RootStorage)
     End Sub
 
     Private Sub AutoForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -53,7 +54,7 @@
         Return form
     End Function
 
-    Public Shared Shadows Function Create(storage As SettingsStorage, logger As ILoggerDispatcher, ui As IAutoUI) As AutoUIForm
+    Public Shared Shadows Function Create(storage As ISettingsFormUiHandler, logger As ILoggerDispatcher, ui As IAutoUI) As AutoUIForm
         Dim form As New AutoUIForm(storage, logger, ui)
         Return form
     End Function

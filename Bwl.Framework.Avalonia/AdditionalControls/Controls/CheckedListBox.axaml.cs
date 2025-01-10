@@ -41,7 +41,7 @@ namespace Bwl.Framework.Avalonia
         }
 
         /// <summary>
-        /// Items were changed, so we need to subscribe to PropertyChanged event of new items and unsubscribe from old items
+        /// Items were changed, so we need to voidscribe to PropertyChanged event of new items and unvoidscribe from old items
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

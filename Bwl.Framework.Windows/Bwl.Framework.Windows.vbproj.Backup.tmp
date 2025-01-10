@@ -1,0 +1,175 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
+		<OutputType>Library</OutputType>
+		<MyType>WindowsForms</MyType>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+		<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageProjectUrl>https://github.com/Lifemotion/Bwl.Framework</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Lifemotion/Bwl.Framework</RepositoryUrl>
+		<LicenseUrl>https://opensource.org/license/apache-2-0</LicenseUrl>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageReadmeFile />
+		<Title>Bwl.Framework.Windows</Title>
+		<PackageIconUrl />
+		<Description>
+			Bwl.Framework.Windows - .NET library that provides common functionality for WinForms-based projects. It is a part of Bwl libraries set.
+			This library provides realization of WinForms elements (configuration, logging, AutoUI, etc.).
+			To use this library - create new WinForms project and add reference to Bwl.Framework.Windows.
+		</Description>
+		<PackageTags>bwl;configuration;logging</PackageTags>
+		<PackageReleaseNotes />
+		<Authors>Alexandra Sovenko, Artem Drobanov, Pavel Cherkas, Ilya Kuryshev</Authors>
+		<Company />
+		<Copyright>Copyright © 2025</Copyright>
+		<PackAsTool>False</PackAsTool>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<OutputPath>..\Debug\lib\Bwl.Framework.Windows\</OutputPath>
+		<DocumentationFile>Bwl.Framework.Windows.xml</DocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineDebug>false</DefineDebug>
+		<OutputPath>..\Release\lib\Bwl.Framework.Windows\</OutputPath>
+		<DocumentationFile>Bwl.Framework.Windows.xml</DocumentationFile>
+		<PackageOutputPath>..\Release\packages\</PackageOutputPath>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<NrtRevisionFormat>{c:ymd.}-{c:hms}-{chash:6}</NrtRevisionFormat>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Import Include="System.Drawing" />
+		<Import Include="System.Windows.Forms" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="My Project\Application.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Application.myapp</DependentUpon>
+			<DesignTime>True</DesignTime>
+		</Compile>
+		<Compile Update="My Project\Resources.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DesignTime>True</DesignTime>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+		<Compile Update="My Project\Settings.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+		</Compile>
+		<Compile Update="src\AppBase\FormAppBase.vb">
+			<SubType>Form</SubType>
+		</Compile>
+		<Compile Update="src\AppBase\FormBase.Designer.vb">
+			<DependentUpon>FormBase.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AppBase\FormBase.vb" />
+		<Compile Update="src\AutoUI\AutoUIForm.Designer.vb">
+			<DependentUpon>AutoUIForm.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\AutoUI\AutoUIDisplay.Designer.vb">
+			<DependentUpon>AutoUIDisplay.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\AutoUI\AutoUIDisplay.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\BaseRemoteElement.Designer.vb">
+			<DependentUpon>BaseRemoteElement.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\BaseRemoteElement.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoImage.Designer.vb">
+			<DependentUpon>RemoteAutoImage.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoImage.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoButton.Designer.vb">
+			<DependentUpon>RemoteAutoButton.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoButton.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoListbox.Designer.vb">
+			<DependentUpon>RemoteAutoListbox.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoListbox.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoTextbox.Designer.vb">
+			<DependentUpon>RemoteAutoTextbox.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\AutoUI\RemoteElements\RemoteAutoTextbox.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\Logger\LogWriters\Realizations\DatagridLogWriter.Designer.vb">
+			<DependentUpon>DatagridLogWriter.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\Logger\LogWriters\Realizations\DatagridLogWriter.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\Logger\LogWriters\Realizations\FormLogInfo.Designer.vb">
+			<DependentUpon>FormLogInfo.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\Logger\LogWriters\Realizations\FormLogInfo.vb">
+			<SubType>Form</SubType>
+		</Compile>
+		<Compile Update="src\Logger\UI\LoggerForm.designer.vb">
+			<DependentUpon>LoggerForm.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\Logger\UI\LoggerForm.vb">
+			<SubType>Form</SubType>
+		</Compile>
+		<Compile Update="src\Settings\Gui\SettingField.Designer.vb">
+			<DependentUpon>SettingField.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\Settings\Gui\SettingField.vb">
+			<SubType>UserControl</SubType>
+		</Compile>
+		<Compile Update="src\Settings\Gui\SettingsDialog.Designer.vb">
+			<DependentUpon>SettingsDialog.vb</DependentUpon>
+		</Compile>
+		<Compile Update="src\Settings\Gui\SettingsDialog.vb">
+			<SubType>Form</SubType>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="My Project\Application.myapp">
+			<Generator>MyApplicationCodeGenerator</Generator>
+			<LastGenOutput>Application.Designer.vb</LastGenOutput>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Bwl.Framework\Bwl.Framework.vbproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="8.0.0" />
+		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+		<PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+	</ItemGroup>
+</Project>

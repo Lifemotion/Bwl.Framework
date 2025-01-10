@@ -1,11 +1,13 @@
 ﻿Imports System.Windows.Forms
+Imports Bwl.Framework.Windows
 
 Public Module App
-    Private _app As New AppBase
+    Private _app As New AppBaseWin
     Private _appRemoting As RemoteAppServer
     Private _core As New RepeaterCore(_app)
     Private _ui As New RepeaterInterface(_app, _core)
 
+    <STAThread()>
     Public Sub Main(args As String())
         _app.RootLogger.ConnectWriter(New ConsoleLogWriter)
         Dim startThread As New Threading.Thread(Sub()

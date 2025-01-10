@@ -1,0 +1,16 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:Bwl.Framework.Avalonia;assembly=Bwl.Framework.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="784" d:DesignHeight="561"
+        x:Class="Bwl.Network.ClientServer.Test.Avalonia.SpeedForm"
+        Title="SpeedForm">
+	<local:FormAppBase x:Name="FormAppBase">
+		<local:FormAppBase.FormContent>
+			<WrapPanel Orientation="Vertical">
+				<Button Name="_TestButton" Width="75" Content="Test"/>
+			</WrapPanel>
+		</local:FormAppBase.FormContent>
+	</local:FormAppBase>
+</Window>

@@ -52,8 +52,8 @@ Base Bwl.Framework library is a .NET Standard 2.0 library. To have access to Win
 	<PropertyGroup>
 		<NrtRevisionFormat>{c:ymd.}-{c:hms}-{chash:6}</NrtRevisionFormat>
 		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
 	</PropertyGroup>

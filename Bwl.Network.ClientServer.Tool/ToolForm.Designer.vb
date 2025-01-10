@@ -1,6 +1,8 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+﻿Imports Bwl.Framework.Windows
+
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class ToolForm
-    Inherits Bwl.Framework.FormAppBase
+    Inherits FormAppBase
 
     'Форма переопределяет dispose для очистки списка компонентов.
     <System.Diagnostics.DebuggerNonUserCode()>
@@ -29,12 +31,12 @@ Partial Class ToolForm
         Me.tbAddressTo = New System.Windows.Forms.TextBox()
         Me.bSend = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.SettingField2 = New Bwl.Framework.SettingField()
+        Me.SettingField2 = New SettingField()
         Me.bClient = New System.Windows.Forms.Button()
-        Me.SettingField1 = New Bwl.Framework.SettingField()
-        Me.SettingField3 = New Bwl.Framework.SettingField()
-        Me.SettingField4 = New Bwl.Framework.SettingField()
-        Me.SettingField5 = New Bwl.Framework.SettingField()
+        Me.SettingField1 = New SettingField()
+        Me.SettingField3 = New SettingField()
+        Me.SettingField4 = New SettingField()
+        Me.SettingField5 = New SettingField()
         Me.bClose = New System.Windows.Forms.Button()
         Me.cbAutoConnect = New System.Windows.Forms.CheckBox()
         Me.cbIsConnected = New System.Windows.Forms.CheckBox()
@@ -225,12 +227,12 @@ Partial Class ToolForm
     Friend WithEvents tbAddressTo As TextBox
     Friend WithEvents bSend As Button
     Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents SettingField2 As Framework.SettingField
+    Friend WithEvents SettingField2 As SettingField
     Friend WithEvents bClient As Button
-    Friend WithEvents SettingField1 As Framework.SettingField
-    Friend WithEvents SettingField3 As Framework.SettingField
-    Friend WithEvents SettingField4 As Framework.SettingField
-    Friend WithEvents SettingField5 As Framework.SettingField
+    Friend WithEvents SettingField1 As SettingField
+    Friend WithEvents SettingField3 As SettingField
+    Friend WithEvents SettingField4 As SettingField
+    Friend WithEvents SettingField5 As SettingField
     Friend WithEvents bClose As Button
     Friend WithEvents cbAutoConnect As CheckBox
     Friend WithEvents cbIsConnected As CheckBox

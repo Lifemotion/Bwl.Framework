@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("bwl.Framework")> 
+<Assembly: AssemblyTitle("Bwl.Framework")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("bwl.Framework")> 
+<Assembly: AssemblyProduct("Bwl.Framework")> 
 <Assembly: AssemblyCopyright("Copyright ©  2012")> 
 <Assembly: AssemblyTrademark("")> 
 

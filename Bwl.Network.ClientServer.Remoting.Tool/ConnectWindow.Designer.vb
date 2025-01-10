@@ -1,4 +1,6 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿Imports Bwl.Framework.Windows
+
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class ConnectWindow
     Inherits System.Windows.Forms.Form
 
@@ -22,266 +24,285 @@ Partial Class ConnectWindow
     'Не изменяйте ее в редакторе исходного кода.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
+        components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConnectWindow))
-        Me.bConnect = New System.Windows.Forms.Button()
-        Me.cbAddress = New System.Windows.Forms.ComboBox()
-        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
-        Me.lbBeacons = New System.Windows.Forms.ListBox()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.bFind = New System.Windows.Forms.Button()
-        Me.bSetNetwork = New System.Windows.Forms.Button()
-        Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.bFindClients = New System.Windows.Forms.Button()
-        Me.lbClients = New System.Windows.Forms.ListBox()
-        Me.bConnectRemoteApp = New System.Windows.Forms.Button()
-        Me.cbIsConnected = New System.Windows.Forms.CheckBox()
-        Me.SettingField5 = New Bwl.Framework.SettingField()
-        Me.SettingField3 = New Bwl.Framework.SettingField()
-        Me.SettingField4 = New Bwl.Framework.SettingField()
-        Me.SettingField2 = New Bwl.Framework.SettingField()
-        Me.bClient = New System.Windows.Forms.Button()
-        Me.SettingField1 = New Bwl.Framework.SettingField()
-        Me.bConnectCmd = New System.Windows.Forms.Button()
-        Me.TabControl1.SuspendLayout()
-        Me.TabPage1.SuspendLayout()
-        Me.TabPage2.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'bConnect
-        '
-        Me.bConnect.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.bConnect.Location = New System.Drawing.Point(428, 296)
-        Me.bConnect.Name = "bConnect"
-        Me.bConnect.Size = New System.Drawing.Size(90, 23)
-        Me.bConnect.TabIndex = 0
-        Me.bConnect.Text = "Connect UI"
-        Me.bConnect.UseVisualStyleBackColor = True
-        '
-        'cbAddress
-        '
-        Me.cbAddress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cbAddress.FormattingEnabled = True
-        Me.cbAddress.Location = New System.Drawing.Point(6, 6)
-        Me.cbAddress.Name = "cbAddress"
-        Me.cbAddress.Size = New System.Drawing.Size(512, 21)
-        Me.cbAddress.TabIndex = 1
-        Me.cbAddress.Text = "localhost"
-        '
-        'ComboBox2
-        '
-        Me.ComboBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Location = New System.Drawing.Point(6, 33)
-        Me.ComboBox2.Name = "ComboBox2"
-        Me.ComboBox2.Size = New System.Drawing.Size(512, 21)
-        Me.ComboBox2.TabIndex = 2
-        '
-        'lbBeacons
-        '
-        Me.lbBeacons.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbBeacons.FormattingEnabled = True
-        Me.lbBeacons.Location = New System.Drawing.Point(6, 60)
-        Me.lbBeacons.Name = "lbBeacons"
-        Me.lbBeacons.Size = New System.Drawing.Size(512, 225)
-        Me.lbBeacons.TabIndex = 3
-        '
-        'Timer1
-        '
-        Me.Timer1.Enabled = True
-        Me.Timer1.Interval = 500
-        '
-        'bFind
-        '
-        Me.bFind.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.bFind.Location = New System.Drawing.Point(6, 296)
-        Me.bFind.Name = "bFind"
-        Me.bFind.Size = New System.Drawing.Size(90, 23)
-        Me.bFind.TabIndex = 4
-        Me.bFind.Text = "Find"
-        Me.bFind.UseVisualStyleBackColor = True
-        '
-        'bSetNetwork
-        '
-        Me.bSetNetwork.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.bSetNetwork.Location = New System.Drawing.Point(221, 296)
-        Me.bSetNetwork.Name = "bSetNetwork"
-        Me.bSetNetwork.Size = New System.Drawing.Size(105, 23)
-        Me.bSetNetwork.TabIndex = 5
-        Me.bSetNetwork.Text = "Set Network"
-        Me.bSetNetwork.UseVisualStyleBackColor = True
-        '
-        'TabControl1
-        '
-        Me.TabControl1.Controls.Add(Me.TabPage1)
-        Me.TabControl1.Controls.Add(Me.TabPage2)
-        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.TabControl1.Location = New System.Drawing.Point(0, 4)
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(534, 353)
-        Me.TabControl1.TabIndex = 6
-        '
-        'TabPage1
-        '
-        Me.TabPage1.Controls.Add(Me.bConnectCmd)
-        Me.TabPage1.Controls.Add(Me.cbAddress)
-        Me.TabPage1.Controls.Add(Me.bSetNetwork)
-        Me.TabPage1.Controls.Add(Me.bConnect)
-        Me.TabPage1.Controls.Add(Me.bFind)
-        Me.TabPage1.Controls.Add(Me.ComboBox2)
-        Me.TabPage1.Controls.Add(Me.lbBeacons)
-        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(526, 327)
-        Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "Direct Connect"
-        Me.TabPage1.UseVisualStyleBackColor = True
-        '
-        'TabPage2
-        '
-        Me.TabPage2.Controls.Add(Me.bFindClients)
-        Me.TabPage2.Controls.Add(Me.lbClients)
-        Me.TabPage2.Controls.Add(Me.bConnectRemoteApp)
-        Me.TabPage2.Controls.Add(Me.cbIsConnected)
-        Me.TabPage2.Controls.Add(Me.SettingField5)
-        Me.TabPage2.Controls.Add(Me.SettingField3)
-        Me.TabPage2.Controls.Add(Me.SettingField4)
-        Me.TabPage2.Controls.Add(Me.SettingField2)
-        Me.TabPage2.Controls.Add(Me.bClient)
-        Me.TabPage2.Controls.Add(Me.SettingField1)
-        Me.TabPage2.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(526, 327)
-        Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "MessageTransport Connect"
-        Me.TabPage2.UseVisualStyleBackColor = True
-        '
-        'bFindClients
-        '
-        Me.bFindClients.Location = New System.Drawing.Point(13, 267)
-        Me.bFindClients.Name = "bFindClients"
-        Me.bFindClients.Size = New System.Drawing.Size(269, 23)
-        Me.bFindClients.TabIndex = 41
-        Me.bFindClients.Text = "Find Clients"
-        Me.bFindClients.UseVisualStyleBackColor = True
-        '
-        'lbClients
-        '
-        Me.lbClients.FormattingEnabled = True
-        Me.lbClients.Location = New System.Drawing.Point(288, 15)
-        Me.lbClients.Name = "lbClients"
-        Me.lbClients.Size = New System.Drawing.Size(232, 303)
-        Me.lbClients.TabIndex = 40
-        '
-        'bConnectRemoteApp
-        '
-        Me.bConnectRemoteApp.Location = New System.Drawing.Point(13, 296)
-        Me.bConnectRemoteApp.Name = "bConnectRemoteApp"
-        Me.bConnectRemoteApp.Size = New System.Drawing.Size(269, 23)
-        Me.bConnectRemoteApp.TabIndex = 39
-        Me.bConnectRemoteApp.Text = "Connect Remote App"
-        Me.bConnectRemoteApp.UseVisualStyleBackColor = True
-        '
-        'cbIsConnected
-        '
-        Me.cbIsConnected.AutoSize = True
-        Me.cbIsConnected.Enabled = False
-        Me.cbIsConnected.Location = New System.Drawing.Point(129, 244)
-        Me.cbIsConnected.Name = "cbIsConnected"
-        Me.cbIsConnected.Size = New System.Drawing.Size(86, 17)
-        Me.cbIsConnected.TabIndex = 38
-        Me.cbIsConnected.Text = "IsConnected"
-        Me.cbIsConnected.UseVisualStyleBackColor = True
-        '
-        'SettingField5
-        '
-        Me.SettingField5.AssignedSetting = Nothing
-        Me.SettingField5.DesignText = Nothing
-        Me.SettingField5.Location = New System.Drawing.Point(8, 191)
-        Me.SettingField5.Name = "SettingField5"
-        Me.SettingField5.Size = New System.Drawing.Size(274, 43)
-        Me.SettingField5.TabIndex = 37
-        '
-        'SettingField3
-        '
-        Me.SettingField3.AssignedSetting = Nothing
-        Me.SettingField3.DesignText = Nothing
-        Me.SettingField3.Location = New System.Drawing.Point(8, 99)
-        Me.SettingField3.Name = "SettingField3"
-        Me.SettingField3.Size = New System.Drawing.Size(274, 43)
-        Me.SettingField3.TabIndex = 36
-        '
-        'SettingField4
-        '
-        Me.SettingField4.AssignedSetting = Nothing
-        Me.SettingField4.DesignText = Nothing
-        Me.SettingField4.Location = New System.Drawing.Point(8, 145)
-        Me.SettingField4.Name = "SettingField4"
-        Me.SettingField4.Size = New System.Drawing.Size(274, 43)
-        Me.SettingField4.TabIndex = 35
-        '
-        'SettingField2
-        '
-        Me.SettingField2.AssignedSetting = Nothing
-        Me.SettingField2.DesignText = Nothing
-        Me.SettingField2.Location = New System.Drawing.Point(8, 53)
-        Me.SettingField2.Name = "SettingField2"
-        Me.SettingField2.Size = New System.Drawing.Size(274, 43)
-        Me.SettingField2.TabIndex = 34
-        '
-        'bClient
-        '
-        Me.bClient.Location = New System.Drawing.Point(13, 240)
-        Me.bClient.Name = "bClient"
-        Me.bClient.Size = New System.Drawing.Size(110, 23)
-        Me.bClient.TabIndex = 32
-        Me.bClient.Text = "Connect Transport"
-        Me.bClient.UseVisualStyleBackColor = True
-        '
-        'SettingField1
-        '
-        Me.SettingField1.AssignedSetting = Nothing
-        Me.SettingField1.DesignText = Nothing
-        Me.SettingField1.Location = New System.Drawing.Point(8, 7)
-        Me.SettingField1.Name = "SettingField1"
-        Me.SettingField1.Size = New System.Drawing.Size(274, 43)
-        Me.SettingField1.TabIndex = 33
-        '
-        'bConnectCmd
-        '
-        Me.bConnectCmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.bConnectCmd.Location = New System.Drawing.Point(332, 296)
-        Me.bConnectCmd.Name = "bConnectCmd"
-        Me.bConnectCmd.Size = New System.Drawing.Size(90, 23)
-        Me.bConnectCmd.TabIndex = 6
-        Me.bConnectCmd.Text = "Connect CMD"
-        Me.bConnectCmd.UseVisualStyleBackColor = True
-        '
-        'ConnectWindow
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(534, 357)
-        Me.Controls.Add(Me.TabControl1)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.Name = "ConnectWindow"
-        Me.Text = "Bwl Remoting Tool - Connect"
-        Me.TabControl1.ResumeLayout(False)
-        Me.TabPage1.ResumeLayout(False)
-        Me.TabPage2.ResumeLayout(False)
-        Me.TabPage2.PerformLayout()
-        Me.ResumeLayout(False)
+        bConnect = New Button()
+        cbAddress = New ComboBox()
+        ComboBox2 = New ComboBox()
+        lbBeacons = New ListBox()
+        Timer1 = New Timer(components)
+        bFind = New Button()
+        bSetNetwork = New Button()
+        TabControl1 = New TabControl()
+        TabPage1 = New TabPage()
+        bConnectCmd = New Button()
+        TabPage2 = New TabPage()
+        bFindClients = New Button()
+        lbClients = New ListBox()
+        bConnectRemoteApp = New Button()
+        cbIsConnected = New CheckBox()
+        SettingField5 = New SettingField()
+        SettingField3 = New SettingField()
+        SettingField4 = New SettingField()
+        SettingField2 = New SettingField()
+        bClient = New Button()
+        SettingField1 = New SettingField()
+        TabControl1.SuspendLayout()
+        TabPage1.SuspendLayout()
+        TabPage2.SuspendLayout()
+        SuspendLayout()
+        ' 
+        ' bConnect
+        ' 
+        bConnect.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        bConnect.Location = New Point(499, 342)
+        bConnect.Margin = New Padding(4, 3, 4, 3)
+        bConnect.Name = "bConnect"
+        bConnect.Size = New Size(105, 27)
+        bConnect.TabIndex = 0
+        bConnect.Text = "Connect UI"
+        bConnect.UseVisualStyleBackColor = True
+        ' 
+        ' cbAddress
+        ' 
+        cbAddress.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        cbAddress.FormattingEnabled = True
+        cbAddress.Location = New Point(7, 9)
+        cbAddress.Margin = New Padding(4, 3, 4, 3)
+        cbAddress.Name = "cbAddress"
+        cbAddress.Size = New Size(597, 23)
+        cbAddress.TabIndex = 1
+        cbAddress.Text = "localhost"
+        ' 
+        ' ComboBox2
+        ' 
+        ComboBox2.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        ComboBox2.FormattingEnabled = True
+        ComboBox2.Location = New Point(7, 38)
+        ComboBox2.Margin = New Padding(4, 3, 4, 3)
+        ComboBox2.Name = "ComboBox2"
+        ComboBox2.Size = New Size(597, 23)
+        ComboBox2.TabIndex = 2
+        ' 
+        ' lbBeacons
+        ' 
+        lbBeacons.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        lbBeacons.FormattingEnabled = True
+        lbBeacons.ItemHeight = 15
+        lbBeacons.Location = New Point(7, 69)
+        lbBeacons.Margin = New Padding(4, 3, 4, 3)
+        lbBeacons.Name = "lbBeacons"
+        lbBeacons.Size = New Size(597, 259)
+        lbBeacons.TabIndex = 3
+        ' 
+        ' Timer1
+        ' 
+        Timer1.Enabled = True
+        Timer1.Interval = 500
+        ' 
+        ' bFind
+        ' 
+        bFind.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        bFind.Location = New Point(7, 342)
+        bFind.Margin = New Padding(4, 3, 4, 3)
+        bFind.Name = "bFind"
+        bFind.Size = New Size(105, 27)
+        bFind.TabIndex = 4
+        bFind.Text = "Find"
+        bFind.UseVisualStyleBackColor = True
+        ' 
+        ' bSetNetwork
+        ' 
+        bSetNetwork.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        bSetNetwork.Location = New Point(258, 342)
+        bSetNetwork.Margin = New Padding(4, 3, 4, 3)
+        bSetNetwork.Name = "bSetNetwork"
+        bSetNetwork.Size = New Size(122, 27)
+        bSetNetwork.TabIndex = 5
+        bSetNetwork.Text = "Set Network"
+        bSetNetwork.UseVisualStyleBackColor = True
+        ' 
+        ' TabControl1
+        ' 
+        TabControl1.Controls.Add(TabPage1)
+        TabControl1.Controls.Add(TabPage2)
+        TabControl1.Dock = DockStyle.Bottom
+        TabControl1.Location = New Point(0, 5)
+        TabControl1.Margin = New Padding(4, 3, 4, 3)
+        TabControl1.Name = "TabControl1"
+        TabControl1.SelectedIndex = 0
+        TabControl1.Size = New Size(623, 407)
+        TabControl1.TabIndex = 6
+        ' 
+        ' TabPage1
+        ' 
+        TabPage1.Controls.Add(bConnectCmd)
+        TabPage1.Controls.Add(cbAddress)
+        TabPage1.Controls.Add(bSetNetwork)
+        TabPage1.Controls.Add(bConnect)
+        TabPage1.Controls.Add(bFind)
+        TabPage1.Controls.Add(ComboBox2)
+        TabPage1.Controls.Add(lbBeacons)
+        TabPage1.Location = New Point(4, 24)
+        TabPage1.Margin = New Padding(4, 3, 4, 3)
+        TabPage1.Name = "TabPage1"
+        TabPage1.Padding = New Padding(4, 3, 4, 3)
+        TabPage1.Size = New Size(615, 379)
+        TabPage1.TabIndex = 0
+        TabPage1.Text = "Direct Connect"
+        TabPage1.UseVisualStyleBackColor = True
+        ' 
+        ' bConnectCmd
+        ' 
+        bConnectCmd.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        bConnectCmd.Location = New Point(387, 342)
+        bConnectCmd.Margin = New Padding(4, 3, 4, 3)
+        bConnectCmd.Name = "bConnectCmd"
+        bConnectCmd.Size = New Size(105, 27)
+        bConnectCmd.TabIndex = 6
+        bConnectCmd.Text = "Connect CMD"
+        bConnectCmd.UseVisualStyleBackColor = True
+        ' 
+        ' TabPage2
+        ' 
+        TabPage2.Controls.Add(bFindClients)
+        TabPage2.Controls.Add(lbClients)
+        TabPage2.Controls.Add(bConnectRemoteApp)
+        TabPage2.Controls.Add(cbIsConnected)
+        TabPage2.Controls.Add(SettingField5)
+        TabPage2.Controls.Add(SettingField3)
+        TabPage2.Controls.Add(SettingField4)
+        TabPage2.Controls.Add(SettingField2)
+        TabPage2.Controls.Add(bClient)
+        TabPage2.Controls.Add(SettingField1)
+        TabPage2.Location = New Point(4, 24)
+        TabPage2.Margin = New Padding(4, 3, 4, 3)
+        TabPage2.Name = "TabPage2"
+        TabPage2.Padding = New Padding(4, 3, 4, 3)
+        TabPage2.Size = New Size(615, 379)
+        TabPage2.TabIndex = 1
+        TabPage2.Text = "MessageTransport Connect"
+        TabPage2.UseVisualStyleBackColor = True
+        ' 
+        ' bFindClients
+        ' 
+        bFindClients.Location = New Point(15, 308)
+        bFindClients.Margin = New Padding(4, 3, 4, 3)
+        bFindClients.Name = "bFindClients"
+        bFindClients.Size = New Size(314, 27)
+        bFindClients.TabIndex = 41
+        bFindClients.Text = "Find Clients"
+        bFindClients.UseVisualStyleBackColor = True
+        ' 
+        ' lbClients
+        ' 
+        lbClients.FormattingEnabled = True
+        lbClients.ItemHeight = 15
+        lbClients.Location = New Point(336, 17)
+        lbClients.Margin = New Padding(4, 3, 4, 3)
+        lbClients.Name = "lbClients"
+        lbClients.Size = New Size(270, 349)
+        lbClients.TabIndex = 40
+        ' 
+        ' bConnectRemoteApp
+        ' 
+        bConnectRemoteApp.Location = New Point(15, 342)
+        bConnectRemoteApp.Margin = New Padding(4, 3, 4, 3)
+        bConnectRemoteApp.Name = "bConnectRemoteApp"
+        bConnectRemoteApp.Size = New Size(314, 27)
+        bConnectRemoteApp.TabIndex = 39
+        bConnectRemoteApp.Text = "Connect Remote App"
+        bConnectRemoteApp.UseVisualStyleBackColor = True
+        ' 
+        ' cbIsConnected
+        ' 
+        cbIsConnected.AutoSize = True
+        cbIsConnected.Enabled = False
+        cbIsConnected.Location = New Point(150, 282)
+        cbIsConnected.Margin = New Padding(4, 3, 4, 3)
+        cbIsConnected.Name = "cbIsConnected"
+        cbIsConnected.Size = New Size(92, 19)
+        cbIsConnected.TabIndex = 38
+        cbIsConnected.Text = "IsConnected"
+        cbIsConnected.UseVisualStyleBackColor = True
+        ' 
+        ' SettingField5
+        ' 
+        SettingField5.AssignedSetting = Nothing
+        SettingField5.DesignText = Nothing
+        SettingField5.Location = New Point(9, 220)
+        SettingField5.Margin = New Padding(5, 6, 5, 6)
+        SettingField5.Name = "SettingField5"
+        SettingField5.Size = New Size(320, 50)
+        SettingField5.TabIndex = 37
+        ' 
+        ' SettingField3
+        ' 
+        SettingField3.AssignedSetting = Nothing
+        SettingField3.DesignText = Nothing
+        SettingField3.Location = New Point(9, 114)
+        SettingField3.Margin = New Padding(5, 6, 5, 6)
+        SettingField3.Name = "SettingField3"
+        SettingField3.Size = New Size(320, 50)
+        SettingField3.TabIndex = 36
+        ' 
+        ' SettingField4
+        ' 
+        SettingField4.AssignedSetting = Nothing
+        SettingField4.DesignText = Nothing
+        SettingField4.Location = New Point(9, 167)
+        SettingField4.Margin = New Padding(5, 6, 5, 6)
+        SettingField4.Name = "SettingField4"
+        SettingField4.Size = New Size(320, 50)
+        SettingField4.TabIndex = 35
+        ' 
+        ' SettingField2
+        ' 
+        SettingField2.AssignedSetting = Nothing
+        SettingField2.DesignText = Nothing
+        SettingField2.Location = New Point(9, 61)
+        SettingField2.Margin = New Padding(5, 6, 5, 6)
+        SettingField2.Name = "SettingField2"
+        SettingField2.Size = New Size(320, 50)
+        SettingField2.TabIndex = 34
+        ' 
+        ' bClient
+        ' 
+        bClient.Location = New Point(15, 277)
+        bClient.Margin = New Padding(4, 3, 4, 3)
+        bClient.Name = "bClient"
+        bClient.Size = New Size(128, 27)
+        bClient.TabIndex = 32
+        bClient.Text = "Connect Transport"
+        bClient.UseVisualStyleBackColor = True
+        ' 
+        ' SettingField1
+        ' 
+        SettingField1.AssignedSetting = Nothing
+        SettingField1.DesignText = Nothing
+        SettingField1.Location = New Point(9, 8)
+        SettingField1.Margin = New Padding(5, 6, 5, 6)
+        SettingField1.Name = "SettingField1"
+        SettingField1.Size = New Size(320, 50)
+        SettingField1.TabIndex = 33
+        ' 
+        ' ConnectWindow
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(623, 412)
+        Controls.Add(TabControl1)
+        FormBorderStyle = FormBorderStyle.FixedSingle
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        Name = "ConnectWindow"
+        Text = "Bwl Remoting Tool - Connect"
+        TabControl1.ResumeLayout(False)
+        TabPage1.ResumeLayout(False)
+        TabPage2.ResumeLayout(False)
+        TabPage2.PerformLayout()
+        ResumeLayout(False)
 
     End Sub
 
@@ -295,12 +316,12 @@ Partial Class ConnectWindow
     Friend WithEvents TabControl1 As TabControl
     Friend WithEvents TabPage1 As TabPage
     Friend WithEvents TabPage2 As TabPage
-    Friend WithEvents SettingField5 As Framework.SettingField
-    Friend WithEvents SettingField3 As Framework.SettingField
-    Friend WithEvents SettingField4 As Framework.SettingField
-    Friend WithEvents SettingField2 As Framework.SettingField
+    Friend WithEvents SettingField5 As SettingField
+    Friend WithEvents SettingField3 As SettingField
+    Friend WithEvents SettingField4 As SettingField
+    Friend WithEvents SettingField2 As SettingField
     Friend WithEvents bClient As Button
-    Friend WithEvents SettingField1 As Framework.SettingField
+    Friend WithEvents SettingField1 As SettingField
     Friend WithEvents cbIsConnected As CheckBox
     Friend WithEvents bConnectRemoteApp As Button
     Friend WithEvents lbClients As ListBox

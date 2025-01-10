@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
+		<OutputType>WinExe</OutputType>
+		<StartupObject>Sub Main</StartupObject>
+		<RootNamespace>Bwl.Framework.Test.WinForms</RootNamespace>
+		<AssemblyName>Bwl.Framework.Test.WinForms</AssemblyName>
+		<MyType>WindowsFormsWithCustomSubMain</MyType>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+		<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<OutputPath>..\Debug\app\Bwl.Framework.Test.WinForms\bin\</OutputPath>
+		<DocumentationFile>Bwl.Framework.Test.WinForms.xml</DocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineDebug>false</DefineDebug>
+		<OutputPath>..\Release\app\Bwl.Framework.Test.WinForms\bin\</OutputPath>
+		<DocumentationFile>Bwl.Framework.Test.WinForms.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<NrtRevisionFormat>{c:ymd.}-{c:hms}-{chash:6}</NrtRevisionFormat>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Import Include="System.Drawing" />
+		<Import Include="System.Windows.Forms" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="My Project\Resources.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DesignTime>True</DesignTime>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+		<Compile Update="My Project\Settings.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Bwl.Framework.Windows\Bwl.Framework.Windows.vbproj" />
+		<ProjectReference Include="..\Bwl.Framework\Bwl.Framework.vbproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+	</ItemGroup>
+</Project>

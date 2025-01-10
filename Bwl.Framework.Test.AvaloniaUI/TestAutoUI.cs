@@ -112,7 +112,7 @@ namespace Bwl.Framework.Avalonia
         }
 
 
-        private void OnSettingsFormClosed()
+        private void OnSettingsFormClosed(object? sender, EventArgs e)
         {
             _appBase.RootLogger.AddInformation("Форма настройки закрыта");
         }

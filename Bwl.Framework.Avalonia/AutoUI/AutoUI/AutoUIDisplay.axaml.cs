@@ -30,7 +30,7 @@ public partial class AutoUIDisplay : UserControl
         {
             if (_ui != null)
             {
-                // Unsubscribe from previous events
+                // Unsuscribe from previous events
                 _ui.RequestToSend -= Ui_RequestToSend;
                 _ui.BaseInfosReady -= Ui_BaseInfosReady;
             }

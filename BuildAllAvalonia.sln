@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Network.ClientServer", "Bwl.Network.ClientServer\Bwl.Network.ClientServer.vbproj", "{87F67447-9009-427B-977D-5BC7870DC5E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Framework.Avalonia", "Bwl.Framework.Avalonia\Bwl.Framework.Avalonia.csproj", "{E512DAA3-595C-4E06-8DC5-31115501533A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Framework.Test.AvaloniaUI", "Bwl.Framework.Test.AvaloniaUI\Bwl.Framework.Test.AvaloniaUI.csproj", "{80445750-5DB8-4644-9BD3-3B34D325E9F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Network.ClientServer.Repeater.Avalonia", "Bwl.Network.ClientServer.Repeater.Avalonia\Bwl.Network.ClientServer.Repeater.Avalonia.csproj", "{A6EA3F85-9B57-48EF-A285-66F83C4953F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientServer", "ClientServer", "{A82CBF93-1F70-49EB-8C08-0B90FAC51649}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{F6610B58-78EC-4C4C-AE89-4AC9C4F555A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Network.ClientServer.FTDI.Avalonia", "Bwl.Network.ClientServer.FTDI.Avalonia\Bwl.Network.ClientServer.FTDI.Avalonia.csproj", "{30E6B933-FBCE-4361-9619-196B1AC415A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Network.ClientServer.Remoting.Tool.Avalonia", "Bwl.Network.ClientServer.Remoting.Tool.Avalonia\Bwl.Network.ClientServer.Remoting.Tool.Avalonia.csproj", "{7A10F547-770A-4D6F-8FBF-6307C4C36F74}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework", "Bwl.Framework\Bwl.Framework.vbproj", "{95D03099-27D7-47BB-8504-8A7D8B60EDCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Network.ClientServer.Avalonia", "Bwl.Network.ClientServer.Avalonia\Bwl.Network.ClientServer.Avalonia.csproj", "{69CFBF00-C57E-4D5A-BEA1-C64CD88F615E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Network.ClientServer.Tool.Avalonia", "Bwl.Network.ClientServer.Tool.Avalonia\Bwl.Network.ClientServer.Tool.Avalonia.csproj", "{64EAD0CE-9201-48ED-83E9-2F442A23929E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87F67447-9009-427B-977D-5BC7870DC5E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87F67447-9009-427B-977D-5BC7870DC5E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87F67447-9009-427B-977D-5BC7870DC5E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87F67447-9009-427B-977D-5BC7870DC5E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E512DAA3-595C-4E06-8DC5-31115501533A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E512DAA3-595C-4E06-8DC5-31115501533A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E512DAA3-595C-4E06-8DC5-31115501533A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E512DAA3-595C-4E06-8DC5-31115501533A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80445750-5DB8-4644-9BD3-3B34D325E9F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80445750-5DB8-4644-9BD3-3B34D325E9F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80445750-5DB8-4644-9BD3-3B34D325E9F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80445750-5DB8-4644-9BD3-3B34D325E9F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6EA3F85-9B57-48EF-A285-66F83C4953F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6EA3F85-9B57-48EF-A285-66F83C4953F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6EA3F85-9B57-48EF-A285-66F83C4953F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6EA3F85-9B57-48EF-A285-66F83C4953F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30E6B933-FBCE-4361-9619-196B1AC415A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30E6B933-FBCE-4361-9619-196B1AC415A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30E6B933-FBCE-4361-9619-196B1AC415A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30E6B933-FBCE-4361-9619-196B1AC415A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A10F547-770A-4D6F-8FBF-6307C4C36F74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A10F547-770A-4D6F-8FBF-6307C4C36F74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A10F547-770A-4D6F-8FBF-6307C4C36F74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A10F547-770A-4D6F-8FBF-6307C4C36F74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95D03099-27D7-47BB-8504-8A7D8B60EDCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95D03099-27D7-47BB-8504-8A7D8B60EDCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95D03099-27D7-47BB-8504-8A7D8B60EDCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95D03099-27D7-47BB-8504-8A7D8B60EDCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69CFBF00-C57E-4D5A-BEA1-C64CD88F615E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69CFBF00-C57E-4D5A-BEA1-C64CD88F615E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69CFBF00-C57E-4D5A-BEA1-C64CD88F615E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69CFBF00-C57E-4D5A-BEA1-C64CD88F615E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64EAD0CE-9201-48ED-83E9-2F442A23929E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64EAD0CE-9201-48ED-83E9-2F442A23929E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64EAD0CE-9201-48ED-83E9-2F442A23929E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64EAD0CE-9201-48ED-83E9-2F442A23929E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{87F67447-9009-427B-977D-5BC7870DC5E1} = {A82CBF93-1F70-49EB-8C08-0B90FAC51649}
+		{E512DAA3-595C-4E06-8DC5-31115501533A} = {F6610B58-78EC-4C4C-AE89-4AC9C4F555A6}
+		{80445750-5DB8-4644-9BD3-3B34D325E9F8} = {F6610B58-78EC-4C4C-AE89-4AC9C4F555A6}
+		{A6EA3F85-9B57-48EF-A285-66F83C4953F7} = {A82CBF93-1F70-49EB-8C08-0B90FAC51649}
+		{30E6B933-FBCE-4361-9619-196B1AC415A8} = {A82CBF93-1F70-49EB-8C08-0B90FAC51649}
+		{7A10F547-770A-4D6F-8FBF-6307C4C36F74} = {A82CBF93-1F70-49EB-8C08-0B90FAC51649}
+		{95D03099-27D7-47BB-8504-8A7D8B60EDCE} = {F6610B58-78EC-4C4C-AE89-4AC9C4F555A6}
+		{69CFBF00-C57E-4D5A-BEA1-C64CD88F615E} = {A82CBF93-1F70-49EB-8C08-0B90FAC51649}
+		{64EAD0CE-9201-48ED-83E9-2F442A23929E} = {A82CBF93-1F70-49EB-8C08-0B90FAC51649}
+	EndGlobalSection
+EndGlobal

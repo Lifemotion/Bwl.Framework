@@ -4,7 +4,7 @@
 ''' Базовый класс хранилища настроек.
 ''' </summary>
 Public MustInherit Class SettingsStorageBase
-    Implements ISettingsStorage
+    Implements ISettingsStorage, ISettingsFormUiHandler
 
     ''' <summary>
     ''' Обвязка словаря с фильтром на ключ.
@@ -58,8 +58,7 @@ Public MustInherit Class SettingsStorageBase
     Protected _friendlyName As String = ""
 
     Public Event SettingChanged(storage As SettingsStorageBase, setting As Setting)
-    Public Event SettingsFormClosed()
-
+    Public Event SettingsFormClosed As EventHandler Implements ISettingsFormUiHandler.SettingsFormClosed
     Protected WithEvents _settingsFormUiHandler As ISettingsFormUiHandler
 
     Public ReadOnly Property SettingsFormUiHandler As ISettingsFormUiHandler
@@ -99,7 +98,7 @@ Public MustInherit Class SettingsStorageBase
     End Sub
 
     Private Sub SettignsFormClosedHandler() Handles _settingsFormUiHandler.SettingsFormClosed
-        RaiseEvent SettingsFormClosed()
+        RaiseEvent SettingsFormClosed(Me, EventArgs.Empty)
     End Sub
 
     Public Function GetStoragePath() As String()
@@ -146,6 +145,12 @@ Public MustInherit Class SettingsStorageBase
     Public ReadOnly Property ChildStorages() As ISettingsStorage() Implements ISettingsStorage.ChildStorages
         Get
             Return _childStorages.Values.ToArray()
+        End Get
+    End Property
+
+    Public ReadOnly Property SettingsForm As ISettingsForm Implements ISettingsFormUiHandler.SettingsForm
+        Get
+            Return If(_settingsFormUiHandler IsNot Nothing, _settingsFormUiHandler.SettingsForm, Nothing)
         End Get
     End Property
 
@@ -226,5 +231,13 @@ Public MustInherit Class SettingsStorageBase
             End If
         End If
         Return Nothing
+    End Function
+
+    Public Function CreateSettingsForm(settingsStorage As SettingsStorageBase, invokeForm As Object) As ISettingsForm Implements ISettingsFormUiHandler.CreateSettingsForm
+        Return _settingsFormUiHandler?.CreateSettingsForm(settingsStorage, invokeForm)
+    End Function
+
+    Public Function ShowSettingsForm(settingsStorage As SettingsStorageBase, invokeForm As Object) As ISettingsForm Implements ISettingsFormUiHandler.ShowSettingsForm
+        Return _settingsFormUiHandler?.ShowSettingsForm(settingsStorage, invokeForm)
     End Function
 End Class

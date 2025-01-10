@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
+		<OutputType>Library</OutputType>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<OutputPath>..\Debug\tests\Bwl.Framework.UnitTests\</OutputPath>
+		<DocumentationFile>Bwl.Framework.UnitTests.xml</DocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineDebug>false</DefineDebug>
+		<OutputPath>..\Release\tests\Bwl.Framework.UnitTests\</OutputPath>
+		<DocumentationFile>Bwl.Framework.UnitTests.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Unclassified.NetRevisionTask" Version="0.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<NrtRevisionFormat>{c:ymd.}-{c:hms}-{chash:6}</NrtRevisionFormat>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<Compile Update="My Project\Application.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Application.myapp</DependentUpon>
+			<DesignTime>True</DesignTime>
+		</Compile>
+		<Compile Update="My Project\Resources.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DesignTime>True</DesignTime>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+		<Compile Update="My Project\Settings.Designer.vb">
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="My Project\Resources.resx">
+			<Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.vb</LastGenOutput>
+			<CustomToolNamespace>My.Resources</CustomToolNamespace>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="My Project\Application.myapp">
+			<Generator>MyApplicationCodeGenerator</Generator>
+			<LastGenOutput>Application.Designer.vb</LastGenOutput>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Bwl.Framework\Bwl.Framework.vbproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+		<PackageReference Include="NUnit" Version="4.3.2" />
+		<PackageReference Include="NUnit.ConsoleRunner" Version="3.19.0" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+	</ItemGroup>
+</Project>

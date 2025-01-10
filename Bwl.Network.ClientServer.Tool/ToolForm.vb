@@ -1,5 +1,6 @@
 ﻿
 Imports Bwl.Framework
+Imports Bwl.Framework.Windows
 
 Public Class ToolForm
     Inherits FormAppBase

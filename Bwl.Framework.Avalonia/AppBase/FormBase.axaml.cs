@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using System;
 using System.Diagnostics;
 using Avalonia.Interactivity;
+using Bwl.Framework.Avalonia;
 using MsBox.Avalonia.Enums;
 using MsBox.Avalonia;
 using Tmds.DBus.Protocol;

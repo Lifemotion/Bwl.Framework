@@ -5,13 +5,13 @@ VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework", "Bwl.Framework\Bwl.Framework.vbproj", "{E18C7249-22C8-4147-91EF-8A2721F0F026}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework.Test.WinForms", "Bwl.Framework.Test\Bwl.Framework.Test.WinForms.vbproj", "{67E94558-938E-4DDE-93F4-E5ABEECE626F}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework.Test.WinForms", "Bwl.Framework.Test.WinForms\Bwl.Framework.Test.WinForms.vbproj", "{67E94558-938E-4DDE-93F4-E5ABEECE626F}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework.UnitTests", "Bwl.Framework.Tests\Bwl.Framework.UnitTests.vbproj", "{1C857714-6B3E-4D6A-8E44-8815C75F52F3}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework.UnitTests", "Bwl.Framework.UnitTests\Bwl.Framework.UnitTests.vbproj", "{1C857714-6B3E-4D6A-8E44-8815C75F52F3}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Framework.Windows", "Bwl.Framework.Windows\Bwl.Framework.Windows.vbproj", "{BD9E341D-613C-46AA-B774-AA09A7FE2D70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Framework.Test.Console", "Bwl.Framework.ConsoleTest\Bwl.Framework.Test.Console.csproj", "{1E81D599-F2B5-4BD6-A679-C5C2884487A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Framework.Test.Console", "Bwl.Framework.Test.Console\Bwl.Framework.Test.Console.csproj", "{1E81D599-F2B5-4BD6-A679-C5C2884487A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bwl.Framework.Avalonia", "Bwl.Framework.Avalonia\Bwl.Framework.Avalonia.csproj", "{876905D0-ECD6-47C4-84D4-8B0950865DF7}"
 EndProject

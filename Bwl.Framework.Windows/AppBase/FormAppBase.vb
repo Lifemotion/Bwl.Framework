@@ -12,6 +12,7 @@ Public Class FormAppBase
         MyBase.New()
         AppBase = New AppBaseWin()
         MyBase.Init(AppBase.RootStorage, AppBase.RootLogger)
+        MyBase.SetSettingsStorage(AppBase.RootStorage)
         _storage = AppBase.RootStorage
         _logger = AppBase.RootLogger
         _loggerServer = AppBase.RootLogger
@@ -30,6 +31,7 @@ Public Class FormAppBase
         AppBase = New AppBaseWin(initFolders:=True, appName:=appName, useBufferedStorage:=useBufferedStorage, baseFolderOverride:=baseFolderOverride,
                               checkSettingsHash:=True, settingsFileName:="settings.ini")
         MyBase.Init(AppBase.RootStorage, AppBase.RootLogger)
+        MyBase.SetSettingsStorage(AppBase.RootStorage)
         _storage = AppBase.RootStorage
         _logger = AppBase.RootLogger
         _loggerServer = AppBase.RootLogger

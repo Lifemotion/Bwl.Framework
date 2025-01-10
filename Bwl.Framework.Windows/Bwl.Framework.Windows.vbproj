@@ -20,9 +20,9 @@
 		<Title>Bwl.Framework.Windows</Title>
 		<PackageIconUrl />
 		<Description>
-			Bwl.Framework.Windows - .NET library that provides common functionality for WinForms-based projects. It is a part of Bwl libraries set.
-			This library provides realization of WinForms elements (configuration, logging, AutoUI, etc.).
-			To use this library - create new WinForms project and add reference to Bwl.Framework.Windows.
+Bwl.Framework.Windows - .NET library that provides common functionality for WinForms-based projects. It is a part of Bwl libraries set.
+This library provides realization of WinForms elements (configuration, logging, AutoUI, etc.).
+To use this library - create new WinForms project and add reference to Bwl.Framework.Windows.
 		</Description>
 		<PackageTags>bwl;configuration;logging</PackageTags>
 		<PackageReleaseNotes />
@@ -54,8 +54,8 @@
 	<PropertyGroup>
 		<NrtRevisionFormat>{c:ymd.}-{c:hms}-{chash:6}</NrtRevisionFormat>
 		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
 	</PropertyGroup>

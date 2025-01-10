@@ -1,8 +1,10 @@
 ﻿Imports Bwl.Framework
+Imports Bwl.Framework.Windows
+Imports Bwl.Network.ClientServer.Windows
 
 Public Class ConnectWindow
 
-    Private _app As New AppBase
+    Private _app As New AppBaseWin
     Private _logger As Logger = _app.RootLogger
 
     Private Sub bFind_Click(sender As Object, e As EventArgs) Handles bFind.Click
@@ -124,8 +126,9 @@ Public Class ConnectWindow
             tran.Open(cbAddress.Text, Val(ComboBox2.Text))
             tran.RegisterMe("User", "", "RemoteCmdClient", "")
             Dim _cmdClient As New CmdlineClient(tran, "remotecmd", "")
-            Dim form = _cmdClient.CreateCmdForm
-            form.Show()
+            'TODO: Implement CreateCmdForm
+            'Dim form = _cmdClient.CreateCmdForm
+            'form.Show()
         Catch ex As Exception
             MsgBox(ex.Message)
             tran.Close()

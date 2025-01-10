@@ -1,0 +1,12 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="284" d:DesignHeight="96"
+        x:Class="Bwl.Network.ClientServer.TestResponder.Avalonia.Responder"
+        Title="Responder">
+	<Viewbox Stretch="Uniform">
+		<Canvas Width="284" Height="96">
+		</Canvas>
+	</Viewbox>
+</Window>

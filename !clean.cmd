@@ -1,2 +1,2 @@
-git clean -X -d -f
-rmdir .vs /q /s
+dotnet clean BuildAll.sln
+pause

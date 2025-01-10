@@ -1,5 +1,6 @@
 ﻿namespace Bwl.Framework.Avalonia;
 
+
 /// <summary>
 /// This class exists only to add AutoUI property to AppBase.
 /// </summary>
