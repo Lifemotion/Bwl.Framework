@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net8.0</TargetFrameworks>
+		<OutputType>WinExe</OutputType>
+		<StartupObject>$(RootNamespace).Program</StartupObject>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Framework\Bwl.Framework.Avalonia\Bwl.Framework.Avalonia.csproj" />
+		<ProjectReference Include="..\..\Framework\Bwl.Framework\Bwl.Framework.vbproj" />
+	</ItemGroup>
+</Project>

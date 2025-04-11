@@ -1,0 +1,746 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Bwl.Framework.SharedMemory</name>
+    </assembly>
+    <members>
+        <member name="T:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient">
+            <summary>
+            Client proxy for performing binary RPC calls over shared memory.
+            Provides transparent synchronous processing of binary data with proper cleanup.
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.Timeout">
+            <summary>
+            Gets or sets the timeout (in milliseconds) for waiting for a response from the server.
+            Must be greater than zero.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.#ctor(System.String,System.Int64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient"/> class with the specified shared memory ID and capacity.
+            </summary>
+            <param name="id">The shared memory identifier.</param>
+            <param name="capacity">The capacity (in bytes) of the data region (excluding header).</param>
+            <exception cref="T:System.ArgumentException">Thrown if id is null or empty.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if capacity is not positive.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.Initialize(System.String,System.Int64)">
+            <summary>
+            Initializes shared memory resources, sets up the memory-mapped file and event handle, and warms up the memory pages.
+            </summary>
+            <param name="id">The shared memory identifier.</param>
+            <param name="capacity">The capacity (in bytes) of the data region.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.WarmUpMemory">
+            <summary>
+            Touches each memory page so that pages are committed and loaded into RAM.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.SendRequest(System.Byte[])">
+            <summary>
+            Sends the binary request data to the server and returns an event handle to wait on the response.
+            </summary>
+            <param name="request">The binary request data.</param>
+            <returns>An EventWaitHandleUniversal instance for synchronizing the response.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown if the request size exceeds capacity.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.WaitForResponse(Bwl.Framework.SharedMemory.EventWaitHandleUniversal)">
+            <summary>
+            Waits for the response event to be signaled within the configured timeout.
+            </summary>
+            <param name="responseEvent">The event to wait on.</param>
+            <returns>True if signaled; otherwise, false.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.ReadResponse">
+            <summary>
+            Reads the binary response data from shared memory.
+            </summary>
+            <returns>The response as a byte array.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown if the response length is invalid.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.InvokeSync(System.Byte[])">
+            <summary>
+            Synchronously sends the request to the server and waits for the response.
+            </summary>
+            <param name="data">The binary request data.</param>
+            <returns>The binary response data.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.ProcessData(System.Byte[])">
+            <summary>
+            Processes binary data by sending it to the remote server and waiting for a response.
+            </summary>
+            <param name="data">The binary data to process.</param>
+            <returns>The binary response from the server.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.Dispose">
+            <summary>
+            Disposes the client and releases all associated resources.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.Dispose(System.Boolean)">
+            <summary>
+            Disposes managed and unmanaged resources used by the client.
+            </summary>
+            <param name="disposing">True if disposing managed resources.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.CleanupResources">
+            <summary>
+            Releases and cleans up all managed resources.
+            Clears the shared memory to avoid residual sensitive data.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryClient.SafeDispose(System.IDisposable)">
+            <summary>
+            Safely disposes an IDisposable resource while suppressing any exceptions.
+            </summary>
+            <param name="resource">The resource to dispose.</param>
+        </member>
+        <member name="T:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer">
+            <summary>
+            Server wrapper that listens for binary requests via shared memory, processes them,
+            and sends back binary responses. It is designed to provide robust error handling
+            and continuous operation.
+            </summary>
+        </member>
+        <member name="E:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.LogMessage">
+            <summary>
+            Occurs when an informational message needs to be logged.
+            </summary>
+        </member>
+        <member name="E:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.LogError">
+            <summary>
+            Occurs when an error message needs to be logged.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.#ctor(System.Func{System.Byte[],System.Byte[]},System.String,System.Int64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer"/> class. Processing function works with byte arrays.
+            </summary>
+            <param name="processFunc">A delegate that processes binary request data and returns the response.</param>
+            <param name="id">Unique identifier used for shared memory resources.</param>
+            <param name="capacity">Capacity of the data region in bytes.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="processFunc"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if <paramref name="id"/> is null, empty, or if <paramref name="capacity"/> is not positive.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.#ctor(System.Func{System.IntPtr,System.Int32,System.Int32},System.String,System.Int64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer"/> class. Processing function works with pointer to shared memory.
+            </summary>
+            <param name="processFuncPtr">A delegate that processes binary request data via pointer, accepts pointer to byte array and length, returns new length.</param>
+            <param name="id">Unique identifier used for shared memory resources.</param>
+            <param name="capacity">Capacity of the data region in bytes.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="processFuncPtr"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if <paramref name="id"/> is null, empty, or if <paramref name="capacity"/> is not positive.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.WarmUpMemory">
+            <summary>
+            Touches every page of the mapped memory to load it into physical memory.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.StartProcessingLoop">
+            <summary>
+            Starts the asynchronous processing loop for handling incoming requests.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.ProcessingLoop(System.Threading.CancellationToken)">
+            <summary>
+            Continuously polls for incoming requests, processes them, and writes responses.
+            </summary>
+            <param name="token">Cancellation token to stop the loop.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.ProcessByteArray">
+            <summary>
+            Processes the incoming request and writes the response back to shared memory.
+            </summary>
+            <exception cref="T:System.ArgumentException">Thrown if ReadRequest returns null.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.ReadRequest">
+            <summary>
+            Reads a binary request from shared memory.
+            </summary>
+            <returns>The request data as a byte array, or null if an error occurs.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.WriteResponse(System.Byte[])">
+            <summary>
+            Writes the binary response data into shared memory and notifies the client.
+            </summary>
+            <param name="response">The binary response data.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.ProcessPointer">
+            <summary>
+            Processes the incoming request and writes the response back to shared memory using pointer processing.
+            </summary>
+            <exception cref="T:System.ArgumentException">Thrown if ReadRequest returns null.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.ReadRequestPtr">
+            <summary>
+            Get a pointer to the binary request data in shared memory and length of a buffer.
+            </summary>
+            <returns>A tuple containing pointer to data in shared memory and length of the data.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.WriteResponsePtr(System.Int32)">
+            <summary>
+            Writes length of binary data already written while processing data via pointer.
+            </summary>
+            <param name="responseLength">Length of new data.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.Stop">
+            <summary>
+            Stops the processing loop.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.Dispose">
+            <summary>
+            Disposes the server and releases all associated resources.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.Dispose(System.Boolean)">
+            <summary>
+            Disposes managed and unmanaged resources.
+            </summary>
+            <param name="disposing">True if disposing managed resources.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryBinaryServer.SafeDispose(System.IDisposable,System.String)">
+            <summary>
+            Safely disposes an IDisposable resource.
+            </summary>
+            <param name="resource">The resource to dispose.</param>
+            <param name="resourceName">Name for logging purposes.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleWindows.WaitOneAsyncInternal(System.Int32,System.Boolean,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Helper method for all WaitOneAsync overloads.
+            </summary>
+            <param name="millisecondsTimeout"></param>
+            <param name="exitContext"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Bwl.Framework.SharedMemory.EventWaitHandleLinux">
+            <summary>
+            POSIX semaphore implementation for Linux.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.#ctor(System.Boolean,System.Threading.EventResetMode,System.String)">
+            <summary>
+            Creates a POSIX semaphore with a name.
+            For manualReset events this implementation simulates “staying signaled” by reposting after a wait.
+            </summary>
+            <param name="initialState">True if the event starts signaled.</param>
+            <param name="mode">Specifies auto- or manual-reset behavior.</param>
+            <param name="name">The name of the event/semaphore.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.WaitOne">
+            <summary>
+            Waits for the event to be signaled.
+            </summary>
+            <returns>True if event was signaled or false if it wasn't</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.WaitOne(System.Int32)">
+            <summary>
+            Waits for the event to be signaled.
+            </summary>
+            <param name="millisecondsTimeout">Timeout</param>
+            <returns>True if event was signaled or false if it wasn't</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.WaitOne(System.TimeSpan)">
+            <summary>
+            Waits for the event to be signaled.
+            </summary>
+            <param name="timeout">Timeout in TimeSpan</param>
+            <returns>True if event was signaled or false if it wasn't</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.WaitOne(System.Int32,System.Boolean)">
+            <summary>
+            Waits for the event to be signaled.
+            </summary>
+            <param name="millisecondsTimeout">Timeout</param>
+            <param name="exitContext">Exit context after wait; unused in Linux</param>
+            <returns>True if event was signaled or false if it wasn't</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.WaitOne(System.TimeSpan,System.Boolean)">
+            <summary>
+            Waits for the event to be signaled.
+            </summary>
+            <param name="timeout">Timeout in TimeSpan</param>
+            <param name="exitContext">Exit context after wait; unused in Linux</param>
+            <returns>True if event was signaled or false if it wasn't</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.WaitOneAsync(System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously waits for the event to be signaled.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.WaitOneAsync(System.Int32,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously waits for the event to be signaled.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.WaitOneAsync(System.TimeSpan,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously waits for the event to be signaled.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.WaitOneAsync(System.Int32,System.Boolean,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously waits for the event to be signaled.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.WaitOneAsync(System.TimeSpan,System.Boolean,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Asynchronously waits for the event to be signaled.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.Set">
+            <summary>
+            Sets the event to signaled.
+            If the event is already signaled, no extra post is done.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.Reset">
+            <summary>
+            Resets (drains) the event to non-signaled by consuming any pending signal.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.GetValue">
+            <summary>
+            Helper to get the current value of the semaphore.
+            </summary>
+            <returns>Current value of the semaphore</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.GetTimeout(System.Int32)">
+            <summary>
+            Helper to compute an absolute timeout in timespec format.
+            sem_timedwait expects an absolute time (CLOCK_REALTIME).
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.EventWaitHandleLinux.Dispose">
+            <summary>
+            Releases the semaphore and unlinks it.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.MemoryMappedFileUniversal.CreateOrOpen(System.String,System.Int64,System.IO.MemoryMappedFiles.MemoryMappedFileAccess)">
+            <summary>
+            Creates or opens a memory-mapped file with the specified name and size (Windows or Linux).
+            </summary>
+            <param name="name">Name of memory-mapped file</param>
+            <param name="size">Size of memory-mapped file, bytes</param>
+            <param name="memoryMappedFileAccess">Access mode for memory-mapped file.</param>
+            <returns>Memory mapped file supported in current OS</returns>
+            <exception cref="T:System.NotSupportedException">Thrown if attempted to use on OS different from Windows or Linux</exception>
+        </member>
+        <member name="T:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1">
+            <summary>
+            Client proxy for performing RPC calls over shared memory.
+            Provides transparent method invocation to a remote implementation.
+            </summary>
+            <typeparam name="T">The interface type that defines the contract for remote calls.</typeparam>
+        </member>
+        <member name="P:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.Timeout">
+            <summary>
+            Gets or sets the timeout (in milliseconds) for waiting for a response from the server.
+            Must be greater than zero.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.Initialize(System.String,System.Int64)">
+            <summary>
+            Initializes the RPC client with the specified identifier and data capacity.
+            </summary>
+            <param name="id">The unique identifier for the memory mapped file.</param>
+            <param name="capacity">The capacity of the data region (in bytes).</param>
+            <exception cref="T:System.ArgumentException">Thrown if ID is null or empty.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if capacity is not positive.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown if resource initialization fails.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.Create(System.String,System.Int64)">
+            <summary>
+            Creates an instance of the RPC client proxy implementing the specified interface.
+            </summary>
+            <param name="id">Identifier used to connect to the server.</param>
+            <param name="capacity">Capacity of the data region (in bytes).</param>
+            <returns>An instance of proxy implementing the interface.</returns>
+            <exception cref="T:System.ArgumentException">Thrown if id is null or empty, or if T is not an interface.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown if initialization fails.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.Invoke(System.Reflection.MethodInfo,System.Object[])">
+            <summary>
+            Intercepts method calls on the proxy and delegates them as RPC calls.
+            </summary>
+            <param name="targetMethod">The invoked method information.</param>
+            <param name="args">The arguments passed to the method.</param>
+            <returns>The return value from the remote call, or null for void methods.</returns>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the client is disposed.</exception>
+            <exception cref="T:System.NotSupportedException">Thrown for unsupported method types (async, properties, or out/ref parameters).</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.WarmUpMemory">
+            <summary>
+            Warms up the memory mapped file by touching each memory page.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.ValidateMethodIsSupported(System.Reflection.MethodInfo)">
+            <summary>
+            Validates that the specified method is supported by the client.
+            </summary>
+            <param name="method">The method to validate.</param>
+            <exception cref="T:System.ArgumentNullException">If method is null.</exception>
+            <exception cref="T:System.NotSupportedException">If the method is asynchronous, has out/ref parameters, or is a property accessor.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.InvokeSync(System.Reflection.MethodInfo,System.Object[])">
+            <summary>
+            Synchronously invokes the method on the remote server over shared memory.
+            </summary>
+            <param name="targetMethod">The method to invoke.</param>
+            <param name="args">The method arguments.</param>
+            <returns>The result from the remote invocation or null for void methods.</returns>
+            <exception cref="T:System.ArgumentException">If argument counts do not match.</exception>
+            <exception cref="T:System.TimeoutException">If the server does not respond within the timeout period.</exception>
+            <exception cref="T:System.MethodAccessException">If the server returns an error.</exception>
+            <exception cref="T:System.InvalidOperationException">For other communication failures.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.SendRequest(Bwl.Framework.SharedMemory.InvocationRequest)">
+            <summary>
+            Sends an invocation request to the remote server via shared memory.
+            </summary>
+            <param name="request">The invocation request.</param>
+            <returns>An event handle associated with the request for waiting on the response.</returns>
+            <exception cref="T:System.InvalidOperationException">If the request size exceeds the available capacity.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.WaitForResponse(Bwl.Framework.SharedMemory.EventWaitHandleUniversal)">
+            <summary>
+            Waits for the response event with the current timeout.
+            </summary>
+            <param name="responseEvent">The event handle to wait on.</param>
+            <returns>True if the response event was signaled; otherwise, false (timeout).</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.ReadResponse">
+            <summary>
+            Reads and deserializes the response from shared memory.
+            </summary>
+            <returns>The deserialized invocation response.</returns>
+            <exception cref="T:System.InvalidOperationException">If the response length is invalid or deserialization fails.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.GenerateUniqueId">
+            <summary>
+            Generates and returns a unique identifier for each request.
+            Resets when maximum value is reached.
+            </summary>
+            <returns>A unique integer identifier.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.SetMsgId(System.Int32)">
+            <summary>
+            Sets the unique ID in the shared memory header.
+            </summary>
+            <param name="id">The unique identifier.</param>
+            <returns>The set unique identifier.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.GetMsgId">
+            <summary>
+            Retrieves the unique ID from the shared memory header.
+            </summary>
+            <returns>The unique identifier.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.SetMsgDataLength(System.Int32)">
+            <summary>
+            Sets the response/request data length in the shared memory header.
+            </summary>
+            <param name="length">The length of the data.</param>
+            <returns>The set data length.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.GetMsgDataLength">
+            <summary>
+            Retrieves the data length from the shared memory header.
+            </summary>
+            <returns>The current data length value.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.ClearSharedMemory">
+            <summary>
+            Clears the shared memory region by zeroing out its contents.
+            This helps ensure no residual data remains in memory.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.Dispose">
+            <summary>
+            Disposes the client and releases all associated resources.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.Dispose(System.Boolean)">
+            <summary>
+            Disposes managed and unmanaged resources used by the client.
+            </summary>
+            <param name="disposing">True to dispose managed resources.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.CleanupResources">
+            <summary>
+            Releases and cleans up all managed resources.
+            Also clears the shared memory to avoid residual sensitive data.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCClient`1.SafeDispose(System.IDisposable)">
+            <summary>
+            Safely disposes an IDisposable resource and suppresses any exceptions.
+            </summary>
+            <param name="resource">The resource to dispose.</param>
+        </member>
+        <member name="T:Bwl.Framework.SharedMemory.MethodArgument">
+            <summary>
+            Represents a method argument with its type and value.
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.SharedMemory.MethodArgument.Type">
+            <summary>
+            Gets or sets the fully qualified name of the argument's type.
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.SharedMemory.MethodArgument.Value">
+            <summary>
+            Gets or sets the argument value.
+            </summary>
+        </member>
+        <member name="T:Bwl.Framework.SharedMemory.InvocationRequest">
+            <summary>
+            Represents an invocation request containing the method name and its arguments.
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.SharedMemory.InvocationRequest.MethodName">
+            <summary>
+            Gets or sets the name of the method to invoke.
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.SharedMemory.InvocationRequest.MethodArguments">
+            <summary>
+            Gets or sets the array of method arguments.
+            </summary>
+        </member>
+        <member name="T:Bwl.Framework.SharedMemory.InvocationResponse">
+            <summary>
+            Represents an invocation response containing the result of the method call or error information.
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.SharedMemory.InvocationResponse.Result">
+            <summary>
+            Gets or sets the result of the method invocation.
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.SharedMemory.InvocationResponse.IsError">
+            <summary>
+            Gets or sets a value indicating whether an error occurred during invocation.
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.SharedMemory.InvocationResponse.ErrorMessage">
+            <summary>
+            Gets or sets the error message when an error occurs.
+            </summary>
+        </member>
+        <member name="T:Bwl.Framework.SharedMemory.GCLowLatency">
+            <summary>
+            Temporarily sets the garbage collector latency mode to low latency.
+            Restores the original latency mode when disposed.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.GCLowLatency.#ctor">
+            <summary>
+            Initializes a new instance, setting GC latency to low latency.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.GCLowLatency.Dispose">
+            <summary>
+            Restores the original GC latency mode.
+            </summary>
+        </member>
+        <member name="T:Bwl.Framework.SharedMemory.UnmanagedBufferWriter">
+            <summary>
+            A custom unmanaged buffer writer implementing IBufferWriter&lt;byte&gt; to allow zero-copy serialization.
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.SharedMemory.UnmanagedBufferWriter.BytesWritten">
+            <summary>
+            Gets the number of bytes written to the buffer.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.UnmanagedBufferWriter.#ctor(System.Byte*,System.Int32)">
+            <summary>
+            Initializes a new instance with the specified unmanaged memory region.
+            </summary>
+            <param name="start">Pointer to the start of the unmanaged memory.</param>
+            <param name="capacity">The total capacity of the memory region.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.UnmanagedBufferWriter.Advance(System.Int32)">
+            <summary>
+            Advances the writer position by the specified count.
+            </summary>
+            <param name="count">The number of bytes to advance.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.UnmanagedBufferWriter.GetSpan(System.Int32)">
+            <summary>
+            Gets a span representing the writable region of the buffer.
+            </summary>
+            <param name="sizeHint">The minimum required size.</param>
+            <returns>A writable Span&lt;byte&gt;.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.UnmanagedBufferWriter.GetMemory(System.Int32)">
+            <summary>
+            Gets a memory block representing the writable region of the buffer.
+            </summary>
+            <param name="sizeHint">The minimum required size.</param>
+            <returns>A Memory&lt;byte&gt;.</returns>
+        </member>
+        <member name="T:Bwl.Framework.SharedMemory.UnmanagedBufferWriter.UnmanagedMemoryManager">
+            <summary>
+            A minimal MemoryManager for wrapping unmanaged memory.
+            </summary>
+        </member>
+        <member name="T:Bwl.Framework.SharedMemory.UnmanagedReadMemoryManager">
+            <summary>
+            Provides a MemoryManager wrapping an unmanaged memory region for zero-copy deserialization.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.UnmanagedReadMemoryManager.#ctor(System.Byte*,System.Int32)">
+            <summary>
+            Initializes a new instance with the given unmanaged memory region.
+            </summary>
+            <param name="pointer">Pointer to the start of the unmanaged memory.</param>
+            <param name="length">The length of the memory region.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.UnmanagedReadMemoryManager.GetSpan">
+            <summary>
+            Gets a span representing the unmanaged memory region.
+            </summary>
+            <returns>A Span&lt;byte&gt; over the memory region.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.UnmanagedReadMemoryManager.Pin(System.Int32)">
+            <summary>
+            Pins the memory and returns a memory handle.
+            </summary>
+            <param name="elementIndex">The index to pin.</param>
+            <returns>A MemoryHandle.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.UnmanagedReadMemoryManager.Unpin">
+            <summary>
+            Not used for unmanaged memory.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.UnmanagedReadMemoryManager.Dispose(System.Boolean)">
+            <summary>
+            Disposes the memory manager.
+            </summary>
+            <param name="disposing">True if disposing managed resources.</param>
+        </member>
+        <member name="T:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1">
+            <summary>
+            Server wrapper that listens for RPC requests via shared memory and sends responses.
+            Implements robust error handling to ensure continuous operation.
+            </summary>
+            <typeparam name="T">Interface type of the underlying service implementation.</typeparam>
+        </member>
+        <member name="E:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.LogMessage">
+            <summary>
+            Event for general informational messages.
+            </summary>
+        </member>
+        <member name="E:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.LogError">
+            <summary>
+            Event for reporting errors encountered during processing.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.#ctor(`0,System.String,System.Int64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1"/> class.
+            </summary>
+            <param name="implementation">The service implementation for RPC calls.</param>
+            <param name="id">Unique identifier for shared memory resources.</param>
+            <param name="capacity">Capacity in bytes of the data region.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if implementation is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if id is null or empty or if capacity is not positive.</exception>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.Dispose">
+            <summary>
+            Stops processing further requests and releases all server resources.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.WarmUpMemory">
+            <summary>
+            Touches each memory page to ensure they are loaded into RAM.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.CreateMethodInvoker(System.Reflection.MethodInfo)">
+            <summary>
+            Creates a delegate for invoking a method using expression trees.
+            </summary>
+            <param name="method">The method info for which to build the invoker.</param>
+            <returns>A delegate to invoke the method.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.StartProcessingLoop">
+            <summary>
+            Starts the background processing loop for handling incoming RPC requests.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.ProcessingLoop(System.Threading.CancellationToken)">
+            <summary>
+            Waits for an invocation request, processes it, and sends back a response.
+            This loop continues until cancellation is requested.
+            </summary>
+            <param name="token">Cancellation token to stop processing.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.ReadInvocationRequest">
+            <summary>
+            Reads an invocation request from shared memory.
+            </summary>
+            <returns>The deserialized invocation request if successful; otherwise, null.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.ProcessInvocation(Bwl.Framework.SharedMemory.InvocationRequest)">
+            <summary>
+            Processes the invocation request by invoking the corresponding service method.
+            </summary>
+            <param name="request">The invocation request details.</param>
+            <returns>An invocation response containing the method result or error information.</returns>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.WriteInvocationResponse(Bwl.Framework.SharedMemory.InvocationResponse)">
+            <summary>
+            Writes the serialized invocation response into shared memory and notifies the client.
+            </summary>
+            <param name="response">The invocation response to send.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.RaiseMessage(System.String)">
+            <summary>
+            Raises an informational log message.
+            </summary>
+            <param name="message">The message to log.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.RaiseError(System.String)">
+            <summary>
+            Raises an error log message.
+            </summary>
+            <param name="errorMessage">The error message to log.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.Stop">
+            <summary>
+            Stops the processing loop and releases internal resources.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.ClearSharedMemory">
+            <summary>
+            Clears the shared memory region to avoid leaving data in memory.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.Dispose(System.Boolean)">
+            <summary>
+            Disposes managed resources and clears memory to prevent leaks.
+            </summary>
+            <param name="disposing">True if disposing managed resources.</param>
+        </member>
+        <member name="M:Bwl.Framework.SharedMemory.SharedMemoryRPCServer`1.SafeDispose(System.IDisposable,System.String)">
+            <summary>
+            Safely disposes an IDisposable resource with exception handling.
+            </summary>
+            <param name="resource">The resource to dispose.</param>
+            <param name="resourceName">Name for logging purposes.</param>
+        </member>
+        <member name="T:MessagePack.GeneratedMessagePackResolver">
+            <summary>A MessagePack resolver that uses generated formatters for types in this assembly.</summary>
+        </member>
+        <member name="F:MessagePack.GeneratedMessagePackResolver.Instance">
+            <summary>An instance of this resolver that only returns formatters specifically generated for types in this assembly.</summary>
+        </member>
+    </members>
+</doc>

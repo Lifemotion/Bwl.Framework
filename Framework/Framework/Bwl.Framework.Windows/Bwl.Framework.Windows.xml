@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Bwl.Framework.Windows</name>
+    </assembly>
+    <members>
+        <member name="M:Bwl.Framework.Windows.InputBox.Show(System.String,System.String,System.String,System.Windows.Forms.Form)">
+            <summary>
+            Shows a dialog box with a prompt and an input field
+            </summary>
+            <param name="prompt">The prompt to display</param>
+            <param name="title">The title of the dialog box</param>
+            <param name="defaultResponse">The default response to display in the input field</param>
+            <param name="owner">The form that owns this dialog</param>
+            <returns>The user's response</returns>
+        </member>
+        <member name="T:Bwl.Framework.Windows.AppBaseFolderFinder">
+            <summary>
+            Класс для поиска папки с настройками и логами
+            </summary>
+        </member>
+        <member name="F:Bwl.Framework.Windows.AppBaseFolderFinder.SystemDrive">
+            <summary>
+            Системный диск
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.Windows.AppBaseFolderFinder.GetPathToApplicationBaseFolder(System.String,System.String)">
+            <summary>
+            Получение актуального пути к папке с данными
+            </summary>
+            <param name="sysVariable">Системная переменная</param>
+            <param name="defaultFolder">Путь к папке (предполагаемый или реальный)</param>
+            <returns>Путь к папке (создаётся, если отсутствует)</returns>
+        </member>
+        <member name="M:Bwl.Framework.Windows.AppBaseFolderFinder.FindDataFolder(System.String)">
+            <summary>
+            Поиск папки по пути
+            </summary>
+            <param name="folderPath">Путь к папке (предполагаемый или реальный)</param>
+            <returns>Путь к папке (создаётся если отсутствует)</returns>
+        </member>
+        <member name="M:Bwl.Framework.Windows.AppBaseFolderFinder.FindFolderOnDisks(System.String)">
+            <summary>
+            Поиск папки на дисках
+            </summary>
+            <param name="pathWithoutDriveLetter">Путь к папке БЕЗ указания буквы диска</param>
+            <returns>Путь к папке (если найден)</returns>
+        </member>
+        <member name="T:Bwl.Framework.Windows.Image">
+            <summary>Изображение</summary>
+        </member>
+        <member name="M:Bwl.Framework.Windows.Image.SaveImage(System.String)">
+            <summary>Сохранить кадр по указанному пути.</summary>
+        </member>
+        <member name="M:Bwl.Framework.Windows.Image.GetBitmap">
+            <summary>
+            Скопировать изображение
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.Windows.Image.RowDataBytes">
+            <summary>Сырые данные изобаржения</summary>
+        </member>
+        <member name="M:Bwl.Framework.Windows.WinFormsUI.InitializeBase">
+            <summary>
+            Initalizes WinForms module initialization
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.Windows.WinFormsUI.IsRunning">
+            <summary>
+            Returns true if the application is running (and was started via WinFormsUI!) and there's at least one form.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.Windows.WinFormsUI.#cctor">
+            <summary>
+            Initializes the WinForms UI.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.Windows.WinFormsUI.StartMainForm(Bwl.Framework.IUIWindow)">
+            <summary>
+            Starts the main form.
+            </summary>
+            <param name="mainForm"></param>
+        </member>
+        <member name="M:Bwl.Framework.Windows.WinFormsUI.StartMainForm(System.Windows.Forms.Form)">
+            <summary>
+            Starts the main form.
+            </summary>
+            <param name="form"></param>
+        </member>
+        <member name="M:Bwl.Framework.Windows.WinFormsUI.HideForm(System.Object,System.EventArgs)">
+            <summary>
+            Hides the form.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Bwl.Framework.Windows.WinFormsUI.StartHeadless">
+            <summary>
+            Starts the headless application.
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.Windows.WinFormsUI.CreateDummyForm">
+            <summary>
+            Creates a dummy form for headless mode so we can get access to UI thread
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Bwl.Framework.Windows.WinFormsUI.UIThreadInvoke(System.Action)">
+            <summary>
+            Invokes an action on the UI thread.
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:Bwl.Framework.Windows.WinFormsUI.StopApplication">
+            <summary>
+            Stops the application.
+            </summary>
+        </member>
+    </members>
+</doc>

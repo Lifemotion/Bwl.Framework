@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net8.0</TargetFrameworks>
+		<OutputType>Exe</OutputType>
+		<StartupObject>$(RootNamespace).Program</StartupObject>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\ClientServer\Bwl.Network.ClientServer\Bwl.Network.ClientServer.vbproj" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,13 @@
+<Project>
+	<PropertyGroup>
+		<Title>Bwl.Framework</Title>
+		<Description>
+Bwl.Framework - a set of .NET libraries that provide common functionality that is used in many projects. It is a part of Bwl libraries set.
+
+Bwl.Framework allows you to easily add configuration and logging to your project, as well as to use a set of common classes and methods.
+Among additional features - CryptoTools with AES support; JSON serialization; string tools; and more.
+Base Bwl.Framework library is a .NET Standard 2.0 library. To have access to Windows-specific features, use Bwl.Framework.Windows library. To use cross-platform GUI and features - use Bwl.Framework.Avalonia library.
+		</Description>
+		<PackageTags>bwl;configuration;logging</PackageTags>
+	</PropertyGroup>
+</Project>

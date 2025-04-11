@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="AppBase\FormAppBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="AppBase\FormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="AutoUI\AutoUIForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="AutoUI\AutoUI\AutoUIDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="AutoUI\RemoteElements\BaseRemoteElement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="AutoUI\RemoteElements\RemoteAutoButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="AutoUI\RemoteElements\RemoteAutoImage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="AutoUI\RemoteElements\RemoteAutoListbox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="AutoUI\RemoteElements\RemoteAutoTextbox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Logger\LogWriters\Realizations\DatagridLogWriter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Logger\LogWriters\Realizations\FormLogInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Logger\UI\LoggerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Settings\Gui\SettingField.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Settings\Gui\SettingsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>

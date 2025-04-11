@@ -1,0 +1,7 @@
+# Bwl.Framework
+
+<!-- pagebreak -->
+
+### Igor Koshelev (igor@lifemotion.ru)
+
+Common library for many projects, implements mechanisms for Settings storages, Loggers, provides Application Bases for console and gui apps.

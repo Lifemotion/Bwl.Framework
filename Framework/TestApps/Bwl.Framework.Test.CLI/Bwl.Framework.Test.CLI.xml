@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Bwl.Framework.Test.CLI</name>
+    </assembly>
+    <members>
+        <member name="M:Bwl.Framework.Test.CLI.BwlConsoleTestLoggerWriter.#ctor(System.Boolean,System.Int32)">
+            <summary>
+            Writer для получения записей из лога и передачи в WebUI
+            </summary>
+            <param name="logEnabled">Использовать лог?</param>
+            <param name="capacity">Количество записей в логе</param>
+        </member>
+        <member name="M:Bwl.Framework.Test.CLI.Program.LogSettingsValue">
+            <summary>
+            This function contiuously adds values from settings to the log with 5 second intervals
+            </summary>
+        </member>
+    </members>
+</doc>

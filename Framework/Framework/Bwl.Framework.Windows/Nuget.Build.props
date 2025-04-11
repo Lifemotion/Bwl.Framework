@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+	  <Title>Bwl.Framework.Windows</Title>
+	  <Description>
+Bwl.Framework.Windows is the Windows‐specific UI component of the Bwl.Framework library. It provides helper classes and methods for classic Windows Forms applications. This library simplifies launching and managing WinForms-based user interfaces, including support for headless mode (to obtain a UI thread without showing an initial form) and single‐window mode.
+	  </Description>
+	  <PackageTags>bwl;configuration;winforms</PackageTags>
+  </PropertyGroup>
+</Project>

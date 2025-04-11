@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net8.0</TargetFrameworks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Framework\Framework\Bwl.Framework.Avalonia\Bwl.Framework.Avalonia.csproj" />
+		<ProjectReference Include="..\..\..\Framework\Framework\Bwl.Framework\Bwl.Framework.vbproj" />
+		<ProjectReference Include="..\Bwl.Network.ClientServer\Bwl.Network.ClientServer.vbproj" />
+	</ItemGroup>
+</Project>

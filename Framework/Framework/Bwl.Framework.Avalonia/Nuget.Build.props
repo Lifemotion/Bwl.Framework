@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+	  <Title>Bwl.Framework.Avalonia</Title>
+	  <Description>
+Bwl.Framework.Avalonia is the cross-platform UI component of Bwl.Framework. It provides a consistent API for building rich desktop interfaces across Windows, Linux, and macOS. This library is designed to work hand-in-hand with the core Bwl.Framework library, offering UI functionality where Windows-specific implementations are not desired.
+	  </Description>
+	  <PackageTags>bwl;configuration;avalonia</PackageTags>
+  </PropertyGroup>
+</Project>

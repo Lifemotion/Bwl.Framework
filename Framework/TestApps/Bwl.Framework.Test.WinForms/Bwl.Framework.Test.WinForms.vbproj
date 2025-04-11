@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net8.0-windows</TargetFrameworks>
+		<OutputType>WinExe</OutputType>
+		<UseWindowsForms>true</UseWindowsForms>
+		<StartupObject>$(RootNamespace).App</StartupObject>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\..\Framework\Bwl.Framework.Windows\Bwl.Framework.Windows.csproj" />
+		<ProjectReference Include="..\..\Framework\Bwl.Framework\Bwl.Framework.vbproj" />
+	</ItemGroup>
+</Project>

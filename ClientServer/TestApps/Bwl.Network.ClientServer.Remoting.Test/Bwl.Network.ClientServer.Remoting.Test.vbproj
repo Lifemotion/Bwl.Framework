@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net8.0</TargetFrameworks>
+		<OutputType>Exe</OutputType>
+		<StartupObject>$(RootNamespace).RemotingTest</StartupObject>
+	</PropertyGroup>
+	<ItemGroup>
+	  <PackageReference Include="SkiaSharp" Version="3.116.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\ClientServer\Bwl.Network.ClientServer\Bwl.Network.ClientServer.vbproj" />
+	</ItemGroup>
+</Project>

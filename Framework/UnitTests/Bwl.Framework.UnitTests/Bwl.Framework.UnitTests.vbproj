@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net48;net8.0</TargetFrameworks>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
+		
+	<ItemGroup>
+		<ProjectReference Include="..\..\Framework\Bwl.Framework.SharedMemory\Bwl.Framework.SharedMemory.csproj" />
+		<ProjectReference Include="..\..\Framework\Bwl.Framework\Bwl.Framework.vbproj" />
+	</ItemGroup>
+</Project>

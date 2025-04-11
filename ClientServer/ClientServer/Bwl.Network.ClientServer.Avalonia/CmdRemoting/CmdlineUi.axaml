@@ -1,0 +1,26 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="884" d:DesignHeight="510"
+        x:Class="Bwl.Network.ClientServer.Avalonia.CmdlineUi"
+        Title="CmdlineUi">
+	<Grid RowDefinitions="Auto,*,Auto">
+		<!-- Top controls -->
+		<Grid Grid.Row="0" Margin="8,4" ColumnDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto,Auto">
+			<CheckBox Name="cbAlive" IsEnabled="False" Content="Alive" Margin="0,0,8,0" Grid.Column="0"/>
+			<CheckBox Name="cbResponding" IsEnabled="False" Content="Responding" Margin="0,0,8,0" Grid.Column="1"/>
+			<CheckBox Name="cbHasStarted" IsEnabled="False" Content="HasStarted" Margin="0,0,8,0" Grid.Column="2"/>
+			<CheckBox Name="cbHasExited" IsEnabled="False" Content="HasExited" Margin="0,0,8,0" Grid.Column="3"/>
+			<Button Name="bClear" Content="Clear" Width="75" HorizontalAlignment="Right" Grid.Column="5" Click="bClear_Click"/>
+			<CheckBox Name="cbFilter" Content="Filter" Margin="8,0,4,0" Grid.Column="6"/>
+			<TextBox Name="tbFilter" Width="100" Grid.Column="7"/>
+		</Grid>
+
+		<!-- Main text area -->
+		<TextBox Name="TextBox1" Grid.Row="1" Margin="8,4"/>
+
+		<!-- Bottom input -->
+		<ComboBox Name="cbInput" Grid.Row="2" Margin="8,4" HorizontalAlignment="Stretch" KeyDown="cbInput_KeyDown"/>
+	</Grid>
+</Window>

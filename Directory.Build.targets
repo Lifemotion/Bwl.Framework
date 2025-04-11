@@ -1,0 +1,92 @@
+<!-- Properties and items that are added to every project after MSBuild evaluation -->
+<Project>
+
+	<!--
+	#########################
+	Setting up the correct version for the project (using git)
+	#########################
+	-->
+
+	<!-- Git info and versioning -->
+	<Target Name="SetVersionFromGit" BeforeTargets="GetAssemblyVersion;GenerateAssemblyInfo;CoreCompile;GenerateNuspec"
+			Condition="'$(DesignTimeBuild)' != 'true'">
+
+		<!-- Create obj directory if needed -->
+		<MakeDir Directories="$(BaseIntermediateOutputPath)" Condition="!Exists('$(BaseIntermediateOutputPath)')" />
+
+		<!-- Get Git info -->
+		<Exec Command="git rev-parse --short=6 HEAD"
+			  ConsoleToMSBuild="true"
+			  StandardOutputImportance="Low"
+			  StandardErrorImportance="Low"
+              IgnoreExitCode="true"
+              ContinueOnError="true"
+              WorkingDirectory="$(MSBuildProjectDirectory)">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommitHashOutput" />
+			<Output TaskParameter="ExitCode" PropertyName="GitHashExitCode" />
+		</Exec>
+
+		<!-- Get Git date and time -->
+		<Exec Command="git log -1 --format=%%ct HEAD"
+              ConsoleToMSBuild="true"
+			  StandardOutputImportance="Low"
+			  StandardErrorImportance="Low"
+              IgnoreExitCode="true"
+              ContinueOnError="true"
+              WorkingDirectory="$(MSBuildProjectDirectory)">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommitTimestampOutput" />
+			<Output TaskParameter="ExitCode" PropertyName="GitTimestampExitCode" />
+		</Exec>
+
+		<!-- Set version properties -->
+		<PropertyGroup>
+			<!-- Process Git command results -->
+			<GitCommitHash Condition="'$(GitHashExitCode)' == '0'">$([System.String]::Copy('$(GitCommitHashOutput)').Trim())</GitCommitHash>
+			<GitCommitHash Condition="'$(GitHashExitCode)' != '0'">unknown</GitCommitHash>
+			<GitCommitTimestamp Condition="'$(GitTimestampExitCode)' == '0'">$([System.String]::Copy('$(GitCommitTimestampOutput)').Trim())</GitCommitTimestamp>
+			<GitCommitTimestamp Condition="'$(GitTimestampExitCode)' != '0'">0</GitCommitTimestamp>
+
+			<!-- Decide whether to use Git timestamp or current time -->
+			<UseCurrentTime Condition="'$(GitCommitTimestamp)' == '0'">true</UseCurrentTime>
+			<UseCurrentTime Condition="'$(UseCurrentTime)' == ''">false</UseCurrentTime>
+
+			<!-- Generate formatted date parts directly -->
+			<!-- Git-based timestamps -->
+			<DatePart Condition="'$(UseCurrentTime)' != 'true'">$([System.DateTimeOffset]::FromUnixTimeSeconds($([System.Int64]::Parse('$(GitCommitTimestamp)'))).UtcDateTime.ToString('yyyy.MM.dd'))</DatePart>
+			<TimePart Condition="'$(UseCurrentTime)' != 'true'">$([System.DateTimeOffset]::FromUnixTimeSeconds($([System.Int64]::Parse('$(GitCommitTimestamp)'))).UtcDateTime.ToString('HHmmss'))</TimePart>
+			<ShortTimePart Condition="'$(UseCurrentTime)' != 'true'">$([System.DateTimeOffset]::FromUnixTimeSeconds($([System.Int64]::Parse('$(GitCommitTimestamp)'))).UtcDateTime.ToString('HHmm'))</ShortTimePart>
+
+			<!-- Current time timestamps -->
+			<DatePart Condition="'$(UseCurrentTime)' == 'true'">$([System.DateTime]::UtcNow.ToString('yyyy.MM.dd'))</DatePart>
+			<TimePart Condition="'$(UseCurrentTime)' == 'true'">$([System.DateTime]::UtcNow.ToString('HHmmss'))</TimePart>
+			<ShortTimePart Condition="'$(UseCurrentTime)' == 'true'">$([System.DateTime]::UtcNow.ToString('HHmm'))</ShortTimePart>
+
+			<!-- Version -->
+			<Version>$(DatePart).$(TimePart)-$(GitCommitHash)</Version>
+
+			<!-- Informational version (not visible in explorer but available programmatically) -->
+			<InformationalVersion>$(Version)</InformationalVersion>
+			<AssemblyInformationalVersion>$(Version)</AssemblyInformationalVersion>
+
+			<!-- File version -->
+			<FileVersion>$(DatePart).$(ShortTimePart)</FileVersion>
+			<AssemblyVersion>$(DatePart).$(ShortTimePart)</AssemblyVersion>
+
+			<!-- NuGet-compatible version -->
+			<PackageVersion>$(DatePart).$(TimePart)</PackageVersion>
+		</PropertyGroup>
+	</Target>
+
+	<!-- Add Git hash to package description -->
+	<Target Name="AppendGitHashToDescription" BeforeTargets="GenerateNuspec" DependsOnTargets="SetVersionFromGit" >
+		<PropertyGroup>
+			<!-- Create a base description if none exists -->
+			<PackageDescription Condition="'$(PackageDescription)' == '' AND '$(Description)' == ''">$(MSBuildProjectName)</PackageDescription>
+			<PackageDescription Condition="'$(PackageDescription)' == '' AND '$(Description)' != ''">$(Description)</PackageDescription>
+			<PackageDescription>
+				$(PackageDescription)
+				Compiled from git commit with hash: $(GitCommitHash)
+			</PackageDescription>
+		</PropertyGroup>
+	</Target>
+</Project>

@@ -1,0 +1,12 @@
+<Project>
+	<PropertyGroup>
+		<Title>Bwl.Framework.SharedMemory</Title>
+		<Description>
+Bwl.Framework.SharedMemory provides high-performance inter-process communication using shared memory. It includes two main communication models:
+
+- Binary Communication: Uses SharedMemoryBinaryClient and SharedMemoryBinaryServer to exchange raw binary data.
+- RPC Communication: Uses SharedMemoryRPCClient and SharedMemoryRPCServer to perform remote procedure calls over shared memory.
+		</Description>
+		<PackageTags>bwl;sharedmemory</PackageTags>
+	</PropertyGroup>
+</Project>

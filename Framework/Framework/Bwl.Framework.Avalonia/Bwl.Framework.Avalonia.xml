@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Bwl.Framework.Avalonia</name>
+    </assembly>
+    <members>
+        <member name="T:Bwl.Framework.Avalonia.AdditionalControls.Classes.InputBox">
+            <summary>
+            Recreation of Visual Basic's Interactivity.InputBox for Avalonia
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.AdditionalControls.Classes.InputBox.ShowAsync(System.String,System.String,System.String,Avalonia.Controls.Window)">
+            <summary>
+            Shows a dialog box with a prompt and an input field
+            </summary>
+            <param name="prompt">The prompt to display</param>
+            <param name="title">The title of the dialog box</param>
+            <param name="defaultResponse">The default response to display in the input field</param>
+            <returns>The user's response</returns>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.CheckedListBox.#ctor">
+            <summary>
+            Implementation of CheckedListBox from WinForms, but for Avalonia
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.CheckedListBox.ItemsCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            Items were changed, so we need to subscribe to PropertyChanged event of new items and unsubscribe from old items
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.CheckedListBox.ItemPropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
+            <summary>
+            Item's property was changed, so we need to raise SelectedValueChanged event
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.CheckedListBox.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="T:Bwl.Framework.Avalonia.CheckedListBoxItem">
+            <summary>
+            Item for CheckedListBox
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.ComboBoxEx.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.FormBase.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.AutoUIForm.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.AutoUIDisplay.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.RemoteAutoButton.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.RemoteAutoImage.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.RemoteAutoListbox.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.RemoteAutoTextbox.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.DatagridLogWriter.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.FormLogInfo.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.LoggerForm.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.SettingField.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.SettingsDialog.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="T:Bwl.Framework.Avalonia.AvaloniaUIBuilder">
+            <summary>
+            Avalonia app builder with platform detection, Inter font and logging to trace
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.AvaloniaUIBuilder.GetAvaloniaAppBuilder(Avalonia.Styling.ThemeVariant,System.Nullable{Avalonia.Themes.Fluent.DensityStyle},Avalonia.Themes.Fluent.ColorPaletteResources,Avalonia.Themes.Fluent.ColorPaletteResources)">
+            <summary>
+            Ready to use Avalonia app builder with platform detection, Inter font and logging to trace. Use it for BuildAvaloniaApp for a Visual Studio visual designer
+            </summary>
+            <param name="theme">Theme - auto, dark, light</param>
+            <param name="density">Density - normal, compact</param>
+            <param name="lightTheme">ColorPaletteResources for light theme</param>
+            <param name="darkTheme">ColorPaletteResources for dark theme</param>
+            <returns>App builder to use for designtr </returns>
+        </member>
+        <member name="T:Bwl.Framework.Avalonia.AvaloniaUI">
+            <summary>
+            Avalonia singleton, to create app if it doesn't exist and use it to show AutoUI windows; all calls should be from the UI thread (use Dispatcher.UIThread)
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.AvaloniaUI.InitializeBase">
+            <summary>
+            Initalizes Avalonia module initialization
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.Avalonia.AvaloniaUI.IsRunning">
+            <summary>
+            Checks if Avalonia is running
+            </summary>
+        </member>
+        <member name="P:Bwl.Framework.Avalonia.AvaloniaUI.AvaloniaApplication">
+            <summary>
+            Gets the Avalonia application instance
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.AvaloniaUI.#cctor">
+            <summary>
+            Static constructor to initialize Avalonia; must be called from the main application thread
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.AvaloniaUI.StartMainWindow(Bwl.Framework.IUIWindow)">
+            <summary>
+            Starts Avalonia with the main window; app is closed when main window is closed. 
+            CAREFUL, THIS WILL BLOCK THE CALLING THREAD!
+            Important! Will not work if you will call it using Dispatcher.UIThread!
+            </summary>
+            <param name="mainWindow">Window to show</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.AvaloniaUI.StartMainWindow(Avalonia.Controls.Window)">
+            <summary>
+            Starts Avalonia with the main window; app is closed when main window is closed. 
+            CAREFUL, THIS WILL BLOCK THE CALLING THREAD!
+            Important! Will not work if you will call it using Dispatcher.UIThread!
+            </summary>
+            <param name="mainWindow">Window to show</param>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.AvaloniaUI.StartHeadless">
+            <summary>
+            Starts Avalonia without a window; app is closed when Stop() is called. 
+            CAREFUL, THIS WILL BLOCK THE CALLING THREAD!
+            Important! Will not work if you will call it using Dispatcher.UIThread!
+            </summary>
+        </member>
+        <member name="M:Bwl.Framework.Avalonia.AvaloniaUI.StopApplication">
+            <summary>
+            Stops the Avalonia application completely
+            </summary>
+        </member>
+    </members>
+</doc>

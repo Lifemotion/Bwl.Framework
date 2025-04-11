@@ -1,0 +1,27 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="505" d:DesignHeight="230"
+        x:Class="Bwl.Network.ClientServer.Avalonia.NetworkAdaptersForm"
+        Title="NetworkAdaptersForm">
+	<Grid RowDefinitions="*,Auto" Margin="12">
+		<!-- Adapters list -->
+		<ListBox Name="lbAdapters" Grid.Row="0" Margin="0,0,0,10" />
+
+		<!-- Button panel -->
+		<StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Spacing="10">
+			<Button Name="bCancel"
+                    Width="75"
+                    Content="Cancel"
+                    Click="bCancel_Click"/>
+			<Button Name="bOK"
+                    Width="75"
+                    Content="OK"
+                    Click="bOK_Click"/>
+		</StackPanel>
+	</Grid>
+</Window>

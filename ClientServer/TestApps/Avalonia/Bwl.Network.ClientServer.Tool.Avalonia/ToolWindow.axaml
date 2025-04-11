@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:Bwl.Network.ClientServer.Tool.Avalonia"
+        xmlns:controls="clr-namespace:Bwl.Framework.Avalonia;assembly=Bwl.Framework.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="623"
+        x:Class="Bwl.Network.ClientServer.Tool.Avalonia.ToolWindow"
+        Title="Bwl ClientServer Messaging Tool"
+        Width="800" Height="623">
+
+	<controls:FormAppBase x:Name="FormAppBase">
+		<controls:FormAppBase.FormContent>
+			<ScrollViewer>
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+
+					<!-- Left side: SettingFields and connection buttons -->
+					<StackPanel Orientation="Vertical" Grid.Column="0">
+						<controls:SettingField x:Name="SettingField1"/>
+						<controls:SettingField x:Name="SettingField2"/>
+						<controls:SettingField x:Name="SettingField3"/>
+						<controls:SettingField x:Name="SettingField4"/>
+						<controls:SettingField x:Name="SettingField5"/>
+						<StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+							<Button x:Name="bClient" Content="Подключить"/>
+							<Button x:Name="bClose" Content="Отключить"/>
+						</StackPanel>
+					</StackPanel>
+
+					<!-- Right side: Message sending area -->
+					<StackPanel Orientation="Vertical" Spacing="5" Grid.Column="1">
+						<StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Stretch">
+							<TextBlock Text="IdTo" VerticalAlignment="Center"/>
+							<TextBox x:Name="tbAddressTo" HorizontalAlignment="Stretch"/>
+						</StackPanel>
+						<StackPanel Orientation="Vertical" Spacing="5" Grid.Column="1">
+							<TextBlock Text="Message"/>
+							<TextBox x:Name="TextBox1" AcceptsReturn="False"/>
+						</StackPanel>
+						<Button x:Name="bSend" Content="Отправить" HorizontalAlignment="Right" Width="95"/>
+						<StackPanel Orientation="Horizontal" Spacing="5">
+							<CheckBox x:Name="cbAutoConnect" Content="AutoConnect"/>
+							<CheckBox x:Name="cbIsConnected" Content="IsConnected" IsEnabled="False"/>
+						</StackPanel>
+					</StackPanel>
+				</Grid>
+			</ScrollViewer>
+		</controls:FormAppBase.FormContent>
+	</controls:FormAppBase>
+</Window>

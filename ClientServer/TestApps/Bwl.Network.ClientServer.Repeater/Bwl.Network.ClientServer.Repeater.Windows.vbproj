@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net8.0-windows</TargetFrameworks>
+		<OutputType>WinExe</OutputType>
+		<UseWindowsForms>true</UseWindowsForms>
+		<StartupObject>$(RootNamespace).App</StartupObject>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="App.vb" />
+		<Compile Remove="AppAvalonia.vb" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Framework\Framework\Bwl.Framework.Windows\Bwl.Framework.Windows.csproj" />
+		<ProjectReference Include="..\..\..\Framework\Framework\Bwl.Framework\Bwl.Framework.vbproj" />
+		<ProjectReference Include="..\..\ClientServer\Bwl.Network.ClientServer.Windows\Bwl.Network.ClientServer.Windows.csproj" />
+		<ProjectReference Include="..\..\ClientServer\Bwl.Network.ClientServer\Bwl.Network.ClientServer.vbproj" />
+	</ItemGroup>
+</Project>

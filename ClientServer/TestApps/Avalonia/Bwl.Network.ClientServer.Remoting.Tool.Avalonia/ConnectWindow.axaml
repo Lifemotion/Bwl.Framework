@@ -1,0 +1,85 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bwl.Framework.Avalonia;assembly=Bwl.Framework.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="623" d:DesignHeight="412"
+        x:Class="Bwl.Network.ClientServer.Remoting.Tool.Avalonia.ConnectWindow"
+        Title="Bwl Remoting Tool - Connect"
+		Width="623" Height="412">
+
+	<TabControl Name="TabControl1" Margin="4">
+		<TabItem Name="TabPage1" Header="Direct Connect">
+			<ScrollViewer>
+				<Grid RowDefinitions="Auto,Auto,*,Auto">
+					<!-- Address and Port inputs -->
+					<StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,8">
+						<local:ComboBoxEx Name="cbAddress" DropDownStyle="Simple" Text="localhost" HorizontalAlignment="Stretch" />
+						<local:ComboBoxEx Name="cbAddress2" DropDownStyle="DropDown" Text="localhost:1488" HorizontalAlignment="Stretch" />
+						<local:ComboBoxEx Name="cbAddress3" DropDownStyle="DropDownList" Text="localhost:1488" HorizontalAlignment="Stretch" />
+						<ComboBox Name="ComboBox2" HorizontalAlignment="Stretch" />
+					</StackPanel>
+
+					<!-- Beacons ListBox -->
+					<ListBox Name="lbBeacons" Grid.Row="2" Margin="0,0,0,8"
+						DoubleTapped="lbBeacons_DoubleClick"
+						SelectionChanged="lbBeacons_SelectedIndexChanged"/>
+
+					<!-- Buttons -->
+					<Grid Grid.Row="3" ColumnDefinitions="Auto,*,Auto,Auto,Auto">
+						<Button Name="bFind" Grid.Column="0"
+								Content="Find" Click="bFind_Click"/>
+
+						<Button Name="bSetNetwork" Grid.Column="2"
+								Content="Set Network" Click="bSetNetwork_Click"/>
+
+						<Button Name="bConnectCmd" Grid.Column="3"
+								Content="Connect CMD" Click="bConnectCmd_Click"
+								Margin="8,0"/>
+
+						<Button Name="bConnect" Grid.Column="4"
+								Content="Connect UI" Click="bConnect_Click"/>
+					</Grid>
+				</Grid>
+			</ScrollViewer>
+		</TabItem>
+
+		<TabItem Name="TabPage2" Header="MessageTransport Connect">
+			<ScrollViewer>
+				<Grid ColumnDefinitions="*,Auto,*">
+					<!-- Left panel - Settings -->
+					<StackPanel Grid.Column="0" Spacing="3" Margin="0,8,8,8">
+						<local:SettingField Name="SettingField1" />
+						<local:SettingField Name="SettingField2" />
+						<local:SettingField Name="SettingField3" />
+						<local:SettingField Name="SettingField4" />
+						<local:SettingField Name="SettingField5" />
+
+						<Grid Margin="0,12,0,0" ColumnDefinitions="Auto,*">
+							<Button Name="bClient" Grid.Column="0" Content="Connect Transport"
+									Click="bClientConnect_Click"/>
+							<CheckBox Name="cbIsConnected" Grid.Column="1" Content="IsConnected"
+           VerticalAlignment="Center" Margin="20,0,0,0" IsEnabled="False"/>
+						</Grid>
+
+						<Button Name="bFindClients" Content="Find Clients"
+								HorizontalContentAlignment="Center" Click="bFindClients_Click"
+								Margin="0,8,0,0"/>
+
+						<Button Name="bConnectRemoteApp" Content="Connect Remote App"
+								HorizontalContentAlignment="Center" Click="bConnectRemoteApp_Click"
+								Margin="0,8,0,0"/>
+					</StackPanel>
+
+					<!-- Vertical Separator -->
+					<GridSplitter Grid.Column="1" Width="1" Background="#CCCCCC"
+          VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+
+					<!-- Right panel - Clients List -->
+					<ListBox Name="lbClients" Grid.Column="2" Margin="8,8,0,8"
+        DoubleTapped="lbClients_DoubleClick"/>
+				</Grid>
+			</ScrollViewer>
+		</TabItem>
+	</TabControl>
+</Window>

@@ -1,0 +1,11 @@
+<Project>
+	<PropertyGroup>
+		<PackageProjectUrl>https://github.com/Lifemotion/Bwl.Framework</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Lifemotion/Bwl.Framework</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<LicenseUrl>https://opensource.org/license/apache-2-0</LicenseUrl>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<Authors>Alexandra Sovenko, Artem Drobanov, Pavel Cherkas, Ilya Kuryshev</Authors>
+	</PropertyGroup>
+</Project>

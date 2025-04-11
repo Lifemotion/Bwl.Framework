@@ -1,0 +1,69 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="120"
+             x:Class="Bwl.Framework.Avalonia.ComboBoxEx">
+	<StackPanel Orientation="Vertical">
+
+		<!-- Simple combobox -->
+		<StackPanel Name="SimpleView" 
+					IsVisible="{Binding IsStyleSimple}" 
+					Orientation="Vertical" 
+					HorizontalAlignment="Stretch">
+			<TextBox Name="SimpleInput" 
+					 HorizontalAlignment="Stretch" 
+					 Text="{Binding Text}"/>
+			<ListBox Name="SimpleItems" 
+					 HorizontalAlignment="Stretch" 
+					 ItemsSource="{Binding Items}" />
+		</StackPanel>
+
+		<!-- DropDown combobox (custom-made combobox with editable text field) -->
+		<StackPanel Name="DropDownView" 
+					IsVisible="{Binding IsStyleDropDown}" 
+					Orientation="Vertical" 
+					HorizontalAlignment="Stretch">
+			<Border Name="DropDownPanel" 
+					BorderBrush="{DynamicResource ComboBoxBorderBrush}"
+					BorderThickness="{DynamicResource ComboBoxBorderThemeThickness}"
+					CornerRadius="{DynamicResource ControlCornerRadius}"
+					Background="{DynamicResource ComboBoxBackground}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+					<TextBox Grid.Row="0" 
+							 Grid.Column="0" 
+							 Name="DropDownInput"
+							 HorizontalAlignment="Stretch"
+							 BorderThickness="0"
+							 Foreground="{DynamicResource ComboBoxForeground}"
+							 Background="{DynamicResource ComboBoxBackground}"
+							 Text="{Binding Text}"/>
+					<Button Grid.Row="0"
+							Grid.Column="1" 
+							Name="DropDownButton"
+							Content="🡫"
+							HorizontalAlignment="Left"
+							Click="DropDownButton_Click"
+							BorderThickness="0"
+							Foreground="{DynamicResource ComboBoxForeground}"
+							Background="{DynamicResource ComboBoxBackground}" />
+				</Grid>
+				<FlyoutBase.AttachedFlyout>
+					<MenuFlyout Placement="Bottom" ItemsSource="{Binding Items}" >
+					</MenuFlyout>
+				</FlyoutBase.AttachedFlyout>
+			</Border>
+		</StackPanel>
+
+
+		<!-- DropDownList AKA default ComboBox -->
+		<StackPanel Name="DropDownListView" IsVisible="{Binding IsStyleDropDownList}" Orientation="Vertical" HorizontalAlignment="Stretch">
+			<ComboBox Name="DropDownList" HorizontalAlignment="Stretch" ItemsSource="{Binding Items}"/>
+		</StackPanel>
+
+	</StackPanel>
+</UserControl>
