@@ -474,7 +474,7 @@ Public Class FrameworkTests
         Dim stringCount = 10000
         Dim writerCount = 100
         Dim logPath = String.Empty
-        Dim logFileName = "MicroLoggerTest.log"
+        Dim logFileName = $"MicroLoggerTest.log"
 
         Dim removeLogFile = Sub()
                                 Try

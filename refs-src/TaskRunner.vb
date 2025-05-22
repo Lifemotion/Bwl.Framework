@@ -16,7 +16,7 @@ Imports System
 Imports System.Threading
 Imports System.Threading.Tasks
 
-Public Class TaskCts
+Public Class TaskRunner
     Private _func As Func(Of CancellationTokenSource, Object(), Task)
     Private _parameters As Object()
     Private _cts As CancellationTokenSource

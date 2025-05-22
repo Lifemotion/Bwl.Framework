@@ -84,8 +84,8 @@
     <Compile Include="..\refs-src\StringTools.vb">
       <Link>refs\StringTools.vb</Link>
     </Compile>
-    <Compile Include="..\refs-src\TaskCts.vb">
-        <Link>refs\TaskCts.vb.vb</Link>
+    <Compile Include="..\refs-src\TaskRunner.vb">
+        <Link>refs\TaskRunner.vb</Link>
     </Compile>
     <Compile Include="..\refs-src\RunLimiter.vb">
       <Link>refs\RunLimiter.vb</Link>

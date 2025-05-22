@@ -21,7 +21,7 @@ Public Class MicroLogger
     Implements IDisposable
 
     Private _linesToWrite As New ConcurrentQueue(Of String)()
-    Private _loggerTask As TaskCts
+    Private _loggerTask As TaskRunner
     Private _stopRequestTicks As Long
 
     Public Property Path As String
@@ -56,7 +56,7 @@ Public Class MicroLogger
 
     Public Function Start() As Boolean
         Dim result = False
-        Dim task = New TaskCts(AddressOf LoggerTaskAsync, False) 'Not Run
+        Dim task = New TaskRunner(AddressOf LoggerTaskAsync, False) 'Not Run
         If Interlocked.CompareExchange(_loggerTask, task, Nothing) Is Nothing Then
             Interlocked.Exchange(_stopRequestTicks, -1)
             task.Run()
@@ -77,33 +77,35 @@ Public Class MicroLogger
     End Function
 
     Private Async Function LoggerTaskAsync(cts As CancellationTokenSource, parameters As Object()) As Task
-        While StopRequested() = 0 OrElse LoggingIsActual()
-            Try
-                If LoggingIsActual() Then
-                    Dim pf = (Me.Path, Me.FileName)
-                    If Not String.IsNullOrWhiteSpace(pf.Path) AndAlso Not Directory.Exists(pf.Path) Then
-                        Directory.CreateDirectory(pf.Path)
+        Try
+            While StopRequested() = 0 OrElse LoggingIsActual()
+                Try
+                    If LoggingIsActual() Then
+                        Dim pf = (Me.Path, Me.FileName)
+                        If Not String.IsNullOrWhiteSpace(pf.Path) AndAlso Not Directory.Exists(pf.Path) Then
+                            Directory.CreateDirectory(pf.Path)
+                        End If
+                        Using sw = File.AppendText(IO.Path.Combine(pf.Path, pf.FileName))
+                            While LoggingIsActual()
+                                Dim line = _linesToWrite.FirstOrDefault()
+                                If line IsNot Nothing Then
+                                    sw.WriteLine(line)
+                                End If
+                                _linesToWrite.TryDequeue(Nothing)
+                            End While
+                        End Using
                     End If
-                    Using sw = File.AppendText(IO.Path.Combine(pf.Path, pf.FileName))
-                        While LoggingIsActual()
-                            Dim line = _linesToWrite.FirstOrDefault()
-                            If line IsNot Nothing Then
-                                sw.WriteLine(line)
-                            End If
-                            _linesToWrite.TryDequeue(Nothing)
-                        End While
-                    End Using
-                End If
-            Catch ex As Exception
-                RaiseEvent OnException(Me, ex)
-            Finally
-                Thread.Sleep(UpdateDelayMs)
-            End Try
-        End While
-        If _linesToWrite.Any() Then
-            DropLines()
-            RaiseEvent OnException(Me, New Exception($"Unsaved lines"))
-        End If
+                Catch ex As Exception
+                    RaiseEvent OnException(Me, ex)
+                End Try
+                Await Task.Delay(UpdateDelayMs, cts.Token).ConfigureAwait(False)
+            End While
+            If _linesToWrite.Any() Then
+                DropLines()
+                RaiseEvent OnException(Me, New Exception($"Unsaved lines"))
+            End If
+        Catch exc As OperationCanceledException
+        End Try
     End Function
 
     Private Function LoggingIsActual() As Boolean
