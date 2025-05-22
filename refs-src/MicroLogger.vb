@@ -21,7 +21,7 @@ Public Class MicroLogger
     Implements IDisposable
 
     Private _linesToWrite As New ConcurrentQueue(Of String)()
-    Private _loggerTask As Task
+    Private _loggerTask As TaskCts
     Private _stopRequestTicks As Long
 
     Public Property Path As String
@@ -56,10 +56,10 @@ Public Class MicroLogger
 
     Public Function Start() As Boolean
         Dim result = False
-        Dim task = New Task(AddressOf LoggerTask)
+        Dim task = New TaskCts(AddressOf LoggerTaskAsync, False) 'Not Run
         If Interlocked.CompareExchange(_loggerTask, task, Nothing) Is Nothing Then
             Interlocked.Exchange(_stopRequestTicks, -1)
-            task.Start()
+            task.Run()
             result = True
         End If
         Return result
@@ -70,13 +70,13 @@ Public Class MicroLogger
         Dim task = Interlocked.Exchange(_loggerTask, Nothing)
         If task IsNot Nothing Then
             Interlocked.Exchange(_stopRequestTicks, DateTime.UtcNow.Ticks)
-            task.Wait()
+            task.WaitSafely().Wait()
             result = True
         End If
         Return result
     End Function
 
-    Private Sub LoggerTask()
+    Private Async Function LoggerTaskAsync(cts As CancellationTokenSource, parameters As Object()) As Task
         While StopRequested() = 0 OrElse LoggingIsActual()
             Try
                 If LoggingIsActual() Then
@@ -104,7 +104,7 @@ Public Class MicroLogger
             DropLines()
             RaiseEvent OnException(Me, New Exception($"Unsaved lines"))
         End If
-    End Sub
+    End Function
 
     Private Function LoggingIsActual() As Boolean
         Return _linesToWrite.Any() AndAlso StopRequested() <= UnsavedAwaitMs

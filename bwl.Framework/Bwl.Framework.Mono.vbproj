@@ -84,6 +84,9 @@
     <Compile Include="..\refs-src\StringTools.vb">
       <Link>refs\StringTools.vb</Link>
     </Compile>
+    <Compile Include="..\refs-src\TaskCts.vb">
+        <Link>refs\TaskCts.vb.vb</Link>
+    </Compile>
     <Compile Include="src\AppBase\AppBase.vb" />
     <Compile Include="src\AppBase\FormAppBase.vb">
       <SubType>Form</SubType>
