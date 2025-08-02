@@ -28,19 +28,23 @@ Public Class TaskRunner
         End Get
     End Property
 
-    Public Sub New(func As Func(Of CancellationTokenSource, Object(), Task), run As Boolean,
+    Public Sub New(func As Func(Of CancellationTokenSource, Object(), Task),
                    Optional cts As CancellationTokenSource = Nothing, Optional parameters As Object() = Nothing)
         _func = func
         _parameters = parameters
         _cts = If(cts, New CancellationTokenSource())
-        If run Then Me.Run()
     End Sub
 
-    Public Sub Run()
+    Public Sub Run(Optional longrun As Boolean = False)
         Try
-            _task = If(_task, Task.Run(Async Function()
-                                           Await _func(_cts, _parameters)
-                                       End Function, _cts.Token))
+            _task = If(_task, If(longrun, Task.Factory.StartNew(Async Function()
+                                                                    Await _func(_cts, _parameters)
+                                                                End Function, _cts.Token,
+                                                                TaskCreationOptions.LongRunning Or TaskCreationOptions.DenyChildAttach,
+                                                                TaskScheduler.Default),
+                                          Task.Run(Async Function()
+                                                       Await _func(_cts, _parameters)
+                                                   End Function, _cts.Token)))
         Catch ex As InvalidOperationException
         End Try
     End Sub

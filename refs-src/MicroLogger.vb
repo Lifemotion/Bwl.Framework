@@ -1,4 +1,4 @@
-﻿'   Copyright 2024 Artem Drobanov (artem.drobanov@gmail.com)
+﻿'   Copyright 2024-2025 Artem Drobanov (artem.drobanov@gmail.com)
 
 '   Licensed under the Apache License, Version 2.0 (the "License");
 '   you may Not use this file except In compliance With the License.
@@ -56,10 +56,10 @@ Public Class MicroLogger
 
     Public Function Start() As Boolean
         Dim result = False
-        Dim task = New TaskRunner(AddressOf LoggerTaskAsync, False) 'Not Run
+        Dim task = New TaskRunner(AddressOf LoggerTaskAsync)
         If Interlocked.CompareExchange(_loggerTask, task, Nothing) Is Nothing Then
             Interlocked.Exchange(_stopRequestTicks, -1)
-            task.Run()
+            task.Run(False)
             result = True
         End If
         Return result
