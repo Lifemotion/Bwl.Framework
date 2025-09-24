@@ -1,27 +1,25 @@
-﻿Imports System.Reflection
+﻿Imports System.Collections.Concurrent
+Imports System.Reflection
+Imports System.Threading
+
 ''' <summary>
 ''' Класс, представляющий средство для иерархичного ведения журнала событий в программе.
 ''' </summary>
 ''' <remarks></remarks>
 Public Class Logger
     Implements ILoggerDispatcher
-
     Implements ILoggerReceiver
     Implements ILoggerChilds
+    Implements IDisposable
+    Private ReadOnly _logQueue As New ConcurrentQueue(Of (type As LogEventType, text As String, additional As Object()))()
+    Private ReadOnly _logProcessingTask As Task
+    Private ReadOnly _cancellationTokenSource As New CancellationTokenSource()
     Private ReadOnly _writers As New List(Of ILogWriter)
     Private _parentLogger As Logger
     Private _childLoggers As New List(Of Logger)
     Private _category As String = ""
     Private _path() As String
     Private _useDebug As Boolean = True
-
-    ''' <summary>
-    ''' Новый корневой журнал.
-    ''' </summary>
-    ''' <remarks></remarks>
-    Public Sub New()
-        ReDim _path(-1)
-    End Sub
 
     Public Property UseDebug As Boolean
         Get
@@ -37,6 +35,15 @@ Public Class Logger
         End Set
     End Property
 
+    ''' <summary>
+    ''' Новый корневой журнал.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Sub New()
+        ReDim _path(-1)
+        _logProcessingTask = Task.Run(Function() LogProcessing(_cancellationTokenSource.Token))
+    End Sub
+
     Friend Sub New(newParentLogger As Logger, categoryName As String)
         If categoryName = "" Then Throw New Exception("Имя категории не указано!")
         If newParentLogger Is Nothing Then Throw New Exception("Родительский логгер не создан!")
@@ -49,7 +56,25 @@ Public Class Logger
             _parentLogger._childLoggers.Add(Me)
         End SyncLock
         NewChildConnected()
+        _logProcessingTask = Task.Run(Function() LogProcessing(_cancellationTokenSource.Token))
     End Sub
+
+    ''' <summary>
+    ''' Asynchronously processes log messages from the queue.
+    ''' </summary>
+    ''' <param name="token">Cancellation token to allow graceful shutdown of the task.</param>
+    ''' <returns>A task representing the asynchronous operation.</returns>
+    Private Async Function LogProcessing(token As CancellationToken) As Task
+        Do While Not token.IsCancellationRequested
+            Dim logEvent As (type As LogEventType, text As String, additional As Object())
+            If _logQueue.TryDequeue(logEvent) Then
+                AddInternal(logEvent.type, logEvent.text, logEvent.additional)
+                Await Task.Yield()
+            Else
+                Await Task.Delay(100, token).ConfigureAwait(False) ' Wait a bit before checking the queue again
+            End If
+        Loop
+    End Function
 
     Private Sub NewChildConnected()
         SyncLock (_writers)
@@ -136,7 +161,19 @@ Public Class Logger
         writer.ConnectedToLogger(Me)
     End Sub
 
+    ''' <summary>
+    ''' Adds a log message with a specified type to the log queue.
+    ''' </summary>
+    ''' <param name="type">The type of the log event (e.g., message, information, error, warning, debug).</param>
+    ''' <param name="message">The message to log.</param>
     Public Sub Add(type As LogEventType, text As String, ParamArray additional() As Object) Implements ILoggerReceiver.Add
+        If text Is Nothing Then
+            Return ' Avoid adding null messages
+        End If
+        _logQueue.Enqueue((type, text, additional))
+    End Sub
+
+    Private Sub AddInternal(type As LogEventType, text As String, ParamArray additional() As Object)
         If type = LogEventType.debug AndAlso (Not UseDebug) Then
             Exit Sub
         End If
@@ -182,23 +219,23 @@ Public Class Logger
     End Function
 
     Public Sub AddInformation(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddInformation
-        Add(LogEventType.information, messageText)
+        Add(LogEventType.information, messageText, additional)
     End Sub
 
     Public Sub AddError(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddError
-        Add(LogEventType.errors, messageText)
+        Add(LogEventType.errors, messageText, additional)
     End Sub
 
     Public Sub AddWarning(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddWarning
-        Add(LogEventType.warning, messageText)
+        Add(LogEventType.warning, messageText, additional)
     End Sub
 
     Public Sub AddDebug(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddDebug
-        Add(LogEventType.debug, messageText)
+        Add(LogEventType.debug, messageText, additional)
     End Sub
 
     Public Sub AddMessage(messageText As String, ParamArray additional() As Object) Implements ILoggerReceiver.AddMessage
-        Add(LogEventType.message, messageText)
+        Add(LogEventType.message, messageText, additional)
     End Sub
 
     Private Sub AddFromChild(path1 As String(), type As LogEventType, messageText As String, ParamArray additional() As Object)
@@ -213,7 +250,6 @@ Public Class Logger
     End Sub
 
     Public Sub RequestLogsTransmission() Implements ILoggerDispatcher.RequestLogsTransmission
-        
     End Sub
 
     Public ReadOnly Property IsRoot() As Boolean
@@ -250,4 +286,20 @@ Public Class Logger
             Return list
         End Get
     End Property
+
+    ''' <summary>
+    ''' Disposes the FastLogger, cancelling the log processing task and waiting for it to complete.
+    ''' </summary>
+    Public Sub Dispose() Implements IDisposable.Dispose
+        _cancellationTokenSource.Cancel()
+        Try
+            _logProcessingTask.Wait()
+        Catch e1 As OperationCanceledException
+            ' Task was cancelled, no action needed
+        Catch ex As Exception
+            AddError($"Error during log processing task completion: {ex.Message}")
+        Finally
+            _cancellationTokenSource.Dispose()
+        End Try
+    End Sub
 End Class
