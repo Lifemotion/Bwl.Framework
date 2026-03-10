@@ -1,4 +1,4 @@
-﻿'   Copyright 2024-2025 Artem Drobanov (artem.drobanov@gmail.com), Ilya Kuryshev (sijeix2@gmail.com)
+﻿'   Copyright 2024-2025 Artem Drobanov (artem.drobanov@gmail.com)
 
 '   Licensed under the Apache License, Version 2.0 (the "License");
 '   you may Not use this file except In compliance With the License.
@@ -14,30 +14,20 @@
 
 Imports System.IO
 Imports System.Threading
+Imports System.Threading.Tasks
 Imports System.Collections.Concurrent
 
 Public Class MicroLogger
     Implements IDisposable
 
-    Private ReadOnly _linesToWrite As New ConcurrentQueue(Of String)()
-    Private ReadOnly _syncLock As New Object()
-
+    Private _linesToWrite As New ConcurrentQueue(Of String)()
+    Private _loggerTask As TaskRunner
     Private _stopRequestTicks As Long
-    Private _loggingTask As Task
-    Private _asyncReset As AsyncResetEvent
 
     Public Property Path As String
     Public Property FileName As String
     Public Property UpdateDelayMs As Integer
     Public Property UnsavedAwaitMs As Integer
-
-    Private ReadOnly Property IsWorking As Boolean
-        Get
-            SyncLock _syncLock
-                Return _loggingTask IsNot Nothing
-            End SyncLock
-        End Get
-    End Property
 
     Public Event OnException As EventHandler(Of Exception)
 
@@ -49,78 +39,72 @@ Public Class MicroLogger
         Me.FileName = fileName
         Me.UpdateDelayMs = updateDelayMs
         Me.UnsavedAwaitMs = unsavedAwaitMs
-        If start Then Me.Start()
+        If start Then
+            Me.Start()
+        End If
     End Sub
 
     Public Function AddMessage(message As String, Optional messageType As String = "") As Boolean
-        If IsWorking Then
+        Dim result = False
+        If _loggerTask IsNot Nothing Then
             Dim messageTypeMarker = If(Not String.IsNullOrWhiteSpace(messageType), $" [{messageType}] ", "")
             _linesToWrite.Enqueue($"{DateTime.Now.ToString("<dd.MM.yyyy HH:mm:ss.fff>")}{messageTypeMarker}{message}")
-            Return True
+            result = True
         End If
-        Return False
+        Return result
     End Function
 
     Public Function Start() As Boolean
-        If IsWorking Then Return False
-        Interlocked.Exchange(_stopRequestTicks, -1)
-        SyncLock _syncLock
-            _asyncReset = New AsyncResetEvent(False)
-            _loggingTask = Task.Run(Function() LoggerTask())
-        End SyncLock
-        Return True
+        Dim result = False
+        Dim task = New TaskRunner(AddressOf LoggerTaskAsync)
+        If Interlocked.CompareExchange(_loggerTask, task, Nothing) Is Nothing Then
+            Interlocked.Exchange(_stopRequestTicks, -1)
+            task.Run(False)
+            result = True
+        End If
+        Return result
     End Function
 
     Public Function [Stop]() As Boolean
-        If Not IsWorking Then Return False
-
-        Interlocked.Exchange(_stopRequestTicks, DateTime.UtcNow.Ticks)
-
-        SyncLock _syncLock
-            ' TaskCompletionSource is required in this case because _loggingTask.Wait() will throw an exception if the task is cancelled
-            If _asyncReset IsNot Nothing Then _asyncReset.Set()
-            _loggingTask.Wait()
-            _asyncReset.Dispose()
-            _loggingTask = Nothing
-            _asyncReset = Nothing
-        End SyncLock
-
-        Return True
+        Dim result = False
+        Dim task = Interlocked.Exchange(_loggerTask, Nothing)
+        If task IsNot Nothing Then
+            Interlocked.Exchange(_stopRequestTicks, DateTime.UtcNow.Ticks)
+            task.WaitSafely().Wait()
+            result = True
+        End If
+        Return result
     End Function
 
-    Private Async Function LoggerTask() As Task
+    Private Async Function LoggerTaskAsync(cts As CancellationTokenSource, parameters As Object()) As Task
         Try
-            While (StopRequested() = 0 OrElse LoggingIsActual())
+            While StopRequested() = 0 OrElse LoggingIsActual()
                 Try
                     If LoggingIsActual() Then
                         Dim pf = (Me.Path, Me.FileName)
-                        If Not String.IsNullOrWhiteSpace(pf.Path) AndAlso Not Directory.Exists(pf.Path) Then _
+                        If Not String.IsNullOrWhiteSpace(pf.Path) AndAlso Not Directory.Exists(pf.Path) Then
                             Directory.CreateDirectory(pf.Path)
-
+                        End If
                         Using sw = File.AppendText(IO.Path.Combine(pf.Path, pf.FileName))
-                            Dim line As String = Nothing
                             While LoggingIsActual()
-                                If _linesToWrite.TryDequeue(line) Then
-                                    Await sw.WriteLineAsync(line)
-                                Else
-                                    Exit While
+                                Dim line = _linesToWrite.FirstOrDefault()
+                                If line IsNot Nothing Then
+                                    sw.WriteLine(line)
                                 End If
+                                _linesToWrite.TryDequeue(Nothing)
                             End While
                         End Using
                     End If
                 Catch ex As Exception
                     RaiseEvent OnException(Me, ex)
                 End Try
-
-                Await _asyncReset.WaitAsync(UpdateDelayMs).ConfigureAwait(False)
+                Await Task.Delay(UpdateDelayMs, cts.Token).ConfigureAwait(False)
             End While
-        Catch ex As Exception
-            ' Do nothing
-        Finally
             If _linesToWrite.Any() Then
                 DropLines()
-                RaiseEvent OnException(Me, New Exception("Unsaved lines"))
+                RaiseEvent OnException(Me, New Exception($"Unsaved lines"))
             End If
+        Catch exc As OperationCanceledException
         End Try
     End Function
 
@@ -134,8 +118,9 @@ Public Class MicroLogger
     End Function
 
     Private Sub DropLines()
-        Do While _linesToWrite.TryDequeue(Nothing)
-        Loop
+        '_linesToWrite.Clear()
+        While _linesToWrite.TryDequeue(Nothing)
+        End While
     End Sub
 
     Public Overridable Sub Dispose() Implements IDisposable.Dispose
