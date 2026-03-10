@@ -65,8 +65,8 @@ Public Class Logger
     Public Sub CollectLogs(target As Object, Optional filter As String = "Logger")
         For Each evnt In target.GetType.GetEvents()
             If filter = "" OrElse evnt.Name.Contains(filter) Then
-                Dim method1 = Me.GetType.GetMethod("CollectLogsHandler1", BindingFlags.Default Or BindingFlags.NonPublic Or BindingFlags.Instance)
-                Dim method2 = Me.GetType.GetMethod("CollectLogsHandler2", BindingFlags.Default Or BindingFlags.NonPublic Or BindingFlags.Instance)
+                Dim method1 = Me.GetType.GetMethod("CollectLogsHandler1", BindingFlags.Default OrElse BindingFlags.NonPublic OrElse BindingFlags.Instance)
+                Dim method2 = Me.GetType.GetMethod("CollectLogsHandler2", BindingFlags.Default OrElse BindingFlags.NonPublic OrElse BindingFlags.Instance)
                 Dim delegate1 As [Delegate] = Nothing
                 Try
                     delegate1 = [Delegate].CreateDelegate(evnt.EventHandlerType, Me, method1)

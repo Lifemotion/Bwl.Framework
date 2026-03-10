@@ -16,7 +16,7 @@ Friend Class EmbNetMessage
         Dim i As Integer
         Dim resultPos As Integer = 0
         For i = 0 To bytes.Length - 1
-            If bytes(i) <= 5 Or bytes(i) = 58 Then
+            If bytes(i) <= 5 OrElse bytes(i) = 58 Then
                 result(resultPos) = 5
                 result(resultPos + 1) = bytes(i) + 6
                 resultPos += 2
@@ -103,7 +103,7 @@ Friend Class EmbNetMessage
     End Property
     Public Property PartBoolean(ByVal index As Integer) As Boolean
         Get
-            If Part(index).ToUpper = "TRUE" Or Part(index).ToUpper = "1" Then Return True
+            If Part(index).ToUpper = "TRUE" OrElse Part(index).ToUpper = "1" Then Return True
             Return False
         End Get
         Set(ByVal value As Boolean)
@@ -112,7 +112,7 @@ Friend Class EmbNetMessage
     End Property
     Public Property PartBytes(ByVal index As Integer) As Byte()
         Get
-            If (index < 0 Or index > partCount - 1) OrElse parts(index) Is Nothing Then
+            If (index < 0 OrElse index > partCount - 1) OrElse parts(index) Is Nothing Then
                 Dim empty(-1) As Byte
                 Return empty
             Else

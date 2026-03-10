@@ -52,7 +52,7 @@ Public Class CmdlineServer
     End Sub
 
     Public Sub New(transport As IMessageTransport, prefix As String, filename As String, Optional arguments As String = "", Optional workDirectory As String = "", Optional netPort As Integer = 0, Optional beaconName As String = "")
-        If beaconName > "" And netPort > 0 Then _beacon = New NetBeacon(netPort, "RemoteCmd" + beaconName, True, True)
+        If beaconName > "" AndAlso netPort > 0 Then _beacon = New NetBeacon(netPort, "RemoteCmd" + beaconName, True, True)
         _filename = filename
         _arguments = arguments
         _directory = workDirectory

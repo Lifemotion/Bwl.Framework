@@ -47,7 +47,7 @@ Public Class CmdlineClient
     End Function
 
     Private Sub ReceivedHandler(message As NetMessage) Handles _transport.ReceivedMessage
-        If message.Part(0) = "CmdRemoting" And message.Part(1) = _prefix And message.FromID = _target Then
+        If message.Part(0) = "CmdRemoting" AndAlso message.Part(1) = _prefix AndAlso message.FromID = _target Then
             Select Case message.Part(2)
                 Case "buffers"
                     Dim buffo = message.Part(3).Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)

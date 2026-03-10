@@ -11,7 +11,7 @@ Public Class SettingsServer
     End Sub
 
     Private Sub ReceivedHandler(message As NetMessage)
-        If message.Part(0) = "SettingsRemoting" And message.Part(1) = _prefix Then
+        If message.Part(0) = "SettingsRemoting" AndAlso message.Part(1) = _prefix Then
             _clientID = message.FromID
             Select Case message.Part(2)
                 Case "SettingsRequest"

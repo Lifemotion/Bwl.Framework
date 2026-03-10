@@ -58,7 +58,7 @@ Public Class AutoUiServer
     End Sub
 
     Private Sub ReceivedHandler(message As NetMessage) Handles _server.ReceivedMessage
-        If message.Part(0) = "AutoUiRemoting" And message.Part(1) = _prefix Then
+        If message.Part(0) = "AutoUiRemoting" AndAlso message.Part(1) = _prefix Then
             SyncLock _syncRoot
                 _lastUiAlive = Date.UtcNow
             End SyncLock

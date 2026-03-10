@@ -4,6 +4,6 @@
 		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="System.Resources.Extensions" Version="9.0.4" />
+	  <PackageReference Include="System.Resources.Extensions" Version="9.0.10" />
 	</ItemGroup>
 </Project>

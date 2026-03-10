@@ -112,7 +112,7 @@ Friend Class EmbDatagridLogWriter
 
             Dim textFilter As Boolean
 
-            If tbFilter.Text.Length = 0 Or cbFilter.Checked = False Then
+            If tbFilter.Text.Length = 0 OrElse Not cbFilter.Checked Then
                 textFilter = True
             Else
                 textFilter = True

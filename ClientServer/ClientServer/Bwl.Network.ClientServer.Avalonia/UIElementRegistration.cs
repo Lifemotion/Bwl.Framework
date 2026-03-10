@@ -25,7 +25,6 @@ namespace Bwl.Network.ClientServer.Avalonia
         {
             return UIWindowFactories.CreateWindow("CmdlineUiWArgs", [client]);
         }
-    }
 
         internal static AppBuilder BuildAvaloniaApp() => AvaloniaUIBuilder.GetAvaloniaAppBuilder();
     }

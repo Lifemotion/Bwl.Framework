@@ -145,7 +145,7 @@ Public Class SettingsStorage
             Dim path = GetStoragePath()
             If _parentStorage Is Nothing Then writer.WriteRoot(_name, _friendlyName)
             For Each setting In _settings.Values
-                If setting.Changed Or Not changedOnly Then
+                If setting.Changed OrElse Not changedOnly Then
                     writer.WriteSetting(path, setting)
                     setting.Changed = False
                 End If

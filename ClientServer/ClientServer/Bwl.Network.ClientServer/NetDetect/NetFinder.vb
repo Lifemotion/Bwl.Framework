@@ -34,7 +34,7 @@ Public Class NetFinder
         For Each file In files
             Try
                 Dim fi = New IO.FileInfo(file)
-                If (DateTime.Now - fi.LastWriteTime).TotalSeconds > 0 And (DateTime.Now - fi.LastWriteTime).TotalSeconds < 10 Then
+                If (DateTime.Now - fi.LastWriteTime).TotalSeconds > 0 AndAlso (DateTime.Now - fi.LastWriteTime).TotalSeconds < 10 Then
                     Dim str = fi.Name
                     ProcessBeaconString(str, "TempFile", "127.0.0.1", list)
                 Else

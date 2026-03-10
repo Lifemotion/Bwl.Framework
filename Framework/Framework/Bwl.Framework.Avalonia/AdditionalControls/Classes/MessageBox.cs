@@ -105,19 +105,37 @@ namespace Bwl.Framework.Avalonia
 
         public static async Task<DialogResult> ShowAsync(Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, string helpFilePath, string keyword)
         {
-            var box = MessageBoxManager.GetMessageBoxStandard(caption, text, (ButtonEnum)buttons, (Icon)icon);
-            ButtonResult result;
 
-            if (owner != null)
+            if (Dispatcher.UIThread.CheckAccess())
             {
-                result = await box.ShowWindowDialogAsync(owner);
+
+                try
+                {
+
+                    var box = MessageBoxManager.GetMessageBoxStandard(caption, text, (ButtonEnum)buttons, (Icon)icon);
+                    ButtonResult result;
+
+                    if (owner != null)
+                    {
+                        result = await box.ShowWindowDialogAsync(owner);
+                    }
+                    else
+                    {
+                        result = await box.ShowWindowAsync();
+                    }
+
+                    return ButtonResultToDialogResult(result);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             }
             else
             {
-                result = await box.ShowWindowAsync();
+                return await Dispatcher.UIThread.InvokeAsync(async () => await ShowAsync(owner, text, caption, buttons, icon, defaultButton, options, helpFilePath, keyword));
             }
 
-            return ButtonResultToDialogResult(result);
         }
 
         public static async Task<DialogResult> ShowAsync(string text)

@@ -548,7 +548,7 @@ Public Class NetServer
         End Try
     End Sub
     Friend Sub SystemSendMessage(ByVal client As ClientData, ByVal message As NetMessage)
-        If message.FromID = "" And MyID > "" Then message.FromID = MyID
+        If message.FromID = "" AndAlso MyID > "" Then message.FromID = MyID
         If Not client.userInfo.Direct Then
             'если клиент подключен по сети
             Dim bytes() As Byte = message.ToBytes(1)
@@ -611,7 +611,7 @@ Public Class NetServer
     Public Overloads Sub SendMessage(message As NetMessage) Implements IMessageTransport.SendMessage
         SyncLock _syncRoot
             For Each connClient In connectedClients
-                If connClient.userInfo.RegisteredID = message.ToID Or message.ToID = "" Then
+                If connClient.userInfo.RegisteredID = message.ToID OrElse message.ToID = "" Then
                     SystemSendMessage(connClient, message)
                 End If
             Next
@@ -636,7 +636,7 @@ Public Class NetServer
     Public Function GetClientsList(serviceName As String) As String() Implements IMessageTransport.GetClientsList
         Dim list As New List(Of String)
         If Me.MyID > "" Then
-            If Me.MyServiceName = serviceName Or serviceName = "*" Then list.Add(Me.MyID)
+            If Me.MyServiceName = serviceName OrElse serviceName = "*" Then list.Add(Me.MyID)
         End If
 
         SyncLock _syncRoot

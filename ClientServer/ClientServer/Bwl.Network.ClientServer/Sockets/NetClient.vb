@@ -365,14 +365,14 @@ Public Class NetClient
     ''' <param name="message">Сообщение.</param>
     ''' <remarks></remarks>
     Public Sub SendMessage(ByVal message As NetMessage) Implements IMessageClient.SendMessage
-        If AutoConnect And Not working Then
+        If AutoConnect AndAlso Not working Then
             Try
                 Connect()
             Catch ex As Exception
             End Try
         End If
         If working Then
-            If message.FromID = "" And MyID > "" Then message.FromID = MyID
+            If message.FromID = "" AndAlso MyID > "" Then message.FromID = MyID
             If Not directMode Then
                 Dim bytes() As Byte = message.ToBytes(1)
                 bytes(0) = 1
@@ -408,7 +408,7 @@ Public Class NetClient
                 waitingResult = Nothing
                 SendMessage(message)
                 Dim time = DateTime.Now
-                Do While waitingResult Is Nothing And (DateTime.Now - time).TotalSeconds < timeout
+                Do While waitingResult Is Nothing AndAlso (DateTime.Now - time).TotalSeconds < timeout
                     _disposedEvent.WaitOne(50)
                 Loop
                 waitingAnswer = ""
