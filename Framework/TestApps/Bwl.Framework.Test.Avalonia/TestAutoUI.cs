@@ -18,7 +18,6 @@ namespace Bwl.Framework.Avalonia
 
     public partial class TestClass
     {
-
         private InternalTestClass IntClassSettingsCollection { get; set; } = new InternalTestClass();
         public string Setting1 { get; set; } = "test";
         public bool Setting2 { get; set; } = true;
@@ -43,6 +42,10 @@ namespace Bwl.Framework.Avalonia
         }
     }
 
+
+    /// <summary>
+    /// Test class to test automatic handling of events
+    /// </summary>
     internal class TestAutoUI : HandleAutoRegister
     {
         private AppBase _appBase;
@@ -85,22 +88,9 @@ namespace Bwl.Framework.Avalonia
             _textbox2 = new AutoTextbox(_appBase.AutoUI, "textbox2");
             _listbox1 = new AutoListbox(_appBase.AutoUI, "listbox1");
             _formDesc = new AutoFormDescriptor(_appBase.AutoUI, "form") { FormWidth = 1000, FormHeight = 600, LoggerExtended = false };
-
-            _settings.SettingsFormClosed += OnSettingsFormClosed;
-            _button2.Click += Button2_Click;
-            _button3.Click += Button3_Click;
-            _button4.Click += Button4_Click;
-            _button5.Click += Button5_Click;
-            _button6.Click += Button6_Click;
-            _button7.Click += Button7_Click;
-            _listbox1.DoubleClick += Listbox1_DoubleClick;
-            _textbox1.DoubleClick += Listbox1_DoubleClick;
-            _image.DoubleClick += Listbox1_DoubleClick;
-
-
         }
 
-        [Handles(HandlesAttribute.This, "_load")]
+        [Handles(nameof(_load))]
         private void _LoadHandler(object? sender, EventArgs e)
         {
             MessageBox.ShowAsync("This is a test message", "Test", MessageBox.MessageBoxButtons.OK, MessageBox.MessageBoxIcon.Information);
@@ -119,14 +109,16 @@ namespace Bwl.Framework.Avalonia
 
             _appForm = AutoUIForm.Create(_appBase);
             _appForm.Load += ((sender, e) => _load?.Invoke(sender, e));
+            RegisterAutoHandlers();
         }
 
+        [Handles(nameof(_settings), nameof(SettingsStorage.SettingsFormClosed))]
         private void OnSettingsFormClosed(object? sender, EventArgs e)
         {
             _appBase.RootLogger.AddInformation("Форма настройки закрыта");
         }
 
-        [Handles("_button1", "Click")]
+        [Handles(nameof(_button1), nameof(AutoButton.Click))]
         private void Button1_Click(AutoButton source)
         {
             var bitmap = new SKBitmap(100, 100);
@@ -144,6 +136,7 @@ namespace Bwl.Framework.Avalonia
             await MessageBox.ShowAsync(message);
         }
 
+        [Handles(nameof(_button2), nameof(AutoButton.Click))]
         private void Button2_Click(AutoButton source)
         {
             var bitmap = new SKBitmap(100, 100);
@@ -156,6 +149,7 @@ namespace Bwl.Framework.Avalonia
             _test1.Setting1 = "cat";
         }
 
+        [Handles(nameof(_button3), nameof(AutoButton.Click))]
         private void Button3_Click(AutoButton source)
         {
             _listbox1.Items.Add("test");
@@ -163,6 +157,7 @@ namespace Bwl.Framework.Avalonia
             // _test1 = Nothing
         }
 
+        [Handles(nameof(_button4), nameof(AutoButton.Click))]
         private void Button4_Click(AutoButton source)
         {
             _listbox1.Items.Clear();
@@ -174,6 +169,7 @@ namespace Bwl.Framework.Avalonia
             _listbox1.Info.Height = 100;
         }
 
+        [Handles(nameof(_button5), nameof(AutoButton.Click))]
         private void Button5_Click(AutoButton source)
         {
             var settings = _appBase.RootStorage;
@@ -262,6 +258,7 @@ namespace Bwl.Framework.Avalonia
 
         private static bool _isButton6Red = false;
 
+        [Handles(nameof(_button6), nameof(AutoButton.Click))]
         private void Button6_Click(AutoButton source)
         {
             if (_isButton6Red)
@@ -278,21 +275,25 @@ namespace Bwl.Framework.Avalonia
             _appBase.RootLogger.AddMessage("Button6_Click");
         }
 
+        [Handles(nameof(_button7), nameof(AutoButton.Click))]
         private void Button7_Click(AutoButton source)
         {
             var storage = new SettingsStorageRoot("Storage", "Storage");
             storage.ShowSettingsForm(this);
         }
 
-        [Handles("_button1", "Click")]
-        [Handles("_listbox1", "Click")]
-        [Handles("_textbox1", "Click")]
-        [Handles("_image", "Click")]
+        [Handles(nameof(_button1), nameof(AutoButton.Click))]
+        [Handles(nameof(_listbox1), nameof(AutoListbox.Click))]
+        [Handles(nameof(_textbox1), nameof(AutoTextbox.Click))]
+        [Handles(nameof(_image), nameof(AutoImage.Click))]
         private void Listbox1_Click(object source)
         {
             _appBase.RootLogger.AddMessage("Click");
         }
 
+        [Handles(nameof(_listbox1), nameof(AutoListbox.DoubleClick))]
+        [Handles(nameof(_textbox1), nameof(AutoTextbox.DoubleClick))]
+        [Handles(nameof(_image), nameof(AutoImage.DoubleClick))]
         private void Listbox1_DoubleClick(object source)
         {
             _appBase.RootLogger.AddMessage("DoubleClick");
