@@ -4,6 +4,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="MethodDecorator.Fody" Version="1.1.1" />
 		<PackageReference Include="System.Text.Json" Version="9.0.10" />
 	</ItemGroup>
 </Project>

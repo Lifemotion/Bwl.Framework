@@ -1,0 +1,52 @@
+<Solution>
+  <Folder Name="/ClientServer/">
+    <Project Path="ClientServer/Bwl.Network.ClientServer.FTDI/Bwl.Network.ClientServer.FTDI.vbproj" />
+  </Folder>
+  <Folder Name="/ClientServer/ClientServer/" Id="d0017b4b-a669-45c6-a92f-dc5c19252605">
+    <Project Path="ClientServer/ClientServer/Bwl.Network.ClientServer.Avalonia/Bwl.Network.ClientServer.Avalonia.csproj" />
+    <Project Path="ClientServer/ClientServer/Bwl.Network.ClientServer.Windows/Bwl.Network.ClientServer.Windows.csproj" />
+    <Project Path="ClientServer/ClientServer/Bwl.Network.ClientServer/Bwl.Network.ClientServer.vbproj" />
+  </Folder>
+  <Folder Name="/ClientServer/TestApps/" Id="4ffe7938-83ef-5f41-9d04-caeb6ba28609">
+    <Project Path="ClientServer/TestApps/Bwl.Network.ClientServer.Remoting.Test/Bwl.Network.ClientServer.Remoting.Test.vbproj" />
+    <Project Path="ClientServer/TestApps/Bwl.Network.ClientServer.Repeater/Bwl.Network.ClientServer.Repeater.CLI.vbproj" />
+    <Project Path="ClientServer/TestApps/Bwl.Network.ClientServer.TestResponder/Bwl.Network.ClientServer.TestResponder.vbproj" />
+  </Folder>
+  <Folder Name="/ClientServer/TestApps/Avalonia/" Id="73256248-509e-54a9-192c-3448fb793552">
+    <Project Path="ClientServer/TestApps/Avalonia/Bwl.Network.ClientServer.CableTest.Avalonia/Bwl.Network.ClientServer.CableTest.Avalonia.csproj" />
+    <Project Path="ClientServer/TestApps/Avalonia/Bwl.Network.ClientServer.Remoting.Tool.Avalonia/Bwl.Network.ClientServer.Remoting.Tool.Avalonia.csproj" />
+    <Project Path="ClientServer/TestApps/Avalonia/Bwl.Network.ClientServer.Test.Avalonia/Bwl.Network.ClientServer.Test.Avalonia.csproj" />
+    <Project Path="ClientServer/TestApps/Avalonia/Bwl.Network.ClientServer.Tool.Avalonia/Bwl.Network.ClientServer.Tool.Avalonia.csproj" />
+    <Project Path="ClientServer/TestApps/Bwl.Network.ClientServer.Repeater/Bwl.Network.ClientServer.Repeater.Avalonia.vbproj" />
+  </Folder>
+  <Folder Name="/ClientServer/TestApps/Windows/" Id="a1e820cd-14a6-57bb-e7f4-2eb72b08676e">
+    <Project Path="ClientServer/TestApps/Bwl.Network.ClientServer.Repeater/Bwl.Network.ClientServer.Repeater.Windows.vbproj" />
+    <Project Path="ClientServer/TestApps/Windows/Bwl.Network.ClientServer.CableTest.Windows/Bwl.Network.ClientServer.CableTest.Windows.vbproj" />
+    <Project Path="ClientServer/TestApps/Windows/Bwl.Network.ClientServer.Remoting.Tool.Windows/Bwl.Network.ClientServer.Remoting.Tool.Windows.vbproj" />
+    <Project Path="ClientServer/TestApps/Windows/Bwl.Network.ClientServer.Test.WIndows/Bwl.Network.ClientServer.Test.WIndows.vbproj" />
+    <Project Path="ClientServer/TestApps/Windows/Bwl.Network.ClientServer.Tool.Windows/Bwl.Network.ClientServer.Tool.Windows.vbproj" />
+  </Folder>
+  <Folder Name="/Framework/" />
+  <Folder Name="/Framework/Framework/" Id="fe6d1998-7713-5a3c-6b78-e826faad8602">
+    <Project Path="Framework/Framework/Bwl.Framework.Avalonia/Bwl.Framework.Avalonia.csproj" />
+    <Project Path="Framework/Framework/Bwl.Framework.Embedded/Bwl.Framework.Embedded.vbproj" />
+    <Project Path="Framework/Framework/Bwl.Framework.SharedMemory/Bwl.Framework.SharedMemory.csproj" />
+    <Project Path="Framework/Framework/Bwl.Framework.Windows/Bwl.Framework.Windows.csproj" />
+    <Project Path="Framework/Framework/Bwl.Framework/Bwl.Framework.vbproj" />
+  </Folder>
+  <Folder Name="/Framework/TestApps/" Id="9532a7bb-b7d0-d5a5-3363-0273ba3d530f">
+    <Project Path="Framework/TestApps/Bwl.Framework.Test.Avalonia/Bwl.Framework.Test.Avalonia.csproj" />
+    <Project Path="Framework/TestApps/Bwl.Framework.Test.CLI/Bwl.Framework.Test.CLI.csproj" />
+    <Project Path="Framework/TestApps/Bwl.Framework.Test.WinForms/Bwl.Framework.Test.WinForms.vbproj" />
+  </Folder>
+  <Folder Name="/Framework/UnitTests/" Id="3ec65082-7c9c-bb6c-f2b0-6fed1380fc52">
+    <Project Path="Framework/UnitTests/Bwl.Framework.UnitTests/Bwl.Framework.UnitTests.vbproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Nuget.Global.Build.props" />
+  </Folder>
+  <Properties Name="TestCaseManagementSettings" Scope="PostLoad">
+    <Property Name="CategoryFile" Value="Bwl.Network.ClientServerMessaging.vsmdi" />
+  </Properties>
+</Solution>

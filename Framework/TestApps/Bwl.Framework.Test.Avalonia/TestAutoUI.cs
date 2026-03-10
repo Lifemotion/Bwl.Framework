@@ -10,7 +10,6 @@ using Bwl.Framework.Avalonia.Settings;
 
 namespace Bwl.Framework.Avalonia
 {
-
     public partial class InternalTestClass
     {
         public string IntSetting1 { get; set; } = "test";
@@ -44,7 +43,7 @@ namespace Bwl.Framework.Avalonia
         }
     }
 
-    internal class TestAutoUI
+    internal class TestAutoUI : HandleAutoRegister
     {
         private AppBase _appBase;
         private SettingsStorage _settings;
@@ -68,6 +67,7 @@ namespace Bwl.Framework.Avalonia
         private IAutoUIForm _appForm;
         public Window AppForm => (Window)_appForm;
 
+        public event EventHandler _load;
 
         private void Init()
         {
@@ -85,22 +85,25 @@ namespace Bwl.Framework.Avalonia
             _textbox2 = new AutoTextbox(_appBase.AutoUI, "textbox2");
             _listbox1 = new AutoListbox(_appBase.AutoUI, "listbox1");
             _formDesc = new AutoFormDescriptor(_appBase.AutoUI, "form") { FormWidth = 1000, FormHeight = 600, LoggerExtended = false };
+
             _settings.SettingsFormClosed += OnSettingsFormClosed;
-            _button1.Click += Button1_Click;
-            _button1.Click += Listbox1_Click;
             _button2.Click += Button2_Click;
             _button3.Click += Button3_Click;
             _button4.Click += Button4_Click;
             _button5.Click += Button5_Click;
             _button6.Click += Button6_Click;
             _button7.Click += Button7_Click;
-            _listbox1.Click += Listbox1_Click;
             _listbox1.DoubleClick += Listbox1_DoubleClick;
-            _textbox1.Click += Listbox1_Click;
             _textbox1.DoubleClick += Listbox1_DoubleClick;
-            _image.Click += Listbox1_Click;
             _image.DoubleClick += Listbox1_DoubleClick;
 
+
+        }
+
+        [Handles(HandlesAttribute.This, "_load")]
+        private void _LoadHandler(object? sender, EventArgs e)
+        {
+            MessageBox.ShowAsync("This is a test message", "Test", MessageBox.MessageBoxButtons.OK, MessageBox.MessageBoxIcon.Information);
         }
 
         public TestAutoUI()
@@ -115,15 +118,15 @@ namespace Bwl.Framework.Avalonia
             var testTextSetting = _appBase.RootStorage.CreateTextFileContentSetting("TextFile1", fileContent1, default, "cfg");
 
             _appForm = AutoUIForm.Create(_appBase);
-
+            _appForm.Load += ((sender, e) => _load?.Invoke(sender, e));
         }
-
 
         private void OnSettingsFormClosed(object? sender, EventArgs e)
         {
             _appBase.RootLogger.AddInformation("Форма настройки закрыта");
         }
 
+        [Handles("_button1", "Click")]
         private void Button1_Click(AutoButton source)
         {
             var bitmap = new SKBitmap(100, 100);
@@ -281,6 +284,10 @@ namespace Bwl.Framework.Avalonia
             storage.ShowSettingsForm(this);
         }
 
+        [Handles("_button1", "Click")]
+        [Handles("_listbox1", "Click")]
+        [Handles("_textbox1", "Click")]
+        [Handles("_image", "Click")]
         private void Listbox1_Click(object source)
         {
             _appBase.RootLogger.AddMessage("Click");

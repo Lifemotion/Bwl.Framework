@@ -18,7 +18,7 @@ namespace Bwl.Framework.Test.Avalonia
             Task.Run(async () =>
             {
                 var res = await InputBox.ShowAsync("This is a test input box", "Input box", "Default response");
-                await MessageBox.ShowAsync(res, "Message box", MessageBox.MessageBoxButtons.OK, MessageBox.MessageBoxIcon.Information);
+                MessageBox.ShowAsync(res, "Message box", MessageBox.MessageBoxButtons.OK, MessageBox.MessageBoxIcon.Information);
                 var forms = new List<Window>();
                 Dispatcher.UIThread.Invoke(() => forms.AddRange([new TestWindow(), new TestAutoUI().AppForm])); // All operations related to Avalonia should be done in the UI thread, including creation of windows
                 foreach (var form in forms)

@@ -1,5 +1,5 @@
 <!-- Properties and items that are added to every project before MSBuild evaluation -->
-<Project>
+<Project InitialTargets="GetProjectInfo">
 
 	<!--
 	#########################
@@ -60,55 +60,55 @@
 	Test project check is required to set up unit test project builds.
 	File is created if it doesn't exist or if it's not a design-time build.
 	-->
-    <Target Name="GetProjectInfo" BeforeTargets="PrepareForBuild;Clean"
+	<Target Name="GetProjectInfo"
            Condition="'$(DesignTimeBuild)' != 'true' OR ('$(DesignTimeBuild)' AND !Exists('$(BaseIntermediateOutputPath)$(MSBuildProjectName).ProjectInfo.props'))" >
 
-       <!-- Read OutputType directly from project file -->
-       <ReadXmlElement ProjectFile="$(MSBuildProjectFullPath)" ElementName="OutputType">
-           <Output TaskParameter="ElementValue" PropertyName="_DetectedOutputType" />
-       </ReadXmlElement>
+		<!-- Read OutputType directly from project file -->
+		<ReadXmlElement ProjectFile="$(MSBuildProjectFullPath)" ElementName="OutputType">
+			<Output TaskParameter="ElementValue" PropertyName="_DetectedOutputType" />
+		</ReadXmlElement>
 
-       <!-- Read UseWindowsForms directly from project file -->
-       <ReadXmlElement ProjectFile="$(MSBuildProjectFullPath)" ElementName="UseWindowsForms">
-           <Output TaskParameter="ElementValue" PropertyName="_DetectedUseWindowsForms" />
-       </ReadXmlElement>
+		<!-- Read UseWindowsForms directly from project file -->
+		<ReadXmlElement ProjectFile="$(MSBuildProjectFullPath)" ElementName="UseWindowsForms">
+			<Output TaskParameter="ElementValue" PropertyName="_DetectedUseWindowsForms" />
+		</ReadXmlElement>
 
-       <!-- Read IsTestProject directly from project file -->
-       <ReadXmlElement ProjectFile="$(MSBuildProjectFullPath)" ElementName="IsTestProject">
-           <Output TaskParameter="ElementValue" PropertyName="_DetectedIsTestProject" />
-       </ReadXmlElement>
+		<!-- Read IsTestProject directly from project file -->
+		<ReadXmlElement ProjectFile="$(MSBuildProjectFullPath)" ElementName="IsTestProject">
+			<Output TaskParameter="ElementValue" PropertyName="_DetectedIsTestProject" />
+		</ReadXmlElement>
 
-       <PropertyGroup>
-           <!-- Fallback to MSBuild if detection has failed -->
-           <_DetectedOutputType Condition="'$(_DetectedOutputType)' == ''">$(OutputType)</_DetectedOutputType>
-           <_DetectedUseWindowsForms Condition="'$(_DetectedUseWindowsForms)' == ''">$(UseWindowsForms)</_DetectedUseWindowsForms>
-           <_DetectedUseWindowsForms Condition="'$(_DetectedIsTestProject)' == ''">$(IsTestProject)</_DetectedUseWindowsForms>
+		<PropertyGroup>
+			<!-- Fallback to MSBuild if detection has failed -->
+			<_DetectedOutputType Condition="'$(_DetectedOutputType)' == ''">$(OutputType)</_DetectedOutputType>
+			<_DetectedUseWindowsForms Condition="'$(_DetectedUseWindowsForms)' == ''">$(UseWindowsForms)</_DetectedUseWindowsForms>
+			<_DetectedUseWindowsForms Condition="'$(_DetectedIsTestProject)' == ''">$(IsTestProject)</_DetectedUseWindowsForms>
 
-           <!-- Classify the project -->
-           <_ProjectCategory Condition="'$(_DetectedOutputType)' == 'Library'">lib</_ProjectCategory>
-           <_ProjectCategory Condition="'$(_DetectedOutputType)' == 'Exe' OR '$(_DetectedOutputType)' == 'WinExe'">app</_ProjectCategory>
-           <_ProjectCategory Condition="'$(_DetectedIsTestProject)' == 'true'">test</_ProjectCategory>
-           <_ProjectCategory Condition="'$(_ProjectCategory)' == ''">misc</_ProjectCategory>
+			<!-- Classify the project -->
+			<_ProjectCategory Condition="'$(_DetectedOutputType)' == 'Library'">lib</_ProjectCategory>
+			<_ProjectCategory Condition="'$(_DetectedOutputType)' == 'Exe' OR '$(_DetectedOutputType)' == 'WinExe'">app</_ProjectCategory>
+			<_ProjectCategory Condition="'$(_DetectedIsTestProject)' == 'true'">test</_ProjectCategory>
+			<_ProjectCategory Condition="'$(_ProjectCategory)' == ''">misc</_ProjectCategory>
 
-           <!-- Write project info to a file -->
-           <_ProjectInfoContent>
-               &lt;Project&gt;
-               &lt;PropertyGroup&gt;
-               &lt;ProjectOutputType&gt;$(_DetectedOutputType)&lt;/ProjectOutputType&gt;
-               &lt;ProjectCategory&gt;$(_ProjectCategory)&lt;/ProjectCategory&gt;
-               &lt;ProjectWinForms&gt;$(_DetectedUseWindowsForms)&lt;/ProjectWinForms&gt;
-               &lt;/PropertyGroup&gt;
-               &lt;/Project&gt;
-           </_ProjectInfoContent>
-       </PropertyGroup>
+			<!-- Write project info to a file -->
+			<_ProjectInfoContent>
+&lt;Project&gt;
+&lt;PropertyGroup&gt;
+&lt;ProjectOutputType&gt;$(_DetectedOutputType)&lt;/ProjectOutputType&gt;
+&lt;ProjectCategory&gt;$(_ProjectCategory)&lt;/ProjectCategory&gt;
+&lt;ProjectWinForms&gt;$(_DetectedUseWindowsForms)&lt;/ProjectWinForms&gt;
+&lt;/PropertyGroup&gt;
+&lt;/Project&gt;
+			</_ProjectInfoContent>
+		</PropertyGroup>
 
-       <!-- Create directory (if needed) and write everything to the file -->
-       <MakeDir Directories="$(BaseIntermediateOutputPath)" Condition="!Exists('$(BaseIntermediateOutputPath)')" />
-       <WriteLinesToFile
-           File="$(BaseIntermediateOutputPath)$(MSBuildProjectName).ProjectInfo.props"
-           Lines="$(_ProjectInfoContent)"
-           Overwrite="true" />
-    </Target>
+		<!-- Create directory (if needed) and write everything to the file -->
+		<MakeDir Directories="$(BaseIntermediateOutputPath)" Condition="!Exists('$(BaseIntermediateOutputPath)')" />
+		<WriteLinesToFile
+			File="$(BaseIntermediateOutputPath)$(MSBuildProjectName).ProjectInfo.props"
+			Lines="$(_ProjectInfoContent)"
+			Overwrite="true" />
+	</Target>
 
 	<!-- Add project type from the file to the properties -->
 	<Import Project="$(BaseIntermediateOutputPath)$(MSBuildProjectName).ProjectInfo.props"
@@ -117,6 +117,7 @@
 	<!-- Output paths for apps, libraries and Nuget package -->
 	<PropertyGroup Condition="('$(DesignTimeBuild)' != 'true' OR Exists('$(BaseIntermediateOutputPath)$(MSBuildProjectName).ProjectInfo.props'))">
 		<BaseOutputPath>$(MSBuildThisFileDirectory)$(Configuration)/$(ProjectCategory)/$(MSBuildProjectName)/</BaseOutputPath>
+		<OutputPath>$(BaseOutputPath)</OutputPath>
 		<PackageOutputPath>$(MSBuildThisFileDirectory)Packages/</PackageOutputPath>
 	</PropertyGroup>
 
@@ -143,6 +144,7 @@
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<AnalysisLevel>latest</AnalysisLevel>
+		<NoWarn>IDE0051;IDE0052;IDE0060</NoWarn>
 
 		<!-- Assembly info generation -->
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -218,9 +220,7 @@
 
 	<!-- Enable embedded types for project references by default -->
 	<ItemGroup>
-		<ProjectReference Update="@(ProjectReference)"
-						  EmbedInteropTypes="false"
-						  Private="true" />
+		<ProjectReference Update="@(ProjectReference)" EmbedInteropTypes="false" Private="true" />
 	</ItemGroup>
 
 	<!--
@@ -252,6 +252,7 @@
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="*" />
 		<PackageReference Include="NUnit" Version="*" />
 		<PackageReference Include="NUnit3TestAdapter" Version="*" />
+		<PackageReference Include="NunitXml.TestLogger" Version="*" />
 	</ItemGroup>
 
 	<!--
@@ -283,5 +284,95 @@
 						   (Exists('$(MSBuildProjectDirectory)\README.md') OR Exists('$(MSBuildThisFileDirectory)README.md'))">
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+
+
+	<!--
+	#########################
+	Setting up the correct version for the project (using git)
+	#########################
+	-->
+
+	<!-- Git info and versioning -->
+	<Target Name="SetVersionFromGit" BeforeTargets="GetAssemblyVersion;GenerateAssemblyInfo;CoreCompile;GenerateNuspec"
+			Condition="'$(DesignTimeBuild)' != 'true'">
+
+		<!-- Create obj directory if needed -->
+		<MakeDir Directories="$(BaseIntermediateOutputPath)" Condition="!Exists('$(BaseIntermediateOutputPath)')" />
+
+		<!-- Get Git info -->
+		<Exec Command="git rev-parse --short=6 HEAD"
+			  ConsoleToMSBuild="true"
+			  StandardOutputImportance="Low"
+			  StandardErrorImportance="Low"
+              IgnoreExitCode="true"
+              ContinueOnError="true"
+              WorkingDirectory="$(MSBuildProjectDirectory)">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommitHashOutput" />
+			<Output TaskParameter="ExitCode" PropertyName="GitHashExitCode" />
+		</Exec>
+
+		<!-- Get Git date and time -->
+		<Exec Command="git log -1 --format=%%ct HEAD"
+              ConsoleToMSBuild="true"
+			  StandardOutputImportance="Low"
+			  StandardErrorImportance="Low"
+              IgnoreExitCode="true"
+              ContinueOnError="true"
+              WorkingDirectory="$(MSBuildProjectDirectory)">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommitTimestampOutput" />
+			<Output TaskParameter="ExitCode" PropertyName="GitTimestampExitCode" />
+		</Exec>
+
+		<!-- Set version properties -->
+		<PropertyGroup>
+			<!-- Process Git command results -->
+			<GitCommitHash Condition="'$(GitHashExitCode)' == '0'">$([System.String]::Copy('$(GitCommitHashOutput)').Trim())</GitCommitHash>
+			<GitCommitHash Condition="'$(GitHashExitCode)' != '0'">unknown</GitCommitHash>
+			<GitCommitTimestamp Condition="'$(GitTimestampExitCode)' == '0'">$([System.String]::Copy('$(GitCommitTimestampOutput)').Trim())</GitCommitTimestamp>
+			<GitCommitTimestamp Condition="'$(GitTimestampExitCode)' != '0'">0</GitCommitTimestamp>
+
+			<!-- Decide whether to use Git timestamp or current time -->
+			<UseCurrentTime Condition="'$(GitCommitTimestamp)' == '0'">true</UseCurrentTime>
+			<UseCurrentTime Condition="'$(UseCurrentTime)' == ''">false</UseCurrentTime>
+
+			<!-- Generate formatted date parts directly -->
+			<!-- Git-based timestamps -->
+			<DatePart Condition="'$(UseCurrentTime)' != 'true'">$([System.DateTimeOffset]::FromUnixTimeSeconds($([System.Int64]::Parse('$(GitCommitTimestamp)'))).UtcDateTime.ToString('yyyy.MM.dd'))</DatePart>
+			<TimePart Condition="'$(UseCurrentTime)' != 'true'">$([System.DateTimeOffset]::FromUnixTimeSeconds($([System.Int64]::Parse('$(GitCommitTimestamp)'))).UtcDateTime.ToString('HHmmss'))</TimePart>
+			<ShortTimePart Condition="'$(UseCurrentTime)' != 'true'">$([System.DateTimeOffset]::FromUnixTimeSeconds($([System.Int64]::Parse('$(GitCommitTimestamp)'))).UtcDateTime.ToString('HHmm'))</ShortTimePart>
+
+			<!-- Current time timestamps -->
+			<DatePart Condition="'$(UseCurrentTime)' == 'true'">$([System.DateTime]::UtcNow.ToString('yyyy.MM.dd'))</DatePart>
+			<TimePart Condition="'$(UseCurrentTime)' == 'true'">$([System.DateTime]::UtcNow.ToString('HHmmss'))</TimePart>
+			<ShortTimePart Condition="'$(UseCurrentTime)' == 'true'">$([System.DateTime]::UtcNow.ToString('HHmm'))</ShortTimePart>
+
+			<!-- Version -->
+			<Version>$(DatePart).$(TimePart)-$(GitCommitHash)</Version>
+
+			<!-- Informational version (not visible in explorer but available programmatically) -->
+			<InformationalVersion>$(Version)</InformationalVersion>
+			<AssemblyInformationalVersion>$(Version)</AssemblyInformationalVersion>
+
+			<!-- File version -->
+			<FileVersion>$(DatePart).$(ShortTimePart)</FileVersion>
+			<AssemblyVersion>$(DatePart).$(ShortTimePart)</AssemblyVersion>
+
+			<!-- NuGet-compatible version -->
+			<PackageVersion>$(DatePart).$(TimePart)</PackageVersion>
+		</PropertyGroup>
+	</Target>
+
+	<!-- Add Git hash to package description -->
+	<Target Name="AppendGitHashToDescription" BeforeTargets="GenerateNuspec" DependsOnTargets="SetVersionFromGit" >
+		<PropertyGroup>
+			<!-- Create a base description if none exists -->
+			<PackageDescription Condition="'$(PackageDescription)' == '' AND '$(Description)' == ''">$(MSBuildProjectName)</PackageDescription>
+			<PackageDescription Condition="'$(PackageDescription)' == '' AND '$(Description)' != ''">$(Description)</PackageDescription>
+			<PackageDescription>
+				$(PackageDescription)
+				Compiled from git commit with hash: $(GitCommitHash)
+			</PackageDescription>
+		</PropertyGroup>
+	</Target>
 
 </Project>

@@ -96,7 +96,6 @@ namespace Bwl.Framework.Avalonia
             None
         }
 
-
         // It's not actually used
         public enum HelpNavigator
         {
@@ -115,14 +114,10 @@ namespace Bwl.Framework.Avalonia
                     var box = MessageBoxManager.GetMessageBoxStandard(caption, text, (ButtonEnum)buttons, (Icon)icon);
                     ButtonResult result;
 
-                    if (owner != null)
-                    {
-                        result = await box.ShowWindowDialogAsync(owner);
-                    }
-                    else
-                    {
-                        result = await box.ShowWindowAsync();
-                    }
+            if (owner != null)
+                result = await box.ShowWindowDialogAsync(owner);
+            else
+                result = await box.ShowWindowAsync();
 
                     return ButtonResultToDialogResult(result);
                 }

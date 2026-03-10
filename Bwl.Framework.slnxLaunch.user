@@ -1,0 +1,40 @@
+[
+  {
+    "Name": "ClientServer Test",
+    "Projects": [
+      {
+        "Path": "ClientServer\\TestApps\\Avalonia\\Bwl.Network.ClientServer.Test.Avalonia\\Bwl.Network.ClientServer.Test.Avalonia.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "ClientServer\\TestApps\\Windows\\Bwl.Network.ClientServer.Test.WIndows\\Bwl.Network.ClientServer.Test.WIndows.vbproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "ClientServer\\TestApps\\Bwl.Network.ClientServer.TestResponder\\Bwl.Network.ClientServer.TestResponder.vbproj",
+        "Action": "Start"
+      }
+    ]
+  },
+  {
+    "Name": "Remoting Tool Test",
+    "Projects": [
+      {
+        "Path": "ClientServer\\TestApps\\Bwl.Network.ClientServer.Remoting.Test\\Bwl.Network.ClientServer.Remoting.Test.vbproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "ClientServer\\TestApps\\Windows\\Bwl.Network.ClientServer.Remoting.Tool.Windows\\Bwl.Network.ClientServer.Remoting.Tool.Windows.vbproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "ClientServer\\TestApps\\Avalonia\\Bwl.Network.ClientServer.Remoting.Tool.Avalonia\\Bwl.Network.ClientServer.Remoting.Tool.Avalonia.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "ClientServer\\TestApps\\Bwl.Network.ClientServer.Repeater\\Bwl.Network.ClientServer.Repeater.CLI.vbproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

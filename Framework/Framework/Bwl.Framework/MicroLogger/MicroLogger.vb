@@ -66,7 +66,7 @@ Public Class MicroLogger
         Interlocked.Exchange(_stopRequestTicks, -1)
         SyncLock _syncLock
             _asyncReset = New AsyncResetEvent(False)
-            _loggingTask = LoggerTask()
+            _loggingTask = Task.Run(Function() LoggerTask())
         End SyncLock
         Return True
     End Function
