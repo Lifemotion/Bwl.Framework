@@ -1,0 +1,46 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          8.0.x
+          9.0.x
+
+    - name: Restore
+      run: |
+        dotnet restore Bwl.Framework/Bwl.Framework.vbproj
+        dotnet restore Bwl.Framework.WinForms/Bwl.Framework.WinForms.vbproj
+        dotnet restore Bwl.Framework.Tests/Bwl.Framework.Tests.vbproj
+
+    - name: Build Core
+      run: dotnet build Bwl.Framework/Bwl.Framework.vbproj -c Release --no-restore
+
+    - name: Build WinForms
+      run: dotnet build Bwl.Framework.WinForms/Bwl.Framework.WinForms.vbproj -c Release --no-restore
+
+    - name: Build Tests
+      run: dotnet build Bwl.Framework.Tests/Bwl.Framework.Tests.vbproj -c Release --no-restore
+
+    - name: Test
+      run: dotnet test Bwl.Framework.Tests/Bwl.Framework.Tests.vbproj -c Release --no-build --logger trx --results-directory TestResults
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: TestResults/
