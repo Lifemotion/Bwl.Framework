@@ -46,7 +46,7 @@ Public MustInherit Class ObjectSetting
     End Sub
 
     Protected Sub ValueChangedCall(ByRef oldValue As Object, ByRef newValue As Object)
-        If oldValue <> newValue Then RaiseEvent ValueChanged()
+        If Not Object.Equals(oldValue, newValue) Then RaiseEvent ValueChanged()
     End Sub
 
 End Class

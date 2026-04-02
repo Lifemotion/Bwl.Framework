@@ -6,7 +6,7 @@
 ''' <remarks></remarks>
 Public MustInherit Class SettingsStorageBase
     Implements ISettingsStorage
-#If Not NETSTANDARD Then
+#If NETFRAMEWORK Then
     Implements ISettingsStorageForm
     Protected _settingsForm As SettingsDialog
 #End If
@@ -103,7 +103,7 @@ Public MustInherit Class SettingsStorageBase
         Return _settings.Where(Function(setting) userGroups IsNot Nothing AndAlso userGroups.Any() AndAlso setting.UserGroups.Any(Function(f) userGroups.Contains(f))).ToArray()
     End Function
 
-#If Not NETSTANDARD Then
+#If NETFRAMEWORK Then
     Public Function ShowSettingsForm(invokeForm As Form) As SettingsDialog Implements ISettingsStorageForm.ShowSettingsForm
         If invokeForm IsNot Nothing AndAlso invokeForm.InvokeRequired Then
             Return DirectCast(invokeForm.Invoke(Function() ShowSettingsForm(invokeForm)), SettingsDialog)

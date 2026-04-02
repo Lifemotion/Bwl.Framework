@@ -53,7 +53,7 @@ Public Class ConsoleAppBase
     End Sub
 
     Public Sub ShowSettings()
-#If Not NETSTANDARD Then
+#If NETFRAMEWORK Then
         Application.Run(RootStorage.ShowSettingsForm(Nothing))
         RootStorage.SaveSettings(False)
 #End If

@@ -1,0 +1,120 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0-windows;net48</TargetFrameworks>
+    <RootNamespace>Bwl.Framework</RootNamespace>
+    <AssemblyName>Bwl.Framework.WinForms</AssemblyName>
+    <UseWindowsForms>true</UseWindowsForms>
+    <OutputType>Library</OutputType>
+
+    <OptionExplicit>On</OptionExplicit>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionStrict>Off</OptionStrict>
+    <OptionInfer>On</OptionInfer>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,SYSLIB0011,SYSLIB0006,SYSLIB0021</NoWarn>
+
+    <!-- Required for .resx files with binary resources (ImageStream etc.) -->
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <OutputPath>..\debug\dll\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <OutputPath>..\release\dll\</OutputPath>
+  </PropertyGroup>
+
+  <!-- VB.NET global imports -->
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Drawing" />
+  </ItemGroup>
+
+  <!-- Reference to Core -->
+  <ItemGroup>
+    <ProjectReference Include="..\Bwl.Framework\Bwl.Framework.vbproj" />
+  </ItemGroup>
+
+  <!-- .NET Framework 4.8: explicit references -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Reference Include="System.Runtime.Serialization" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+  </ItemGroup>
+
+  <!-- WinForms source files (linked from Bwl.Framework/src) -->
+  <ItemGroup>
+    <!-- AppBase Forms -->
+    <Compile Include="..\Bwl.Framework\src\AppBase\FormAppBase.vb" Link="AppBase\FormAppBase.vb" />
+    <Compile Include="..\Bwl.Framework\src\AppBase\FormBase.vb" Link="AppBase\FormBase.vb" />
+    <Compile Include="..\Bwl.Framework\src\AppBase\FormBase.Designer.vb" Link="AppBase\FormBase.Designer.vb" />
+
+    <!-- AutoUI Forms and Controls -->
+    <Compile Include="..\Bwl.Framework\src\AutoUI\AutoUIForm.vb" Link="AutoUI\AutoUIForm.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\AutoUIForm.Designer.vb" Link="AutoUI\AutoUIForm.Designer.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\AutoUI\AutoUIDisplay.vb" Link="AutoUI\AutoUIDisplay.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\AutoUI\AutoUIDisplay.Designer.vb" Link="AutoUI\AutoUIDisplay.Designer.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\LocalElements\AutoBitmap.vb" Link="AutoUI\AutoBitmap.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\RemoteElements\BaseRemoteElement.vb" Link="AutoUI\RemoteElements\BaseRemoteElement.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\RemoteElements\BaseRemoteElement.Designer.vb" Link="AutoUI\RemoteElements\BaseRemoteElement.Designer.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\RemoteElements\BaseRemoteClass.vb" Link="AutoUI\RemoteElements\BaseRemoteClass.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoFormDescriptor.vb" Link="AutoUI\RemoteElements\RemoteAutoFormDescriptor.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoListbox.vb" Link="AutoUI\RemoteElements\RemoteAutoListbox.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoListbox.Designer.vb" Link="AutoUI\RemoteElements\RemoteAutoListbox.Designer.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoTextbox.vb" Link="AutoUI\RemoteElements\RemoteAutoTextbox.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoTextbox.Designer.vb" Link="AutoUI\RemoteElements\RemoteAutoTextbox.Designer.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoBitmap.vb" Link="AutoUI\RemoteElements\RemoteAutoBitmap.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoBitmap.Designer.vb" Link="AutoUI\RemoteElements\RemoteAutoBitmap.Designer.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoButton.vb" Link="AutoUI\RemoteElements\RemoteAutoButton.vb" />
+    <Compile Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoButton.Designer.vb" Link="AutoUI\RemoteElements\RemoteAutoButton.Designer.vb" />
+
+    <!-- Logger UI -->
+    <Compile Include="..\Bwl.Framework\src\Logger\UI\LoggerForm.vb" Link="Logger\LoggerForm.vb" />
+    <Compile Include="..\Bwl.Framework\src\Logger\UI\LoggerForm.Designer.vb" Link="Logger\LoggerForm.Designer.vb" />
+    <Compile Include="..\Bwl.Framework\src\Logger\LogWriters\Realizations\FormLogInfo.vb" Link="Logger\FormLogInfo.vb" />
+    <Compile Include="..\Bwl.Framework\src\Logger\LogWriters\Realizations\FormLogInfo.Designer.vb" Link="Logger\FormLogInfo.Designer.vb" />
+    <Compile Include="..\Bwl.Framework\src\Logger\LogWriters\Realizations\DatagridLogWriter.vb" Link="Logger\DatagridLogWriter.vb" />
+    <Compile Include="..\Bwl.Framework\src\Logger\LogWriters\Realizations\DatagridLogWriter.Designer.vb" Link="Logger\DatagridLogWriter.Designer.vb" />
+
+    <!-- Settings GUI -->
+    <Compile Include="..\Bwl.Framework\src\Settings\Gui\SettingField.vb" Link="Settings\SettingField.vb" />
+    <Compile Include="..\Bwl.Framework\src\Settings\Gui\SettingField.Designer.vb" Link="Settings\SettingField.Designer.vb" />
+    <Compile Include="..\Bwl.Framework\src\Settings\Gui\SettingsDialog.vb" Link="Settings\SettingsDialog.vb" />
+    <Compile Include="..\Bwl.Framework\src\Settings\Gui\SettingsDialog.Designer.vb" Link="Settings\SettingsDialog.Designer.vb" />
+    <Compile Include="..\Bwl.Framework\src\Settings\Storages\Common\ISettingsStorageForm.vb" Link="Settings\ISettingsStorageForm.vb" />
+
+    <!-- MailSender (uses MessageBox) -->
+    <Compile Include="..\Bwl.Framework\src\MailSender\MailSender.vb" Link="MailSender\MailSender.vb" />
+  </ItemGroup>
+
+  <!-- Linked refs-src -->
+  <ItemGroup>
+    <Compile Include="..\refs-src\JpegSaver.vb" Link="refs\JpegSaver.vb" />
+  </ItemGroup>
+
+  <!-- .resx files for WinForms forms -->
+  <ItemGroup>
+    <EmbeddedResource Include="..\Bwl.Framework\src\AppBase\FormAppBase.resx" Link="AppBase\FormAppBase.resx" />
+    <EmbeddedResource Include="..\Bwl.Framework\src\AppBase\FormBase.resx" Link="AppBase\FormBase.resx" />
+    <EmbeddedResource Include="..\Bwl.Framework\src\AutoUI\AutoUIForm.resx" Link="AutoUI\AutoUIForm.resx" />
+    <EmbeddedResource Include="..\Bwl.Framework\src\AutoUI\AutoUI\AutoUIDisplay.resx" Link="AutoUI\AutoUIDisplay.resx" />
+    <EmbeddedResource Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoListbox.resx" Link="AutoUI\RemoteElements\RemoteAutoListbox.resx" />
+    <EmbeddedResource Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoTextbox.resx" Link="AutoUI\RemoteElements\RemoteAutoTextbox.resx" />
+    <EmbeddedResource Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoBitmap.resx" Link="AutoUI\RemoteElements\RemoteAutoBitmap.resx" />
+    <EmbeddedResource Include="..\Bwl.Framework\src\AutoUI\RemoteElements\RemoteAutoButton.resx" Link="AutoUI\RemoteElements\RemoteAutoButton.resx" />
+    <EmbeddedResource Include="..\Bwl.Framework\src\Logger\LogWriters\Realizations\FormLogInfo.resx" Link="Logger\FormLogInfo.resx" />
+    <EmbeddedResource Include="..\Bwl.Framework\src\Logger\LogWriters\Realizations\DatagridLogWriter.resx" Link="Logger\DatagridLogWriter.resx" />
+    <EmbeddedResource Include="..\Bwl.Framework\src\Logger\UI\LoggerForm.resx" Link="Logger\LoggerForm.resx" />
+    <EmbeddedResource Include="..\Bwl.Framework\src\Settings\Gui\SettingField.resx" Link="Settings\SettingField.resx" />
+    <EmbeddedResource Include="..\Bwl.Framework\src\Settings\Gui\SettingsDialog.resx" Link="Settings\SettingsDialog.resx" />
+  </ItemGroup>
+
+</Project>
