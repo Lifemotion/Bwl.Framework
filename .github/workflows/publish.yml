@@ -27,4 +27,5 @@ jobs:
         dotnet pack Bwl.Framework.WinForms/Bwl.Framework.WinForms.vbproj -c Release -o ./nupkgs /p:Version=${{ steps.version.outputs.VERSION }}
 
     - name: Push to NuGet
-      run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      shell: bash
+      run: dotnet nuget push './nupkgs/*.nupkg' --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
