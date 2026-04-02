@@ -17,7 +17,17 @@
 
     <!-- Required for .resx files with binary resources (ImageStream etc.) -->
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+
+    <!-- NuGet -->
+    <PackageId>Bwl.Framework.WinForms</PackageId>
+    <Description>WinForms UI components for Bwl.Framework: FormAppBase, SettingsDialog, DatagridLogWriter, AutoUI display controls, MailSender.</Description>
+    <PackageTags>framework;settings;logger;winforms;vb.net</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <OutputPath>..\debug\dll\</OutputPath>

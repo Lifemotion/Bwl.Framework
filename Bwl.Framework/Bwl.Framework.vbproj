@@ -13,7 +13,17 @@
 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,SYSLIB0011,SYSLIB0006,SYSLIB0021</NoWarn>
+
+    <!-- NuGet -->
+    <PackageId>Bwl.Framework</PackageId>
+    <Description>Cross-platform core library: Settings storages, hierarchical Logger, AutoUI interfaces, ConsoleAppBase, and utilities.</Description>
+    <PackageTags>framework;settings;logger;vb.net</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <OutputPath>..\debug\dll\</OutputPath>
