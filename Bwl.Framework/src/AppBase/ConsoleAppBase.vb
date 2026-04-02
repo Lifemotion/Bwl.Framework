@@ -60,7 +60,7 @@ Public Class ConsoleAppBase
     End Sub
 
     Public Sub Start()
-#If Not NETSTANDARD Then
+#If NETFRAMEWORK Then
         For Each arg In System.Environment.GetCommandLineArgs
             If arg.ToLower = "showsetup" Then ShowSettings()
         Next
